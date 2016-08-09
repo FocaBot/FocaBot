@@ -10,6 +10,7 @@ class AudioFilters
     @presets = {
         # Speed filter
         nightcore: new FilterPreset @filters.speed, 1.5
+        vaporwave: new FilterPreset @filters.speed, 0.75
     }
     @availableFilters = Object.keys @filters
     @availablePresets = Object.keys @presets

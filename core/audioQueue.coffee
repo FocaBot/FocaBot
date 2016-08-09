@@ -21,7 +21,14 @@ class ServerAudioQueue
     item = @items.shift()
     @currentItem = item
     return false if not @currentItem?
-    @audioPlayer.play @currentItem.playInChannel, @currentItem.path
+    # Filters
+    if @currentItem.filters.length
+      flags = ['-filter']
+      fstr = ""
+      fstr += filter.toFFMPEGFilter() for filter in @currentItem.filters
+      flags.push fstr
+    else flags = []
+    @audioPlayer.play @currentItem.playInChannel, @currentItem.path, flags
     .then (stream)=>
       stream.on 'end', ()=>
         @nextItem() if not item.skipped

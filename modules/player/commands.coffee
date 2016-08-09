@@ -15,6 +15,7 @@ class AudioModuleCommands
       return @bot.reply msg, 'You must be in a voice channel to request songs.' if not msg.author.voiceChannel
       dl = new VideoDownload args[0]
       dl.on 'info', (info)=>
+        #@bot.startTyping msg.channel
         @audioModule.handleVideoInfo dl, msg, args
       dl.on 'error', (err)=>
         @bot.sendMessage msg.channel, 'Something went wrong.'
@@ -90,17 +91,21 @@ class AudioModuleCommands
       qI = queue.currentItem
       currentTime = moment.duration audioPlayer.voiceConnection.streamTime
       currentTime = "#{currentTime.minutes()}:#{currentTime.seconds()}"
+      filters = " "
+      filters += filter for filter in qI.filters
       reply = """
       **Now Playing In** `#{qI.playInChannel.name}`: 
-      `#{qI.title}` (#{currentTime}/#{qI.duration}) Requested By #{qI.requestedBy.username}\n
+      `#{qI.title}` *#{filters}* (#{currentTime}/#{qI.duration}) Requested By #{qI.requestedBy.username}\n
       """
       if queue.items.length
-        reply += "**Up next:**\n"
+        reply += "\n**Up next:**\n"
         l = queue.items.length
         i = 0
         for qi in queue.items when i < 20
-          reply += "**#{++i}.** `#{qi.title}` (#{qi.duration}) Requested By #{qi.requestedBy.username}\n"
-        if l > 10
+          filters = ""
+          filters += filter for filter in qi.filters
+          reply += "**#{++i}.** `#{qi.title}` *#{filters}* (#{qi.duration}) Requested By #{qi.requestedBy.username}\n"
+        if l > 20
           reply += "*(#{l-i} more...)*"
       else
          reply += "Queue is currently empty."
@@ -134,6 +139,22 @@ class AudioModuleCommands
       else
         @bot.sendMessage msg.channel, 'The queue is empty.'
 
+    # Now Playing
+    @npCommand = @commands.registerCommand 'np', {
+      description: 'Displays the current song.'
+    }, (msg, args)=>
+      {audioPlayer, queue} = @getServerData(msg.server)
+      return @bot.sendMessage msg.channel, "Nothing being played on the current server." if not queue.currentItem
+      qI = queue.currentItem
+      currentTime = moment.duration audioPlayer.voiceConnection.streamTime
+      currentTime = "#{currentTime.minutes()}:#{currentTime.seconds()}"
+      filters = " "
+      filters += filter for filter in qI.filters
+      @bot.sendMessage msg.channel, """
+      **Now Playing In** `#{qI.playInChannel.name}`: 
+      `#{qI.title}` *#{filters}* (#{currentTime}/#{qI.duration}) Requested By #{qI.requestedBy.username}\n
+      """
+
   unregisterAll: =>
     @commands.unregisterCommands [
       @playCommand
@@ -145,6 +166,7 @@ class AudioModuleCommands
       @queueCommand
       @undoCommand
       @shuffleCommand
+      @npCommand
     ]
 
 module.exports = AudioModuleCommands
