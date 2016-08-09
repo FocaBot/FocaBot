@@ -1,0 +1,9 @@
+apps:
+  - name   : midiBot
+    interpreter: ./node_modules/.bin/coffee
+    script : main.coffee
+    env    :
+      NODE_ENV: production      
+    env_staging:
+      NODE_ENV: development
+      PORT: 3052

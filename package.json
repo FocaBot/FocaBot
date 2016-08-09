@@ -1,0 +1,51 @@
+{
+  "name": "discord-midi-bot",
+  "version": "0.1.0",
+  "description": "What's a MIDI file? I'll show you!",
+  "main": "main.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./node_modules/.bin/coffee main.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/TheBITLINK/MIDIBot.git"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "midi",
+    "vinesauce",
+    "joel",
+    "audio",
+    "convert"
+  ],
+  "author": "thebit.link <me@thebitlink.com> (https://thebit.link/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/TheBITLINK/MIDIBot/issues"
+  },
+  "homepage": "https://gitlab.com/TheBITLINK/MIDIBot#README",
+  "dependencies": {
+    "async": "^2.0.1",
+    "bufferutil": "^1.2.1",
+    "chance": "^1.0.4",
+    "coffee-script": "^1.10.0",
+    "discord.js": "^8.1.0",
+    "dotenv": "^2.0.0",
+    "ffmpeg": "0.0.4",
+    "git-rev": "^0.2.1",
+    "json-format": "^0.1.2",
+    "json-prune": "^1.0.1",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.14.1",
+    "pad-left": "^2.1.0",
+    "path": "^0.12.7",
+    "request": "^2.74.0",
+    "url": "^0.11.0",
+    "youtube-dl": "^1.11.1"
+  },
+  "devDependencies": {
+    "coffee-errors": "^0.8.6"
+  }
+}
