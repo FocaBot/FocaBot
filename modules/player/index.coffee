@@ -21,7 +21,7 @@ class PlayerModule
     )()
     moment.duration(info.duration).asSeconds()/60
 
-    if (duration > 1000 and not @permissions.isAdmin msg.author) or duration <= 0
+    if (duration > 1000 and not @permissions.isAdmin msg.author, msg.server) or duration <= 0
       return @bot.reply msg, 'The requested song is too long. (or too short?)'
 
     # Get filters

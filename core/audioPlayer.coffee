@@ -9,7 +9,6 @@ class ServerAudioPlayer
       return reject { message: 'Bot is currently playing another file on the server.' }
     @join audioChannel
     .then (connection)=>
-      console.log ['-i', path].concat(flags)
       connection.playArbitraryFFmpeg ['-i', path].concat(flags)
     .then (@currentStream)=>
       @currentStream.on 'end', =>
