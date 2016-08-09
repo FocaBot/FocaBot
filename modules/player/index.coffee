@@ -56,7 +56,7 @@ class PlayerModule
       # Set events
       qI.on 'start', =>
         @bot.sendMessage msg.channel, """
-          Now Playing In `#{qI.playInChannel.name}`: **#{qI.title}** *#{filterstr}*
+          Now Playing In `#{qI.playInChannel.name}`: **#{qI.title}** #{filterstr}
 
           (Length: `#{qI.duration}` - Requested By **#{qI.requestedBy}**)
           """
@@ -68,7 +68,7 @@ class PlayerModule
             audioPlayer.clean true
         ), 100
       
-      @bot.sendMessage msg.channel, "**#{msg.author}** added `#{qI.title}` *#{filterstr}* (#{qI.duration}) to the queue! (Position \##{queue.items.length+1})"
+      @bot.sendMessage msg.channel, "**#{msg.author}** added `#{qI.title}` #{filterstr} (#{qI.duration}) to the queue! (Position \##{queue.items.length+1})"
       queue.addToQueue qI
     .catch (err)=>
       @bot.sendMessage msg.channel, 'Something went wrong.'
