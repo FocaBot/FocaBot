@@ -95,7 +95,7 @@ class AudioModuleCommands
       filters += filter for filter in qI.filters
       reply = """
       **Now Playing In** `#{qI.playInChannel.name}`: 
-      `#{qI.title}` *#{filters}* (#{currentTime}/#{qI.duration}) Requested By #{qI.requestedBy.username}\n
+      `#{qI.title}` #{filters} (#{currentTime}/#{qI.duration}) Requested By #{qI.requestedBy.username}\n
       """
       if queue.items.length
         reply += "\n**Up next:**\n"
@@ -104,7 +104,7 @@ class AudioModuleCommands
         for qi in queue.items when i < 20
           filters = ""
           filters += filter for filter in qi.filters
-          reply += "**#{++i}.** `#{qi.title}` *#{filters}* (#{qi.duration}) Requested By #{qi.requestedBy.username}\n"
+          reply += "**#{++i}.** `#{qi.title}` #{filters} (#{qi.duration}) Requested By #{qi.requestedBy.username}\n"
         if l > 20
           reply += "*(#{l-i} more...)*"
       else
@@ -152,7 +152,7 @@ class AudioModuleCommands
       filters += filter for filter in qI.filters
       @bot.sendMessage msg.channel, """
       **Now Playing In** `#{qI.playInChannel.name}`: 
-      `#{qI.title}` *#{filters}* (#{currentTime}/#{qI.duration}) Requested By #{qI.requestedBy.username}\n
+      `#{qI.title}` #{filters} (#{currentTime}/#{qI.duration}) Requested By #{qI.requestedBy.username}\n
       """
 
   unregisterAll: =>

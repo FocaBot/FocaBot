@@ -24,9 +24,9 @@ class ServerAudioQueue
     # Filters
     if @currentItem.filters.length
       flags = ['-filter']
-      fstr = ""
-      fstr += filter.toFFMPEGFilter() for filter in @currentItem.filters
-      flags.push fstr
+      filters = []
+      filters.push filter.toFFMPEGFilter() for filter in @currentItem.filters
+      flags.push filters.join ', '
     else flags = []
     @audioPlayer.play @currentItem.playInChannel, @currentItem.path, flags
     .then (stream)=>

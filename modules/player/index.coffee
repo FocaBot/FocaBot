@@ -33,10 +33,15 @@ class PlayerModule
           f = filter.split '='
           filter = audioFilters.getFilter f[0], f[1]
           if filter
-            filters.push filter if not filter.validate()
+            if filter.isAdminOnly() and not @permissions.isAdmin msg.author, msg.server
+              return @bot.reply msg, "#{filter} is only for Bot Commanders."
+            valErr = filter.validate()
+            if valErr
+              return @bot.reply msg, "#{filter} - #{valErr}"
+            filters.push filter
     
       # temp
-      filters = [filters[0]]
+      #filters = [filters[0]]
 
     # Start download
     dl.download()
