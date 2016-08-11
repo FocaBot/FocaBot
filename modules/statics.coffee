@@ -15,7 +15,7 @@ class StatsModule
     memfree = Math.floor os.freemem() / 1024000
     serverCount = @bot.servers.length
     reply = """
-    **MIDIBot Statics**
+    **FocaBot Stats**
 
     Current Version: #{@engine.version} (#{@engine.versionName})
     Platform: #{os.platform()} (#{os.arch()})
