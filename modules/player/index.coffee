@@ -22,7 +22,9 @@ class PlayerModule
     )()
     moment.duration(info.duration).asSeconds()/60
 
-    if (duration > 1000 and not @permissions.isAdmin msg.author, msg.server) or duration <= 0
+    if (duration > 1000 and not @permissions.isAdmin msg.author, msg.server) or 
+       duration > 3600 and not @permissions.isOwner msg.author or
+       duration <= 0
       return @bot.reply msg, 'The requested song is too long. (or too short?)'
 
     # Get filters
@@ -44,6 +46,9 @@ class PlayerModule
       # temp
       #filters = [filters[0]]
 
+    filterstr = " "
+      filterstr += filter for filter in filters
+    @bot.sendMessage msg.channel, "Loading `#{info.title}` #{filterstr} (#{info.duration})..."
     # Start download
     dl.download()
     .then =>
@@ -57,8 +62,6 @@ class PlayerModule
         filters: filters
         path: dl.path
       }
-      filterstr = " "
-      filterstr += filter for filter in qI.filters
       # Set events
       qI.on 'start', =>
         @bot.sendMessage msg.channel, """
