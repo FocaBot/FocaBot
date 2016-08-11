@@ -113,7 +113,7 @@ class AudioModuleCommands
       @bot.sendMessage msg.channel, reply
       .then (m)=>
         @bot.deleteMessage msg
-        @bot.deleteMessage m {wait : 15000}
+        @bot.deleteMessage m, {wait : 15000}
 
     # Undo
     @undoCommand = @commands.registerCommand 'undo', {
@@ -159,7 +159,7 @@ class AudioModuleCommands
       `#{qI.title}` #{filters} (#{currentTime}/#{qI.duration}) Requested By #{qI.requestedBy.username}\n
       """
       .then (m)=>
-        @bot.deleteMessage m {wait : 10000}
+        @bot.deleteMessage m, {wait : 10000}
 
   unregisterAll: =>
     @commands.unregisterCommands [

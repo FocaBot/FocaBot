@@ -11,7 +11,6 @@ class PlayerModule
 
   handleVideoInfo: (dl, msg, args)=>
     {info} = dl
-
     # Check if duration is valid
     duration = (=>
       if info.duration.split(':').length < 2
@@ -74,7 +73,7 @@ class PlayerModule
           (Length: `#{qI.duration}` - Requested By **#{qI.requestedBy}**)
           """
           .then (m)=>
-            @bot.deleteMessage m {wait : 10000}
+            @bot.deleteMessage m, {wait : 10000}
       qI.on 'end', =>
         dl.deleteFiles()
         setTimeout (()=>
