@@ -25,14 +25,14 @@ class AdminModule
 
   enableFunc: (msg)=>
     @serverData.servers[msg.server.id].enabled = true
-    @bot.sendMessage msg.channel, 'MIDIBot enabled for this server.'
+    @bot.sendMessage msg.channel, 'FocaBot enabled for this server.'
 
   disableFunc: (msg)=>
     @serverData.servers[msg.server.id].enabled = false
-    @bot.sendMessage msg.channel, 'MIDIBot disabled for this server (will only accept commands from Bot Commanders).'
+    @bot.sendMessage msg.channel, 'FocaBot disabled for this server (will only accept commands from Bot Commanders).'
 
   restartFunc: (msg)=>
-    @bot.sendMessage msg.channel, 'MIDIBot is restarting...'
+    @bot.sendMessage msg.channel, 'FocaBot is restarting...'
     setTimeout process.exit, 2000 # Let's hope PM2 restarts it :)
 
   updateFunc: (msg,args,bot)=>
@@ -43,7 +43,7 @@ class AdminModule
 
                        """+stdout+"""
                        ```
-                       MIDIBot is restarting...
+                       FocaBot is restarting...
                        """
       setTimeout process.exit, 2000
 

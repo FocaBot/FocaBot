@@ -1,6 +1,7 @@
 CoffeeScript = require 'coffee-script'
 prune = require 'json-prune'
 format = require 'json-format'
+reload = require('require-reload')(require)
 formatSettings =
   type: 'space',
   size: 2

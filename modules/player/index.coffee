@@ -1,7 +1,8 @@
 QueueItem = require '../../models/audioQueueItem'
 moment = require 'moment'
-AudioModuleCommands = require './commands'
-audioFilters = require '../../filters'
+reload = require('require-reload')(require)
+AudioModuleCommands = reload './commands'
+audioFilters = reload '../../filters'
 
 class PlayerModule
   constructor: (@engine)->

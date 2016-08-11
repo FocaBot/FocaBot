@@ -1,3 +1,5 @@
+reload = require('require-reload')(require)
+
 ###
 Thy Module Manager
 ###
@@ -8,7 +10,7 @@ class BotModuleManager
   load: (modules)=>
     for module in modules
       try
-        modClass = require '../modules/'+module
+        modClass = reload '../modules/'+module
         @modules[module] = new modClass @engine
   
   unload: (modules)=>

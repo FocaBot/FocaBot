@@ -1,4 +1,5 @@
-VideoDownload = require './download'
+reload = require('require-reload')(require)
+VideoDownload = reload './download'
 moment = require 'moment'
 
 class AudioModuleCommands
