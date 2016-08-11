@@ -48,8 +48,8 @@ class PlayerModule
 
     filterstr = " "
     filterstr += filter for filter in filters
-    @bot.sendMessage msg.channel, "Loading `#{info.title}` #{filterstr} (#{info.duration})..."
     origMsg = undefined
+    @bot.sendMessage msg.channel, "Loading `#{info.title}` #{filterstr} (#{info.duration})..."
     # Start download
     .then (oms)=>
       origMsg = oms
