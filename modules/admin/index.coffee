@@ -15,6 +15,7 @@ class AdminModule
       ownerOnly: true
     @restartCommand = @commands.registerCommand 'restart', restartOptions, @restartFunc
     @updateCommand = @commands.registerCommand 'update', restartOptions, @updateFunc
+    @pullCommand = @commands.registerCommand 'pull', pullOptions, @pullFunc
 
   setnickFunc: (msg, args)=>
     @bot.setNickname msg.server, args, @bot.user, (error)=>
