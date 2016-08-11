@@ -33,9 +33,13 @@ class AdminModule
 
   restartFunc: (msg)=>
     @bot.sendMessage msg.channel, 'FocaBot is restarting...'
-    setTimeout process.exit, 2000 # Let's hope PM2 restarts it :)
+    .then ()-> setTimeout process.exit, 2000 # Let's hope PM2 restarts it :)
 
   updateFunc: (msg,args,bot)=>
+      @pullFunc msg,args,bot
+      .then ()=> @restartFunc msg,args,bot
+
+  pullFunc: (msg,args,bot)=> new Promise (resolve, reject)=>
     childProcess.exec 'git pull origin master', (error, stdout, stderr)->
       bot.sendMessage msg.channel, """
                        ```diff
@@ -43,9 +47,8 @@ class AdminModule
 
                        """+stdout+"""
                        ```
-                       FocaBot is restarting...
                        """
-      setTimeout process.exit, 2000
+      .then resolve
 
   cleanFunc: (msg,args,bot)=>
     hasError = false
