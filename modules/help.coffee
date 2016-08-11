@@ -3,26 +3,20 @@ class helpModule
     {@bot, @commands, @prefix} = @engine
     # help Command
     helpOptions =
-      description: 'Displays help about MIDIBot'
+      description: 'Displays help about FocaBot'
     @helpCommand = @commands.registerCommand 'help', helpOptions, @helpCommandFunction
 
   helpCommandFunction: (msg, args)=>
     reply = """
-    **MIDIBot Beta #{@engine.version} (#{@engine.versionName})**
+    **FocaBot Beta #{@engine.version} (#{@engine.versionName})**
     Made by <@164588804362076160>
-
-    This bot works much like most music bots, except it converts to midi! :D
     
-    To add this garbage to your server, use this:
-    https://discordapp.com/oauth2/authorize?client_id=206474212561387520&scope=bot&permissions=8192
-    
-    This bot is in an experimental phase, if you find any bugs feel free to send me a DM
+    This bot is not yet public, but you can send me a DM if you want it on your server.
 
     Command List:
     ```
     Available to Everyone:
-    #{@prefix}convert <link/title> - Converts to midi and gives a download link.
-    #{@prefix}play    <link/title> - Converts to midi and plays the result in current voice channel.
+    #{@prefix}play    <link/title> - Plays the requested
     #{@prefix}queue                - Shows the current play queue
     #{@prefix}help                 - Shows this help
     #{@prefix}stats                - Technical stuff about the bot
