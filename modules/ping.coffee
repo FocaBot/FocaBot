@@ -7,8 +7,9 @@ class PingModule
     @pingCommand = @commands.registerCommand 'ping', pingOptions, @pingCommandFunction
 
   pingCommandFunction: (msg, args)->
+    sd = Date.now()
     @bot.sendMessage msg.channel, "Pong!"
-    .then (m)=> @bot.updateMessage m, "Pong! `#{m.timestamp - msg.timestamp}ms`"
+    .then (m)=> @bot.updateMessage m, "Pong! `#{Date.now() - sd}ms`"
 
   shutdown: =>
     @commands.unregisterCommand @pingCommand
