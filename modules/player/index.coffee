@@ -49,8 +49,11 @@ class PlayerModule
     filterstr = " "
       filterstr += filter for filter in filters
     @bot.sendMessage msg.channel, "Loading `#{info.title}` #{filterstr} (#{info.duration})..."
+    origMsg = undefined
     # Start download
-    dl.download()
+    .then (oms)=>
+      origMsg = oms
+      dl.download()
     .then =>
       {queue, audioPlayer} = @getServerData(msg.server)
       # Create a new queue item
@@ -64,11 +67,14 @@ class PlayerModule
       }
       # Set events
       qI.on 'start', =>
+        @bot.deleteMessage origMsg
         @bot.sendMessage msg.channel, """
           Now Playing In `#{qI.playInChannel.name}`: **#{qI.title}** #{filterstr}
 
           (Length: `#{qI.duration}` - Requested By **#{qI.requestedBy}**)
           """
+          .then (m)=>
+            @bot.deleteMessage m {wait : 10000}
       qI.on 'end', =>
         dl.deleteFiles()
         setTimeout (()=>
@@ -77,7 +83,8 @@ class PlayerModule
             audioPlayer.clean true
         ), 100
       
-      @bot.sendMessage msg.channel, "**#{msg.author}** added `#{qI.title}` #{filterstr} (#{qI.duration}) to the queue! (Position \##{queue.items.length+1})"
+      @bot.updateMessage origMsg, "**#{msg.author}** added `#{qI.title}` #{filterstr} (#{qI.duration}) to the queue! (Position \##{queue.items.length+1})"
+      @bot.deleteMessage msg
       queue.addToQueue qI
     .catch (err)=>
       @bot.sendMessage msg.channel, 'Something went wrong.'

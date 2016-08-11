@@ -111,6 +111,9 @@ class AudioModuleCommands
       else
          reply += "Queue is currently empty."
       @bot.sendMessage msg.channel, reply
+      .then (m)=>
+        @bot.deleteMessage msg
+        @bot.deleteMessage m {wait : 15000}
 
     # Undo
     @undoCommand = @commands.registerCommand 'undo', {
@@ -155,6 +158,8 @@ class AudioModuleCommands
       **Now Playing In** `#{qI.playInChannel.name}`: 
       `#{qI.title}` #{filters} (#{currentTime}/#{qI.duration}) Requested By #{qI.requestedBy.username}\n
       """
+      .then (m)=>
+        @bot.deleteMessage m {wait : 10000}
 
   unregisterAll: =>
     @commands.unregisterCommands [
