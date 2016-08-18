@@ -20,7 +20,7 @@ class helpModule
     #{@prefix}play    <link/title> - Plays the requested song
     #{@prefix}queue                - Shows the current song queue
     #{@prefix}skip                 - Vote to skip the current song
-                                (Bot commanders bypass voting)
+                          (Bot commanders bypass voting)
     #{@prefix}undo                 - Removes the most recent item added to the queue
     #{@prefix}np                   - Now Playing
     #{@prefix}help                 - Shows this help
@@ -30,6 +30,7 @@ class helpModule
 
     Bot Commanders Only:
     #{@prefix}volume  <vol>        - Sets volume of the bot
+    #{@prefix}shuffle              - Shuffles the queue
     #{@prefix}pause                - Pauses playback
     #{@prefix}resume               - Resumes playback
     #{@prefix}stop                 - Stops playback an clears the queue
