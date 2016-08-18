@@ -7,7 +7,7 @@ class FlangerFilter extends AudioFilter
     return 'Speed must not be higher than 10' if speed > 10
     return 'Speed must not be lower than 0.1' if speed < 0.1
 
-  toFFMPEGFilter:=> @escape "flanger=speed=#{parseFloat(@param)}"
-  toString:=> "[Flanger #{@param}]"
+  toFFMPEGFilter:=> @escape "flanger=speed=#{parseFloat(@param) or 0.5}"
+  toString:=> "[Flanger #{@param or 0.5}]"
   
 module.exports = FlangerFilter

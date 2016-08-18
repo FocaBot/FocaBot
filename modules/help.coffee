@@ -20,7 +20,8 @@ class helpModule
     #{@prefix}play    <link/title> - Plays the requested song
     #{@prefix}queue                - Shows the current song queue
     #{@prefix}skip                 - Vote to skip the current song
-                                     (Bot commanders bypass voting)
+                                (Bot commanders bypass voting)
+    #{@prefix}undo                 - Removes the most recent item added to the queue
     #{@prefix}np                   - Now Playing
     #{@prefix}help                 - Shows this help
     #{@prefix}filters              - Shows information about filters
