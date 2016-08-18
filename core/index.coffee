@@ -30,7 +30,7 @@ class BotEngine
     @version = "0.3.1"
     
   onReady: =>
-    @bot.setPlayingGame @prefix+'help'
+    @bot.setPlayingGame @prefix+'help | '+@prefix+'filters'
     @serverData.initServers @bot.servers
     @permissions.updateAdmins()
   

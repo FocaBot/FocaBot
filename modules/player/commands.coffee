@@ -24,12 +24,21 @@ class AudioModuleCommands
     # Skip
     @skipCommand = @commands.registerCommand 'skip', {
       description: 'Skips currently playing song.'
-      adminOnly: true
     }, (msg)=>
       {queue} = @getServerData(msg.server)
       if queue.items.length or queue.currentItem
-        @bot.sendMessage msg.channel, "**#{msg.author.username}** skipped the current song."
-        queue.nextItem()
+        if not @permissions.isAdmin msg.author, msg.server
+
+          if msg.author.id in queue.currentItem.voteSkip
+            return @bot.reply msg, 'Did you really try to skip this song **again**?'
+          else
+            queue.currentItem.voteSkip.push msg.author.id
+            ql = queue.currentItem.voteSkip.length
+            @bot.sendMessage msg.channel, "**#{msg.author.username}** voted to skip the current song (#{ql}/3)"
+
+        if (queue.currentItem.voteSkip.length >= 3) or @permissions.isAdmin msg.author, msg.server
+          @bot.sendMessage msg.channel, "**#{msg.author.username}** skipped the current song."
+          queue.nextItem()
       else
         @bot.sendMessage msg.channel, 'No songs playing on the current server.'
 

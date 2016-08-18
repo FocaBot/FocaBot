@@ -48,7 +48,7 @@ class PlayerModule
     filterstr = " "
     filterstr += filter for filter in filters
     origMsg = undefined
-    @bot.sendMessage msg.channel, "Loading `#{info.title}` #{filterstr} (#{info.duration})..."
+    @bot.sendMessage msg.channel, "Loading `#{info.title}` #{filterstr}..."
     # Start download
     .then (oms)=>
       origMsg = oms
@@ -79,6 +79,8 @@ class PlayerModule
         setTimeout (()=>
           if not queue.items.length and not queue.currentItem
             @bot.sendMessage msg.channel, 'Nothing more to play.'
+            .then (m)=>
+              @bot.deleteMessage m, {wait : 10000}
             audioPlayer.clean true
         ), 100
       
@@ -86,6 +88,7 @@ class PlayerModule
       @bot.deleteMessage msg
       queue.addToQueue qI
     .catch (err)=>
+      console.error err
       @bot.sendMessage msg.channel, 'Something went wrong.'
       dl.deleteFiles()
         
