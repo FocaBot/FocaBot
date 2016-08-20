@@ -16,6 +16,7 @@ class AdminModule
     @restartCommand = @commands.registerCommand 'restart', restartOptions, @restartFunc
     @updateCommand = @commands.registerCommand 'update', restartOptions, @updateFunc
     @pullCommand = @commands.registerCommand 'pull', restartOptions, @pullFunc
+    @execCommand = @commands.registerCommand 'exec', restartOptions, @execFunc
 
   setnickFunc: (msg, args)=>
     @bot.setNickname msg.server, args, @bot.user, (error)=>
@@ -51,6 +52,16 @@ class AdminModule
                        """
       .then resolve
 
+  execFunc: (msg, args, bot)=>
+    childProcess.exec args, (error, stdout, stderr)->
+      bot.sendMessage msg.channel, """
+                       ```diff
+                       + $ #{args}
+
+                       #{stdout}
+                       ```
+                       """
+
   cleanFunc: (msg,args,bot)=>
     hasError = false
     for m in msg.channel.messages when m.author is bot.user or (m.content.indexOf @prefix) is 0
@@ -61,6 +72,6 @@ class AdminModule
       
 
   shutdown: =>
-    @commands.unregisterCommands [@setnickCommand, @enableCommand, @disableCommand, @restartCommand, @updateCommand, @cleanCommand]
+    @commands.unregisterCommands [@setnickCommand, @enableCommand, @disableCommand, @restartCommand, @updateCommand, @cleanCommand, @pullFunc, @execFunc]
 
 module.exports = AdminModule
