@@ -45,7 +45,7 @@ class AdminModule
     childProcess.exec 'git pull origin master', (error, stdout, stderr)->
       bot.sendMessage msg.channel, """
                        ```diff
-                       + $ git pull origin master
+                       + focabot@thebit.link ~ $ git pull origin master
 
                        """+stdout+"""
                        ```
@@ -56,7 +56,7 @@ class AdminModule
     childProcess.exec args, (error, stdout, stderr)->
       bot.sendMessage msg.channel, """
                        ```diff
-                       + $ #{args}
+                       + focabot@thebit.link ~ $ #{args}
 
                        #{stdout}
                        ```
