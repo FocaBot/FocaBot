@@ -35,6 +35,7 @@
     "json-prune": "^1.0.1",
     "mkdirp": "^0.5.1",
     "moment": "^2.14.1",
+    "node-bing-api": "^2.4.1",
     "pad-left": "^2.1.0",
     "path": "^0.12.7",
     "request": "^2.74.0",
