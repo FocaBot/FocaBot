@@ -27,6 +27,7 @@ class helpModule
     #{@prefix}filters              - Shows information about filters
     #{@prefix}stats                - Technical stuff about the bot
     #{@prefix}ping                 - Pong!
+    #{@prefix}seal                 - Sends seal pictures
 
     Bot Commanders Only:
     #{@prefix}volume  <vol>        - Sets volume of the bot
