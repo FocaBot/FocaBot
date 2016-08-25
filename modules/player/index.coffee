@@ -22,7 +22,7 @@ class PlayerModule
     moment.duration(info.duration).asSeconds()/60
 
     if (duration > 1000 and not @permissions.isAdmin msg.author, msg.server) or 
-       duration > 3600 and not @permissions.isOwner msg.author or
+       (duration > 3600 and not @permissions.isOwner msg.author) or
        duration <= 0
       return @bot.reply msg, 'The requested song is too long. (or too short?)'
 
@@ -63,6 +63,7 @@ class PlayerModule
         playInChannel: msg.author.voiceChannel
         filters: filters
         path: dl.path
+        sauce: info.webpage_url
       }
       # Set events
       qI.on 'start', =>

@@ -28,6 +28,7 @@ class helpModule
     #{@prefix}stats                - Technical stuff about the bot
     #{@prefix}ping                 - Pong!
     #{@prefix}seal                 - Sends seal pictures
+    #{@prefix}sauce                - Sends a link to the current item's sauce
 
     Bot Commanders Only:
     #{@prefix}volume  <vol>        - Sets volume of the bot

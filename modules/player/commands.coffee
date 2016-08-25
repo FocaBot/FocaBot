@@ -168,7 +168,21 @@ class AudioModuleCommands
       `#{qI.title}` #{filters} (#{currentTime}/#{qI.duration}) Requested By #{qI.requestedBy.username}\n
       """
       .then (m)=>
+        @bot.deleteMessage msg
         @bot.deleteMessage m, {wait : 10000}
+
+    # Sauce
+    @sauceCommand = @commands.registerCommand 'sauce', {
+      description: 'Gets the sauce of the current song.'
+    }, (msg, args)=>
+      {audioPlayer, queue} = @getServerData(msg.server)
+      return @bot.sendMessage msg.channel, "Nothing being played on the current server." if not queue.currentItem
+      qI = queue.currentItem
+      return @bot.reply msg, "Sorry, no sauce for the current item. :C" if not qI.sauce
+      @bot.reply msg, "Here's the sauce of the current item: #{qI.sauce}"
+      .then (m)=>
+        @bot.deleteMessage msg
+        @bot.deleteMessage m, {wait : 15000}
 
   unregisterAll: =>
     @commands.unregisterCommands [

@@ -10,6 +10,7 @@ class QueueItem extends EventEmitter
        @playInChannel,
        @filters,
        @path,
+       @sauce,
     } = data
     @voteSkip = []
     for filter in @filters
