@@ -1,8 +1,8 @@
-botEngine = require './core'
+BotEngine = require './core'
 dotenv = require 'dotenv'
 mkdirp = require 'mkdirp'
 
-mkdirp 'data/tmp'
+# mkdirp 'data/tmp'
 dotenv.config()
 botSettings =
   prefix: process.env.BOT_PREFIX
@@ -11,11 +11,11 @@ botSettings =
   admins: JSON.parse process.env.BOT_ADMINS
   adminRoles: JSON.parse process.env.BOT_ADMIN_ROLES
 
-midiBot = new botEngine botSettings
+focaBot = new BotEngine botSettings
 
 # Run this shit
-midiBot.establishConnection()
+focaBot.establishConnection()
 # Load Modules
-midiBot.modules.load JSON.parse process.env.BOT_MODULES
+focaBot.modules.load JSON.parse process.env.BOT_MODULES
 
 console.log 'done'

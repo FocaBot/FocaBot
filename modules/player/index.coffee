@@ -48,11 +48,11 @@ class PlayerModule
     filterstr = " "
     filterstr += filter for filter in filters
     origMsg = undefined
-    @bot.sendMessage msg.channel, "Loading `#{info.title}` #{filterstr}..."
+    # @bot.sendMessage msg.channel, "Loading `#{info.title}` #{filterstr}..."
     # Start download
     .then (oms)=>
       origMsg = oms
-      dl.download()
+      # dl.download()
     .then =>
       {queue, audioPlayer} = @getServerData(msg.server)
       # Create a new queue item
@@ -62,7 +62,7 @@ class PlayerModule
         requestedBy: msg.author
         playInChannel: msg.author.voiceChannel
         filters: filters
-        path: dl.path
+        stream: dl
         sauce: info.webpage_url
       }
       # Set events

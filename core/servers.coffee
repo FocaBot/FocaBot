@@ -1,4 +1,3 @@
-mkdirp = require 'mkdirp'
 AudioPlayer = require './audioPlayer'
 AudioQueue = require './audioQueue'
 
@@ -11,7 +10,6 @@ class BotServerManager
     @addServer server for server in servers
   
   addServer: (server)=>
-    mkdirp "data/servers/#{server.id}/queue"
     @servers[server.id] =
       enabled: true,
       admins: [],

@@ -16,6 +16,21 @@ class ServerAudioPlayer
       resolve @currentStream
     .catch (error)=>
       reject error
+
+  playStream: (audioChannel, stream, flags)=> new Promise (resolve, reject)=>
+    {bot, engine, server} = @
+    if @currentStream?
+      return reject { message: 'Bot is currently playing another file on the server.' }
+    @join audioChannel
+    .then (connection)=>
+      connection.playRawStream stream
+    .then (@currentStream)=>
+      console.log @currentStream
+      @currentStream.on 'end', =>
+        @clean()
+      resolve @currentStream
+    .catch (error)=>
+      reject error
     
   join: (audioChannel)=> new Promise (resolve, reject)=>
     if @voiceConnection?

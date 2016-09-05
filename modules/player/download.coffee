@@ -26,8 +26,13 @@ class VideoDownload extends EventEmitter
     @dl.pipe fs.createWriteStream @path
     @dl.on 'end', resolve
     @dl.on 'error', reject
+    @pp = true
+
+  getStream: => youtubedl @nameOrUrl,
+                ['--default-search', 'ytsearch', '-f', 'bestaudio']
+    
 
   deleteFiles: ()=>
-    fs.unlink @path
+    fs.unlink @path if @pp
 
 module.exports = VideoDownload
