@@ -28,6 +28,7 @@
     "chance": "^1.0.4",
     "coffee-script": "^1.10.0",
     "discord.js": "^8.1.0",
+    "discordie": "^0.8.1",
     "dotenv": "^2.0.0",
     "ffmpeg": "0.0.4",
     "git-rev": "^0.2.1",

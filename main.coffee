@@ -5,6 +5,7 @@ mkdirp = require 'mkdirp'
 # mkdirp 'data/tmp'
 dotenv.config()
 botSettings =
+  name: 'FocaBot'
   prefix: process.env.BOT_PREFIX
   token: process.env.BOT_TOKEN
   owner: JSON.parse process.env.BOT_OWNER
@@ -18,4 +19,4 @@ focaBot.establishConnection()
 # Load Modules
 focaBot.modules.load JSON.parse process.env.BOT_MODULES
 
-console.log 'done'
+console.log 'Started.'

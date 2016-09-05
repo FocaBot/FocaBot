@@ -1,15 +1,12 @@
-class helpModule
-  constructor: (@engine)->
-    {@bot, @commands, @prefix} = @engine
-    # help Command
-    helpOptions =
-      description: 'Displays help about FocaBot'
-    @helpCommand = @commands.registerCommand 'help', helpOptions, @helpCommandFunction
-    @filtersCommand = @commands.registerCommand 'filters', helpOptions, @filtersCommandFunction
+class HelpModule extends BotModule
+  init: =>
+    {@prefix} = @engine
+    @registerCommand 'help', @helpCommandFunction
+    @registerCommand 'filters', @filtersCommandFunction
 
   helpCommandFunction: (msg, args)=>
     reply = """
-    **FocaBot Beta #{@engine.version} (#{@engine.versionName})**
+    **#{@engine.name} #{@engine.version} (#{@engine.versionName})**
     Made by <@164588804362076160>
     
     This bot is not yet public, though you can send me a DM if you want it on your server.
@@ -39,8 +36,10 @@ class helpModule
     #{@prefix}clean                - Deletes messages sent by the bot (requires permission to do so)
     ```
     """
-    @bot.sendMessage msg.author, reply
-    @bot.reply msg, 'Check your DMs!' if msg.channel.server?
+    msg.author.openDM().then (dm)=>
+      dm.sendMessage reply
+      msg.reply 'Check your DMs!' if msg.channel.guild_id
+    
 
   filtersCommandFunction: (msg,args)=>
     reply = """
@@ -105,10 +104,8 @@ class helpModule
     **| vaporwave** (Preset, same as speed=0.75)
     **| earrape** (Preset, same as volume=25)
     """
-    @bot.sendMessage msg.author, reply
-    @bot.reply msg, 'Check your DMs!' if msg.channel.server?
+    msg.author.openDM().then (dm)=>
+      dm.sendMessage reply
+      msg.reply 'Check your DMs!' if msg.channel.guild_id
 
-  shutdown: =>
-    @commands.unregisterCommands [ @helpCommand, @filtersCommand ]
-
-module.exports = helpModule
+module.exports = HelpModule

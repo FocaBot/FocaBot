@@ -2,7 +2,13 @@
 class BotCommand
   constructor: (@engine, @name, opt, @func)->
     {@bot} = @engine
-    {@argExplain, @description, @aliases, @adminOnly, @ownerOnly, @argSeparator, @includeCommandNameInArgs} = opt
+    {
+      @aliases,
+      @adminOnly,
+      @ownerOnly,
+      @argSeparator,
+      @includeCommandNameInArgs
+    } = opt
   
   exec: (msg, args)=>
     @func msg, args, @bot, @engine
@@ -15,8 +21,9 @@ class BotCommandManager
     @registeredPlain = {}
 
   registerCommand: (name, opt, func)=>
-    return null if not name? or not func?
+    return null if not name?
     command = new BotCommand @engine, name, opt, func
+    command = new BotCommand @engine, name, {}, opt if typeof opt is 'function'
     @registered[name] = command
     @registeredPlain[name] = command
     @registeredPlain[alias] = command for alias in opt.aliases if opt.aliases?
@@ -35,15 +42,15 @@ class BotCommandManager
     @unregisterCommand command for command in commands
   
   executeCommand: (msg)=>
-    name = msg.content[@prefix.length..].split(' ')[0]
+    name = msg.content[@prefix.length..].split(' ')[0].toLowerCase()
     args = msg.content[@prefix.length+name.length+1..]
     command = @registeredPlain[name]
     return false if not command?
-    if command.adminOnly and not @permissions.isAdmin msg.author, msg.server
-      @bot.reply msg, "You don't have enough permissions to execute that command."
+    if command.adminOnly and not @permissions.isAdmin msg.author, msg.guild
+      msg.reply "You don't have enough permissions to execute that command."
       return false
     if command.ownerOnly and not @permissions.isOwner msg.author
-      @bot.reply msg, "Only the owner has access to that command."
+      msg.reply "Only the owner has access to that command."
       return false
     if command.argSeparator?
       args = args.split(command.argSeparator)

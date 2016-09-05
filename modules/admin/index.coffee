@@ -1,77 +1,67 @@
 childProcess = require 'child_process'
+os = require 'os'
+request = require 'request'
 
-class AdminModule
-  constructor: (@engine)->
-    {@bot, @commands, @serverData, @prefix} = @engine
+class AdminModule extends BotModule
+  init: =>
     # Admin Commands
     adminOptions =
       adminOnly: true
-    @setnickCommand =  @commands.registerCommand 'setnick', adminOptions, @setnickFunc
-    @enableCommand =  @commands.registerCommand 'enable', adminOptions, @enableFunc
-    @disableCommand =  @commands.registerCommand 'disable', adminOptions, @disableFunc
-    @cleanCommand =  @commands.registerCommand 'clean', adminOptions, @cleanFunc
+    @registerCommand 'setnick', adminOptions, @setnickFunc
+    @registerCommand 'clean', adminOptions, @cleanFunc
     # Restart Command
-    restartOptions =
+    ownerOptions =
       ownerOnly: true
-    @restartCommand = @commands.registerCommand 'restart', restartOptions, @restartFunc
-    @updateCommand = @commands.registerCommand 'update', restartOptions, @updateFunc
-    @pullCommand = @commands.registerCommand 'pull', restartOptions, @pullFunc
-    @execCommand = @commands.registerCommand 'exec', restartOptions, @execFunc
+    @registerCommand 'restart', ownerOptions, @restartFunc
+    @registerCommand 'update', ownerOptions, @updateFunc
+    @registerCommand 'pull', ownerOptions, @pullFunc
+    @registerCommand 'exec', ownerOptions, @execFunc
+    @registerCommand 'setavatar', ownerOptions, @setavatarFunc
+    @registerCommand 'setusername', ownerOptions, @setusernameFunc
 
   setnickFunc: (msg, args)=>
-    @bot.setNickname msg.server, args, @bot.user, (error)=>
-      if error?
-        @bot.sendMessage msg.channel "Couldn't set nickname for the bot. Make sure it has enough permissions."
-      else
-        @bot.sendMessage msg.channel "Nickname changed succesfully!"
+    @bot.User.memberOf(msg.guild).setNickname args
+    .then ()=>
+      msg.reply "Nickname changed succesfully!"
+    .catch (error)=>
+      console.error error
+      msg.reply "Couldn't set nickname for the bot. Make sure it has enough permissions."
 
-  enableFunc: (msg)=>
-    @serverData.servers[msg.server.id].enabled = true
-    @bot.sendMessage msg.channel, 'FocaBot enabled for this server.'
+  setusernameFunc: (msg, args)=>
+    @bot.User.setUsername args
+    .then => msg.reply 'Username changed.'
+    .catch => msg.reply "Couldn't change the username."
 
-  disableFunc: (msg)=>
-    @serverData.servers[msg.server.id].enabled = false
-    @bot.sendMessage msg.channel, 'FocaBot disabled for this server (will only accept commands from Bot Commanders).'
+  setavatarFunc: (msg,args)=>
+    return if not msg.attachments[0]
+    request { url: msg.attachments[0].url, encoding: null }, (error, response, body)=>
+      @bot.User.setAvatar body if not error and response.statusCode == 200
 
   restartFunc: (msg)=>
-    @bot.sendMessage msg.channel, 'FocaBot is restarting...'
-    .then ()-> setTimeout process.exit, 2000 # Let's hope PM2 restarts it :)
+    msg.channel.sendMessage 'FocaBot is restarting...'
+    .then ()-> process.exit() # Let's hope PM2 restarts it :)
 
   updateFunc: (msg,args,bot)=>
       @pullFunc msg,args,bot
       .then ()=> @restartFunc msg,args,bot
 
-  pullFunc: (msg,args,bot)=> new Promise (resolve, reject)=>
-    childProcess.exec 'git pull origin master', (error, stdout, stderr)->
-      bot.sendMessage msg.channel, """
-                       ```diff
-                       + focabot@thebit.link ~ $ git pull origin master
-
-                       """+stdout+"""
-                       ```
-                       """
-      .then resolve
+  pullFunc: (msg,args,bot)=> @execFunc 'git pull origin master', args, bot
 
   execFunc: (msg, args, bot)=>
     childProcess.exec args, (error, stdout, stderr)->
-      bot.sendMessage msg.channel, """
-                       ```diff
-                       + focabot@thebit.link ~ $ #{args}
+      msg.channel.sendMessage """
+                              ```diff
+                              + [#{@engine.name}@#{os.hostname()} ~]$ #{args}
 
-                       #{stdout}
-                       ```
-                       """
+                              #{stdout}
+                              ```
+                              """
 
   cleanFunc: (msg,args,bot)=>
     hasError = false
-    for m in msg.channel.messages when m.author is bot.user or (m.content.indexOf @prefix) is 0
-      bot.deleteMessage m,{},(err)->
-        if err and not hasError
-          bot.sendMessage msg.channel, "Couldn't delete messages, check the bot permissions."
-          hasError = true
-      
-
-  shutdown: =>
-    @commands.unregisterCommands [@setnickCommand, @enableCommand, @disableCommand, @restartCommand, @updateCommand, @cleanCommand, @pullFunc, @execFunc]
+    bot.Messages.deleteMessages msg.channel.messages.filter (m)=>
+      m.author.id is bot.User.id or m.indexOf @engine.prefix is 0
+    .catch =>
+      msg.channel.sendMessage "Couldn't delete some messages."
 
 module.exports = AdminModule
