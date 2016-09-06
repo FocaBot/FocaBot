@@ -69,7 +69,7 @@ class PlayerModule extends BotModule
       msg.channel.sendMessage """
         Now Playing in `#{qI.playInChannel.name}`:
         ```fix
-        live
+        #{qI.title}
         ```
         #{filterstr}
         Length: `#{durationstr}`

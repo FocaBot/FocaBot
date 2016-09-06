@@ -77,7 +77,7 @@ class AudioModuleCommands
       reply = """
         Now Playing in `#{qI.playInChannel.name}`:
         ```fix
-        live
+        #{qI.title}
         ```
         #{filterstr}
         Length: `#{durationstr}`
@@ -141,7 +141,7 @@ class AudioModuleCommands
       msg.channel.sendMessage """
         Now Playing in `#{qI.playInChannel.name}`:
         ```fix
-        live
+        #{qI.title}
         ```
         #{filterstr}
         Length: `#{durationstr}`
