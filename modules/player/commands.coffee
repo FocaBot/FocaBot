@@ -26,7 +26,7 @@ class AudioModuleCommands
       {queue} = @getGuildData(msg.guild)
       return if msg.author.bot
       return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
-      target = Math.round(msg.member.getVoiceChannel().members.length * 0.4) + 1
+      target = Math.round(msg.member.getVoiceChannel().members.length * 0.4)
       if queue.items.length or queue.currentItem
         if not @permissions.isAdmin msg.author, msg.guild
 

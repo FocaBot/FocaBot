@@ -15,7 +15,6 @@ class SealModule extends BotModule
         ext = image.ContentType.split('/')[1]
         .replace 'jpeg', 'jpg'
         .replace 'animatedgif', 'gif'
-        console.log image
         name = image.Title + '.' + ext
         # Send the pic
         msg.channel.uploadFile request(image.MediaUrl), name
