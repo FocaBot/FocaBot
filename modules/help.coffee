@@ -30,8 +30,6 @@ class HelpModule extends BotModule
     Bot Commanders Only:
     #{@prefix}volume  <vol>        - Sets volume of the bot
     #{@prefix}shuffle              - Shuffles the queue
-    #{@prefix}pause                - Pauses playback
-    #{@prefix}resume               - Resumes playback
     #{@prefix}stop                 - Stops playback an clears the queue
     #{@prefix}clean                - Deletes messages sent by the bot (requires permission to do so)
     ```

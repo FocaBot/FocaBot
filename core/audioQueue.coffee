@@ -1,13 +1,13 @@
 Chance = require 'chance'
 
-class ServerAudioQueue
-  constructor: (@engine, @server)->
-    {@bot, @permissions, @getServerData} = @engine
-    {@audioPlayer} = @getServerData @server
+class GuildAudioQueueManager
+  constructor: (@engine, @guild)->
+    {@bot, @permissions, @getGuildData} = @engine
+    {@audioPlayer} = @getGuildData @guild
     @items = []
 
   addToQueue: (item)=>
-    if item.path or item.stream and item.playInChannel and typeof item.emit is 'function'
+    if item.path and item.playInChannel and typeof item.emit is 'function'
       @items.push(item)
       item.emit 'addedToQueue', @server
       if not @currentItem?
@@ -28,11 +28,7 @@ class ServerAudioQueue
       filters.push filter.toFFMPEGFilter() for filter in @currentItem.filters
       flags.push filters.join ', '
     else flags = []
-    # @audioPlayer.play @currentItem.playInChannel, @currentItem.path, flags
-    @audioPlayer.playStream @currentItem.playInChannel,
-                            @currentItem.stream.getStream(),
-                            @currentItem.path,
-                            flags
+    @audioPlayer.play @currentItem.playInChannel, @currentItem.path, flags
     .then (stream)=>
       stream.on 'end', ()=>
         @nextItem() if not item.skipped
@@ -64,4 +60,4 @@ class ServerAudioQueue
       @currentItem = null
     @audioPlayer.stop()
 
-module.exports = ServerAudioQueue
+module.exports = GuildAudioQueueManager

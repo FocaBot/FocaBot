@@ -7,7 +7,7 @@ Thy Module Base
 class BotModule
   constructor: ->
     @engine = engine
-    { @bot } = engine
+    { @bot, @permissions } = engine
     @commands = []
 
   registerCommand: (name, options, func)=>

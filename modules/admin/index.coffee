@@ -45,7 +45,7 @@ class AdminModule extends BotModule
       @pullFunc msg,args,bot
       .then ()=> @restartFunc msg,args,bot
 
-  pullFunc: (msg,args,bot)=> @execFunc 'git pull origin master', args, bot
+  pullFunc: (msg,args,bot)=> @execFunc 'git pull', args, bot
 
   execFunc: (msg, args, bot)=>
     childProcess.exec args, (error, stdout, stderr)->
@@ -60,7 +60,7 @@ class AdminModule extends BotModule
   cleanFunc: (msg,args,bot)=>
     hasError = false
     bot.Messages.deleteMessages msg.channel.messages.filter (m)=>
-      m.author.id is bot.User.id or m.indexOf @engine.prefix is 0
+      m.author.id is bot.User.id or m.content.indexOf @engine.prefix is 0
     .catch =>
       msg.channel.sendMessage "Couldn't delete some messages."
 

@@ -5,14 +5,15 @@ Discordie = require 'discordie'
 CommandManager = require './commands'
 ModuleManager = require './modules'
 PermissionManager = require './permissions'
-ServerManager = require './servers'
+GuildManager = require './guilds'
 git = require 'git-rev'
+{ Guild } = require '../models'
 
 class BotEngine
   constructor: (@settings) ->
     {@prefix, @name} = @settings
     @bot = new Discordie { autoReconnect: true }
-    # @serverData = new ServerManager @
+    @guildData = new GuildManager @
     @permissions = new PermissionManager @
     @commands = new CommandManager @
     @modules = new ModuleManager @
@@ -21,6 +22,7 @@ class BotEngine
     @bootDate = new Date()
     git.short @devVersion
     @version = "0.4.1"
+    global.Core = @
     
   onReady: =>
     @bot.User.setGame "#{@prefix}help | #{@prefix}filters"
@@ -35,6 +37,8 @@ class BotEngine
 
   establishConnection: => @bot.connect { token: @settings.token }
 
-  getServerData: (server)=> @serverData.servers[server.id]
+  getGuildData: (guild)=>
+    return @guildData.guilds[guild.id] if @guildData.guilds[guild.id]?
+    @guildData.addGuild guild
 
 module.exports = BotEngine

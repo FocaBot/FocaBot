@@ -1,31 +1,26 @@
-class ServerAudioPlayer
-  constructor: (@engine, @server)->
+util = require 'util' 
+
+class GuildAudioPlayer
+  constructor: (@engine, @guild)->
     {@bot, @permissions} = @engine
-    @volume = 0.5
+    @volume = 50
 
   play: (audioChannel, path, flags)=> new Promise (resolve, reject)=>
-    {bot, engine, server} = @
     if @currentStream?
       return reject { message: 'Bot is currently playing another file on the server.' }
+    
     @join audioChannel
     .then (connection)=>
-      connection.playArbitraryFFmpeg ['-i', path].concat(flags)
+      connection.createExternalEncoder {
+        type: 'ffmpeg'
+        source: path
+        format: 'pcm'
+        frameDuration: 60
+        outputArgs: flags
+      }
     .then (@currentStream)=>
-      @currentStream.on 'end', =>
-        @clean()
-      resolve @currentStream
-    .catch (error)=>
-      reject error
-
-  playStream: (audioChannel, stream, flags)=> new Promise (resolve, reject)=>
-    {bot, engine, server} = @
-    if @currentStream?
-      return reject { message: 'Bot is currently playing another file on the server.' }
-    @join audioChannel
-    .then (connection)=>
-      connection.playRawStream stream
-    .then (@currentStream)=>
-      console.log @currentStream
+      @encStream = @currentStream.play()
+      @voiceConnection.getEncoder().setVolume @volume
       @currentStream.on 'end', =>
         @clean()
       resolve @currentStream
@@ -34,29 +29,30 @@ class ServerAudioPlayer
     
   join: (audioChannel)=> new Promise (resolve, reject)=>
     if @voiceConnection?
-      if @voiceConnection.voiceChannel.id isnt audioChannel.id
+      if @voiceConnection.channelId isnt audioChannel.id
         return reject { message: 'Bot is already in another voice channel' } if @currentStream?
         @clean true
       else
         return resolve @voiceConnection
-    @bot.joinVoiceChannel audioChannel
-    .then (@voiceConnection)=>
-      @voiceConnection.setVolume @volume
+    audioChannel.join()
+    .then (voiceConnectionInfo)=>
+      { @voiceConnection } = voiceConnectionInfo
       resolve @voiceConnection
     .catch (error)=>
       reject error
 
-  setVolume: (@volume)=>@voiceConnection.setVolume @volume
+  setVolume: (@volume)=> @voiceConnection.getEncoder().setVolume @volume
   stop:   ()=>
-    @voiceConnection.stopPlaying()
+    try
+      @currentStream.stop()
+      # @currentStream.destroy()
     @clean()
-  pause:  ()=> @voiceConnection.pause()
-  resume: ()=> @voiceConnection.resume()
 
   clean: (disconnect)=>
-    @currentStream = null
+    delete @currentStream
+    delete @encStream
     if disconnect
-      @voiceConnection.destroy()
-      @voiceConnection = null
+      @voiceConnection.disconnect()
+      delete @voiceConnection
 
-module.exports = ServerAudioPlayer
+module.exports = GuildAudioPlayer

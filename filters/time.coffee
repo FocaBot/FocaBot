@@ -11,14 +11,9 @@ class TimeFilter extends AudioFilter
     }
     .asSeconds()
 
-  parseTimestamp: (time)=>
-    t = moment.duration { seconds: time }
-    "#{t.minutes()}:#{t.seconds()}"
-
   processTime: (time)=>
-    originalTime = @parseTime time
-    return @parseTimestamp @e if @e
-    return @parseTimestamp originalTime - @s if @s
+    return @e if @e
+    return time - @s if @s
 
   validate:=>
     splt = @param.split '-'
@@ -47,7 +42,7 @@ class TimeFilter extends AudioFilter
     r = '[Time]'
     r = '' if @s or @e
     r += "[From #{@s}s]" if @s
-    r += " [Duration #{@e}s]" if @e
+    r += "[Duration #{@e}s]" if @e
     r
     
   

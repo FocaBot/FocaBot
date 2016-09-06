@@ -2,22 +2,7 @@ AudioFilter = require '../models/audioFilter'
 moment = require 'moment'
 
 class TempoFilter extends AudioFilter
-  parseTime:(time)=>
-    t = time.split(':').reverse()
-    moment.duration {
-      seconds: t[0]
-      minutes: t[1]
-      hours:   t[2]
-    }
-    .asSeconds()
-
-  parseTimestamp: (time)=>
-    t = moment.duration { seconds: time }
-    "#{t.minutes()}:#{t.seconds()}"
-
-  processTime: (time)=>
-    originalTime = @parseTime time
-    return @parseTimestamp originalTime / parseFloat(@param)
+  processTime: (time)=> time / parseFloat(@param)
 
   validate:=>
     speed = parseFloat @param 

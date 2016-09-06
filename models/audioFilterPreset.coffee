@@ -5,5 +5,6 @@ class AudioFilterPreset
     @toFFMPEGFilter = @original.toFFMPEGFilter
     @toString = @original.toString
     @isAdminOnly = @original.isAdminOnly
+    @processTime = @original.processTime
 
 module.exports = AudioFilterPreset
