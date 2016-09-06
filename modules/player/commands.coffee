@@ -144,7 +144,7 @@ class AudioModuleCommands
         #{qI.title}
         ```
         #{filterstr}
-        Length: `#{durationstr}`
+        `#{currentTime}` / `#{durationstr}`
         Requested By **#{qI.requestedBy.nick or qI.requestedBy.username}**
         """
       .then (m)=>
