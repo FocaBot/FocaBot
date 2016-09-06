@@ -45,13 +45,13 @@ class AdminModule extends BotModule
       @pullFunc msg,args,bot
       .then ()=> @restartFunc msg,args,bot
 
-  pullFunc: (msg,args,bot)=> @execFunc 'git pull', args, bot
+  pullFunc: (msg,args,bot)=> @execFunc msg, 'git pull', bot
 
   execFunc: (msg, args, bot)=>
     childProcess.exec args, (error, stdout, stderr)->
       msg.channel.sendMessage """
                               ```diff
-                              + [#{@engine.name}@#{os.hostname()} ~]$ #{args}
+                              + [focaBot@#{os.hostname()} ~]$ #{args}
 
                               #{stdout}
                               ```

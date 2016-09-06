@@ -79,6 +79,8 @@ class PlayerModule extends BotModule
           setTimeout (->m.delete()), 15000
     
     qI.on 'end', =>
+      try
+        audioPlayer.encStream.timestamp = 0
       setTimeout (()=>
         if not queue.items.length and not queue.currentItem
           msg.channel.sendMessage 'Nothing more to play.'
