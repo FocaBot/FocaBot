@@ -20,6 +20,7 @@ class GuildAudioPlayer
       }
     .then (@currentStream)=>
       @encStream = @currentStream.play()
+      @encStream.resetTimestamp()
       @voiceConnection.getEncoder().setVolume @volume
       @currentStream.on 'end', =>
         @clean()
