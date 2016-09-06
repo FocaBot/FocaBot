@@ -91,7 +91,7 @@ class AudioModuleCommands
           filterstr = ""
           filterstr += filter for filter in qi.filters
           durationstr = if isFinite(qi.duration) then moment.utc(qi.duration * 1000).format("HH:mm:ss") else '∞'
-          reply += "**#{++i}.** `#{qi.title}` #{filterstr} (#{durationstr}) Requested By #{qI.requestedBy.nick or qI.requestedBy.username}\n"
+          reply += "**#{++i}.** `#{qi.title}` #{filterstr} (#{durationstr}) Requested By #{qi.requestedBy.nick or qi.requestedBy.username}\n"
         if l > 15
           reply += "*(#{l-i} more...)*"
       else
