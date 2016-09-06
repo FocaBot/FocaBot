@@ -9,7 +9,7 @@ class AudioModuleCommands
 
     # Play
     @registerCommand 'play', { argSeparator: '|' }, (msg,args)=>
-      return msg.reply 'No video specified.' if not args[0].trim()
+      return msg.reply 'No video specified.' if not args[0].trim() and not msg.attachments[0]
       return msg.reply 'You must be in a voice channel to request songs.' if not msg.member.getVoiceChannel()
       urlToFind = args[0]
       if msg.attachments[0]
