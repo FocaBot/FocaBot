@@ -11,6 +11,8 @@ class HelpModule extends BotModule
     
     This bot is not yet public, though you can send me a DM if you want it on your server.
 
+    Changelog: https://gist.github.com/TheBITLINK/61f86a841f7d6fed896363d67ddd4d40
+
     Command List:
     ```
     Available to Everyone:
