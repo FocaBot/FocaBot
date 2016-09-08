@@ -4,7 +4,7 @@ moment = require 'moment'
 
 class AudioModuleCommands
   constructor: (@audioModule)->
-    { @engine, @registerCommand } = @audioModule
+    { @engine, @registerCommand, @hud } = @audioModule
     { @getGuildData, @permissions } = @engine
 
     # Play
@@ -28,7 +28,7 @@ class AudioModuleCommands
       return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
       target = Math.round(msg.member.getVoiceChannel().members.length * 0.4)
       if queue.items.length or queue.currentItem
-        if not @permissions.isAdmin msg.author, msg.guild
+        if not @permissions.isAdmin msg.author, msg.guild and msg.author.id isnt queue.currentItem.requestedBy.id 
 
           if msg.author.id in queue.currentItem.voteSkip
             return msg.reply 'Did you really try to skip this song **again**?'
@@ -37,7 +37,7 @@ class AudioModuleCommands
             ql = queue.currentItem.voteSkip.length
             msg.channel.sendMessage "**#{msg.member.nick or msg.author.username}** voted to skip the current song (#{ql}/#{target})"
 
-        if (queue.currentItem.voteSkip.length >= target) or @permissions.isAdmin msg.author, msg.guild
+        if (queue.currentItem.voteSkip.length >= target) or msg.author.id is queue.currentItem.requestedBy.id or @permissions.isAdmin msg.author, msg.guild
           msg.channel.sendMessage "**#{msg.member.nick or msg.author.username}** skipped the current song."
           queue.nextItem()
       else
@@ -56,11 +56,11 @@ class AudioModuleCommands
     @registerCommand 'volume', { adminOnly: true }, (msg, args)=>
       {audioPlayer} = @getGuildData(msg.guild)
       if not args
-        return msg.channel.sendMessage "Current Volume: #{audioPlayer.volume}."
+        return msg.channel.sendMessage @hud.getVolume msg.guild
       volume = parseInt(args)
       if volume > 0 and volume <=100
         audioPlayer.setVolume volume
-        msg.channel.sendMessage "**#{msg.member.nick or msg.author.username}** set the volume to #{volume}."
+        msg.channel.sendMessage @hud.setVolume msg.guild, msg.member
       else
         msg.channel.sendMessage "Invalid volume provided."
 
@@ -69,42 +69,13 @@ class AudioModuleCommands
     @registerCommand 'queue', (msg, args)=>
       {audioPlayer, queue} = @getGuildData(msg.guild)
       return msg.channel.sendMessage "Nothing being played on the current server." if not queue.currentItem
-      qI = queue.currentItem
-      currentTime = moment.utc(audioPlayer.encStream.timestamp * 1000).format("HH:mm:ss")
-      durationstr = if isFinite(qI.duration) then moment.utc(qI.duration * 1000).format("HH:mm:ss") else '∞'
-      filterstr = ""
-      filterstr += filter for filter in qI.filters
-      reply = """
-        Now Playing in `#{qI.playInChannel.name}`:
-        ```fix
-        #{qI.title}
-        ```
-        #{filterstr}
-        `#{currentTime}` / `#{durationstr}`
-        Requested By **#{qI.requestedBy.nick or qI.requestedBy.username}**
-        """
-      if queue.items.length
-        reply += "\n\n**Up next:**\n"
-        l = queue.items.length
-        i = 0
-        for qi in queue.items when i < 20
-          filterstr = ""
-          filterstr += filter for filter in qi.filters
-          durationstr = if isFinite(qi.duration) then moment.utc(qi.duration * 1000).format("HH:mm:ss") else '∞'
-          reply += "**#{++i}.** `#{qi.title}` #{filterstr} (#{durationstr}) Requested By #{qi.requestedBy.nick or qi.requestedBy.username}\n"
-        if l > 15
-          reply += "*(#{l-i} more...)*"
-      else
-         reply += "\nQueue is currently empty."
-      msg.channel.sendMessage reply
+      msg.channel.sendMessage @hud.queue msg.guild, parseInt args
       .then (m)=>
         msg.delete()
         setTimeout (->m.delete()), 15000
 
     # Undo
-    @registerCommand 'undo', {
-      description: 'Removes the last item from the queue.'
-    }, (msg, args)=>
+    @registerCommand 'undo', (msg, args)=>
       {queue} = @getGuildData msg.guild
       if not queue.items.length and not queue.currentItem
         return msg.channel.sendMessage 'The queue is empty.'
@@ -112,8 +83,8 @@ class AudioModuleCommands
       [..., last] = queue.items
       last = queue.currentItem if not last
       if last.requestedBy.id is msg.author.id or @permissions.isAdmin msg.author, msg.guild
+        msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, last
         queue.undo()
-        msg.channel.sendMessage "**#{msg.member.nick or msg.author.username}** removed the last item from the queue."
       else
         msg.channel.sendMessage 'You can only remove your own items from the queue.'
 
@@ -132,21 +103,7 @@ class AudioModuleCommands
     # Now Playing
     @registerCommand 'np', (msg, args)=>
       {audioPlayer, queue} = @getGuildData(msg.guild)
-      return msg.channel.sendMessage "Nothing being played on the current server." if not queue.currentItem
-      qI = queue.currentItem
-      currentTime = moment.utc(audioPlayer.encStream.timestamp * 1000).format("HH:mm:ss")
-      durationstr = if isFinite(qI.duration) then moment.utc(qI.duration * 1000).format("HH:mm:ss") else '∞'
-      filterstr = ""
-      filterstr += filter for filter in qI.filters
-      msg.channel.sendMessage """
-        Now Playing in `#{qI.playInChannel.name}`:
-        ```fix
-        #{qI.title}
-        ```
-        #{filterstr}
-        `#{currentTime}` / `#{durationstr}`
-        Requested By **#{qI.requestedBy.nick or qI.requestedBy.username}**
-        """
+      msg.channel.sendMessage @hud.nowPlaying msg.guild, queue.currentItem, false
       .then (m)=>
         msg.delete()
         setTimeout (->m.delete()), 10000
@@ -160,6 +117,36 @@ class AudioModuleCommands
       msg.reply "Here's the sauce of the current item: #{qI.sauce}"
       .then (m)=>
         msg.delete()
-        setTimeout (->m.delete()), 15000
+        setTimeout (->m.delete()), 20000
+
+    # Remove
+    @registerCommand 'remove', (msg, args)=>
+      {queue} = @getGuildData msg.guild
+      index = (parseInt args) - 1
+      itm = queue.items[index]
+      if not itm
+        return msg.channel.sendMessage "Can't find the specified item in the queue."
+      
+      if itm.requestedBy.id is msg.author.id or @permissions.isAdmin msg.author, msg.guild
+        msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, itm
+        .then (m)=>
+          msg.delete()
+          setTimeout (->m.delete()), 10000
+        queue.remove index
+      else
+        msg.channel.sendMessage 'You can only remove your own items from the queue.'
+
+    # Swap
+    @registerCommand 'swap', { adminOnly: true, argSeparator: ' ' }, (msg,args)=>
+      {queue} = @getGuildData msg.guild
+      return msg.channel.sendMessage "Invalid arguments provided." if args.length < 2
+      indexes = [parseInt(args[0])-1, parseInt(args[1])-1]
+      for idx of indexes
+        return msg.channel.sendMessage "Can't find the specified items in the queue." if not queue.items[idx]
+      items = queue.swap indexes[0], indexes[1]
+      msg.channel.sendMessage @hud.swapItems msg.guild, msg.member, items, indexes
+      .then (m)=>
+        msg.delete()
+        setTimeout (->m.delete()), 10000
 
 module.exports = AudioModuleCommands

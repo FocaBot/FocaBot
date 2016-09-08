@@ -47,6 +47,20 @@ class GuildAudioQueueManager
     last.emit 'undone'
     last.emit 'end'
 
+  remove: (index)=>
+    return 'invalid' if not isFinite index or index >= @items.length
+    item = @items.splice index, 1
+    item.skipped = true
+    item.undone = true
+    item.emit 'undone'
+    item.emit 'end'
+
+  swap: (ix1, ix2)=>
+    item1 = @items[ix1]
+    @items[ix1] = @items[ix2]
+    @items[ix2] = item1
+    [ @items[ix1], @items[ix2] ]
+
   shuffle: => @items = new Chance().shuffle(@items)
 
   clearQueue: =>

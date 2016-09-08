@@ -3,10 +3,12 @@ moment = require 'moment'
 reload = require('require-reload')(require)
 AudioModuleCommands = reload './commands'
 audioFilters = reload '../../filters'
+AudioHud = require './hud'
 
 class PlayerModule extends BotModule
   init: =>
     { @permissions, @getGuildData } = @engine
+    @hud = new AudioHud @
     @moduleCommands = new AudioModuleCommands @
 
   parseTime:(time)=>
@@ -66,15 +68,7 @@ class PlayerModule extends BotModule
       if omsg
         omsg.delete()
         omsg = null
-      msg.channel.sendMessage """
-        Now Playing in `#{qI.playInChannel.name}`:
-        ```fix
-        #{qI.title}
-        ```
-        #{filterstr}
-        Length: `#{durationstr}`
-        Requested By **#{qI.requestedBy.nick or qI.requestedBy.username}**
-        """
+      msg.channel.sendMessage @hud.nowPlaying msg.guild, qI, true
         .then (m)=>
           setTimeout (->m.delete()), 15000
     
@@ -87,7 +81,7 @@ class PlayerModule extends BotModule
           audioPlayer.clean true
       ), 100
       
-    msg.channel.sendMessage  "**#{msg.author.mention}** added `#{qI.title}` #{filterstr} (#{durationstr}) to the queue! (Position \##{queue.items.length+1})"
+    msg.channel.sendMessage @hud.addItem msg.guild, qI.requestedBy, qI, queue.items.length+1
     .then (m)=>
       omsg = m;
       setTimeout ->

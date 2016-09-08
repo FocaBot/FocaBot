@@ -1,6 +1,6 @@
 {
   "name": "discord-foca-bot",
-  "version": "0.1.0",
+  "version": "0.4.8",
   "description": "Music Bot with Effects!",
   "main": "main.coffee",
   "scripts": {
