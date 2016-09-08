@@ -32,6 +32,8 @@ class HelpModule extends BotModule
     #{@prefix}shuffle              - Shuffles the queue
     #{@prefix}stop                 - Stops playback an clears the queue
     #{@prefix}clean                - Deletes messages sent by the bot (requires permission to do so)
+    #{@prefix}remove <position>    - Removes the song at the specified position
+    #{@prefix}swap <pos1> <pos2>   - Swaps the positions of the specified items
     ```
     """
     msg.author.openDM().then (dm)=>
