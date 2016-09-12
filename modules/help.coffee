@@ -60,6 +60,9 @@ class HelpModule extends BotModule
     #{@prefix}play Rick Hentai | speed=0.75 reverse lowpass=1000
     ```
 
+    ***DON'T EVER TRY TO STACK MORE THAN 3 FILTERS, OTHERWISE YOU MIGHT END WITH THIS ABOMINATION***
+    https://youtu.be/Bg9fwP1vMv0
+
     Here is a complete list of filters:
 
     **| speed**
