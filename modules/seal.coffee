@@ -23,6 +23,6 @@ class SealModule extends BotModule
           # Send... this...
           msg.channel.uploadFile request(
             'http://danbooru.donmai.us/data/__original_drawn_by_maldives__71425fe9ff40add3a301d5c5d0cf3baf.png'
-          ), 'seal.png'
+          ), 'seal.png', 'A strange seal appeared.'
 
 module.exports = SealModule
