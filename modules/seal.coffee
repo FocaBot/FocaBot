@@ -16,7 +16,7 @@ class SealModule extends BotModule
         .replace 'jpeg', 'jpg'
         .replace 'animatedgif', 'gif'
         name = image.Title + '.' + ext
-        if chance.integer { min: 0, max: 100 } > 2
+        if chance.integer { min: 0, max: 100 } > 10
           # Send the pic
           msg.channel.uploadFile request(image.MediaUrl), name
         else
