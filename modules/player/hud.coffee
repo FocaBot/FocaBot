@@ -12,10 +12,10 @@ class AudioHUD
     pos = Math.floor pcnt * path.length
     path.substr(0, pos) + handle + path.substr(pos)
 
-  generateVolumeInd: (vol)=>
-    return '∙)' if vol >= 60
-    return '∙' if vol >= 25
-    ''
+  generateVolumeInd: (vol)=>  
+    return '🔊' if vol >= 60
+    return '🔉' if vol >= 25
+    '🔈'
   
   getDisplayName: (member, mention)=>
     member.mention if mention
@@ -34,7 +34,7 @@ class AudioHUD
     cT = @parseTime tS
     """
     ```fix
-     ▶  🔈#{vI}  #{pB} #{cT}
+     ▶  #{vI}  #{pB} #{cT}
     ```
     """
 
