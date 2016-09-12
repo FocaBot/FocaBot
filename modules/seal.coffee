@@ -16,7 +16,13 @@ class SealModule extends BotModule
         .replace 'jpeg', 'jpg'
         .replace 'animatedgif', 'gif'
         name = image.Title + '.' + ext
-        # Send the pic
-        msg.channel.uploadFile request(image.MediaUrl), name
+        if chance.integer { min: 0, max: 100 } > 2
+          # Send the pic
+          msg.channel.uploadFile request(image.MediaUrl), name
+        else
+          # Send... this...
+          msg.channel.uploadFile request(
+            'http://danbooru.donmai.us/data/__original_drawn_by_maldives__71425fe9ff40add3a301d5c5d0cf3baf.png'
+          ), 'seal.png'
 
 module.exports = SealModule
