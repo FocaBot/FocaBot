@@ -3,7 +3,7 @@ moment = require 'moment'
 reload = require('require-reload')(require)
 AudioModuleCommands = reload './commands'
 audioFilters = reload '../../filters'
-AudioHud = require './hud'
+AudioHud = reload './hud'
 
 class PlayerModule extends BotModule
   init: =>
