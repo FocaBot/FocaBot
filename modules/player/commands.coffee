@@ -28,7 +28,7 @@ class AudioModuleCommands
       return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
       target = Math.round(msg.member.getVoiceChannel().members.length * 0.4)
       if queue.items.length or queue.currentItem
-        if not @permissions.isAdmin msg.author, msg.guild and msg.author.id isnt queue.currentItem.requestedBy.id 
+        if not @permissions.isAdmin(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id 
 
           if msg.author.id in queue.currentItem.voteSkip
             return msg.reply 'Did you really try to skip this song **again**?'
