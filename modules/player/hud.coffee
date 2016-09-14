@@ -29,7 +29,7 @@ class AudioHUD
     { queue, audioPlayer } = @getGuildData(guild)
     qI = itm or queue.currentItem
     vI = @generateVolumeInd audioPlayer.volume
-    tS = if audioPlayer.encStream? then audioPlayer.encStream.timestamp else 1
+    tS = if audioPlayer.encStream? then audioPlayer.getTimestamp() else 1
     pB = @generateProgressBar tS / qI.duration
     cT = @parseTime tS
     """

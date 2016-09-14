@@ -44,6 +44,8 @@ class TimeFilter extends AudioFilter
     r += "[From #{@s}s]" if @s
     r += "[Duration #{@e}s]" if @e
     r
+
+  avoidRuntime: true
     
   
 module.exports = TimeFilter

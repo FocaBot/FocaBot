@@ -3,6 +3,7 @@ moment = require 'moment'
 
 class TempoFilter extends AudioFilter
   processTime: (time)=> time / parseFloat(@param)
+  originalTime: (time)=> time * parseFloat(@param)
 
   validate:=>
     speed = parseFloat @param 

@@ -21,7 +21,7 @@ class BotEngine
     @bot.Dispatcher.on 'MESSAGE_CREATE', @onMessage
     @bootDate = new Date()
     git.short @devVersion
-    @version = "0.4.8"
+    @version = "0.4.9"
     global.Core = @
     
   onReady: =>

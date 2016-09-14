@@ -28,6 +28,7 @@ class HelpModule extends BotModule
     #{@prefix}ping                 - Pong!
     #{@prefix}seal                 - Sends seal pictures
     #{@prefix}sauce                - Sends a link to the current item's sauce
+    #{@prefix}|                    - Applies filters to the current song (see #{@prefix}filters)
 
     Bot Commanders Only:
     #{@prefix}volume  <vol>        - Sets volume of the bot
@@ -36,6 +37,7 @@ class HelpModule extends BotModule
     #{@prefix}clean                - Deletes messages sent by the bot (requires permission to do so)
     #{@prefix}remove <position>    - Removes the song at the specified position
     #{@prefix}swap <pos1> <pos2>   - Swaps the positions of the specified items
+    #{@prefix}reset                - Resets FocaBot in your server (Temporary, read the changelog)
     ```
     """
     msg.author.openDM().then (dm)=>
@@ -62,6 +64,11 @@ class HelpModule extends BotModule
 
     ***DON'T EVER TRY TO STACK MORE THAN 3 FILTERS, OTHERWISE YOU MIGHT END WITH THIS ABOMINATION***
     https://youtu.be/Bg9fwP1vMv0
+
+    Since FocaBot v0.4.9 you can also change filters while the song is playing:
+    ```'| nightcore echo```
+    You can only do this on songs requested by yourself if you are not a bot commander.
+    Please note that not all filters are supported. Also, this might pause the song for a while, depending on the length.
 
     Here is a complete list of filters:
 

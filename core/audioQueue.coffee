@@ -16,6 +16,7 @@ class GuildAudioQueueManager
   nextItem: =>
     if @currentItem?
       @currentItem.emit 'skipped'
+      @currentItem.emit 'end'
       @currentItem.skipped = true
       @audioPlayer.stop()
     item = @items.shift()
@@ -38,6 +39,38 @@ class GuildAudioQueueManager
       console.error err
       item.emit 'error', err
     true
+
+  updateFilters: (newFilters)=>
+    if @currentItem? and newFilters.length and isFinite @currentItem.duration
+      resumeAt = if @audioPlayer.encStream? then @audioPlayer.getTimestamp() else 1
+      for filter in @currentItem.filters
+        resumeAt = filter.originalTime resumeAt if filter.originalTime?
+      
+      @currentItem.filters = newFilters
+      flags = ['-filter']
+      filters = []
+      for filter in @currentItem.filters
+        if not filter.avoidRuntime
+          filters.push filter.toFFMPEGFilter() 
+          resumeAt = filter.processTime resumeAt if filter.processTime
+      flags.push (filters.join ', ') + ", atrim=start=#{resumeAt}"
+
+      # hack
+      @currentItem.skipped = true
+      @audioPlayer.stop()
+
+      item = @currentItem
+      @audioPlayer.play @currentItem.playInChannel, @currentItem.path, flags, resumeAt
+      .then (stream)=>
+        stream.on 'end', ()=>
+          @nextItem() if not item.skipped
+          item.emit 'end'
+      .catch (err)=>
+        console.error err
+        item.emit 'error', err
+      true
+
+      @currentItem.skipped = false
 
   undo: =>
     last = @items.pop()
@@ -69,8 +102,9 @@ class GuildAudioQueueManager
       item.emit 'skipped'
       item.skipped = true
     if @currentItem?
-      @currentItem.emit 'skipped'
       @currentItem.skipped = true
+      @currentItem.emit 'skipped'
+      @currentItem.emit 'end'
       @currentItem = null
     @audioPlayer.stop()
 

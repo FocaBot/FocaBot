@@ -5,7 +5,7 @@ class GuildAudioPlayer
     {@bot, @permissions} = @engine
     @volume = 50
 
-  play: (audioChannel, path, flags)=> new Promise (resolve, reject)=>
+  play: (audioChannel, path, flags, @cOffset=0)=> new Promise (resolve, reject)=>
     if @currentStream?
       return reject { message: 'Bot is currently playing another file on the server.' }
     
@@ -49,11 +49,14 @@ class GuildAudioPlayer
       # @currentStream.destroy()
     @clean()
 
+  getTimestamp: => @encStream.timestamp + @cOffset
+
   clean: (disconnect)=>
     delete @currentStream
     delete @encStream
-    if disconnect
-      @voiceConnection.disconnect()
-      delete @voiceConnection
+    try
+      if disconnect
+        @voiceConnection.disconnect()
+        delete @voiceConnection
 
 module.exports = GuildAudioPlayer

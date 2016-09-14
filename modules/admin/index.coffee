@@ -4,11 +4,13 @@ request = require 'request'
 
 class AdminModule extends BotModule
   init: =>
+    {@getGuildData} = @engine
     # Admin Commands
     adminOptions =
       adminOnly: true
     @registerCommand 'setnick', adminOptions, @setnickFunc
     @registerCommand 'clean', adminOptions, @cleanFunc
+    @registerCommand 'reset', adminOptions, @resetFunc
     # Restart Command
     ownerOptions =
       ownerOnly: true
@@ -59,9 +61,15 @@ class AdminModule extends BotModule
 
   cleanFunc: (msg,args,bot)=>
     hasError = false
-    bot.Messages.deleteMessages msg.channel.messages.filter (m)=>
+    bot.Messages.deleteMessages(msg.channel.messages.filter((m)=>
       m.author.id is bot.User.id or m.content.indexOf(@engine.prefix) is 0
+    ).slice(0 - (parseInt(args) or 50)))
     .catch =>
       msg.channel.sendMessage "Couldn't delete some messages."
+
+  resetFunc: (msg, args)=>
+    { queue } = @getGuildData msg.guild
+    queue.clearQueue()
+    msg.member.getVoiceChannel().leave()
 
 module.exports = AdminModule

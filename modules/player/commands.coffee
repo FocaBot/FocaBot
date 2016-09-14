@@ -4,7 +4,7 @@ moment = require 'moment'
 
 class AudioModuleCommands
   constructor: (@audioModule)->
-    { @engine, @registerCommand, @hud } = @audioModule
+    { @engine, @registerCommand, @hud, @audioFilters } = @audioModule
     { @getGuildData, @permissions } = @engine
 
     # Play
@@ -148,5 +148,27 @@ class AudioModuleCommands
       .then (m)=>
         msg.delete()
         setTimeout (->m.delete()), 10000
+
+    # Change Filters
+    @registerCommand 'fx', { aliases: ['setfilters', '|'], argSeparator: ' ' }, (msg,args)=>
+      {queue} = @getGuildData msg.guild
+      return if not isFinite queue.currentItem.duration
+      return if not @permissions.isAdmin(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id
+      for filter in queue.currentItem.filters
+        return msg.reply "The filter #{filter} cannot be removed while the song plays." if filter.avoidRuntime
+      filters = []
+      for filter in args
+        try
+          f = filter.split '='
+          filter = @audioFilters.getFilter f[0], f[1]
+          if filter
+            if filter.isAdminOnly() and not @permissions.isAdmin msg.author, msg.guild
+              return msg.reply "#{filter} is only for Bot Commanders."
+            return msg.reply "The filter #{filter} cannot be applied while the song plays." if filter.avoidRuntime
+            valErr = filter.validate()
+            if valErr
+              return msg.reply "#{filter} - #{valErr}"
+            filters.push filter
+      queue.updateFilters filters
 
 module.exports = AudioModuleCommands
