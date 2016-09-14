@@ -109,10 +109,10 @@ class AudioHUD
     #{@getDisplayName aby} swapped some items:
     ```fix
     * #{indexes[1]+1} -> #{indexes[0]+1}
-      #{items[1].title}
+      #{items[0].title}
     
     * #{indexes[0]+1} -> #{indexes[1]+1}
-      #{items[0].title}
+      #{items[1].title}
     ```
     """
 
