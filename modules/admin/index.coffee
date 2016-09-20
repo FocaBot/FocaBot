@@ -72,7 +72,7 @@ class AdminModule extends BotModule
   purgeFunc: (msg, args, bot)=>
     limit = parseInt(args) or 50
     msg.channel.fetchMessages limit
-    .then (msgs)=> bot.Messages.deleteMessages msgs
+    .then (e)=> bot.Messages.deleteMessages e.messages
 
   findFunc: (msg, args, bot)=>
     rp = ""
