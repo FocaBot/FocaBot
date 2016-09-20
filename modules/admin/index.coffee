@@ -83,7 +83,7 @@ class AdminModule extends BotModule
     rp = "#{msg.member.mention} here's what i found for `#{args}`:\n"
     for ms in msgs
       rp += "__(deleted)__ " if ms.deleted
-      rp += "#{ms.author.username}: #{ms.content}\n"
+      rp += "**#{ms.author.username}**: #{ms.content}\n"
     msg.channel.sendMessage rp
 
   resetFunc: (msg, args)=>
