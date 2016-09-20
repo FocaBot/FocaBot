@@ -78,7 +78,9 @@ class AdminModule extends BotModule
     rp = ""
     msgs =  bot.Messages.filter (m)=>
       m.content.indexOf(args) >= 0 and
-      m.guild.id is msg.guild.id
+      m.guild.id is msg.guild.id and
+      m.author.id isnt msg.author.id and
+      m.author.id isnt bot.User.id
     .slice 0,10
     rp = "#{msg.member.mention} here's what i found for `#{args}`:\n"
     for ms in msgs
