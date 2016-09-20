@@ -18,6 +18,8 @@ class AdminModule extends BotModule
     @registerCommand 'update', ownerOptions, @updateFunc
     @registerCommand 'pull', ownerOptions, @pullFunc
     @registerCommand 'exec', ownerOptions, @execFunc
+    @registerCommand 'purge', ownerOptions, @purgeFunc
+    @registerCommand 'find', ownerOptions, @findFunc
     @registerCommand 'setavatar', ownerOptions, @setavatarFunc
     @registerCommand 'setusername', ownerOptions, @setusernameFunc
 
@@ -66,6 +68,23 @@ class AdminModule extends BotModule
     ).slice(0 - (parseInt(args) or 50)))
     .catch =>
       msg.channel.sendMessage "Couldn't delete some messages."
+
+  purgeFunc: (msg, args, bot)=>
+    limit = parseInt(args) or 50
+    msg.channel.fetchMessages limit
+    .then (msgs)=> bot.Messages.deleteMessages msgs
+
+  findFunc: (msg, args, bot)=>
+    rp = ""
+    msgs =  bot.Messages.filter (m)=>
+      m.content.indexOf(args) >= 0 and
+      m.guild.id is msg.guild.id
+    .slice 0,10
+    rp = "#{msg.member.mention} here's what i found for `#{args}`:\n"
+    for ms in msgs
+      rp += "__(deleted)__ " if ms.deleted
+      rp += "#{ms.author.username}: #{ms.content}\n"
+    msg.channel.sendMessage rp
 
   resetFunc: (msg, args)=>
     { queue } = @getGuildData msg.guild
