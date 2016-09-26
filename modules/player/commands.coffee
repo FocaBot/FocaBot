@@ -198,10 +198,8 @@ class AudioModuleCommands
       return if not @permissions.isDJ(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id
       for filter in queue.currentItem.filters
         return msg.reply "You can't seek through this song (unsupported filter #{filter})." if filter.avoidRuntime
-      if args.indexOf 'f' is 0
-        queue.seek @parseTime(args.slice(1)), true
-      else
-        queue.seek @parseTime(args), false
+      return msg.reply "You can't seek to that position" if @parseTime(args) > queue.currentItem.duration or @parseTime(args) < 0
+      queue.seek @parseTime(args), true
 
   # TODO: At this point, this should be in a global function or something
   parseTime:(time)=>

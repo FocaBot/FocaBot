@@ -16,7 +16,7 @@ class BotPermissionManager
       false
     
   isDJ: (user, guild)=>
-    return true if @isAdmin user
+    return true if @isAdmin user, guild
     member = user.memberOf(guild)
     return false if not member?
     member.roles.filter (item)=> item.name in @djRoles

@@ -25,12 +25,9 @@ class PlayerModule extends BotModule
     # Check if duration is valid
     duration = @parseTime info.duration
        
-       # Plebs = 30 minutos
-    if duration > 1800  and not @permissions.isDJ(msg.author, msg.guild) or 
-       # Mememasters = 2 horas
-       duration > 7200  and not @permissions.isAdmin(msg.author, msg.guild) or
-       # Memekings = 12 horas
-       duration > 43200 and not @permissions.isOwner msg.author
+    if (duration > 1800  and not @permissions.isDJ(msg.author, msg.guild)) or 
+       (duration > 7200  and not @permissions.isAdmin(msg.author, msg.guild)) or
+       (duration > 43200 and not @permissions.isOwner(msg.author))
        # Bot Owner = ∞
       return msg.reply 'The requested song is too long.'
 
