@@ -194,7 +194,7 @@ class AudioModuleCommands
     # Seek
     @registerCommand 'seek', (msg,args)=>
       {queue} = @getGuildData msg.guild
-      return if not isFinite queue.currentItem.duration
+      return if not isFinite queue.currentItem.duration or not isFinite @parseTime args
       return if not @permissions.isDJ(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id
       for filter in queue.currentItem.filters
         return msg.reply "You can't seek through this song (unsupported filter #{filter})." if filter.avoidRuntime
