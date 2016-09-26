@@ -5,6 +5,7 @@ class BotCommand
     {
       @aliases,
       @adminOnly,
+      @djOnly,
       @ownerOnly,
       @argSeparator,
       @includeCommandNameInArgs
@@ -46,6 +47,9 @@ class BotCommandManager
     args = msg.content[@prefix.length+name.length+1..]
     command = @registeredPlain[name]
     return false if not command?
+    if command.djOnly and not @permissions.isDJ msg.author, msg.guild
+      msg.reply "You don't have enough permissions to execute that command."
+      return false
     if command.adminOnly and not @permissions.isAdmin msg.author, msg.guild
       msg.reply "You don't have enough permissions to execute that command."
       return false

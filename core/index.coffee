@@ -7,7 +7,7 @@ ModuleManager = require './modules'
 PermissionManager = require './permissions'
 GuildManager = require './guilds'
 git = require 'git-rev'
-{ Guild } = require '../models'
+# { Guild } = require '../models'
 
 class BotEngine
   constructor: (@settings) ->
@@ -21,7 +21,7 @@ class BotEngine
     @bot.Dispatcher.on 'MESSAGE_CREATE', @onMessage
     @bootDate = new Date()
     git.short @devVersion
-    @version = "0.4.9"
+    @version = "0.4.12"
     global.Core = @
     
   onReady: =>

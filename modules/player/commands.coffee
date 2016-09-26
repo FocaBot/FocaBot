@@ -1,5 +1,6 @@
 reload = require('require-reload')(require)
 youtubedl = require 'youtube-dl'
+{ spawn } = require 'child_process'
 moment = require 'moment'
 
 class AudioModuleCommands
@@ -19,7 +20,24 @@ class AudioModuleCommands
           return youtubedl.getInfo urlToFind, [], (error, info) =>
             return msg.reply 'Something went wrong.' if error
             @audioModule.handleVideoInfo info, msg, args
-        @audioModule.handleVideoInfo info, msg, args        
+        if isNaN info.duration
+          # Try to get the duration from FFProbe (for direct links and other streams)
+          ffprobe = spawn('ffprobe', [info.url, '-show_format', '-v', 'quiet'])
+          ffprobe.stdout.on 'data', (data)=>
+            # Parse the output from FFProbe
+            prop = { }
+            pattern = /(.*)=(.*)/g
+            while match = pattern.exec data
+              prop[match[1]] = match[2]
+            # Get the duration
+            info.duration = prop.duration
+            # Try to use metadata from the ID3 tags as well
+            if prop['TAG:title']
+              info.title = ''
+              info.title += "#{prop['TAG:artist']} - " if prop['TAG:artist']
+              info.title += prop['TAG:title']
+            @audioModule.handleVideoInfo info, msg, args
+        else @audioModule.handleVideoInfo info, msg, args
     
     # Skip
     @registerCommand 'skip', (msg)=>
@@ -28,7 +46,7 @@ class AudioModuleCommands
       return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
       target = Math.round(msg.member.getVoiceChannel().members.length * 0.4)
       if queue.items.length or queue.currentItem
-        if not @permissions.isAdmin(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id 
+        if not @permissions.isDJ(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id 
 
           if msg.author.id in queue.currentItem.voteSkip
             return msg.reply 'Did you really try to skip this song **again**?'
@@ -37,14 +55,14 @@ class AudioModuleCommands
             ql = queue.currentItem.voteSkip.length
             msg.channel.sendMessage "**#{msg.member.nick or msg.author.username}** voted to skip the current song (#{ql}/#{target})"
 
-        if (queue.currentItem.voteSkip.length >= target) or msg.author.id is queue.currentItem.requestedBy.id or @permissions.isAdmin msg.author, msg.guild
+        if (queue.currentItem.voteSkip.length >= target) or msg.author.id is queue.currentItem.requestedBy.id or @permissions.isDJ msg.author, msg.guild
           msg.channel.sendMessage "**#{msg.member.nick or msg.author.username}** skipped the current song."
           queue.nextItem()
       else
         msg.channel.sendMessage 'No songs playing on the current server.'
 
     # Stop
-    @registerCommand 'stop', { adminOnly: true }, (msg)=>
+    @registerCommand 'stop', { djOnly: true }, (msg)=>
       {queue} = @getGuildData(msg.guild)
       if queue.currentItem
         queue.clearQueue()
@@ -53,7 +71,7 @@ class AudioModuleCommands
         msg.channel.sendMessage "No songs playing on the current server."
 
     # Volume
-    @registerCommand 'volume', { adminOnly: true }, (msg, args)=>
+    @registerCommand 'volume', { djOnly: true }, (msg, args)=>
       {audioPlayer} = @getGuildData(msg.guild)
       if not args
         return msg.channel.sendMessage @hud.getVolume msg.guild
@@ -82,7 +100,7 @@ class AudioModuleCommands
 
       [..., last] = queue.items
       last = queue.currentItem if not last
-      if last.requestedBy.id is msg.author.id or @permissions.isAdmin msg.author, msg.guild
+      if last.requestedBy.id is msg.author.id or @permissions.isDJ msg.author, msg.guild
         msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, last
         queue.undo()
       else
@@ -91,7 +109,7 @@ class AudioModuleCommands
     # Shuffle
     @registerCommand 'shuffle', {
       description: 'Shuffles the queue.'
-      adminOnly: true
+      djOnly: true
     }, (msg,args)=>
       {queue} = @getGuildData msg.guild
       if queue.items.length
@@ -127,7 +145,7 @@ class AudioModuleCommands
       if not itm
         return msg.channel.sendMessage "Can't find the specified item in the queue."
       
-      if itm.requestedBy.id is msg.author.id or @permissions.isAdmin msg.author, msg.guild
+      if itm.requestedBy.id is msg.author.id or @permissions.isDJ msg.author, msg.guild
         msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, itm
         .then (m)=>
           msg.delete()
@@ -137,7 +155,7 @@ class AudioModuleCommands
         msg.channel.sendMessage 'You can only remove your own items from the queue.'
 
     # Swap
-    @registerCommand 'swap', { adminOnly: true, argSeparator: ' ' }, (msg,args)=>
+    @registerCommand 'swap', { djOnly: true, argSeparator: ' ' }, (msg,args)=>
       {queue} = @getGuildData msg.guild
       return msg.channel.sendMessage "Invalid arguments provided." if args.length < 2
       indexes = [parseInt(args[0])-1, parseInt(args[1])-1]
@@ -153,7 +171,7 @@ class AudioModuleCommands
     @registerCommand 'fx', { aliases: ['setfilters', '|'], argSeparator: ' ' }, (msg,args)=>
       {queue} = @getGuildData msg.guild
       return if not isFinite queue.currentItem.duration
-      return if not @permissions.isAdmin(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id
+      return if not @permissions.isDJ(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id
       for filter in queue.currentItem.filters
         return msg.reply "The filter #{filter} cannot be removed while the song plays." if filter.avoidRuntime
       filters = []
@@ -162,13 +180,37 @@ class AudioModuleCommands
           f = filter.split '='
           filter = @audioFilters.getFilter f[0], f[1]
           if filter
-            if filter.isAdminOnly() and not @permissions.isAdmin msg.author, msg.guild
-              return msg.reply "#{filter} is only for Bot Commanders."
+            if filter.isAdminOnly() and not @permissions.isDJ msg.author, msg.guild
+              return msg.reply "#{filter} is only for DJs."
             return msg.reply "The filter #{filter} cannot be applied while the song plays." if filter.avoidRuntime
             valErr = filter.validate()
             if valErr
               return msg.reply "#{filter} - #{valErr}"
             filters.push filter
+        catch e
+          console.error e
       queue.updateFilters filters
+
+    # Seek
+    @registerCommand 'seek', (msg,args)=>
+      {queue} = @getGuildData msg.guild
+      return if not isFinite queue.currentItem.duration
+      return if not @permissions.isDJ(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id
+      for filter in queue.currentItem.filters
+        return msg.reply "You can't seek through this song (unsupported filter #{filter})." if filter.avoidRuntime
+      if args.indexOf 'f' is 0
+        queue.seek @parseTime(args.slice(1)), true
+      else
+        queue.seek @parseTime(args), false
+
+  # TODO: At this point, this should be in a global function or something
+  parseTime:(time)=>
+    t = time.split(':').reverse()
+    moment.duration {
+      seconds: t[0]
+      minutes: t[1]
+      hours:   t[2]
+    }
+    .asSeconds()
 
 module.exports = AudioModuleCommands

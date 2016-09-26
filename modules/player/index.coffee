@@ -24,9 +24,14 @@ class PlayerModule extends BotModule
   handleVideoInfo: (info, msg, args)=>
     # Check if duration is valid
     duration = @parseTime info.duration
-
-    if (duration > 1000 and not @permissions.isAdmin msg.author, msg.guild) or 
-       duration > 3600 and not @permissions.isOwner msg.author
+       
+       # Plebs = 30 minutos
+    if duration > 1800  and not @permissions.isDJ(msg.author, msg.guild) or 
+       # Mememasters = 2 horas
+       duration > 7200  and not @permissions.isAdmin(msg.author, msg.guild) or
+       # Memekings = 12 horas
+       duration > 43200 and not @permissions.isOwner msg.author
+       # Bot Owner = ∞
       return msg.reply 'The requested song is too long.'
 
     # Get filters
@@ -65,7 +70,7 @@ class PlayerModule extends BotModule
     }
     # Set events
     durationstr = if isFinite(qI.duration) then moment.utc(qI.duration * 1000).format("HH:mm:ss") else '∞'
-    qI.on 'start', =>
+    qI.once 'start', =>
       if omsg
         omsg.delete()
         omsg = null
@@ -73,7 +78,7 @@ class PlayerModule extends BotModule
         .then (m)=>
           setTimeout (->m.delete()), 15000
     
-    qI.on 'end', =>
+    qI.once 'end', =>
       setTimeout (()=>
         if not queue.items.length and not queue.currentItem
           msg.channel.sendMessage 'Nothing more to play.'

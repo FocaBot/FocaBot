@@ -23,54 +23,66 @@ class GuildAudioQueueManager
     @currentItem = item
     return false if not @currentItem?
     # Filters
-    if @currentItem.filters.length
-      flags = ['-filter']
-      filters = []
-      filters.push filter.toFFMPEGFilter() for filter in @currentItem.filters
-      flags.push filters.join ', '
-    else flags = []
-    @audioPlayer.play @currentItem.playInChannel, @currentItem.path, flags
+    @playItem @getFlags(@currentItem)
+
+  playItem: (flags={}, offset=0, item=@currentItem)=>
+    @audioPlayer.play item.playInChannel, item.path, flags, offset
     .then (stream)=>
       stream.on 'end', ()=>
         @nextItem() if not item.skipped
         item.emit 'end'
-      item.emit 'start'
+      item.emit 'start' if offset is 0
     .catch (err)=>
       console.error err
       item.emit 'error', err
     true
 
+  getFlags: (item, avoidRuntime)=>
+    return {} if not item.filters.length
+    flags = []
+    inputFlags = []
+    filters = []
+
+    for filter in item.filters
+      continue if avoidRuntime and filter.avoidRuntime
+      if filter.toFFMPEGInputArgs
+        inputFlags = inputFlags.concat filter.toFFMPEGInputArgs()
+      else if filter.toFFMPEGArgs
+        flags = flags.concat filter.toFFMPEGArgs()
+      else if filter.toFFMPEGFilter
+        filters.push filter.toFFMPEGFilter()
+    
+    flags.push '-af', filters.join ', '
+    { input: inputFlags, output: flags }
+
+  getTransformedTimestamp: (item, position, original=false)=>
+    ts = position or item.originalDuration
+    for filter in item.filters
+      if original
+        ts = filter.originalTime ts if filter.originalTime?
+      else
+        ts = filter.processTime ts if filter.processTime?
+    ts
+
   updateFilters: (newFilters)=>
-    if @currentItem? and newFilters.length and isFinite @currentItem.duration
-      resumeAt = if @audioPlayer.encStream? then @audioPlayer.getTimestamp() else 1
-      for filter in @currentItem.filters
-        resumeAt = filter.originalTime resumeAt if filter.originalTime?
-      
+    if @currentItem? and isFinite @currentItem.duration # and newFilters.length 
+      resumeAt = @getTransformedTimestamp @currentItem, @audioPlayer.getTimestamp(), true
       @currentItem.filters = newFilters
-      flags = ['-filter']
-      filters = []
-      for filter in @currentItem.filters
-        if not filter.avoidRuntime
-          filters.push filter.toFFMPEGFilter() 
-          resumeAt = filter.processTime resumeAt if filter.processTime
-      flags.push (filters.join ', ') + ", atrim=start=#{resumeAt}"
+      @currentItem.duration = @getTransformedTimestamp @currentItem
+      @seek resumeAt # without this, the new filters won't be applied!
 
-      # hack
-      @currentItem.skipped = true
-      @audioPlayer.stop()
-
-      item = @currentItem
-      @audioPlayer.play @currentItem.playInChannel, @currentItem.path, flags, resumeAt
-      .then (stream)=>
-        stream.on 'end', ()=>
-          @nextItem() if not item.skipped
-          item.emit 'end'
-      .catch (err)=>
-        console.error err
-        item.emit 'error', err
-      true
-
-      @currentItem.skipped = false
+  seek: (newPos, filterTransform=false)=>
+    # console.log newPos, @currentItem
+    newPos = @getTransformedTimestamp(@currentItem, newPos) if filterTransform
+    # hacky way to "seek"
+    flags = @getFlags(@currentItem)
+    if flags.input
+      flags.input = flags.input.concat ['-ss', newPos]
+    else flags.input = ['-ss', newPos]
+    @currentItem.skipped = true
+    @audioPlayer.stop()
+    @playItem flags, @getTransformedTimestamp(@currentItem, newPos)
+    @currentItem.skipped = false
 
   undo: =>
     last = @items.pop()

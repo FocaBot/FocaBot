@@ -11,6 +11,7 @@ botSettings =
   owner: JSON.parse process.env.BOT_OWNER
   admins: JSON.parse process.env.BOT_ADMINS
   adminRoles: JSON.parse process.env.BOT_ADMIN_ROLES
+  djRoles: JSON.parse process.env.BOT_DJ_ROLES
 
 focaBot = new BotEngine botSettings
 

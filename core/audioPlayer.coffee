@@ -16,7 +16,8 @@ class GuildAudioPlayer
         source: path
         format: 'pcm'
         frameDuration: 60
-        outputArgs: flags
+        outputArgs: flags.output
+        inputArgs: flags.input
       }
     .then (@currentStream)=>
       @encStream = @currentStream.play()

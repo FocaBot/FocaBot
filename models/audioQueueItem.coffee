@@ -13,7 +13,9 @@ class QueueItem extends EventEmitter
        @sauce,
     } = data
     @voteSkip = []
+    @originalDuration = @duration
     for filter in @filters
       @duration = filter.processTime @duration if filter.processTime
+    
 
 module.exports = QueueItem

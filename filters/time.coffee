@@ -30,13 +30,25 @@ class TimeFilter extends AudioFilter
       return 'Invalid duration timestamp.' if not @e 
     return 'Invalid format.' if not valid
 
-  toFFMPEGFilter:=>
+  toFFMPEGFilter:=> # Backwards Compatibilty
     flt = 'atrim='
     fla = []
     fla.push "start=#{@s}" if @s 
     fla.push "duration=#{@e}" if @e
     flt += fla.join ':'
     @escape flt
+
+  toFFMPEGArgs:=>
+    f = []
+    f.push ['-ss', @s] if @s
+    f.push ['-t', @e] if @e
+    f
+
+  toFFMPEGInputArgs:=>
+    f = []
+    f.push ['-ss', @s] if @s
+    f.push ['-t', @e] if @e
+    f
 
   toString:=> 
     r = '[Time]'

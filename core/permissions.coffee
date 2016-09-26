@@ -1,7 +1,7 @@
 class BotPermissionManager
   constructor: (@engine)->
     {@bot} = @engine
-    {@owner, @admins, @adminRoles} = @engine.settings
+    {@owner, @admins, @adminRoles, @djRoles} = @engine.settings
 
   isAdmin: (user, guild, globalOnly)=>
     return true if user.id in @admins or user.id in @owner
@@ -14,6 +14,13 @@ class BotPermissionManager
       .length > 0
     else
       false
+    
+  isDJ: (user, guild)=>
+    return true if @isAdmin user
+    member = user.memberOf(guild)
+    return false if not member?
+    member.roles.filter (item)=> item.name in @djRoles
+    .length > 0
     
   isOwner: (user)=> user.id in @owner
 

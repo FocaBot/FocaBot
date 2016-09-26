@@ -30,13 +30,16 @@ class HelpModule extends BotModule
     #{@prefix}sauce                - Sends a link to the current item's sauce
     #{@prefix}|                    - Applies filters to the current song (see #{@prefix}filters)
 
-    Bot Commanders Only:
+    DJs Only:
     #{@prefix}volume  <vol>        - Sets volume of the bot
     #{@prefix}shuffle              - Shuffles the queue
     #{@prefix}stop                 - Stops playback an clears the queue
-    #{@prefix}clean                - Deletes messages sent by the bot (requires permission to do so)
     #{@prefix}remove <position>    - Removes the song at the specified position
     #{@prefix}swap <pos1> <pos2>   - Swaps the positions of the specified items
+    #{@prefix}seek <time>          - Seeks to the specified position
+
+    Bot Commanders Only:
+    #{@prefix}clean                - Deletes messages sent by the bot (requires permission to do so)
     #{@prefix}reset                - Resets FocaBot in your server (Temporary, read the changelog)
     ```
     """
