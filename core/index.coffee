@@ -25,7 +25,11 @@ class BotEngine
     global.Core = @
     
   onReady: =>
-    @bot.User.setGame "#{@prefix}help | #{@prefix}filters"
+    @bot.User.setGame {
+      type: 1
+      name: "#{@prefix}help | #{@prefix}filters"
+      url: 'https://www.twitch.tv/nothingactuallyherejaksjksfj'
+    } 
     console.log 'Connected.'
 
   onMessage: (e)=>
