@@ -29,6 +29,10 @@ class HelpModule extends BotModule
     #{@prefix}seal                 - Sends seal pictures
     #{@prefix}sauce                - Sends a link to the current item's sauce
     #{@prefix}|                    - Applies filters to the current song (see #{@prefix}filters)
+    #{@prefix}img <query>          - Finds an image matching the query.
+    #{@prefix}rimg <query>         - Same as above, but finds a random image instead.
+    #{@prefix}imgn <query>         - Finds an image (with the adult filter disabled).
+    #{@prefix}rimgn <query>        - Finds a random image (with the adult filter disabled).s
 
     DJs Only:
     #{@prefix}volume  <vol>        - Sets volume of the bot
@@ -114,6 +118,9 @@ class HelpModule extends BotModule
     Trims the song.
     For example `| time=0:15` will make the song start at 15 seconds.
     You can also specify a duration: `| time=0:15-30` will make the song start at 0:15 and last 30 seconds.
+
+    **| nofx**
+    This is a dummy filter that prevents making changes to the filters while the song plays
 
     **| nightcore** (Preset, same as speed=1.5)
     **| vaporwave** (Preset, same as speed=0.75)
