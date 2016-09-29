@@ -16,6 +16,7 @@ class AudioFilters
       phaser: reload './phaser'     # | phaser
       tempo: reload './tempo'       # | tempo=2
       time: reload './time'         # | time=1:23-45   (Start - Duration)
+      nofx: reload './nofx'         # | nofx
       
     @presets =
       # Speed filter

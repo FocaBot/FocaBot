@@ -1,15 +1,14 @@
 {
   "name": "discord-foca-bot",
-  "version": "0.4.8",
-  "description": "Music Bot with Effects!",
+  "version": "0.4.13",
+  "description": "Music with Seals!",
   "main": "main.coffee",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/.bin/coffee main.coffee"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/TheBITLINK/FXBot.git"
+    "url": "git+https://github.com/TheBITLINK/FocaBot.git"
   },
   "keywords": [
     "discord",
@@ -19,16 +18,15 @@
   "author": "thebit.link <me@thebitlink.com> (https://thebit.link/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://gitlab.com/TheBITLINK/FXBot/issues"
+    "url": "https://github.com/TheBITLINK/FocaBot/issues"
   },
-  "homepage": "https://gitlab.com/TheBITLINK/FXBot#README",
+  "homepage": "https://github.com/TheBITLINK/FocaBot#README",
   "dependencies": {
     "async": "^2.0.1",
     "bufferutil": "^1.2.1",
     "chance": "^1.0.4",
     "coffee-script": "^1.10.0",
-    "discord.js": "^8.1.0",
-    "discordie": "^0.8.1",
+    "discordie": "github:qeled/discordie#dev",
     "dotenv": "^2.0.0",
     "ffmpeg": "0.0.4",
     "git-rev": "^0.2.1",

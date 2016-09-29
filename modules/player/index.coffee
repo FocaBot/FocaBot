@@ -40,8 +40,8 @@ class PlayerModule extends BotModule
           f = filter.split '='
           filter = audioFilters.getFilter f[0], f[1]
           if filter
-            if filter.isAdminOnly() and not @permissions.isAdmin msg.author, msg.guild
-              return msg.reply "#{filter} is only for Bot Commanders."
+            if filter.isAdminOnly() and not @permissions.isDJ msg.author, msg.guild
+              return msg.reply "#{filter} is only for DJs."
             valErr = filter.validate()
             if valErr
               return msg.reply "#{filter} - #{valErr}"
