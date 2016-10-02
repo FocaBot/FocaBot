@@ -6,7 +6,8 @@ class ImageModule extends BotModule
   init: =>
     @registerCommand 'img', (msg, args)=> Bing.images args, { top: 1 }, (error, res, body)=>
       { results } = body.d
-      msg.channel.uploadFile request(results[0].MediaUrl), @getImageName(results[0])
+      if results[0]
+        msg.channel.uploadFile request(results[0].MediaUrl), @getImageName(results[0])
 
     @registerCommand 'rimg', (msg, args)=> Bing.images args, { top: 50 }, (error, res, body)=>
       { results } = body.d
@@ -23,6 +24,7 @@ class ImageModule extends BotModule
       { results } = body.d
       chance = new Chance()
       image = chance.pickone results
+      return if not image
       msg.channel.uploadFile request(image.MediaUrl), @getImageName(image)
   
   getImageName: (image)=>
