@@ -1,9 +1,10 @@
 moment = require 'moment'
+url = require 'url'
 
 class AudioHUD
   constructor: (@audioModule)->
     { @getGuildData, @engine } = @audioModule
-    { @permissions, @prefix } = @engine
+    { @permissions, @prefix, @bot } = @engine
 
   generateProgressBar: (pcnt)=>
     path = '───────────────'
@@ -95,6 +96,85 @@ class AudioHUD
     ```
     (#{@parseTime item.duration}) #{@parseFilters item.filters} - Position **\##{pos}**
     """
+
+  addItemWebhook: (guild, aby, item, pos)=>
+    reply = {
+      username: @getDisplayName aby
+      icon_url: aby.avatarURL
+      text: 'Added a new item to the queue:'
+      attachments: [
+        {
+          color: '#AAFF00'
+          title: '[sauce]'
+          title_link: item.sauce
+          text: """
+          **Length**: #{@parseTime item.duration}
+          **Position** in Queue: ##{pos}
+          """
+          author_name: item.title
+          author_link: item.sauce
+          author_icon: @getIcon item.sauce
+          thumb_url: item.thumbnail
+        }
+      ]
+    }
+    fstr = @parseFilters(item.filters)
+    reply.attachments.push {
+      color: '#f442c2'
+      text: "**Filters**: #{fstr}"
+    } if fstr
+    reply.attachments.push {
+      color: '#42a7f4',
+      footer: "Sent by #{@getDisplayName @bot.User}"
+      footer_icon: @bot.User.avatarURL
+    }
+    return reply
+
+  removeItemWebhook: (guild, aby, item)=>
+    reply = {
+      username: @getDisplayName aby
+      icon_url: aby.avatarURL
+      text: 'Removed from the queue:',
+      attachments: [
+        {
+          color: '#F44277'
+          title: '[sauce]'
+          title_link: item.sauce
+          text: "**Length**: #{@parseTime item.duration}"
+          author_name: item.title
+          title_link: item.sauce
+          author_icon: @getIcon item.sauce
+          thumb_url: item.thumbnail
+        }
+        {
+          footer: "Sent by #{@getDisplayName @bot.User}"
+          footer_icon: @bot.User.avatarURL
+        }
+      ]
+    }
+    fstr = @parseFilters(item.filters)
+    reply.attachments[0].text += "\n**Filters**: #{fstr}" if fstr
+    return reply
+  
+  getIcon: (u)=>
+    uri = url.parse(u)
+    "#{uri.protocol}//#{uri.host}/favicon.ico"
+
+  addPlaylist: (aby, length)=>
+    "#{@getDisplayName aby} added a playlist of **#{length}** items to the queue!"
+  
+  addPlaylistWebhook: (aby, length)=> {
+      username: @getDisplayName aby
+      icon_url: aby.avatarURL
+      attachments: [
+        {
+          color: '#42a7f4'
+          text: "Added a playlist of **#{length}** items to the queue!"
+          footer: "Sent by #{@getDisplayName @bot.User}"
+          footer_icon: @bot.User.avatarURL
+        }
+      ]
+    }
 
   removeItem: (guild, aby, item)=>
     """

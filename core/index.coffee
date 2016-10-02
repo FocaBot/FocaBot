@@ -6,6 +6,7 @@ CommandManager = require './commands'
 ModuleManager = require './modules'
 PermissionManager = require './permissions'
 GuildManager = require './guilds'
+WebHookCollection = require './webHooks'
 git = require 'git-rev'
 # { Guild } = require '../models'
 
@@ -17,18 +18,17 @@ class BotEngine
     @permissions = new PermissionManager @
     @commands = new CommandManager @
     @modules = new ModuleManager @
+    @webHooks = new WebHookCollection @
     @bot.Dispatcher.on 'GATEWAY_READY', @onReady
     @bot.Dispatcher.on 'MESSAGE_CREATE', @onMessage
     @bootDate = new Date()
     git.short @devVersion
-    @version = "0.4.13"
+    @version = "dev-0.5.1"
     global.Core = @
     
-  onReady: =>
+  onReady: (e)=>
     @bot.User.setStatus 'dnd', {
-      type: 1
-      name: "#{@prefix}help | #{@prefix}filters"
-      url: 'https://www.twitch.tv/nothingactuallyherejaksjksfj'
+      name: "'help [#{@version}]'"
     } 
     console.log 'Connected.'
 

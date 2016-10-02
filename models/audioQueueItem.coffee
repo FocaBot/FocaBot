@@ -11,6 +11,7 @@ class QueueItem extends EventEmitter
        @filters,
        @path,
        @sauce,
+       @thumbnail,
     } = data
     @voteSkip = []
     @originalDuration = @duration

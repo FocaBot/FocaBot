@@ -6,7 +6,7 @@ moment = require 'moment'
 class AudioModuleCommands
   constructor: (@audioModule)->
     { @engine, @registerCommand, @hud, @audioFilters } = @audioModule
-    { @getGuildData, @permissions } = @engine
+    { @getGuildData, @permissions, @webHooks } = @engine
 
     # Play
     @registerCommand 'play', { argSeparator: '|' }, (msg,args)=>
@@ -15,29 +15,12 @@ class AudioModuleCommands
       urlToFind = args[0]
       if msg.attachments[0]
         urlToFind  = msg.attachments[0].url
-      youtubedl.getInfo urlToFind, ['--default-search', 'ytsearch', '-f', 'bestaudio', '--no-playlist'], (err, info) =>
+      youtubedl.getInfo urlToFind, ['--default-search', 'ytsearch', '-f', 'bestaudio'], (err, info)=>
         if err
-          return youtubedl.getInfo urlToFind, [], (error, info) =>
+          return youtubedl.getInfo urlToFind, [], (error, info)=>
             return msg.reply 'Something went wrong.' if error
-            @audioModule.handleVideoInfo info, msg, args
-        if isNaN info.duration
-          # Try to get the duration from FFProbe (for direct links and other streams)
-          ffprobe = spawn('ffprobe', [info.url, '-show_format', '-v', 'quiet'])
-          ffprobe.stdout.on 'data', (data)=>
-            # Parse the output from FFProbe
-            prop = { }
-            pattern = /(.*)=(.*)/g
-            while match = pattern.exec data
-              prop[match[1]] = match[2]
-            # Get the duration
-            info.duration = prop.duration
-            # Try to use metadata from the ID3 tags as well
-            if prop['TAG:title']
-              info.title = ''
-              info.title += "#{prop['TAG:artist']} - " if prop['TAG:artist']
-              info.title += prop['TAG:title']
-            @audioModule.handleVideoInfo info, msg, args
-        else @audioModule.handleVideoInfo info, msg, args
+            @getLength(info).then (i)=> @audioModule.handleVideoInfo i, msg, args
+        @getLength(info).then (i)=> @audioModule.handleVideoInfo i, msg, args
     
     # Skip
     @registerCommand 'skip', (msg)=>
@@ -101,7 +84,14 @@ class AudioModuleCommands
       [..., last] = queue.items
       last = queue.currentItem if not last
       if last.requestedBy.id is msg.author.id or @permissions.isDJ msg.author, msg.guild
-        msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, last
+        # Try to use a WebHook for the "added to queue" message
+        @webHooks.getForChannel(msg.channel, true)
+        .then (hook)=>
+          hook.execSlack @hud.removeItemWebhook msg.guild, msg.member, last
+        # The old method
+        .catch (e)=>
+          msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, last
+        msg.delete()
         queue.undo()
       else
         msg.channel.sendMessage 'You can only remove your own items from the queue.'
@@ -146,10 +136,17 @@ class AudioModuleCommands
         return msg.channel.sendMessage "Can't find the specified item in the queue."
       
       if itm.requestedBy.id is msg.author.id or @permissions.isDJ msg.author, msg.guild
-        msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, itm
-        .then (m)=>
+        # Try to use a WebHook for the "added to queue" message
+        @webHooks.getForChannel(msg.channel, true)
+        .then (hook)=>
+          hook.execSlack @hud.removeItemWebhook msg.guild, msg.member, itm
           msg.delete()
-          setTimeout (->m.delete()), 10000
+        # The old method
+        .catch (e)=>
+          msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, itm
+          .then (m)=>
+            msg.delete()
+            setTimeout (->m.delete()), 10000
         queue.remove index
       else
         msg.channel.sendMessage 'You can only remove your own items from the queue.'
@@ -200,6 +197,25 @@ class AudioModuleCommands
       return msg.reply "You can't seek to that position" if @parseTime(args) > queue.currentItem.duration or @parseTime(args) < 1
       queue.seek @parseTime(args), true
 
+  # Try to get the duration from FFProbe (for direct links and other streams)
+  getLength: (info)=> new Promise (resolve, reject)=>
+    return resolve(info) if isFinite info.duration or typeof info.forEach is 'function'
+    ffprobe = spawn('ffprobe', [info.url, '-show_format', '-v', 'quiet'])
+    ffprobe.stdout.on 'data', (data)=>
+      # Parse the output from FFProbe
+      prop = { }
+      pattern = /(.*)=(.*)/g
+      while match = pattern.exec data
+        prop[match[1]] = match[2]
+      # Get the duration
+      info.duration = prop.duration
+      # Try to use metadata from the ID3 tags as well
+      if prop['TAG:title']
+        info.title = ''
+        info.title += "#{prop['TAG:artist']} - " if prop['TAG:artist']
+        info.title += prop['TAG:title']
+      resolve info
+  
   # TODO: At this point, this should be in a global function or something
   parseTime:(time)=>
     t = time.split(':').reverse()

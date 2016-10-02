@@ -1,9 +1,10 @@
-BotEngine = require './core'
 dotenv = require 'dotenv'
+dotenv.config()
+
+BotEngine = require './core'
 mkdirp = require 'mkdirp'
 
-# mkdirp 'data/tmp'
-dotenv.config()
+
 botSettings =
   name: 'FocaBot'
   prefix: process.env.BOT_PREFIX
