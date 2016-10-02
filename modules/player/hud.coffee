@@ -125,7 +125,7 @@ class AudioHUD
     } if fstr
     reply.attachments.push {
       color: '#42a7f4',
-      footer: "Sent by #{@getDisplayName @bot.User}"
+      footer: "Sent by #{@getDisplayName @bot.User.memberOf(guild)}"
       footer_icon: @bot.User.avatarURL
     }
     return reply
@@ -147,7 +147,7 @@ class AudioHUD
           thumb_url: item.thumbnail
         }
         {
-          footer: "Sent by #{@getDisplayName @bot.User}"
+          footer: "Sent by #{@getDisplayName @bot.User.memberOf(guild)}"
           footer_icon: @bot.User.avatarURL
         }
       ]
@@ -170,7 +170,7 @@ class AudioHUD
         {
           color: '#42a7f4'
           text: "Added a playlist of **#{length}** items to the queue!"
-          footer: "Sent by #{@getDisplayName @bot.User}"
+          footer: "Sent by #{@getDisplayName @bot.User.memberOf(guild)}"
           footer_icon: @bot.User.avatarURL
         }
       ]
