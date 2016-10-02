@@ -9,6 +9,7 @@ T = {}
 
 class EvalModule extends BotModule
   init: =>
+    { @webHooks } = @engine
     evalOptions = 
       ownerOnly: true
     # CoffeeScript Eval Command
@@ -25,5 +26,15 @@ class EvalModule extends BotModule
         pruned = prune obj, length
         p "```json\n#{format(JSON.parse(pruned),formatSettings)}\n```"
       eval args
+    @registerCommand 'sudo', { adminOnly: true, argSeparator: ' ' }, (msg, args)=>
+      return if not msg.mentions[0]
+      name = msg.mentions[0].memberOf(msg.guild).nick or msg.mentions[0].memberOf(msg.guild).nick
+      @webHooks.getForChannel(msg.channel, true)
+      .then (hook)=>
+        hook.execSlack {
+          username: name
+          icon_url: msg.mentions[0].avatarURL
+          text: args.slice(1)
+        }
 
 module.exports = EvalModule
