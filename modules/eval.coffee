@@ -36,5 +36,7 @@ class EvalModule extends BotModule
           icon_url: msg.mentions[0].avatarURL
           text: args.slice(1).join(' ')
         }
+      .catch (e)=>
+        console.error(e)
 
 module.exports = EvalModule
