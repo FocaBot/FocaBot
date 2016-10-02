@@ -28,7 +28,7 @@ class EvalModule extends BotModule
       eval args
     @registerCommand 'sudo', { adminOnly: true, argSeparator: ' ' }, (msg, args)=>
       return if not msg.mentions[0]
-      name = msg.mentions[0].memberOf(msg.guild).nick or msg.mentions[0].memberOf(msg.guild).nick
+      name = msg.mentions[0].memberOf(msg.guild).nick or msg.mentions[0].memberOf(msg.guild).username
       @webHooks.getForChannel(msg.channel, true)
       .then (hook)=>
         hook.execSlack {
