@@ -24,10 +24,12 @@ class PlayerModule extends BotModule
   handleVideoInfo: (info, msg, args, silent=false)=>
     # Check if playlist
     if typeof info.forEach is 'function'
+      if not @permissions.isDJ(msg.author, msg.guild)
+        return msg.reply "Only people with the DJ role (or higher) is allowed to add playlists."
       # Playlist
       @webHooks.getForChannel(msg.channel, true)
       .then (hook)=>
-        hook.execSlack @hud.addPlaylistWebhook(msg.author, info.length)
+        hook.execSlack @hud.addPlaylistWebhook(msg.author, info.length, msg.guild)
       .catch (e)=>
         msg.channel.sendMessage @hud.addPlaylist(msg.author, info.length)
       # Iterate over all items

@@ -163,7 +163,7 @@ class AudioHUD
   addPlaylist: (aby, length)=>
     "#{@getDisplayName aby} added a playlist of **#{length}** items to the queue!"
   
-  addPlaylistWebhook: (aby, length)=> {
+  addPlaylistWebhook: (aby, length, guild)=> {
       username: @getDisplayName aby
       icon_url: aby.avatarURL
       attachments: [
