@@ -109,7 +109,7 @@ class AudioHUD
           title_link: item.sauce
           text: """
           **Length**: #{@parseTime item.duration}
-          **Position** in Queue: ##{pos}
+          **Position in Queue**: ##{pos}
           """
           author_name: item.title
           author_link: item.sauce
