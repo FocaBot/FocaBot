@@ -34,7 +34,7 @@ class EvalModule extends BotModule
         hook.execSlack {
           username: name
           icon_url: msg.mentions[0].avatarURL
-          text: args.slice(1)
+          text: args.slice(1).join(' ')
         }
 
 module.exports = EvalModule
