@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/b73aaa36d313393d8aaa5411669cf4e0f6b16759/chance/chance.d.ts",
+    "raw": "registry:dt/chance#0.7.3+20160914132028",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/b73aaa36d313393d8aaa5411669cf4e0f6b16759/chance/chance.d.ts"
+  }
+}

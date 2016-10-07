@@ -1,0 +1,9 @@
+{
+  "globalDependencies": {
+    "chance": "registry:dt/chance#0.7.3+20160914132028",
+    "moment": "registry:dt/moment#2.11.1+20160829143156",
+    "node": "registry:dt/node#6.0.0+20160928143418",
+    "request": "registry:dt/request#0.0.0+20160726020908",
+    "request-promise": "registry:dt/request-promise#3.0.0+20160906190103"
+  }
+}
