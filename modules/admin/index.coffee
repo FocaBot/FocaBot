@@ -89,8 +89,9 @@ class AdminModule extends BotModule
     msg.channel.sendMessage rp
 
   resetFunc: (msg, args)=>
-    { queue } = @getGuildData msg.guild
-    queue.clearQueue()
-    msg.member.getVoiceChannel().leave()
+    try
+      { queue } = @getGuildData msg.guild
+      queue.clearQueue()
+      msg.member.getVoiceChannel().leave()
 
 module.exports = AdminModule
