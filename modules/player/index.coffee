@@ -104,11 +104,11 @@ class PlayerModule extends BotModule
       # Try to use a WebHook for the "added to queue" message
       @webHooks.getForChannel(msg.channel, true)
       .then (hook)=>
-        hook.execSlack @hud.addItemWebhook(msg.guild, qI.requestedBy, qI, queue.items.length+1)
+        hook.execSlack @hud.addItemWebhook(msg.guild, qI.requestedBy, qI, queue.items.length)
         msg.delete()
       # The old method
       .catch (e)=>
-        msg.channel.sendMessage @hud.addItem msg.guild, qI.requestedBy, qI, queue.items.length+1
+        msg.channel.sendMessage @hud.addItem msg.guild, qI.requestedBy, qI, queue.items.length
         .then (m)=>
           omsg = m;
           setTimeout ->
