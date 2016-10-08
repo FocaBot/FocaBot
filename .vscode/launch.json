@@ -5,20 +5,21 @@
             "name": "Launch",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}/main.js",
+            "program": "${workspaceRoot}/main.coffee",
             "stopOnEntry": false,
             "args": [],
             "cwd": "${workspaceRoot}",
             "preLaunchTask": null,
             "runtimeExecutable": null,
             "runtimeArgs": [
-                "--nolazy",
-                "--harmony_async_await"
+                "--nolazy"
             ],
             "env": {
                 "NODE_ENV": "development"
             },
-            "externalConsole": false
+            "externalConsole": false,
+            "sourceMaps": true,
+            "outDir": "${workspaceRoot}/bin"
         },
         {
             "name": "Attach",
@@ -43,6 +44,6 @@
             "outDir": "${workspaceRoot}/bin",
             "localRoot": "${workspaceRoot}",
             "remoteRoot": null
-        }
+        },
     ]
 }
