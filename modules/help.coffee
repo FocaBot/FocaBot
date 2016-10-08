@@ -123,6 +123,7 @@ class HelpModule extends BotModule
     This is a dummy filter that prevents making changes to the filters while the song plays
 
     **| nightcore** (Preset, same as speed=1.5)
+    **| chipmunk** (Preset, same as speed=2)
     **| vaporwave** (Preset, same as speed=0.75)
     **| earrape** (Preset, same as volume=25)
     """

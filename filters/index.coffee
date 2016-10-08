@@ -21,6 +21,7 @@ class AudioFilters
     @presets =
       # Speed filter
       nightcore: new FilterPreset @filters.speed, 1.5  # | nightcore
+      chipmunk: new FilterPreset @filters.speed, 2.0  # | chipmunk
       vaporwave: new FilterPreset @filters.speed, 0.75 # | vaporwave
       # Volume filter
       earrape: new FilterPreset @filters.volume, 25    # | earrape (bot commanders)
