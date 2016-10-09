@@ -111,8 +111,9 @@ class GuildAudioQueueManager
   clearQueue: =>
     for item in @items
       @items.shift()
-      item.emit 'skipped'
-      item.skipped = true
+      try
+        item.emit 'skipped'
+        item.skipped = true
     if @currentItem?
       @currentItem.skipped = true
       @currentItem.emit 'skipped'
