@@ -21,39 +21,38 @@ class HelpModule extends BotModule
     Command List:
     ```
     Available to Everyone:
-    #{pfx}play    <link/title> - Plays the requested song
-    #{pfx}queue                - Shows the current song queue
-    #{pfx}skip                 - Vote to skip the current song
-                          (Bot commanders bypass voting)
-    #{pfx}undo                 - Removes the most recent item added to the queue
-    #{pfx}np                   - Now Playing
-    #{pfx}help                 - Shows this help
-    #{pfx}filters              - Shows information about filters
-    #{pfx}stats                - Technical stuff about the bot
-    #{pfx}ping                 - Pong!
-    #{pfx}seal                 - Sends seal pictures
-    #{pfx}sauce                - Sends a link to the current item's sauce
-    #{pfx}|                    - Applies filters to the current song (see #{pfx}filters)
-    #{pfx}img <query>          - Finds an image matching the query.
-    #{pfx}rimg <query>         - Same as above, but finds a random image instead.
-    #{pfx}imgn <query>         - Finds an image (with the adult filter disabled).
-    #{pfx}rimgn <query>        - Finds a random image (with the adult filter disabled).
-    #{pfx}+ <tag> <reply>      - Adds a new tag
-    #{pfx}- <tag> [reply]      - Removes a tag
-    #{pfx}! <tag>              - Displays the contents of the tag
+    #{pfx}play <link/title> - Plays the requested song
+    #{pfx}queue - Shows the current song queue
+    #{pfx}skip - Vote to skip the current song (Bot commanders bypass voting)
+    #{pfx}undo - Removes the most recent item added to the queue
+    #{pfx}np - Now Playing
+    #{pfx}help - Shows this help
+    #{pfx}filters - Shows information about filters
+    #{pfx}stats - Technical stuff about the bot
+    #{pfx}ping - Pong!
+    #{pfx}seal - Sends seal pictures
+    #{pfx}sauce - Sends a link to the current item's sauce
+    #{pfx}| - Applies filters to the current song (see #{pfx}filters)
+    #{pfx}img <query> - Finds an image matching the query.
+    #{pfx}rimg <query> - Same as above, but finds a random image instead.
+    #{pfx}imgn <query> - Finds an image (with the adult filter disabled).
+    #{pfx}rimgn <query> - Finds a random image (with the adult filter disabled).
+    #{pfx}+ <tag> <reply> - Adds a new tag
+    #{pfx}- <tag> [reply] - Removes a tag
+    #{pfx}! <tag> - Displays the contents of the tag
 
     DJs Only:
-    #{pfx}volume  <vol>        - Sets volume of the bot
-    #{pfx}shuffle              - Shuffles the queue
-    #{pfx}stop                 - Stops playback an clears the queue
-    #{pfx}remove <position>    - Removes the song at the specified position
-    #{pfx}swap <pos1> <pos2>   - Swaps the positions of the specified items
-    #{pfx}seek <time>          - Seeks to the specified position
+    #{pfx}volume  <vol> - Sets volume of the bot
+    #{pfx}shuffle - Shuffles the queue
+    #{pfx}stop - Stops playback an clears the queue
+    #{pfx}remove <position> - Removes the song at the specified position
+    #{pfx}swap <pos1> <pos2> - Swaps the positions of the specified items
+    #{pfx}seek <time> - Seeks to the specified position
 
     Bot Commanders Only:
-    #{pfx}clean                - Deletes messages sent by the bot (requires permission to do so)
-    #{pfx}reset                - Resets FocaBot in your server (Temporary, read the changelog)
-    #{pfx}config               - Configures the bot (run it to get more info)
+    #{pfx}clean - Deletes messages sent by the bot (requires permission to do so)
+    #{pfx}reset - Resets FocaBot in your server (Temporary, read the changelog)
+    #{pfx}config - Configures the bot (run it to get more info)
     ```
     """
     msg.author.openDM().then (dm)=>
@@ -79,13 +78,10 @@ class HelpModule extends BotModule
     #{pfx}play Rick Hentai | speed=0.75 reverse lowpass=1000
     ```
 
-    ***DON'T EVER TRY TO STACK MORE THAN 3 FILTERS, OTHERWISE YOU MIGHT END WITH THIS ABOMINATION***
-    https://youtu.be/Bg9fwP1vMv0
-
-    Since FocaBot v0.4.9 you can also change filters while the song is playing:
+    You can also change filters while the song is playing:
     ```'| nightcore echo```
     You can only do this on songs requested by yourself if you are not a bot commander.
-    Please note that not all filters are supported. Also, this might pause the song for a while, depending on the length.
+    Please note that not all filters are supported.
 
     Here is a complete list of filters:
 
@@ -99,7 +95,6 @@ class HelpModule extends BotModule
     Reverses the song
 
     **| volume**
-    (This filter is for Bot Commanders only, as it can be used for "ear rapes")
     Multiplies the volume of the song by the specified number. For example `| volume=2`
 
     **| lowpass**
@@ -109,7 +104,6 @@ class HelpModule extends BotModule
     Applies a high pass filter. For Example `| highpass=1000`
 
     **| bass**
-    (This filter is for Bot Commanders only)
     Applies a bass boost filter. Use 20 for MAXIMUM bass boost *(not recommended)* `| bass=2`
 
     **| chorus**
@@ -130,7 +124,7 @@ class HelpModule extends BotModule
     You can also specify a duration: `| time=0:15-30` will make the song start at 0:15 and last 30 seconds.
 
     **| nofx**
-    This is a dummy filter that prevents making changes to the filters while the song plays
+    Dummy filter that prevents making changes to the filters while the song plays
 
     **| nightcore** (Preset, same as speed=1.5)
     **| chipmunk** (Preset, same as speed=2)
