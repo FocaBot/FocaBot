@@ -9,7 +9,7 @@ class AudioModuleCommands
     { @getGuildData, @permissions, @webHooks } = @engine
 
     # Play
-    @registerCommand 'play', { argSeparator: '|' }, (msg,args)=>
+    @registerCommand 'play', { argSeparator: '|' }, (msg,args,data)=>
       return msg.reply 'No video specified.' if not args[0].trim() and not msg.attachments[0]
       return msg.reply 'You must be in a voice channel to request songs.' if not msg.member.getVoiceChannel()
       urlToFind = args[0]
@@ -18,13 +18,15 @@ class AudioModuleCommands
       youtubedl.getInfo urlToFind, ['--default-search', 'ytsearch', '-f', 'bestaudio'], (err, info)=>
         if err
           return youtubedl.getInfo urlToFind, [], (error, info)=>
-            return msg.reply 'Something went wrong.' if error
-            @getLength(info).then (i)=> @audioModule.handleVideoInfo i, msg, args
-        @getLength(info).then (i)=> @audioModule.handleVideoInfo i, msg, args
+            if error
+              global.lastErrItem = { error, info }
+              return msg.reply 'Something went wrong.'
+            @getLength(info).then (i)=> @audioModule.handleVideoInfo i, msg, args, data
+        @getLength(info).then (i)=> @audioModule.handleVideoInfo i, msg, args, data
     
     # Skip
-    @registerCommand 'skip', (msg)=>
-      {queue} = @getGuildData(msg.guild)
+    @registerCommand 'skip', (msg, args, data)=>
+      {queue} = data
       return if msg.author.bot
       return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
       target = Math.round(msg.member.getVoiceChannel().members.length * 0.4)
@@ -45,8 +47,8 @@ class AudioModuleCommands
         msg.channel.sendMessage 'No songs playing on the current server.'
 
     # Stop
-    @registerCommand 'stop', { djOnly: true }, (msg)=>
-      {queue} = @getGuildData(msg.guild)
+    @registerCommand 'stop', { djOnly: true }, (msg, args, data)=>
+      {queue} = data
       if queue.currentItem
         queue.clearQueue()
         msg.channel.sendMessage "**#{msg.member.nick or msg.author.username}** cleared the queue."
@@ -54,30 +56,31 @@ class AudioModuleCommands
         msg.channel.sendMessage "No songs playing on the current server."
 
     # Volume
-    @registerCommand 'volume', { djOnly: true }, (msg, args)=>
-      {audioPlayer} = @getGuildData(msg.guild)
+    @registerCommand 'volume', { djOnly: true }, (msg, args, data)=>
+      {audioPlayer} = data
       if not args
-        return msg.channel.sendMessage @hud.getVolume msg.guild
+        return msg.channel.sendMessage @hud.getVolume data
       volume = parseInt(args)
       if volume > 0 and volume <=100
         audioPlayer.setVolume volume
-        msg.channel.sendMessage @hud.setVolume msg.guild, msg.member
+        msg.channel.sendMessage @hud.setVolume data, msg.member
       else
         msg.channel.sendMessage "Invalid volume provided."
 
     
     # Queue
-    @registerCommand 'queue', (msg, args)=>
-      {audioPlayer, queue} = @getGuildData(msg.guild)
+    @registerCommand 'queue', (msg, args, data)=>
+      {audioPlayer, queue} = data
       return msg.channel.sendMessage "Nothing being played on the current server." if not queue.currentItem
-      msg.channel.sendMessage @hud.queue msg.guild, parseInt args
+      msg.channel.sendMessage @hud.queue data, parseInt args
       .then (m)=>
-        msg.delete()
-        setTimeout (->m.delete()), 15000
+        if data.data.autoDel
+          msg.delete()
+          setTimeout (->m.delete()), 15000
 
     # Undo
-    @registerCommand 'undo', (msg, args)=>
-      {queue} = @getGuildData msg.guild
+    @registerCommand 'undo', (msg, args, data)=>
+      {queue} = data
       if not queue.items.length and not queue.currentItem
         return msg.channel.sendMessage 'The queue is empty.'
 
@@ -91,7 +94,8 @@ class AudioModuleCommands
         # The old method
         .catch (e)=>
           msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, last
-        msg.delete()
+        if data.data.autoDel
+          msg.delete()
         queue.undo()
       else
         msg.channel.sendMessage 'You can only remove your own items from the queue.'
@@ -100,8 +104,8 @@ class AudioModuleCommands
     @registerCommand 'shuffle', {
       description: 'Shuffles the queue.'
       djOnly: true
-    }, (msg,args)=>
-      {queue} = @getGuildData msg.guild
+    }, (msg, args, data)=>
+      {queue} = data
       if queue.items.length
         queue.shuffle()
         msg.channel.sendMessage '✅'
@@ -109,27 +113,29 @@ class AudioModuleCommands
         msg.channel.sendMessage 'The queue is empty.'
 
     # Now Playing
-    @registerCommand 'np', (msg, args)=>
-      {audioPlayer, queue} = @getGuildData(msg.guild)
-      msg.channel.sendMessage @hud.nowPlaying msg.guild, queue.currentItem, false
+    @registerCommand 'np', (msg, args, data)=>
+      {audioPlayer, queue} = data
+      msg.channel.sendMessage @hud.nowPlaying data, queue.currentItem, false
       .then (m)=>
-        msg.delete()
-        setTimeout (->m.delete()), 10000
+        if data.data.autoDel
+          msg.delete()
+          setTimeout (->m.delete()), 10000
 
     # Sauce
-    @registerCommand 'sauce', (msg, args)=>
-      {audioPlayer, queue} = @getGuildData(msg.guild)
+    @registerCommand 'sauce', (msg, args, data)=>
+      {audioPlayer, queue} = data
       return msg.channel.sendMessage "Nothing being played on the current server." if not queue.currentItem
       qI = queue.currentItem
       return msg.reply "Sorry, no sauce for the current item. :C" if not qI.sauce
       msg.reply "Here's the sauce of the current item: #{qI.sauce}"
       .then (m)=>
-        msg.delete()
-        setTimeout (->m.delete()), 20000
+        if data.data.autoDel
+          msg.delete()
+          setTimeout (->m.delete()), 20000
 
     # Remove
-    @registerCommand 'remove', (msg, args)=>
-      {queue} = @getGuildData msg.guild
+    @registerCommand 'remove', (msg, args, data)=>
+      {queue} = data
       index = (parseInt args) - 1
       itm = queue.items[index]
       if not itm
@@ -140,20 +146,22 @@ class AudioModuleCommands
         @webHooks.getForChannel(msg.channel, true)
         .then (hook)=>
           hook.execSlack @hud.removeItemWebhook msg.guild, msg.member, itm
-          msg.delete()
+          if data.data.autoDel
+            msg.delete()
         # The old method
         .catch (e)=>
           msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, itm
           .then (m)=>
-            msg.delete()
-            setTimeout (->m.delete()), 10000
+            if data.data.autoDel
+              msg.delete()
+              setTimeout (->m.delete()), 10000
         queue.remove index
       else
         msg.channel.sendMessage 'You can only remove your own items from the queue.'
 
     # Swap
-    @registerCommand 'swap', { djOnly: true, argSeparator: ' ' }, (msg,args)=>
-      {queue} = @getGuildData msg.guild
+    @registerCommand 'swap', { djOnly: true, argSeparator: ' ' }, (msg, args, data)=>
+      {queue} = data
       return msg.channel.sendMessage "Invalid arguments provided." if args.length < 2
       indexes = [parseInt(args[0])-1, parseInt(args[1])-1]
       for idx of indexes
@@ -161,12 +169,13 @@ class AudioModuleCommands
       items = queue.swap indexes[0], indexes[1]
       msg.channel.sendMessage @hud.swapItems msg.guild, msg.member, items, indexes
       .then (m)=>
-        msg.delete()
-        setTimeout (->m.delete()), 10000
+        if data.data.autoDel
+          msg.delete()
+          setTimeout (->m.delete()), 10000
 
     # Change Filters
-    @registerCommand 'fx', { aliases: ['setfilters', '|'], argSeparator: ' ' }, (msg,args)=>
-      {queue} = @getGuildData msg.guild
+    @registerCommand 'fx', { aliases: ['setfilters', '|'], argSeparator: ' ' }, (msg, args, data)=>
+      {queue} = data
       return if not isFinite queue.currentItem.duration
       return if not @permissions.isDJ(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id
       for filter in queue.currentItem.filters
@@ -189,8 +198,8 @@ class AudioModuleCommands
       queue.updateFilters filters
 
     # Seek
-    @registerCommand 'seek', (msg,args)=>
-      {queue} = @getGuildData msg.guild
+    @registerCommand 'seek', (msg, args, data)=>
+      {queue} = data
       return if not @permissions.isDJ(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id
       for filter in queue.currentItem.filters
         return msg.reply "You can't seek through this song (unsupported filter #{filter})." if filter.avoidRuntime

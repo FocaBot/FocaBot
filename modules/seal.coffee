@@ -3,7 +3,7 @@ request = require 'request'
 
 class SealModule extends BotModule
   init: =>
-    @registerCommand 'seal', (msg, args)->
+    @registerCommand 'seal', { allowDM: true }, (msg, args)->
       chance = new Chance()
       if chance.integer({ min: 0, max: 100 }) > 10
         # Get a seal from randomse.al

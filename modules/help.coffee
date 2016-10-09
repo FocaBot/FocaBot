@@ -1,13 +1,18 @@
 class HelpModule extends BotModule
   init: =>
-    {@prefix} = @engine
-    @registerCommand 'help', @helpCommandFunction
-    @registerCommand 'filters', @filtersCommandFunction
+    {@prefix, @getGuildData} = @engine
+    @registerCommand 'help', { allowDM: true }, @helpCommandFunction
+    @registerCommand 'filters', { allowDM: true }, @filtersCommandFunction
 
-  helpCommandFunction: (msg, args)=>
+  helpCommandFunction: (msg, args)=> @getGuildData(msg.guild).then (d)=>
+    pfx = d.data.prefix or @prefix
+    gstr = ""
+    if msg.guild
+      gstr = "\nPrefix for `#{msg.guild.name}`: #{pfx}"
     reply = """
     **#{@engine.name} #{@engine.version} (#{@engine.versionName})**
     Made by <@164588804362076160>
+    #{gstr}
     
     This bot is not yet public, though you can send me a DM if you want it on your server.
 
@@ -16,35 +21,39 @@ class HelpModule extends BotModule
     Command List:
     ```
     Available to Everyone:
-    #{@prefix}play    <link/title> - Plays the requested song
-    #{@prefix}queue                - Shows the current song queue
-    #{@prefix}skip                 - Vote to skip the current song
+    #{pfx}play    <link/title> - Plays the requested song
+    #{pfx}queue                - Shows the current song queue
+    #{pfx}skip                 - Vote to skip the current song
                           (Bot commanders bypass voting)
-    #{@prefix}undo                 - Removes the most recent item added to the queue
-    #{@prefix}np                   - Now Playing
-    #{@prefix}help                 - Shows this help
-    #{@prefix}filters              - Shows information about filters
-    #{@prefix}stats                - Technical stuff about the bot
-    #{@prefix}ping                 - Pong!
-    #{@prefix}seal                 - Sends seal pictures
-    #{@prefix}sauce                - Sends a link to the current item's sauce
-    #{@prefix}|                    - Applies filters to the current song (see #{@prefix}filters)
-    #{@prefix}img <query>          - Finds an image matching the query.
-    #{@prefix}rimg <query>         - Same as above, but finds a random image instead.
-    #{@prefix}imgn <query>         - Finds an image (with the adult filter disabled).
-    #{@prefix}rimgn <query>        - Finds a random image (with the adult filter disabled).s
+    #{pfx}undo                 - Removes the most recent item added to the queue
+    #{pfx}np                   - Now Playing
+    #{pfx}help                 - Shows this help
+    #{pfx}filters              - Shows information about filters
+    #{pfx}stats                - Technical stuff about the bot
+    #{pfx}ping                 - Pong!
+    #{pfx}seal                 - Sends seal pictures
+    #{pfx}sauce                - Sends a link to the current item's sauce
+    #{pfx}|                    - Applies filters to the current song (see #{pfx}filters)
+    #{pfx}img <query>          - Finds an image matching the query.
+    #{pfx}rimg <query>         - Same as above, but finds a random image instead.
+    #{pfx}imgn <query>         - Finds an image (with the adult filter disabled).
+    #{pfx}rimgn <query>        - Finds a random image (with the adult filter disabled).
+    #{pfx}+ <tag> <reply>      - Adds a new tag
+    #{pfx}- <tag> [reply]      - Removes a tag
+    #{pfx}! <tag>              - Displays the contents of the tag
 
     DJs Only:
-    #{@prefix}volume  <vol>        - Sets volume of the bot
-    #{@prefix}shuffle              - Shuffles the queue
-    #{@prefix}stop                 - Stops playback an clears the queue
-    #{@prefix}remove <position>    - Removes the song at the specified position
-    #{@prefix}swap <pos1> <pos2>   - Swaps the positions of the specified items
-    #{@prefix}seek <time>          - Seeks to the specified position
+    #{pfx}volume  <vol>        - Sets volume of the bot
+    #{pfx}shuffle              - Shuffles the queue
+    #{pfx}stop                 - Stops playback an clears the queue
+    #{pfx}remove <position>    - Removes the song at the specified position
+    #{pfx}swap <pos1> <pos2>   - Swaps the positions of the specified items
+    #{pfx}seek <time>          - Seeks to the specified position
 
     Bot Commanders Only:
-    #{@prefix}clean                - Deletes messages sent by the bot (requires permission to do so)
-    #{@prefix}reset                - Resets FocaBot in your server (Temporary, read the changelog)
+    #{pfx}clean                - Deletes messages sent by the bot (requires permission to do so)
+    #{pfx}reset                - Resets FocaBot in your server (Temporary, read the changelog)
+    #{pfx}config               - Configures the bot (run it to get more info)
     ```
     """
     msg.author.openDM().then (dm)=>
@@ -52,7 +61,8 @@ class HelpModule extends BotModule
       msg.reply 'Check your DMs!' if msg.channel.guild_id
     
 
-  filtersCommandFunction: (msg,args)=>
+  filtersCommandFunction: (msg,args)=> @getGuildData(msg.guild).then (d)=>
+    pfx = d.data.prefix or @prefix
     reply = """
     **About Filters**
 
@@ -60,13 +70,13 @@ class HelpModule extends BotModule
 
     For example:
     ```
-    #{@prefix}play Noma - Brain Power | speed=1.5
+    #{pfx}play Noma - Brain Power | speed=1.5
     ```
     Will play Brain Power at 1.5x speed!
 
     You can also chain multiple filters in this way:
     ```
-    #{@prefix}play Rick Hentai | speed=0.75 reverse lowpass=1000
+    #{pfx}play Rick Hentai | speed=0.75 reverse lowpass=1000
     ```
 
     ***DON'T EVER TRY TO STACK MORE THAN 3 FILTERS, OTHERWISE YOU MIGHT END WITH THIS ABOMINATION***

@@ -12,15 +12,16 @@ class EvalModule extends BotModule
     { @webHooks } = @engine
     evalOptions = 
       ownerOnly: true
+      allowDM: true
     # CoffeeScript Eval Command
-    @registerCommand 'eval', evalOptions, (msg, args, bot, engine)=>
+    @registerCommand 'eval', evalOptions, (msg, args, d, bot, engine)=>
       p = (text)-> msg.channel.sendMessage text
       j = (obj, length)->
         pruned = prune obj, length
         p "```json\n#{format(JSON.parse(pruned),formatSettings)}\n```"
       eval(CoffeeScript.compile(args, bare: true))
     # JavaScript Eval Command
-    @registerCommand 'jseval', evalOptions, (msg, args, bot, engine)=>
+    @registerCommand 'jseval', evalOptions, (msg, args, d, bot, engine)=>
       p = (text)-> msg.channel.sendMessage text
       j = (obj, length)->
         pruned = prune obj, length

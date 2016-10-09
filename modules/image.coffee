@@ -4,28 +4,32 @@ request = require 'request'
 
 class ImageModule extends BotModule
   init: =>
-    @registerCommand 'img', (msg, args)=> Bing.images args, { top: 1 }, (error, res, body)=>
+    @registerCommand 'img', { allowDM: true }, (msg, args)=> Bing.images args, { top: 1 }, (error, res, body)=>
       { results } = body.d
       if results[0]
         msg.channel.uploadFile request(results[0].MediaUrl), @getImageName(results[0])
 
-    @registerCommand 'rimg', (msg, args)=> Bing.images args, { top: 50 }, (error, res, body)=>
+    @registerCommand 'rimg', { allowDM: true }, (msg, args)=> Bing.images args, { top: 50 }, (error, res, body)=>
       { results } = body.d
       chance = new Chance()
       image = chance.pickone results
       msg.channel.uploadFile request(image.MediaUrl), @getImageName(image)
 
     # NSFW (sorry, WET code)
-    @registerCommand 'imgn', (msg, args)=> Bing.images args, { top: 1, adult: 'Off' }, (error, res, body)=>
-      { results } = body.d
-      msg.channel.uploadFile request(results[0].MediaUrl), @getImageName(results[0])
+    @registerCommand 'imgn', { allowDM: true }, (msg, args, d)=>
+      return if not d.data.allowNSFW
+      Bing.images args, { top: 1, adult: 'Off' }, (error, res, body)=>
+        { results } = body.d
+        msg.channel.uploadFile request(results[0].MediaUrl), @getImageName(results[0])
 
-    @registerCommand 'rimgn', (msg, args)=> Bing.images args, { top: 50, adult: 'Off' }, (error, res, body)=>
-      { results } = body.d
-      chance = new Chance()
-      image = chance.pickone results
-      return if not image
-      msg.channel.uploadFile request(image.MediaUrl), @getImageName(image)
+    @registerCommand 'rimgn', { allowDM: true }, (msg, args, d)=>
+      return if not d.data.allowNSFW
+      Bing.images args, { top: 50, adult: 'Off' }, (error, res, body)=>
+        { results } = body.d
+        chance = new Chance()
+        image = chance.pickone results
+        return if not image
+        msg.channel.uploadFile request(image.MediaUrl), @getImageName(image)
   
   getImageName: (image)=>
     ext = image.ContentType.split('/')[1]

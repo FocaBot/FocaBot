@@ -1,9 +1,9 @@
 Chance = require 'chance'
 
 class GuildAudioQueueManager
-  constructor: (@engine, @guild)->
-    {@bot, @permissions, @getGuildData} = @engine
-    {@audioPlayer} = @getGuildData @guild
+  constructor: (@engine, @guild, @guildData)->
+    {@bot, @permissions} = @engine
+    {@audioPlayer} = @guildData
     @items = []
 
   addToQueue: (item)=>

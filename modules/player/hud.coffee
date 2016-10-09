@@ -26,8 +26,8 @@ class AudioHUD
     return moment.utc(seconds * 1000).format("HH:mm:ss") if isFinite(seconds)
     '∞'
 
-  generateProgressOuter: (guild, itm)=>
-    { queue, audioPlayer } = @getGuildData(guild)
+  generateProgressOuter: (g, itm)=>
+    { queue, audioPlayer } = g
     qI = itm or queue.currentItem
     vI = @generateVolumeInd audioPlayer.volume
     tS = if audioPlayer.encStream? then audioPlayer.getTimestamp() else 1
@@ -44,18 +44,17 @@ class AudioHUD
     filterstr += filter for filter in filters
     filterstr
 
-  nowPlaying: (guild, qI, mention)=>
+  nowPlaying: (g, qI, mention)=>
     """
-    #{@generateProgressOuter guild, qI}
+    #{@generateProgressOuter g, qI}
     Now playing in __#{qI.playInChannel.name}__:
     >`#{qI.title}` (#{@parseTime qI.duration}) #{@parseFilters qI.filters}
 
     Requested by: **#{@getDisplayName qI.requestedBy, mention}** 
     """
   
-  queue: (guild, page=1)=>
-    g = @getGuildData(guild)
-    m = @nowPlaying guild, g.queue.currentItem, false
+  queue: (g, page=1)=>
+    m = @nowPlaying g, g.queue.currentItem, false
     page = 1 if isNaN page
 
     return m + "\nThe queue seems to be empty." if g.queue.items.length <= 0
@@ -74,17 +73,15 @@ class AudioHUD
     m += "Use #{@prefix}queue #{page+1} to see the next page." if max < g.queue.items.length
     m
 
-  setVolume: (guild, member)=>
-    g = @getGuildData(guild)
+  setVolume: (g, member)=>
     """
-    #{@generateProgressOuter guild}
+    #{@generateProgressOuter g}
     #{@getDisplayName member, true} set the volume to #{g.audioPlayer.volume}
     """
   
-  getVolume: (guild)=>
-    g = @getGuildData(guild)
+  getVolume: (g)=>
     """
-    #{@generateProgressBar guild}
+    #{@generateProgressOuter g}
     Current volume: #{g.audioPlayer.volume}
     """
 

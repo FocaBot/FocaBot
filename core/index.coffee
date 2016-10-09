@@ -8,12 +8,14 @@ PermissionManager = require './permissions'
 GuildManager = require './guilds'
 WebHookCollection = require './webHooks'
 git = require 'git-rev'
-# { Guild } = require '../models'
+thinky = require './thinky'
 
 class BotEngine
   constructor: (@settings) ->
     {@prefix, @name} = @settings
+    global.Core = @
     @bot = new Discordie { autoReconnect: true }
+    @db = thinky
     @guildData = new GuildManager @
     @permissions = new PermissionManager @
     @commands = new CommandManager @
@@ -23,26 +25,22 @@ class BotEngine
     @bot.Dispatcher.on 'MESSAGE_CREATE', @onMessage
     @bootDate = new Date()
     git.short @devVersion
-    @version = "dev-0.5.1"
-    global.Core = @
+    @version = "0.5.1"
     
   onReady: (e)=>
     @bot.User.setStatus 'dnd', {
-      name: "'help [#{@version}]'"
+      name: "#{@prefix}help (new prefix!)]"
     } 
     console.log 'Connected.'
 
   onMessage: (e)=>
-    if e.message.content[..@prefix.length-1] is @prefix
-      @commands.executeCommand e.message
+    @commands.executeCommand e.message
 
   devVersion: (version)=>
     @versionName = 'git-'+version
 
   establishConnection: => @bot.connect { token: @settings.token }
 
-  getGuildData: (guild)=>
-    return @guildData.guilds[guild.id] if @guildData.guilds[guild.id]?
-    @guildData.addGuild guild
+  getGuildData: (guild)=> @guildData.getGuild guild
 
 module.exports = BotEngine

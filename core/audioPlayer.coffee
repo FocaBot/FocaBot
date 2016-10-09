@@ -43,7 +43,10 @@ class GuildAudioPlayer
     .catch (error)=>
       reject error
 
-  setVolume: (@volume)=> @voiceConnection.getEncoder().setVolume @volume
+  setVolume: (@volume)=>
+    try
+      @voiceConnection.getEncoder().setVolume @volume
+
   stop:   ()=>
     try
       @currentStream.stop()

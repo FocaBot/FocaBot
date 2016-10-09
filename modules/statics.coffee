@@ -3,7 +3,7 @@ os = require 'os'
 
 class StatsModule extends BotModule
   init: =>
-    @registerCommand 'stats', (msg, args)->
+    @registerCommand 'stats', { allowDM: true }, (msg, args)->
       uptime = moment().from @engine.bootDate, true
       mem = Math.floor process.memoryUsage().heapTotal / 1024000
       memfree = Math.floor os.freemem() / 1024000

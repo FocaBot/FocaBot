@@ -21,7 +21,7 @@ class PlayerModule extends BotModule
     }
     .asSeconds()
 
-  handleVideoInfo: (info, msg, args, silent=false)=>
+  handleVideoInfo: (info, msg, args, gdata, silent=false)=>
     # Check if playlist
     if typeof info.forEach is 'function'
       if not @permissions.isDJ(msg.author, msg.guild)
@@ -33,7 +33,7 @@ class PlayerModule extends BotModule
       .catch (e)=>
         msg.channel.sendMessage @hud.addPlaylist(msg.author, info.length)
       # Iterate over all items
-      return info.forEach (v)=> @handleVideoInfo(v, msg, args, true)
+      return info.forEach (v)=> @handleVideoInfo(v, msg, args, gdata, true)
     # Check if duration is valid
     duration = @parseTime info.duration
        
@@ -69,7 +69,7 @@ class PlayerModule extends BotModule
     filterstr = " "
     filterstr += filter for filter in filters
 
-    {queue, audioPlayer} = @getGuildData(msg.guild)
+    {queue, audioPlayer} = gdata
     # Create a new queue item
     qI = new QueueItem {
       title: info.title
@@ -87,16 +87,18 @@ class PlayerModule extends BotModule
       if omsg
         omsg.delete()
         omsg = null
-      msg.channel.sendMessage @hud.nowPlaying msg.guild, qI, true
+      msg.channel.sendMessage @hud.nowPlaying gdata, qI, true
         .then (m)=>
-          setTimeout (->m.delete()), 15000
+          if gdata.data.autoDel
+           setTimeout (->m.delete()), 15000
     
     qI.once 'end', =>
       setTimeout (()=>
         if not queue.items.length and not queue.currentItem
           msg.channel.sendMessage 'Nothing more to play.'
           .then (m)=>
-            setTimeout (->m.delete()), 15000
+            if gdata.data.autoDel
+              setTimeout (->m.delete()), 15000
           audioPlayer.clean true
       ), 100
     
@@ -104,19 +106,21 @@ class PlayerModule extends BotModule
       # Try to use a WebHook for the "added to queue" message
       @webHooks.getForChannel(msg.channel, true)
       .then (hook)=>
+        if gdata.data.autoDel
+          msg.delete()
         hook.execSlack @hud.addItemWebhook(msg.guild, qI.requestedBy, qI, queue.items.length)
-        msg.delete()
       # The old method
       .catch (e)=>
         msg.channel.sendMessage @hud.addItem msg.guild, qI.requestedBy, qI, queue.items.length
         .then (m)=>
           omsg = m;
           setTimeout ->
-            if omsg
+            if omsg and gdata.data.autoDel
               omsg.delete()
               omsg = null
           , 15000
-          msg.delete()
+          if gdata.data.autoDel
+            msg.delete()
     queue.addToQueue qI
 
 module.exports = PlayerModule
