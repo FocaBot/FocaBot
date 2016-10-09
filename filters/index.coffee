@@ -17,6 +17,7 @@ class AudioFilters
       tempo: reload './tempo'       # | tempo=2
       time: reload './time'         # | time=1:23-45   (Start - Duration)
       nofx: reload './nofx'         # | nofx
+      karaoke: reload './karaoke'   # | karaoke
       
     @presets =
       # Speed filter
