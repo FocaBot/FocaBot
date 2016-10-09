@@ -18,6 +18,8 @@ class AudioFilters
       time: reload './time'         # | time=1:23-45   (Start - Duration)
       nofx: reload './nofx'         # | nofx
       karaoke: reload './karaoke'   # | karaoke
+      distort: reload './distort'   # | distort=5
+      tremolo: reload './tremolo'   # | tremolo=5
       
     @presets =
       # Speed filter
