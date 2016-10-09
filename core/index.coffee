@@ -28,7 +28,7 @@ class BotEngine
     @version = "0.5.1"
     
   onReady: (e)=>
-    @bot.User.setStatus 'dnd', {
+    @bot.User.setStatus 'online', {
       name: "#{@prefix}help (new prefix!)"
     } 
     console.log 'Connected.'
