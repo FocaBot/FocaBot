@@ -47,9 +47,10 @@ class WebHookCollection
       e.socket.socket.on('message', @rawGatewayHandler)
 
   rawGatewayHandler: (e)=>
-    {t,d} = JSON.parse(e);
-    if t is 'WEBHOOKS_UPDATE'
-      @updateCacheForGuild @bot.Guilds.get(d.guild_id)
+    try
+      {t,d} = JSON.parse(e);
+      if t is 'WEBHOOKS_UPDATE'
+        @updateCacheForGuild @bot.Guilds.get(d.guild_id)
 
   addToCache: (hook)=>
     # First check if not in cache
