@@ -29,7 +29,7 @@ class BotEngine
     
   onReady: (e)=>
     @bot.User.setStatus 'dnd', {
-      name: "#{@prefix}help (new prefix!)]"
+      name: "#{@prefix}help (new prefix!)"
     } 
     console.log 'Connected.'
 
