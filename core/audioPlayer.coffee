@@ -47,11 +47,11 @@ class GuildAudioPlayer
     try
       @voiceConnection.getEncoder().setVolume @volume
 
-  stop:   ()=>
+  stop: (disconnect)=>
     try
       @currentStream.stop()
       # @currentStream.destroy()
-    @clean()
+    @clean disconnect
 
   getTimestamp: => @encStream.timestamp + @cOffset
 
