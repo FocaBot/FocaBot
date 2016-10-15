@@ -117,15 +117,17 @@ class AdminModule extends BotModule
 
   pullFunc: (msg,args,d,bot)=> @execFunc msg, 'git pull', bot
 
-  execFunc: (msg, args, bot)=>
+  execFunc: (msg, args, bot)=> new Promise (resolve)=>
     childProcess.exec args, (error, stdout, stderr)->
+      if stderr then stderr = '\n-' + stderr
       msg.channel.sendMessage """
                               ```diff
                               + [focaBot@#{os.hostname()} ~]$ #{args}
 
-                              #{stdout}
+                              #{stdout}#{stderr}
                               ```
                               """
+      resolve()
 
   cleanFunc: (msg,args,d,bot)=>
     hasError = false

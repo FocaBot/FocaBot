@@ -95,11 +95,12 @@ class PlayerModule extends BotModule
     qI.once 'end', =>
       setTimeout (()=>
         if not queue.items.length and not queue.currentItem
-          msg.channel.sendMessage 'Nothing more to play.'
-          .then (m)=>
-            if gdata.data.autoDel
-              setTimeout (->m.delete()), 15000
-          audioPlayer.clean true
+          try
+            msg.channel.sendMessage 'Nothing more to play.'
+            .then (m)=>
+              if gdata.data.autoDel
+                setTimeout (->m.delete()), 15000
+            audioPlayer.clean true
       ), 100
     
     if not silent
