@@ -13,7 +13,7 @@ class TagModule extends BotModule
     { @permissions } = @engine
 
     @registerCommand '+', {argSeparator: ' '}, (msg, args)=>
-      return if args.length < 2
+      return if args.length < 2 or msg.author.bot
       tag = new Tag {
         key: args[0].toLowerCase()
         reply: args.slice(1).join(' ')
@@ -23,7 +23,7 @@ class TagModule extends BotModule
         msg.reply 'Tag saved!'
 
     @registerCommand '-', {argSeparator: ' '}, (msg, args)=>
-      return if args.length < 1
+      return if args.length < 1 or msg.author.bot
       q = { by: msg.author.id, key: args[0] }
       if args.length > 1
         if args[1].toLowerCase() is 'all' and @permissions.isOwner msg.author
@@ -37,14 +37,14 @@ class TagModule extends BotModule
         result.delete() for result in results
 
     @registerCommand "!", { argSeparator: ' ' }, (msg, args)=>
-      return if args.length < 1
+      return if args.length < 1 or msg.author.bot
       Tag.filter({ key: args[0].toLowerCase() }).run().then (results)=>
         chance = new Chance()
         tag = chance.pickone results
         msg.channel.sendMessage tag.reply
 
     @registerCommand 'taginfo', { ownerOnly: true, argSeparator: ' ' }, (msg, args, data, bot)=>
-      return if args.length < 1
+      return if args.length < 1 or msg.author.bot
       Tag.filter({ key: args[0].toLowerCase() }).run().then (results)=>
         r = ""
         for tag in results
