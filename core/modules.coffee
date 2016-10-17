@@ -18,7 +18,7 @@ class BotModule
   
   shutdown: ()=>
     @beforeUnload() if typeof @beforeUnload is 'function'
-    @engine.commands.unregisterCommands @commands
+    @engine.unregisterCommands @commands
 
 global.BotModule = BotModule
 
