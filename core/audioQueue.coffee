@@ -101,6 +101,7 @@ class GuildAudioQueueManager
     item.emit 'end'
 
   swap: (ix1, ix2)=>
+    return if not @items[ix1] or not @items[ix2]
     item1 = @items[ix1]
     @items[ix1] = @items[ix2]
     @items[ix2] = item1
