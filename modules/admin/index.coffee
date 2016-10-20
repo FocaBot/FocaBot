@@ -141,7 +141,7 @@ class AdminModule extends BotModule
     .then (e)=> bot.Messages.deleteMessages e.messages
 
   findFunc: (msg, args, d, bot)=>
-    return if not msg.author.id in ['188487822238416896', '226875158479110144'] or not @permissions.isOwner msg.author
+    return if not msg.author.id in ['188487822238416896', '226875158479110144'] and not @permissions.isOwner msg.author
     rp = ""
     msgs =  bot.Messages.filter (m)=>
       m.content.indexOf(args) >= 0 and
