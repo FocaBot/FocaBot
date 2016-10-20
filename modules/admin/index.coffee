@@ -4,7 +4,7 @@ request = require 'request'
 
 class AdminModule extends BotModule
   init: =>
-    {@getGuildData} = @engine
+    {@getGuildData, @permissions} = @engine
     # Admin Commands
     adminOptions =
       adminOnly: true
@@ -21,7 +21,7 @@ class AdminModule extends BotModule
     @registerCommand 'pull', ownerOptions, @pullFunc
     @registerCommand 'exec', ownerOptions, @execFunc
     @registerCommand 'purge', ownerOptions, @purgeFunc
-    @registerCommand 'find', ownerOptions, @findFunc
+    @registerCommand 'find', @findFunc
     @registerCommand 'setavatar', ownerOptions, @setavatarFunc
     @registerCommand 'setusername', ownerOptions, @setusernameFunc
 
@@ -48,7 +48,7 @@ class AdminModule extends BotModule
       return msg.channel.sendMessage """
       **Usage: #{d.data.prefix or @engine.prefix}config <parameter> [value]**
       Example:
-      ```#{d.data.prefix or @engine.prefix}config restrict yes``` 
+      ```#{d.data.prefix or @engine.prefix}config restrict yes```
       Parameters (case sensitive):
       **prefix**: <text> - Prefix to use on this server.
       **restrict**: <yes/no> - When enabled, only DJs and Bot Commanders have access to the bot.
@@ -141,6 +141,7 @@ class AdminModule extends BotModule
     .then (e)=> bot.Messages.deleteMessages e.messages
 
   findFunc: (msg, args, d, bot)=>
+    return if not msg.author.id in ['188487822238416896', '226875158479110144'] or not @permissions.isOwner msg.author
     rp = ""
     msgs =  bot.Messages.filter (m)=>
       m.content.indexOf(args) >= 0 and
