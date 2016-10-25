@@ -44,7 +44,7 @@ class BotCommandManager
     @unregisterCommand command for command in commands
   
   executeCommand: (msg)=> @getGuildData(msg.guild).then (d)=>
-    return false if d.data.restricted and not @permissions.isDJ msg.author
+    return false if d.data.restricted and not @permissions.isDJ msg.author, msg.guild
     if msg.content.indexOf(@prefix) is 0
       name = msg.content[@prefix.length..].split(' ')[0].toLowerCase()
       args = msg.content[@prefix.length+name.length+1..]
