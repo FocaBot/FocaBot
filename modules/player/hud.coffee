@@ -193,7 +193,7 @@ class AudioHUD
     ```
     """
 
-  swapItems: (guild, aby, item, indexes)=>
+  moveItem: (guild, aby, item, indexes)=>
     """
     #{@getDisplayName aby} moved the following item:
     ```fix
