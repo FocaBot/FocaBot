@@ -20,13 +20,11 @@ class StatusModule extends BotModule
   changeStatus: =>
     newStatus = ''
     while not newStatus
-      newStatus = @statusList[0]
+      newStatus = @statusList[0]()
       @statusList.push @statusList.shift()
     sm = 'online'
     sm = 'dnd' if @engine.version.indexOf('dev') >= 0
-    @bot.User.setStatus sm, {
-      name: newStatus
-    }
+    @bot.User.setStatus sm, newStatus
 
   beforeUnload: =>
     clearInterval @int
