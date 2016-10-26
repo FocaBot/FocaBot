@@ -107,6 +107,12 @@ class GuildAudioQueueManager
     @items[ix2] = item1
     [ @items[ix1], @items[ix2] ]
 
+  # it's been 100 years...
+  move: (ix, pos)=>
+    return if ix >= @items.length or pos >= @items.length or ix < 0 or pos < 0
+    @items.splice(pos, 0, @items.splice(ix, 1)[0])
+    @items[pos]
+
   shuffle: => @items = new Chance().shuffle(@items)
 
   clearQueue: =>

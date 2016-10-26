@@ -173,6 +173,20 @@ class AudioModuleCommands
           msg.delete()
           setTimeout (->m.delete()), 10000
 
+    # Move
+    @registerCommand 'move', { djOnly: true, argSeparator: ' ' }, (msg, args, data)=>
+      {queue} = data
+      return msg.channel.sendMessage "Invalid arguments provided." if args.length < 2
+      indexes = [parseInt(args[0])-1, parseInt(args[1])-1]
+      for idx of indexes
+        return msg.channel.sendMessage "Can't find the specified items in the queue." if not queue.items[idx]
+      item = queue.move indexes[0], indexes[1]
+      msg.channel.sendMessage @hud.moveItem msg.guild, msg.member, item, indexes
+      .then (m)=>
+        if data.data.autoDel
+          msg.delete()
+          setTimeout (->m.delete()), 10000
+
     # Change Filters
     @registerCommand 'fx', { aliases: ['setfilters', '|'], argSeparator: ' ' }, (msg, args, data)=>
       {queue} = data

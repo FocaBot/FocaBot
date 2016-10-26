@@ -193,4 +193,13 @@ class AudioHUD
     ```
     """
 
+  swapItems: (guild, aby, item, indexes)=>
+    """
+    #{@getDisplayName aby} moved the following item:
+    ```fix
+    * #{indexes[0]+1} -> #{indexes[1]+1}
+      #{item.title}
+    ```
+    """
+
 module.exports = AudioHUD
