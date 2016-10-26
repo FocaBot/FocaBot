@@ -96,8 +96,8 @@ class AudioHUD
 
   addItemWebhook: (guild, aby, item, pos)=>
     reply = {
-      username: @getDisplayName aby
-      icon_url: aby.avatarURL
+      username: @getDisplayName @bot.User.memberOf(guild)
+      icon_url: @bot.User.avatarURL
       text: 'Added a new item to the queue:'
       attachments: [
         {
@@ -122,15 +122,15 @@ class AudioHUD
     } if fstr
     reply.attachments.push {
       color: '#42a7f4',
-      footer: "Sent by #{@getDisplayName @bot.User.memberOf(guild)}"
-      footer_icon: @bot.User.avatarURL
+      footer: "Requested by #{@getDisplayName aby}"
+      footer_icon: aby.avatarURL
     }
     return reply
 
   removeItemWebhook: (guild, aby, item)=>
     reply = {
-      username: @getDisplayName aby
-      icon_url: aby.avatarURL
+      username: @getDisplayName @bot.User.memberOf(guild)
+      icon_url: @bot.User.avatarURL
       text: 'Removed from the queue:',
       attachments: [
         {
@@ -144,8 +144,8 @@ class AudioHUD
           thumb_url: item.thumbnail
         }
         {
-          footer: "Sent by #{@getDisplayName @bot.User.memberOf(guild)}"
-          footer_icon: @bot.User.avatarURL
+          footer: "Removed by #{@getDisplayName aby}"
+          footer_icon: aby.avatarURL
         }
       ]
     }
@@ -161,14 +161,14 @@ class AudioHUD
     "#{@getDisplayName aby} added a playlist of **#{length}** items to the queue!"
   
   addPlaylistWebhook: (aby, length, guild)=> {
-      username: @getDisplayName aby
-      icon_url: aby.avatarURL
+      username: @getDisplayName @bot.User.memberOf(guild)
+      icon_url: @bot.User.avatarURL
       attachments: [
         {
           color: '#42a7f4'
           text: "Added a playlist of **#{length}** items to the queue!"
-          footer: "Sent by #{@getDisplayName @bot.User.memberOf(guild)}"
-          footer_icon: @bot.User.avatarURL
+          footer: "Requested by #{@getDisplayName aby}"
+          footer_icon: aby.avatarURL
         }
       ]
     }
