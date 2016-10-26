@@ -19,7 +19,7 @@ class PlayerModule extends BotModule
       minutes: t[1]
       hours:   t[2]
     }
-    .asSeconds()
+    .asSeconds()      
 
   handleVideoInfo: (info, msg, args, gdata, silent=false)=>
     # Check if playlist

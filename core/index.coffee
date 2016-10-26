@@ -25,12 +25,9 @@ class BotEngine
     @bot.Dispatcher.on 'MESSAGE_CREATE', @onMessage
     @bootDate = new Date()
     git.short @devVersion
-    @version = "0.5.2"
+    @version = "dev-0.5.2"
     
   onReady: (e)=>
-    @bot.User.setStatus 'dnd', {
-      name: "#{@prefix}help [dev-0.5.2]"
-    } 
     console.log 'Connected.'
 
   onMessage: (e)=>
