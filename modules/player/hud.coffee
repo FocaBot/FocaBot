@@ -35,6 +35,7 @@ class AudioHUD
     cT = @parseTime tS
     """
      ▶  #{vI}  #{pB} #{cT}
+     
     """
 
   parseFilters: (filters)=>
