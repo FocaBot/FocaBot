@@ -4,13 +4,12 @@ class StatusModule extends BotModule
   init: =>
     { @bot, @prefix } = @engine
     @statusList = [
-      => ["#{@prefix}help"]
-      => ["#{@prefix}filters"]
-      => ["music in #{@bot.Guilds.length} servers!"] if @bot.Guilds.length
-      => ["with seals!"]
-      => [@engine.version] if @engine.version.indexOf('dev') >= 0
-      => ["with cutting edge seals!"] if @engine.version.indexOf('dev') >= 0
-      => ["#{moment().from @engine.bootDate, true} since last restart."] if @engine.version.indexOf('dev') >= 0
+      => "#{@prefix}help"
+      => "#{@prefix}filters"
+      => "music in #{@bot.Guilds.length} servers!" if @bot.Guilds.length
+      => @engine.version if @engine.version.indexOf('dev') >= 0
+      => if @engine.version.indexOf('dev') >= 0 then "with cutting-edge seals!" else "with seals!"
+      => "#{moment().from @engine.bootDate, true} since last restart." if @engine.version.indexOf('dev') >= 0
     ]
     @int = setInterval =>
       @changeStatus()
