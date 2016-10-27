@@ -2,6 +2,8 @@
 The Main Server Class
 ###
 Discordie = require 'discordie'
+reload = require('require-reload')(require)
+global.reload = reload
 CommandManager = require './commands'
 ModuleManager = require './modules'
 PermissionManager = require './permissions'

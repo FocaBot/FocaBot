@@ -1,4 +1,3 @@
-reload = require('require-reload')(require)
 engine = {}
 
 ###

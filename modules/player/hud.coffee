@@ -34,8 +34,9 @@ class AudioHUD
     pB = @generateProgressBar tS / qI.duration
     cT = @parseTime tS
     """
+    ```
      ▶  #{vI}  #{pB} #{cT}
-     
+    ```
     """
 
   parseFilters: (filters)=>

@@ -4,6 +4,7 @@ class BotPermissionManager
     {@owner, @admins, @adminRoles, @djRoles} = @engine.settings
 
   isAdmin: (user, guild, globalOnly)=>
+    guild = user.guild if user.guild
     return true if user.id in @admins or user.id in @owner
     if not globalOnly
       return false if not guild?
@@ -16,6 +17,7 @@ class BotPermissionManager
       false
     
   isDJ: (user, guild)=>
+    guild = user.guild if user.guild
     return true if @isAdmin user, guild
     member = user.memberOf(guild)
     return false if not member?
