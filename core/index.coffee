@@ -9,6 +9,7 @@ ModuleManager = require './modules'
 PermissionManager = require './permissions'
 GuildManager = require './guilds'
 WebHookCollection = require './webHooks'
+Util = require './util'
 git = require 'git-rev'
 thinky = require './thinky'
 
@@ -23,6 +24,7 @@ class BotEngine
     @commands = new CommandManager @
     @modules = new ModuleManager @
     @webHooks = new WebHookCollection @
+    @util = new Util @
     @bot.Dispatcher.on 'GATEWAY_READY', @onReady
     @bot.Dispatcher.on 'MESSAGE_CREATE', @onMessage
     @bootDate = new Date()

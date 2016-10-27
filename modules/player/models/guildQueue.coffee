@@ -14,8 +14,10 @@ module.exports = Core.db.createModel 'GuildQueue', {
     path: type.string()
     sauce: type.string()
     thumbnail: type.string()
+    originalDuration: type.number()
     voteSkip: [type.string()]
-    paused: type.boolean().default(false)
+    status: type.string().default('playing')
+    time: type.number()
   }
   items: [{
     title: type.string()
@@ -27,5 +29,7 @@ module.exports = Core.db.createModel 'GuildQueue', {
     path: type.string()
     sauce: type.string()
     thumbnail: type.string()
+    originalDuration: type.number()
+    status: type.string().default('queued')
   }]
 }

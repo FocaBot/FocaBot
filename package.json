@@ -32,6 +32,7 @@
     "git-rev": "^0.2.1",
     "json-format": "^0.1.2",
     "json-prune": "^1.0.1",
+    "mathjs": "^3.6.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.14.1",
     "node-bing-api": "^2.4.1",

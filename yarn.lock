@@ -121,6 +121,10 @@ commander@^2.9.0:
   dependencies:
     graceful-readlink ">= 1.0.0"
 
+complex.js@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/complex.js/-/complex.js-2.0.1.tgz#ea90c7a05aeceaf3a376d2c0f6a78421727d6879"
+
 component-emitter@~1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/component-emitter/-/component-emitter-1.2.1.tgz#137918d6d78283f7df7a6b7c5a63e140e69425e6"
@@ -154,6 +158,10 @@ debug@2:
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.2.0.tgz#f87057e995b1a1f6ae6a4960664137bc56f039da"
   dependencies:
     ms "0.7.1"
+
+decimal.js@5.0.8:
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-5.0.8.tgz#b48c3fb7d73a2d4d4940e0b38f1cd21db5b367ce"
 
 delayed-stream@~1.0.0:
   version "1.0.0"
@@ -233,6 +241,10 @@ form-data@1.0.0-rc3:
 formidable@~1.0.14:
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.0.17.tgz#ef5491490f9433b705faa77249c99029ae348559"
+
+fraction.js@3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-3.3.1.tgz#5d6a31ff07707294f204ccbb6b53791607771083"
 
 generate-function@^2.0.0:
   version "2.0.0"
@@ -378,6 +390,16 @@ jsprim@^1.2.2:
 lodash@^4.13.1, lodash@^4.14.0:
   version "4.16.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.16.4.tgz#01ce306b9bad1319f2a5528674f88297aeb70127"
+
+mathjs:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/mathjs/-/mathjs-3.6.0.tgz#a31bdc117f8cc9c34d6489dfbe08cb96579c325a"
+  dependencies:
+    complex.js "2.0.1"
+    decimal.js "5.0.8"
+    fraction.js "3.3.1"
+    tiny-emitter "1.0.2"
+    typed-function "0.10.4"
 
 methods@~1.1.1:
   version "1.1.2"
@@ -644,6 +666,10 @@ thinky@^2.3.6:
     rethinkdbdash "~2.3.0"
     validator "~3.22.1"
 
+tiny-emitter@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-1.0.2.tgz#8e49470d3f55f89e247210368a6bb9fb51aa1601"
+
 tough-cookie@~2.3.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-2.3.1.tgz#99c77dfbb7d804249e8a299d4cb0fd81fef083fd"
@@ -663,6 +689,10 @@ tweetnacl@^0.14.1, tweetnacl@^0.14.3, tweetnacl@~0.14.0:
 twix@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/twix/-/twix-1.1.1.tgz#aa8a4454ea6a097c1dd51790397f864a0e565336"
+
+typed-function@0.10.4:
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/typed-function/-/typed-function-0.10.4.tgz#1a015498d38eaf9c402fcce1022a0bd87b7418b2"
 
 ultron@1.0.x:
   version "1.0.2"
