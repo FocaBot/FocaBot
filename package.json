@@ -37,13 +37,11 @@
     "moment": "^2.14.1",
     "node-bing-api": "^2.4.1",
     "pad-left": "^2.1.0",
-    "path": "^0.12.7",
     "request": "^2.74.0",
     "request-promise": "^4.1.1",
     "require-reload": "^0.2.2",
     "thinky": "^2.3.6",
     "twix": "^1.1.1",
-    "url": "^0.11.0",
     "youtube-dl": "^1.11.1"
   },
   "devDependencies": {

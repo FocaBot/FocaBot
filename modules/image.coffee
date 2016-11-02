@@ -1,43 +1,70 @@
-Bing = require('node-bing-api')({ accKey: process.env.BING_KEY })
 Chance = require 'chance'
 request = require 'request'
+{ type } = Core.db
+
+# Cache results in DB
+CachedResults = Core.db.createModel 'SearchResults', {
+  id: type.string()
+  query: type.string()
+  response: type.object()
+  expires: type.date()
+}
+
+# Google Image Search API
+CSE = require('request-promise').defaults {
+  baseUrl: 'https://www.googleapis.com/customsearch/'
+  simple: true
+}
 
 class ImageModule extends BotModule
   init: =>
-    @registerCommand 'img', { allowDM: true }, (msg, args)=> Bing.images args, { top: 1 }, (error, res, body)=>
-      try
-        { results } = body.d
-        msg.channel.uploadFile request(results[0].MediaUrl), @getImageName(results[0])
+    @chance = new Chance()
 
-    @registerCommand 'rimg', { allowDM: true }, (msg, args)=> Bing.images args, { top: 50 }, (error, res, body)=>
-      try
-        { results } = body.d
-        chance = new Chance()
-        image = chance.pickone results
-        msg.channel.uploadFile request(image.MediaUrl), @getImageName(image)
+    @registerCommand 'img', {
+      allowDM: true
+      aliases: ['rimg','imgn','rimgn']
+      includeCommandNameInArgs: true
+    }, (msg, args, d)=>
+      random = args[0].indexOf('rimg') >= 0
+      nsfw = d.data.allowNSFW and args[0].indexOf('imgn') >= 0
 
-    # NSFW (sorry, WET code)
-    @registerCommand 'imgn', { allowDM: true }, (msg, args, d)=>
-      return if not d.data.allowNSFW
-      Bing.images args, { top: 1, adult: 'Off' }, (error, res, body)=>
-        try
-          { results } = body.d
-          msg.channel.uploadFile request(results[0].MediaUrl), @getImageName(results[0])
-
-    @registerCommand 'rimgn', { allowDM: true }, (msg, args, d)=>
-      return if not d.data.allowNSFW
-      Bing.images args, { top: 50, adult: 'Off' }, (error, res, body)=>
-        try
-          { results } = body.d
-          chance = new Chance()
-          image = chance.pickone results
-          return if not image
-          msg.channel.uploadFile request(image.MediaUrl), @getImageName(image)
+      @getImages(args[1]).then (r)=>
+        return msg.reply 'No results.' if not r.items?
+        if not random
+          msg.channel.uploadFile request(r.items[0].link), @getImageName(r.items[0])
+        else
+          image = @chance.pickone r.items
+          msg.channel.uploadFile request(image.link), @getImageName(image)
+      .catch (err)=>
+        return msg.reply 'Daily limit exceeded.' if err.statusCode is 403
+        msg.reply 'Something went wrong.'
   
+  getImages: (query, safe='high')=>
+    CachedResults.filter({ query }).run().then (results)=>
+      # Check if the query is already cached and not expired
+      if results[0]? and results[0].expires - Date.now() > 0
+        return Promise.resolve(results[0].response)
+      else
+        r = results[0] or new CachedResults({ query })
+        # Fetch the results straight from Google
+        CSE.get 'v1', { json: true, qs: {
+          searchType: 'image'
+          q: query
+          cx: process.env.GOOGLE_CX
+          key: process.env.GOOGLE_KEY
+          safe
+        }}
+        .then (resp)=>
+          r.response = resp
+          r.expires = new Date(Date.now() + 0x48190800) # 14 days
+          r.save()
+        .then (obj)=>
+          return obj.response
+
   getImageName: (image)=>
-    ext = image.ContentType.split('/')[1]
+    ext = image.mime.split('/')[1] or 'jpg' # jpg if no extension set
     .replace 'jpeg', 'jpg'
     .replace 'animatedgif', 'gif'
-    name = image.Title + '.' + ext
+    name = image.title + '.' + ext
 
 module.exports = ImageModule
