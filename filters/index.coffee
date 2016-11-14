@@ -15,11 +15,12 @@ class AudioFilters
       flanger: reload './flanger'   # | flanger=0.5
       phaser: reload './phaser'     # | phaser
       tempo: reload './tempo'       # | tempo=2
-      time: reload './time'         # | time=1:23-45   (Start - Duration)
+    # time: reload './time'         # | time=1:23-45   (Start - Duration)
       nofx: reload './nofx'         # | nofx
       karaoke: reload './karaoke'   # | karaoke
       distort: reload './distort'   # | distort=5
       tremolo: reload './tremolo'   # | tremolo=5
+      loop: reload './loop'         # | loop=0:30-0:45-4 (Start - End - Loops)
       
     @presets =
       # Speed filter
