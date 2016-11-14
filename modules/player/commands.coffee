@@ -217,7 +217,7 @@ class AudioModuleCommands
       return if not @permissions.isDJ(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id
       for filter in queue.currentItem.filters
         return msg.reply "You can't seek through this song (unsupported filter #{filter})." if filter.avoidRuntime
-      return msg.reply "You can't seek to that position" if @parseTime(args) > queue.currentItem.duration or @parseTime(args) < 1
+      return msg.reply "You can't seek to that position" if @parseTime(args) > queue.currentItem.duration or @parseTime(args) < 0
       queue.seek @parseTime(args), true
 
   # Try to get the duration from FFProbe (for direct links and other streams)

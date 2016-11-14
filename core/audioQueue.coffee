@@ -72,16 +72,20 @@ class GuildAudioQueueManager
       @seek resumeAt # without this, the new filters won't be applied!
 
   seek: (newPos, filterTransform=false)=>
-    # console.log newPos, @currentItem
-    newPos = @getTransformedTimestamp(@currentItem, newPos) if filterTransform
-    # hacky way to "seek"
-    flags = @getFlags(@currentItem)
-    if flags.input
-      flags.input = flags.input.concat ['-ss', newPos]
-    else flags.input = ['-ss', newPos]
+    if newPos > 0
+      # console.log newPos, @currentItem
+      newPos = @getTransformedTimestamp(@currentItem, newPos) if filterTransform
+      # hacky way to "seek"
+      flags = @getFlags(@currentItem)
+      if flags.input
+        flags.input = flags.input.concat ['-ss', newPos]
+      else flags.input = ['-ss', newPos]
+    else flags = @getFlags(@currentItem)
     @currentItem.skipped = true
     @audioPlayer.stop()
-    @playItem flags, @getTransformedTimestamp(@currentItem, newPos)
+    if newPos > 0
+      @playItem flags, @getTransformedTimestamp(@currentItem, newPos)
+    else @playItem flags
     @currentItem.skipped = false
 
   undo: =>
