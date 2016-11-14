@@ -6,6 +6,7 @@ request = require 'request'
 CachedResults = Core.db.createModel 'SearchResults', {
   id: type.string()
   query: type.string()
+  nsfw: type.boolean()
   response: type.object()
   expires: type.date()
 }
@@ -28,7 +29,7 @@ class ImageModule extends BotModule
       random = args[0].indexOf('rimg') >= 0
       nsfw = d.data.allowNSFW and args[0].indexOf('imgn') >= 0
 
-      @getImages(args[1]).then (r)=>
+      @getImages(args[1], nsfw).then (r)=>
         return msg.reply 'No results.' if not r.items?
         if not random
           msg.channel.uploadFile request(r.items[0].link), @getImageName(r.items[0])
@@ -39,8 +40,10 @@ class ImageModule extends BotModule
         return msg.reply 'Daily limit exceeded.' if err.statusCode is 403
         msg.reply 'Something went wrong.'
   
-  getImages: (query, safe='high')=>
-    CachedResults.filter({ query }).run().then (results)=>
+  getImages: (query, nsfw)=>
+    safe = 'high'
+    safe = 'off' if nsfw
+    CachedResults.filter({ query, nsfw }).run().then (results)=>
       # Check if the query is already cached and not expired
       if results[0]? and results[0].expires - Date.now() > 0
         return Promise.resolve(results[0].response)
