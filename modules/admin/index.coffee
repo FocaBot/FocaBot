@@ -46,14 +46,8 @@ class AdminModule extends BotModule
   configFunc: (msg, args, d)=>
     if not args[0]
       return msg.channel.sendMessage """
-      **Usage: #{d.data.prefix or @engine.prefix}config <parameter> [value]**
-      Example:
-      ```#{d.data.prefix or @engine.prefix}config restrict yes```
-      Parameters (case sensitive):
-      **prefix**: <text> - Prefix to use on this server.
-      **restrict**: <yes/no> - When enabled, only DJs and Bot Commanders have access to the bot.
-      **autoDel**: <yes/no> - When enabled, the bot deletes some messages automatically.
-      **allowNSFW**: <yes/no> - When disabled, the commands `imgn` and `rimgn` can't be used.
+      **Usage: #{d.data.prefix or @engine.prefix}config {parameter} [value]**
+      Check https://thebitlink.gitbooks.io/focabot-docs/content/Configuration.html for more info.
       """
     switch args[0]
       when 'prefix'

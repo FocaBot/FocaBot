@@ -5,7 +5,7 @@ class SealModule extends BotModule
   init: =>
     @registerCommand 'seal', { allowDM: true }, (msg, args)->
       chance = new Chance()
-      if chance.integer({ min: 0, max: 100 }) > 10
+      if chance.integer({ min: 0, max: 100 }) > 2
         # Get a seal from randomse.al
         seal = chance.integer { min: 1, max: 83 }
         seal = ('0000' + seal).substring(seal.toString().length)
