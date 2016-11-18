@@ -29,7 +29,7 @@ class BotEngine
     @bot.Dispatcher.on 'MESSAGE_CREATE', @onMessage
     @bootDate = new Date()
     git.short @devVersion
-    @version = "0.5.2"
+    @version = "dev-0.5.3"
     
   onReady: (e)=>
     console.log 'Connected.'
