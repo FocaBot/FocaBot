@@ -32,7 +32,7 @@ class DanbooruModule extends BotModule
       aliases: ['d']
     }, (msg, tags, d)=>
       if d.danbooruDate
-        return m.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
+        return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
       d.danbooruDate = new Date()
       tags = 'rating:safe ' + tags if not d.data.allowNSFW
       qs = {
@@ -56,7 +56,7 @@ class DanbooruModule extends BotModule
       aliases: ['safe']
     }, (msg, tags, d)=>
       if d.danbooruDate
-        return m.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
+        return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
       d.danbooruDate = new Date()
       qs = {
         random: true
@@ -104,7 +104,7 @@ class DanbooruModule extends BotModule
       allowDM: true
     }, (msg, args, d)=>
       if d.danbooruDate
-        return m.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
+        return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
       d.danbooruDate = new Date()
       Waifu.filter({ user: msg.author.id }).run()
       .then (results)=>
