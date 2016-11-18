@@ -32,7 +32,7 @@ class DanbooruModule extends BotModule
       aliases: ['d']
     }, (msg, tags, d)=>
       if d.danbooruDate
-        return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
+        return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 3000
       d.danbooruDate = new Date()
       tags = 'rating:safe ' + tags if not d.data.allowNSFW
       qs = {
@@ -44,7 +44,7 @@ class DanbooruModule extends BotModule
       .then (r)=>
         if r.length
           url = "https://danbooru.donmai.us#{r[0].file_url}"
-          msg.channel.uploadFile request(url), @getFileName(url)
+          msg.reply url
         else
           msg.reply 'No results.'
       .catch (e)=>
@@ -56,7 +56,7 @@ class DanbooruModule extends BotModule
       aliases: ['safe']
     }, (msg, tags, d)=>
       if d.danbooruDate
-        return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
+        return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 3000
       d.danbooruDate = new Date()
       qs = {
         random: true
@@ -67,7 +67,7 @@ class DanbooruModule extends BotModule
       .then (r)=>
         if r.length
           url = "https://safebooru.donmai.us#{r[0].file_url}"
-          msg.channel.uploadFile request(url), @getFileName(url)
+          msg.reply url
         else
           msg.reply 'No results.'
       .catch (e)=>
@@ -104,7 +104,7 @@ class DanbooruModule extends BotModule
       allowDM: true
     }, (msg, args, d)=>
       if d.danbooruDate
-        return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
+        return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 3000
       d.danbooruDate = new Date()
       Waifu.filter({ user: msg.author.id }).run()
       .then (results)=>
@@ -118,7 +118,7 @@ class DanbooruModule extends BotModule
       .then (r)=>
         if r.length
           url = "https://safebooru.donmai.us#{r[0].file_url}"
-          msg.channel.uploadFile request(url), @getFileName(url)
+          msg.reply url
         else
           msg.reply 'No results.'
       .catch (e)=>
