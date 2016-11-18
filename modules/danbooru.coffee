@@ -10,16 +10,18 @@ danbooru = require('request-promise').defaults {
 class DanbooruModule extends BotModule
   init: =>
     @registerCommand 'danbooru', (msg, tags, d)=>
-    qs = {
-      random: true
-      limit: 1
-      rating = 's' if not d.data.allowNSFW
-      tags
-    }
-    danbooru.get '/posts.json', { json: true, qs }
-    .then (r)=>
-      url = "https://danbooru.donmai.us#{r[0].file_url}"
-      msg.channel.uploadFile request(url), @getImageName(url)
+      tags = 'rating:safe ' + tags if not d.data.allowNSFW
+      qs = {
+        random: true
+        limit: 1
+        tags
+      }
+      danbooru.get '/posts.json', { json: true, qs }
+      .then (r)=>
+        url = "https://danbooru.donmai.us#{r[0].file_url}"
+        msg.channel.uploadFile request(url), @getFileName(url)
+      .catch (e)=>
+        msg.reply 'Something went wrong.'
   
   getFileName: (url)=> url.split('/').reverse()[0]
 
