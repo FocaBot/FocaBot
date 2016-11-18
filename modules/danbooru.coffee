@@ -42,6 +42,7 @@ class DanbooruModule extends BotModule
         url = "https://danbooru.donmai.us#{r[0].file_url}"
         msg.channel.uploadFile request(url), @getFileName(url)
       .catch (e)=>
+        console.error e
         msg.reply 'Something went wrong.'
 
     @registerCommand 'safebooru', {
@@ -58,6 +59,7 @@ class DanbooruModule extends BotModule
         url = "https://safebooru.donmai.us#{r[0].file_url}"
         msg.channel.uploadFile request(url), @getFileName(url)
       .catch (e)=>
+        console.error e
         msg.reply 'Something went wrong.'
 
     @registerCommand 'setwaifu', { allowDM: true }, (msg, args, d)=>
@@ -81,6 +83,7 @@ class DanbooruModule extends BotModule
       .then ()=>
         msg.reply 'Success.'
       .catch (e)=>
+        console.error e
         return msg.reply e.msg if e.msg
         msg.reply 'Something went wrong.'
 
@@ -101,6 +104,7 @@ class DanbooruModule extends BotModule
         url = "https://safebooru.donmai.us#{r[0].file_url}"
         msg.channel.uploadFile request(url), @getFileName(url)
       .catch (e)=>
+        console.error e
         return msg.reply e.msg if e.msg
         msg.reply 'Something went wrong.'
   
