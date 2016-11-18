@@ -41,7 +41,7 @@ class DanbooruModule extends BotModule
       includeCommandNameInArgs: true
       allowDM: true
     }, (msg, args, d)=>
-      waifu = (args[1].match(/w+/) or [''])[0]
+      waifu = (args[1].match(/\w+/) or [''])[0]
       return msg.reply "Usage: ```#{@prefix}#{args[0]} <danbooru_tag>```" if not waifu
       # Do a dummy search
       qs = {
