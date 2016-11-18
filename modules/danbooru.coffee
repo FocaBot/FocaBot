@@ -37,7 +37,6 @@ class DanbooruModule extends BotModule
       tags = 'rating:safe ' + tags if not d.data.allowNSFW
       qs = {
         random: true
-        limit: 1
         tags
       }
       danbooru.get '/posts.json', { json: true, qs }
@@ -60,7 +59,6 @@ class DanbooruModule extends BotModule
       d.danbooruDate = new Date()
       qs = {
         random: true
-        limit: 1
         tags
       }
       safebooru.get '/posts.json', { json: true, qs }
@@ -110,7 +108,6 @@ class DanbooruModule extends BotModule
       .then (results)=>
         return Promise.reject { msg: "Run the #{@prefix}setWaifu command first." } if not results[0]?
         qs = {
-          limit: 1
           random: true
           tags: 'solo ' + results[0].waifu
         }
