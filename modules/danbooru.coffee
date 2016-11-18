@@ -102,7 +102,7 @@ class DanbooruModule extends BotModule
     @registerCommand 'waifu', {
       aliases: ['w'],
       allowDM: true
-    }, (msg)=>
+    }, (msg, args, d)=>
       if d.danbooruDate
         return d.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
       Waifu.filter({ user: msg.author.id }).run()
