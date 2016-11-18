@@ -39,11 +39,11 @@ class DanbooruModule extends BotModule
       }
       danbooru.get '/posts.json', { json: true, qs }
       .then (r)=>
-        try
+        if r.length
           url = "https://danbooru.donmai.us#{r[0].file_url}"
           msg.channel.uploadFile request(url), @getFileName(url)
-        catch
-          console.error r
+        else
+          msg.reply 'No results.'
       .catch (e)=>
         console.error e
         msg.reply 'Something went wrong.'
@@ -59,11 +59,11 @@ class DanbooruModule extends BotModule
       }
       safebooru.get '/posts.json', { json: true, qs }
       .then (r)=>
-        try
+        if r.length
           url = "https://safebooru.donmai.us#{r[0].file_url}"
           msg.channel.uploadFile request(url), @getFileName(url)
-        catch
-          console.error r
+        else
+          msg.reply 'No results.'
       .catch (e)=>
         console.error e
         msg.reply 'Something went wrong.'
@@ -107,11 +107,11 @@ class DanbooruModule extends BotModule
         }
         safebooru.get '/posts.json', { json: true, qs }
       .then (r)=>
-        try
+        if r.length
           url = "https://safebooru.donmai.us#{r[0].file_url}"
           msg.channel.uploadFile request(url), @getFileName(url)
-        catch
-          console.error r
+        else
+          msg.reply 'No results.'
       .catch (e)=>
         console.error e
         return msg.reply e.msg if e.msg
