@@ -33,6 +33,7 @@ class DanbooruModule extends BotModule
     }, (msg, tags, d)=>
       if d.danbooruDate
         return d.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
+      d.danbooruDate = new Date()
       tags = 'rating:safe ' + tags if not d.data.allowNSFW
       qs = {
         random: true
@@ -44,7 +45,6 @@ class DanbooruModule extends BotModule
         if r.length
           url = "https://danbooru.donmai.us#{r[0].file_url}"
           msg.channel.uploadFile request(url), @getFileName(url)
-          d.danbooruDate = new Date()
         else
           msg.reply 'No results.'
       .catch (e)=>
@@ -57,6 +57,7 @@ class DanbooruModule extends BotModule
     }, (msg, tags, d)=>
       if d.danbooruDate
         return d.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
+      d.danbooruDate = new Date()
       qs = {
         random: true
         limit: 1
@@ -67,7 +68,6 @@ class DanbooruModule extends BotModule
         if r.length
           url = "https://safebooru.donmai.us#{r[0].file_url}"
           msg.channel.uploadFile request(url), @getFileName(url)
-          d.danbooruDate = new Date()
         else
           msg.reply 'No results.'
       .catch (e)=>
@@ -105,6 +105,7 @@ class DanbooruModule extends BotModule
     }, (msg, args, d)=>
       if d.danbooruDate
         return d.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 10000
+      d.danbooruDate = new Date()
       Waifu.filter({ user: msg.author.id }).run()
       .then (results)=>
         return Promise.reject { msg: "Run the #{@prefix}setWaifu command first." } if not results[0]?
@@ -118,7 +119,6 @@ class DanbooruModule extends BotModule
         if r.length
           url = "https://safebooru.donmai.us#{r[0].file_url}"
           msg.channel.uploadFile request(url), @getFileName(url)
-          d.danbooruDate = new Date()
         else
           msg.reply 'No results.'
       .catch (e)=>
