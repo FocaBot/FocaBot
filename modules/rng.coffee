@@ -18,7 +18,7 @@ class RNGModule extends BotModule
         msg.reply "I choose #{@chance.pickone args}"
 
     # Totally not stolen from Wikipedia
-    @registerCommand '8ball', (msg, args)=> msg.reply '🎱' + chance.pickone [
+    @registerCommand '8ball', (msg, args)=> msg.reply '🎱' + @chance.pickone [
       "It is certain"
       "It is decidedly so"
       "Without a doubt"
