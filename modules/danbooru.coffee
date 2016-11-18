@@ -66,7 +66,7 @@ class DanbooruModule extends BotModule
       # Do a dummy search
       qs = {
         limit: 1
-        tags: '1girl ' + waifu
+        tags: 'solo ' + waifu
       }
       safebooru.get '/posts.json', { json: true, qs }
       .then (r)=>
@@ -94,7 +94,7 @@ class DanbooruModule extends BotModule
         qs = {
           limit: 1
           random: true
-          tags: '1girl ' + results[0].waifu
+          tags: 'solo ' + results[0].waifu
         }
         safebooru.get '/posts.json', { json: true, qs }
       .then (r)=>
