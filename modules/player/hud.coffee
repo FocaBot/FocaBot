@@ -100,7 +100,7 @@ class AudioHUD
         { name: 'Position in queue:', value: "##{pos}", inline: true }
       ]
       footer:
-        icon_url: msg.author.avatarURL
+        icon_url: aby.avatarURL
         text: "Requested by #{@getDisplayName aby}"
     fstr = @parseFilters(item.filters)
     reply.description = "**Filters**: #{fstr}" if fstr
@@ -120,7 +120,7 @@ class AudioHUD
         { name: 'Length:', value: "#{@parseTime item.duration} + \n‌‌ ", inline: true }
       ]
       footer:
-        icon_url: msg.author.avatarURL
+        icon_url: aby.avatarURL
         text: "Removed by #{@getDisplayName aby}"
     fstr = @parseFilters(item.filters)
     reply.description = "**Filters**: #{fstr}" if fstr
@@ -135,7 +135,7 @@ class AudioHUD
       color: 0x42A7F4
       description: "Added a playlist of **#{length}** items to the queue!"
       footer:
-        icon_url: msg.author.avatarURL
+        icon_url: aby.avatarURL
         text: "Requested by #{@getDisplayName aby}"
 
   swapItems: (guild, aby, items, indexes)=>
