@@ -43,7 +43,9 @@ class DanbooruModule extends BotModule
       .then (r)=>
         if r.length
           url = "https://danbooru.donmai.us#{r[0].file_url}"
-          msg.reply url
+          msg.reply '', false, {
+            image: { url }
+          }
         else
           msg.reply 'No results.'
       .catch (e)=>
@@ -65,7 +67,9 @@ class DanbooruModule extends BotModule
       .then (r)=>
         if r.length
           url = "https://safebooru.donmai.us#{r[0].file_url}"
-          msg.reply url
+          msg.reply '', false, {
+            image: { url }
+          }
         else
           msg.reply 'No results.'
       .catch (e)=>
@@ -115,7 +119,9 @@ class DanbooruModule extends BotModule
       .then (r)=>
         if r.length
           url = "https://safebooru.donmai.us#{r[0].file_url}"
-          msg.reply url
+          msg.reply '', false, {
+            image: { url }
+          }
         else
           msg.reply 'No results.'
       .catch (e)=>
