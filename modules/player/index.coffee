@@ -58,10 +58,6 @@ class PlayerModule extends BotModule
               return
             filters.push filter
 
-    omsg = undefined
-      # temp
-      #filters = [filters[0]]
-
     filterstr = " "
     filterstr += filter for filter in filters
 
@@ -80,9 +76,6 @@ class PlayerModule extends BotModule
     # Set events
     durationstr = if isFinite(qI.duration) then moment.utc(qI.duration * 1000).format("HH:mm:ss") else '∞'
     qI.once 'start', =>
-      if omsg
-        omsg.delete()
-        omsg = null
       msg.channel.sendMessage @hud.nowPlaying gdata, qI, true
         .then (m)=>
           if gdata.data.autoDel
