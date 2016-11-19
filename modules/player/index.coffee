@@ -7,7 +7,7 @@ AudioHud = reload './hud'
 
 class PlayerModule extends BotModule
   init: =>
-    { @permissions, @getGuildData, @webHooks } = @engine
+    { @permissions, @getGuildData } = @engine
     @audioFilters = audioFilters
     @hud = new AudioHud @
     @moduleCommands = new AudioModuleCommands @
@@ -27,11 +27,7 @@ class PlayerModule extends BotModule
       if not @permissions.isDJ(msg.author, msg.guild)
         return msg.reply "Only people with the DJ role (or higher) is allowed to add playlists."
       # Playlist
-      @webHooks.getForChannel(msg.channel, true)
-      .then (hook)=>
-        hook.execSlack @hud.addPlaylistWebhook(msg.author, info.length, msg.guild)
-      .catch (e)=>
-        msg.channel.sendMessage @hud.addPlaylist(msg.author, info.length)
+      msg.channel.sendMessage '', false, @hud.addPlaylist(msg.author, info.length)
       # Iterate over all items
       return info.forEach (v)=> @handleVideoInfo(v, msg, args, gdata, true)
     # Check if duration is valid
@@ -104,24 +100,9 @@ class PlayerModule extends BotModule
       ), 100
     
     if not silent
-      # Try to use a WebHook for the "added to queue" message
-      @webHooks.getForChannel(msg.channel, true)
-      .then (hook)=>
-        if gdata.data.autoDel
-          msg.delete()
-        hook.execSlack @hud.addItemWebhook(msg.guild, qI.requestedBy, qI, queue.items.length)
-      # The old method
-      .catch (e)=>
-        msg.channel.sendMessage @hud.addItem msg.guild, qI.requestedBy, qI, queue.items.length
-        .then (m)=>
-          omsg = m;
-          setTimeout ->
-            if omsg and gdata.data.autoDel
-              omsg.delete()
-              omsg = null
-          , 15000
-          if gdata.data.autoDel
-            msg.delete()
+      msg.channel.sendMessage 'Added a new item to the queue:',
+                              false,
+                              @hud.addItem(msg.guild, qI.requestedBy, qI, queue.items.length)
     queue.addToQueue qI
 
 module.exports = PlayerModule

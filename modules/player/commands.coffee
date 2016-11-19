@@ -6,7 +6,7 @@ moment = require 'moment'
 class AudioModuleCommands
   constructor: (@audioModule)->
     { @engine, @registerCommand, @hud, @audioFilters } = @audioModule
-    { @getGuildData, @permissions, @webHooks } = @engine
+    { @getGuildData, @permissions } = @engine
 
     # Play
     @registerCommand 'play', { argSeparator: '|' }, (msg,args,data)=>
@@ -87,15 +87,11 @@ class AudioModuleCommands
       [..., last] = queue.items
       last = queue.currentItem if not last
       if last.requestedBy.id is msg.author.id or @permissions.isDJ msg.author, msg.guild
-        # Try to use a WebHook for the "added to queue" message
-        @webHooks.getForChannel(msg.channel, true)
-        .then (hook)=>
-          hook.execSlack @hud.removeItemWebhook msg.guild, msg.member, last
-        # The old method
-        .catch (e)=>
-          msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, last
-        if data.data.autoDel
-          msg.delete()
+        msg.channel.sendMessage 'Removed from the queue:', false, @hud.removeItem msg.guild, msg.member, last
+        .then (m)=>
+          if data.data.autoDel
+            msg.delete()
+            setTimeout (->m.delete()), 10000
         queue.undo()
       else
         msg.channel.sendMessage 'You can only remove your own items from the queue.'
@@ -142,19 +138,11 @@ class AudioModuleCommands
         return msg.channel.sendMessage "Can't find the specified item in the queue."
       
       if itm.requestedBy.id is msg.author.id or @permissions.isDJ msg.author, msg.guild
-        # Try to use a WebHook for the "added to queue" message
-        @webHooks.getForChannel(msg.channel, true)
-        .then (hook)=>
-          hook.execSlack @hud.removeItemWebhook msg.guild, msg.member, itm
+        msg.channel.sendMessage 'Removed from the queue:', false, @hud.removeItem msg.guild, msg.member, itm
+        .then (m)=>
           if data.data.autoDel
             msg.delete()
-        # The old method
-        .catch (e)=>
-          msg.channel.sendMessage @hud.removeItem msg.guild, msg.member, itm
-          .then (m)=>
-            if data.data.autoDel
-              msg.delete()
-              setTimeout (->m.delete()), 10000
+            setTimeout (->m.delete()), 10000
         queue.remove index
       else
         msg.channel.sendMessage 'You can only remove your own items from the queue.'

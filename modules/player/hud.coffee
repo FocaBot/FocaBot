@@ -86,100 +86,57 @@ class AudioHUD
     """
 
   addItem: (guild, aby, item, pos)=>
-    """
-    #{@getDisplayName aby} added a new item to the queue:
-    ```diff
-    + #{item.title}
-    ```
-    (#{@parseTime item.duration}) #{@parseFilters item.filters} - Position **\##{pos}**
-    """
-
-  addItemWebhook: (guild, aby, item, pos)=>
-    reply = {
-      username: @getDisplayName @bot.User.memberOf(guild)
-      icon_url: @bot.User.avatarURL
-      text: 'Added a new item to the queue:'
-      attachments: [
-        {
-          color: '#AAFF00'
-          title: '[sauce]'
-          title_link: item.sauce
-          text: """
-          **Length**: #{@parseTime item.duration}
-          **Position in Queue**: ##{pos}
-          """
-          author_name: item.title
-          author_link: item.sauce
-          author_icon: @getIcon item.sauce
-          thumb_url: item.thumbnail
-        }
+    reply =
+      url: item.sauce
+      color: 0xAAFF00
+      title: '[click for sauce]'
+      author:
+        name: item.title
+        icon_url: @getIcon item.sauce
+      thumbnail:
+        url: item.thumbnail
+      fields: [
+        { name: 'Length:', value: "#{@parseTime item.duration} + \n‌‌ ", inline: true }
+        { name: 'Position in queue:', value: "##{pos}", inline: true }
       ]
-    }
+      footer:
+        icon_url: msg.author.avatarURL
+        text: "Requested by #{@getDisplayName aby}"
     fstr = @parseFilters(item.filters)
-    reply.attachments.push {
-      color: '#f442c2'
-      text: "**Filters**: #{fstr}"
-    } if fstr
-    reply.attachments.push {
-      color: '#42a7f4',
-      footer: "Requested by #{@getDisplayName aby}"
-      footer_icon: aby.avatarURL
-    }
-    return reply
-
-  removeItemWebhook: (guild, aby, item)=>
-    reply = {
-      username: @getDisplayName @bot.User.memberOf(guild)
-      icon_url: @bot.User.avatarURL
-      text: 'Removed from the queue:',
-      attachments: [
-        {
-          color: '#F44277'
-          title: '[sauce]'
-          title_link: item.sauce
-          text: "**Length**: #{@parseTime item.duration}"
-          author_name: item.title
-          title_link: item.sauce
-          author_icon: @getIcon item.sauce
-          thumb_url: item.thumbnail
-        }
-        {
-          footer: "Removed by #{@getDisplayName aby}"
-          footer_icon: aby.avatarURL
-        }
+    reply.description = "**Filters**: #{fstr}" if fstr
+    reply
+  
+  removeItem: (guild, aby, item)=>
+    reply =
+      url: item.sauce
+      color: 0xF44277
+      title: '[click for sauce]'
+      author:
+        name: item.title
+        icon_url: @getIcon item.sauce
+      thumbnail:
+        url: item.thumbnail
+      fields: [
+        { name: 'Length:', value: "#{@parseTime item.duration} + \n‌‌ ", inline: true }
       ]
-    }
+      footer:
+        icon_url: msg.author.avatarURL
+        text: "Removed by #{@getDisplayName aby}"
     fstr = @parseFilters(item.filters)
-    reply.attachments[0].text += "\n**Filters**: #{fstr}" if fstr
-    return reply
+    reply.description = "**Filters**: #{fstr}" if fstr
+    reply
   
   getIcon: (u)=>
     uri = url.parse(u)
     "#{uri.protocol}//#{uri.host}/favicon.ico"
 
   addPlaylist: (aby, length)=>
-    "#{@getDisplayName aby} added a playlist of **#{length}** items to the queue!"
-  
-  addPlaylistWebhook: (aby, length, guild)=> {
-      username: @getDisplayName @bot.User.memberOf(guild)
-      icon_url: @bot.User.avatarURL
-      attachments: [
-        {
-          color: '#42a7f4'
-          text: "Added a playlist of **#{length}** items to the queue!"
-          footer: "Requested by #{@getDisplayName aby}"
-          footer_icon: aby.avatarURL
-        }
-      ]
-    }
-
-  removeItem: (guild, aby, item)=>
-    """
-    #{@getDisplayName aby} removed from the queue:
-    ```diff
-    - #{item.title}
-    ```
-    """
+    reply =
+      color: 0x42A7F4
+      description: "Added a playlist of **#{length}** items to the queue!"
+      footer:
+        icon_url: msg.author.avatarURL
+        text: "Requested by #{@getDisplayName aby}"
 
   swapItems: (guild, aby, items, indexes)=>
     """
