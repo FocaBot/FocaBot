@@ -96,7 +96,7 @@ class AudioHUD
       thumbnail:
         url: item.thumbnail
       fields: [
-        { name: 'Length:', value: "#{@parseTime item.duration} + \n‌‌ ", inline: true }
+        { name: 'Length:', value: "#{@parseTime item.duration}\n‌‌ ", inline: true }
         { name: 'Position in queue:', value: "##{pos}", inline: true }
       ]
       footer:
@@ -117,7 +117,7 @@ class AudioHUD
       thumbnail:
         url: item.thumbnail
       fields: [
-        { name: 'Length:', value: "#{@parseTime item.duration} + \n‌‌ ", inline: true }
+        { name: 'Length:', value: "#{@parseTime item.duration}\n‌‌ ", inline: true }
       ]
       footer:
         icon_url: aby.avatarURL
