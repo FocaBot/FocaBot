@@ -91,11 +91,12 @@ class PlayerModule extends BotModule
                 setTimeout (->m.delete()), 15000
             audioPlayer.clean true
       ), 100
-    
+
+    queue.addToQueue qI
+
     if not silent
       msg.channel.sendMessage 'Added a new item to the queue:',
                               false,
                               @hud.addItem(msg.guild, qI.requestedBy, qI, queue.items.length)
-    queue.addToQueue qI
 
 module.exports = PlayerModule
