@@ -10,6 +10,8 @@ Guild = thinky.createModel "Guild", {
   restricted: type.boolean().default(false)
   autoDel: type.boolean().default(true)
   allowNSFW: type.boolean().default(false)
+  voteSkip: type.boolean().default(true)
+  allowWaifus: type.boolean().default(true)
 }
 
 # Additional data about servers
@@ -38,6 +40,8 @@ class BotGuildManager
           autoDel: true
           restricted: false
           allowNSFW: true
+          voteSkip: false
+          allowWaifus: true
         }
       }
     return resolve @guilds[guild.id] if @guilds[guild.id]
