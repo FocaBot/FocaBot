@@ -19,7 +19,7 @@ class LoopFilter extends AudioFilter
     @start = @parseTime(splt[0])
     @length = @parseTime(splt[1]) - @start
     @loops = splt[2]
-    if not @start or not @length or not @loops or @end < 0
+    if (not @start and @start isnt 0) or not @length or not @loops or @end < 0
       return 'Invalid filter syntax. You have to specify start-end-loops (example: `loop=0:15-0:45-5`)'
       
 
