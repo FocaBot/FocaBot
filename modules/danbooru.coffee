@@ -44,6 +44,8 @@ class DanbooruModule extends BotModule
         if r.length
           url = "https://danbooru.donmai.us#{r[0].file_url}"
           msg.reply '', false, {
+            title: '[click for sauce]'
+            url: "https://danbooru.donmai.us/posts/#{r[0].id}"
             image: { url }
           }
         else
@@ -68,6 +70,8 @@ class DanbooruModule extends BotModule
         if r.length
           url = "https://safebooru.donmai.us#{r[0].file_url}"
           msg.reply '', false, {
+            title: '[click for sauce]'
+            url: "https://safebooru.donmai.us/posts/#{r[0].id}"
             image: { url }
           }
         else
@@ -122,6 +126,8 @@ class DanbooruModule extends BotModule
         if r.length
           url = "https://safebooru.donmai.us#{r[0].file_url}"
           msg.reply '', false, {
+            title: '[click for sauce]'
+            url: "https://safebooru.donmai.us/posts/#{r[0].id}"
             image: { url }
           }
         else
