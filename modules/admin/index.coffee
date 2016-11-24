@@ -99,6 +99,32 @@ class AdminModule extends BotModule
         else
           return msg.reply "NSFW commands are allowed." if d.data.allowNSFW
           msg.reply "NSFW commands are not allowed."
+      when 'voteSkip'
+        if args[1]
+          switch args[1]
+            when 'on', 'true', '1', 'yes', 'y'
+              d.data.voteSkip = true
+              d.data.save().then => msg.reply 'Settings Saved!'
+            when 'off', 'false', '0', 'no', 'n'
+              d.data.voteSkip = false
+              d.data.save().then => msg.reply 'Settings Saved!'
+            else msg.reply "Invalid value (#{args[1]}). Please use either `yes` or `no`."
+        else
+          return msg.reply "Vote Skip is enabled." if d.data.voteSkip
+          msg.reply "Vote Skip is disabled."
+      when 'allowWaifus'
+        if args[1]
+          switch args[1]
+            when 'on', 'true', '1', 'yes', 'y'
+              d.data.allowWaifus = true
+              d.data.save().then => msg.reply 'Settings Saved!'
+            when 'off', 'false', '0', 'no', 'n'
+              d.data.allowWaifus = false
+              d.data.save().then => msg.reply 'Settings Saved!'
+            else msg.reply "Invalid value (#{args[1]}). Please use either `yes` or `no`."
+        else
+          return msg.reply "Waifus are currently allowed on this server :3" if d.data.allowWaifus
+          msg.reply "Waifus are not allowed on this server :("
       else msg.reply "Unrecognized parameter #{args[0]}."
 
   restartFunc: (msg)=>

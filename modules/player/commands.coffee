@@ -29,9 +29,11 @@ class AudioModuleCommands
       {queue} = data
       return if msg.author.bot
       return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
+      return msg.reply 'You must be in the same voice channel the bot is in.' if queue.currentItem.playInChannel isnt msg.member.getVoiceChannel()
       target = Math.round(msg.member.getVoiceChannel().members.length * 0.4)
       if queue.items.length or queue.currentItem
         if not @permissions.isDJ(msg.author, msg.guild) and msg.author.id isnt queue.currentItem.requestedBy.id 
+          return msg.reply "You are not allowed to skip songs." if not data.data.voteSkip
 
           if msg.author.id in queue.currentItem.voteSkip
             return msg.reply 'Did you really try to skip this song **again**?'

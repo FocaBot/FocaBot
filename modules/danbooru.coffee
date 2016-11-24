@@ -81,6 +81,7 @@ class DanbooruModule extends BotModule
         msg.reply 'Something went wrong.'
 
     @registerCommand 'setwaifu', { allowDM: true }, (msg, args, d)=>
+      return if not d.data.allowWaifus
       waifu = (args.match(/\w+/) or [''])[0]
       return msg.reply "Usage: ```#{@prefix}setWaifu <safebooru_tag>```" if not waifu
       # Do a dummy search
@@ -108,6 +109,7 @@ class DanbooruModule extends BotModule
       aliases: ['w'],
       allowDM: true
     }, (msg, args, d)=>
+      return if not d.data.allowWaifus
       if d.danbooruDate
         return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 3000
       d.danbooruDate = new Date()
