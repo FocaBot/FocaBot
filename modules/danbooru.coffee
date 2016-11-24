@@ -85,7 +85,6 @@ class DanbooruModule extends BotModule
       return msg.reply "Usage: ```#{@prefix}setWaifu <safebooru_tag>```" if not waifu
       # Do a dummy search
       qs = {
-        limit: 1
         tags: 'solo ' + waifu
       }
       safebooru.get '/posts.json', { json: true, qs }
