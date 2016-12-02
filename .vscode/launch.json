@@ -5,19 +5,19 @@
             "name": "Launch",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}/main.coffee",
+            "program": "${workspaceRoot}/main.js",
             "stopOnEntry": false,
             "args": [],
             "cwd": "${workspaceRoot}",
             "preLaunchTask": null,
             "runtimeExecutable": null,
             "runtimeArgs": [
-                "--nolazy"
+                "--nolazy",
+                "--harmony-async-await"
             ],
             "env": {
                 "NODE_ENV": "development"
             },
-            "externalConsole": false,
             "sourceMaps": true,
             "outDir": "${workspaceRoot}/bin"
         },

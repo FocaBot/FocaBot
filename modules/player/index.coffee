@@ -7,7 +7,7 @@ AudioHud = reload './hud'
 
 class PlayerModule extends BotModule
   init: =>
-    { @permissions, @getGuildData } = @engine
+    { @permissions } = @engine
     @audioFilters = audioFilters
     @hud = new AudioHud @
     @moduleCommands = new AudioModuleCommands @

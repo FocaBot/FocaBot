@@ -6,7 +6,7 @@ moment = require 'moment'
 class AudioModuleCommands
   constructor: (@audioModule)->
     { @engine, @registerCommand, @hud, @audioFilters } = @audioModule
-    { @getGuildData, @permissions } = @engine
+    { @permissions } = @engine
 
     # Play
     @registerCommand 'play', { argSeparator: '|' }, (msg,args,data)=>

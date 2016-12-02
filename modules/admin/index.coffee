@@ -4,14 +4,13 @@ request = require 'request'
 
 class AdminModule extends BotModule
   init: =>
-    {@getGuildData, @permissions} = @engine
+    {@permissions} = @engine
     # Admin Commands
     adminOptions =
       adminOnly: true
     @registerCommand 'setnick', adminOptions, @setnickFunc
     @registerCommand 'clean', adminOptions, @cleanFunc
     @registerCommand 'reset', adminOptions, @resetFunc
-    @registerCommand 'config', { argSeparator: ' ', adminOnly: true }, @configFunc
     # Restart Command
     ownerOptions =
       ownerOnly: true
@@ -42,90 +41,6 @@ class AdminModule extends BotModule
     return if not msg.attachments[0]
     request { url: msg.attachments[0].url, encoding: null }, (error, response, body)=>
       @bot.User.setAvatar body if not error and response.statusCode == 200
-
-  configFunc: (msg, args, d)=>
-    if not args[0]
-      return msg.channel.sendMessage """
-      **Usage: #{d.data.prefix or @engine.prefix}config {parameter} [value]**
-      Check https://thebitlink.gitbooks.io/focabot-docs/content/Configuration.html for more info.
-      """
-    switch args[0]
-      when 'prefix'
-        if args[1]
-          if args[1].length <= 5
-            d.data.prefix = args[1]
-            d.data.save().then => msg.reply 'Settings Saved!'
-          else msg.reply "The prefix length can't exceed 5 character."
-        else msg.reply """
-        Current prefix for this server: #{d.data.prefix or @engine.prefix}
-        Default prefix: #{@engine.prefix}
-        """
-      when 'restrict'
-        if args[1]
-          switch args[1]
-            when 'on', 'true', '1', 'yes', 'y'
-              d.data.restricted = true
-              d.data.save().then => msg.reply 'Settings Saved!'
-            when 'off', 'false', '0', 'no', 'n'
-              d.data.restricted = false
-              d.data.save().then => msg.reply 'Settings Saved!'
-            else msg.reply "Invalid value (#{args[1]}). Please use either `yes` or `no`."
-        else
-          return msg.reply "#{@engine.name} is currently restricted on this server." if d.data.restricted
-          msg.reply "#{@engine.name} is not restricted on this server."
-      when 'autoDel'
-        if args[1]
-          switch args[1]
-            when 'on', 'true', '1', 'yes', 'y'
-              d.data.autoDel = true
-              d.data.save().then => msg.reply 'Settings Saved!'
-            when 'off', 'false', '0', 'no', 'n'
-              d.data.autoDel = false
-              d.data.save().then => msg.reply 'Settings Saved!'
-            else msg.reply "Invalid value (#{args[1]}). Please use either `yes` or `no`."
-        else
-          return msg.reply "Messages sent by the bot are being auto deleted." if d.data.autoDel
-          msg.reply "Messages sent by the bot are not being auto deleted."
-      when 'allowNSFW'
-        if args[1]
-          switch args[1]
-            when 'on', 'true', '1', 'yes', 'y'
-              d.data.allowNSFW = true
-              d.data.save().then => msg.reply 'Settings Saved!'
-            when 'off', 'false', '0', 'no', 'n'
-              d.data.allowNSFW = false
-              d.data.save().then => msg.reply 'Settings Saved!'
-            else msg.reply "Invalid value (#{args[1]}). Please use either `yes` or `no`."
-        else
-          return msg.reply "NSFW commands are allowed." if d.data.allowNSFW
-          msg.reply "NSFW commands are not allowed."
-      when 'voteSkip'
-        if args[1]
-          switch args[1]
-            when 'on', 'true', '1', 'yes', 'y'
-              d.data.voteSkip = true
-              d.data.save().then => msg.reply 'Settings Saved!'
-            when 'off', 'false', '0', 'no', 'n'
-              d.data.voteSkip = false
-              d.data.save().then => msg.reply 'Settings Saved!'
-            else msg.reply "Invalid value (#{args[1]}). Please use either `yes` or `no`."
-        else
-          return msg.reply "Vote Skip is enabled." if d.data.voteSkip
-          msg.reply "Vote Skip is disabled."
-      when 'allowWaifus'
-        if args[1]
-          switch args[1]
-            when 'on', 'true', '1', 'yes', 'y'
-              d.data.allowWaifus = true
-              d.data.save().then => msg.reply 'Settings Saved!'
-            when 'off', 'false', '0', 'no', 'n'
-              d.data.allowWaifus = false
-              d.data.save().then => msg.reply 'Settings Saved!'
-            else msg.reply "Invalid value (#{args[1]}). Please use either `yes` or `no`."
-        else
-          return msg.reply "Waifus are currently allowed on this server :3" if d.data.allowWaifus
-          msg.reply "Waifus are not allowed on this server :("
-      else msg.reply "Unrecognized parameter #{args[0]}."
 
   restartFunc: (msg)=>
     msg.channel.sendMessage 'FocaBot is restarting...'
@@ -177,11 +92,9 @@ class AdminModule extends BotModule
       rp += "**#{ms.author.username}**: #{ms.content}\n"
     msg.channel.sendMessage rp
 
-  resetFunc: (msg, args)=>
-    @getGuildData msg.guild
-    .then (data)=>
-      data.queue.clearQueue()
-      try
-        msg.member.getVoiceChannel().leave()
+  resetFunc: (msg, args, data)=>
+    data.queue.clearQueue()
+    try
+      msg.member.getVoiceChannel().leave()
 
 module.exports = AdminModule

@@ -1,47 +1,39 @@
 {
   "name": "discord-foca-bot",
-  "version": "0.4.13",
+  "version": "0.5.4",
   "description": "Music with Seals!",
   "main": "main.coffee",
   "scripts": {
-    "start": "./node_modules/.bin/coffee main.coffee"
+    "start": "node --harmony-async-await main.js",
+    "watch": "./node_modules/.bin/coffee -cwmo bin ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheBITLINK/FocaBot.git"
+    "url": "git+https://github.com/FocaBot/FocaBot.git"
   },
   "keywords": [
     "discord",
     "bot",
     "music"
   ],
-  "author": "thebit.link <me@thebitlink.com> (https://thebit.link/)",
+  "author": "TheBITLINK aka BIT <me@thebitlink.com> (https://thebit.link/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TheBITLINK/FocaBot/issues"
+    "url": "https://github.com/FocaBot/FocaBot/issues"
   },
-  "homepage": "https://github.com/TheBITLINK/FocaBot#README",
+  "homepage": "https://github.com/FocaBot/FocaBot#README",
   "dependencies": {
-    "async": "^2.0.1",
-    "bufferutil": "^1.2.1",
     "chance": "^1.0.4",
-    "coffee-script": "^1.10.0",
-    "discordie": "github:qeled/discordie#dev",
+    "coffee-script": "https://github.com/connec/coffeescript/archive/es2015-classes-new.tar.gz",
     "dotenv": "^2.0.0",
-    "ffmpeg": "0.0.4",
-    "git-rev": "^0.2.1",
+    "focabot-core": "^1.0.0",
     "json-format": "^0.1.2",
     "json-prune": "^1.0.1",
-    "mathjs": "^3.6.0",
-    "mkdirp": "^0.5.1",
     "moment": "^2.14.1",
-    "node-bing-api": "^2.4.1",
-    "pad-left": "^2.1.0",
     "request": "^2.74.0",
     "request-promise": "^4.1.1",
     "require-reload": "^0.2.2",
     "thinky": "^2.3.6",
-    "twix": "^1.1.1",
     "youtube-dl": "^1.11.1"
   },
   "devDependencies": {

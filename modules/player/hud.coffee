@@ -3,7 +3,7 @@ url = require 'url'
 
 class AudioHUD
   constructor: (@audioModule)->
-    { @getGuildData, @engine } = @audioModule
+    { @engine } = @audioModule
     { @permissions, @prefix, @bot } = @engine
 
   generateProgressBar: (pcnt)=>

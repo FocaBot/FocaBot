@@ -1,7 +1,9 @@
 apps:
-  - name   : midiBot
-    interpreter: ./node_modules/.bin/coffee
-    script : main.coffee
+  - name   : focaBot
+    script : main.js
+    instances: max
+    exec_mode: cluster
+    interpreter_args: --harmony-async-await
     env    :
       NODE_ENV: production      
     env_staging:
