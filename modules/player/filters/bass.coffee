@@ -6,7 +6,6 @@ class BassFilter extends AudioFilter
   display: '[Bass]'
   
   constructor: (@param, member)->
-    super
     return "Not enough permissions to use this filter" if not isDJ member
     @gain = parseInt(@param) or 2
     return 'Gain must not be higher than 20' if gain > 20

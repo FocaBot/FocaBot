@@ -5,7 +5,6 @@ class SpeedFilter extends AudioFilter
   display: '[Speed]'
 
   constructor: (@param, member, playing, filters)->
-    super
     for filter in filters
       return "You can't use this filter twice." if filter.name is 'speed'
     @speed = parseFloat(@param)

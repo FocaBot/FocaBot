@@ -10,7 +10,7 @@ T = {}
 class EvalModule extends BotModule
   init: =>
     evalOptions =
-      ownerOnly: true 
+      ownerOnly: true
       allowDM: true
     # CoffeeScript Eval Command
     @registerCommand 'eval', evalOptions, (msg, args, d, bot, engine)=>

@@ -1,19 +1,29 @@
 EventEmitter = require 'events'
 
 class AudioQueueInstance extends EventEmitter
-  constructor: (data, @playerModule, @guildData)->
+  constructor: (data, guildData)->
+    @items = []
+    @nowPlaying = {}
     @update data
-    {@engine, @hud} = @playerModule
-    {@bot, @permissions, @util} = @engine
-    {@audioPlayer} = @guildData
+    { @audioPlayer } = guildData
 
-  update: (data)=> Object.assign(@, data)
+  update: (@data)=> # Object.assign(@, @data)
+    { @timestamp, @guildId, @updatedBy } = @data
+    @nowPlaying = @data.nowPlaying or @nowPlaying
+    @items = @data.items or @items
+    deserializeItems = (i)=>
+      i.requestedBy = Core.bot.Users.get(i.requestedBy).memberOf(@guildId) if i.requestedBy
+      i.voiceChannel = Core.bot.Channels.get(i.voiceChannel) if i.voiceChannel
+      i.textChannel = Core.bot.Channels.get(i.textChannel) if i.textChannel
+    try
+      deserializeItems @nowPlaying
+      deserializeItems item for item in @items
 
   addToQueue: (item)=>
-    if item.path and item.playInChannel
+    if item.path and item.voiceChannel
       @items.push(item)
       @emit 'updated'
-      @nextItem() if not @nowPlaying
+      @nextItem() if not @nowPlaying or not @nowPlaying.path or not @nowPlaying.voiceChannel
 
   nextItem: =>
     if @nowPlaying
@@ -32,7 +42,7 @@ class AudioQueueInstance extends EventEmitter
     if not offset? and item.time
       offset = time
     else if not offset then offset = 0
-    @audioPlayer.play item.playInChannel, item.path, flags, offset
+    @audioPlayer.play item.voiceChannel, item.path, flags, offset
     .then (stream)=>
       @emit 'playing', item
       item.status = 'playing'
@@ -46,7 +56,7 @@ class AudioQueueInstance extends EventEmitter
   getFlags: (item)=>
     return {} if not item.filters.length
     flags = []; inputFlags = []; filters = []
-    inRuntime = item.status isnt 'queued'
+    inRuntime = item.status isnt 'queue'
 
     for filter in item.filters
       continue if filter.avoidRuntime and inRuntime
@@ -63,9 +73,9 @@ class AudioQueueInstance extends EventEmitter
     ts = position or item.originalDuration
     for filter in item.filters
       if o and filter.inverseModifier
-        ts = @util.evalExpr filter.inverseModifier. ts
+        ts = Core.util.evalExpr filter.inverseModifier. ts
       else if filter.timeModifier
-        ts = @util.evalExpr filter.timeModifier. ts
+        ts = Core.util.evalExpr filter.timeModifier. ts
     ts
 
   updateFilters: (newFilters)=>
@@ -77,13 +87,17 @@ class AudioQueueInstance extends EventEmitter
 
   pause: =>
     if @nowPlaying? and isFinite @nowPlaying.duration
-    @nowPlaying.time = @getTransformedTimestamp @nowPlaying, @audioPlayer.getTimestamp(), true
-    @nowPlaying.status = 'paused'
-    @audioPlayer.stop()
-    @emit 'updated'
+      @nowPlaying.time = @getTransformedTimestamp @nowPlaying, @audioPlayer.getTimestamp(), true
+      @nowPlaying.status = 'paused'
+      @audioPlayer.stop()
+      @emit 'updated'
+      true
+    else
+      false
 
-  resume: => @play @getFlags(@nowPlaying), @nowPlaying.time
-             @emit 'updated'
+  resume: =>
+    @play @getFlags(@nowPlaying), @nowPlaying.time
+    @emit 'updated'
 
   seek: (newPos)=>
     newPos = @getTransformedTimestamp(@nowPlaying, newPos) if filterTransform
@@ -121,8 +135,9 @@ class AudioQueueInstance extends EventEmitter
     @emit 'updated'
     @items[pos]
 
-  shuffle: => @items = new Chance().shuffle(@items)
-              @emit 'updated'
+  shuffle: =>
+    @items = new Chance().shuffle(@items)
+    @emit 'updated'
 
   clearQueue: =>
     @items = []

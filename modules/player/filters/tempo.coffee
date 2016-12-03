@@ -5,7 +5,6 @@ class TempoFilter extends AudioFilter
   display: '[Tempo]'
 
   constructor: (@param, member, playing, filters)->
-    super
     @speed = parseFloat(@param)
     return 'Requested speed is not a number.' if not speed
     return 'Speed must not be higher than 2' if @speed > 2

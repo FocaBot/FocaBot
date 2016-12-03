@@ -20,7 +20,7 @@ const focaBot = new FocaBotCore({
 });
 
 // These modules go first.
-focaBot.modules.load(['db', 'config']);
+focaBot.modules.load(['db', 'config', 'util']);
 // Load the modules.
 focaBot.modules.load(JSON.parse(env.BOT_MODULES));
 
