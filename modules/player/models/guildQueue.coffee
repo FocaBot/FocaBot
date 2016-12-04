@@ -1,4 +1,7 @@
+Chance = require 'chance'
 { type } = Core.db
+
+chance = new Chance()
 
 GuildQueue = Core.db.createModel 'GuildQueue', {
   id: type.string()
@@ -7,6 +10,7 @@ GuildQueue = Core.db.createModel 'GuildQueue', {
   # frozenBy: type.string()
   updatedBy: type.string().default(process.env.NODE_APP_INSTANCE or '0')
   nowPlaying: {
+    uid: type.string().default(-> chance.guid())
     title: type.string()
     duration: type.number()
     requestedBy: type.string()
@@ -22,6 +26,7 @@ GuildQueue = Core.db.createModel 'GuildQueue', {
     time: type.number()
   }
   items: [{
+    uid: type.string().default(-> chance.guid())
     title: type.string()
     duration: type.number()
     requestedBy: type.string()

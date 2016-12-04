@@ -29,6 +29,7 @@ class AudioModuleCommands
       {queue} = data
       return if msg.author.bot
       return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
+      return queue.nextItem() if not queue.currentItem.playInChannel
       return msg.reply 'You must be in the same voice channel the bot is in.' if queue.currentItem.playInChannel isnt msg.member.getVoiceChannel()
       target = Math.round(msg.member.getVoiceChannel().members.length * 0.4)
       if queue.items.length or queue.currentItem

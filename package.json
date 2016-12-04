@@ -26,6 +26,7 @@
     "chance": "^1.0.4",
     "coffee-script": "https://github.com/connec/coffeescript/archive/es2015-classes-new.tar.gz",
     "dotenv": "^2.0.0",
+    "es6-promisify": "^5.0.0",
     "focabot-core": "^1.0.0",
     "json-format": "^0.1.2",
     "json-prune": "^1.0.1",

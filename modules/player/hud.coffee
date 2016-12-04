@@ -13,11 +13,6 @@ class AudioHUD
     pos = Math.floor pcnt * path.length
     path.substr(0, pos) + handle + path.substr(pos)
 
-  generateVolumeInd: (vol)=>  
-    return '🔊' if vol >= 60
-    return '🔉' if vol >= 25
-    '🔈'
-  
   getDisplayName: (member, mention)=>
     member.mention if mention
     member.nick or member.username
@@ -26,11 +21,10 @@ class AudioHUD
     return moment.utc(seconds * 1000).format("HH:mm:ss") if isFinite(seconds)
     '∞'
 
-  generateProgressOuter: (g, itm)=>
-    { queue, audioPlayer } = g
-    qI = itm or queue.currentItem
-    vI = @generateVolumeInd audioPlayer.volume
-    tS = if audioPlayer.encStream? then audioPlayer.getTimestamp() else 1
+  generateProgressOuter: (q, itm)=>
+    qI = itm or q.nowPlaying
+    vI = '🔊'
+    tS = if q.audioPlayer.encStream? then q.audioPlayer.timestamp else 1
     pB = @generateProgressBar tS / qI.duration
     cT = @parseTime tS
     """
@@ -44,9 +38,9 @@ class AudioHUD
     filterstr += filter for filter in filters
     filterstr
 
-  nowPlaying: (g, qI, mention)=>
+  nowPlaying: (q, qI, mention)=>
     """
-    #{@generateProgressOuter g, qI}
+    #{@generateProgressOuter q, qI}
     Now playing in __#{qI.playInChannel.name}__:
     >`#{qI.title}` (#{@parseTime qI.duration}) #{@parseFilters qI.filters}
 

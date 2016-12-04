@@ -4,6 +4,7 @@ QueueInstance = require './queueInstance'
 class AudioQueueManager
   constructor: (@playerModule)->
     @instances = {}
+    { @hud } = @playerModule
     @initFeed()
 
   initFeed: =>
@@ -19,7 +20,7 @@ class AudioQueueManager
         @instances[d.guildId].update(d)
 
   getForGuild: (guild)=>
-    return Promise.resolve @instances[guild.id] if @instances[guild.id]?
+    return @instances[guild.id] if @instances[guild.id]?
     # Find for existing data on DB.
     q = await GuildQueue.filter({ guildId: guild.id }).run()
     if q[0]?
@@ -28,17 +29,30 @@ class AudioQueueManager
       qData = await new GuildQueue({ guildId: guild.id }).save()
     instance = new QueueInstance(qData, await Core.guilds.getGuild(guild))
     instance.on 'updated', =>
-      serializeItems = (i)=>
-        i.requestedBy = i.requestedBy.id if i.requestedBy
-        i.voiceChannel = i.voiceChannel.id if i.voiceChannel
-        i.textChannel = i.textChannel.id if i.textChannel
-      instance.data.timestamp = new Date()
-      instance.data.updatedBy = process.env.NODE_APP_INSTANCE or '0'
-      instance.data.nowPlaying = instance.nowPlaying
-      instance.data.items = instance.items
-      serializeItems instance.data.nowPlaying if instance.data.nowPlaying
-      serializeItems i for i in instance.data.items if instance.data.items
+      serializeItems = (itm)=>
+        return if not itm 
+        if itm.forEach
+          arr = []
+          itm.forEach (i)=> arr.push(serializeItems(i))
+          arr
+        else Object.assign({}, itm, {
+          requestedBy: itm.requestedBy.id if itm.requestedBy
+          voiceChannel: itm.voiceChannel.id if itm.voiceChannel
+          textChannel: itm.textChannel.id if itm.textChannel
+          duration: null if not isFinite(itm.duration)
+        })
+      instance.data.merge({
+        timestamp: new Date()
+        updatedBy: process.env.NODE_APP_INSTANCE or '0'
+        nowPlaying: serializeItems(instance.nowPlaying)
+        items: serializeItems(instance.items)
+      })
       instance.data.save()
+    instance.on 'playing', (item)=>
+      try
+        m = await item.textChannel.sendMessage @hud.nowPlaying(instance, item, true)
+        await delay(5000)
+        m.delete() if instance.guildData.data.autoDel
     @instances[guild.id] = instance
     instance
 

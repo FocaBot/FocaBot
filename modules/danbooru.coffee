@@ -83,7 +83,7 @@ class DanbooruModule extends BotModule
     @registerCommand 'setwaifu', { allowDM: true }, (msg, args, d)=>
       return if not d.data.allowWaifus
       waifu = (args.match(/\S+/) or [''])[0]
-      return msg.reply "Usage: \`\`\`#{@prefix}setWaifu <safebooru_tag>\`\`\`" if not waifu
+      return msg.reply "Usage: ```#{@prefix}setWaifu <safebooru_tag>```" if not waifu
       # Do a dummy search
       qs = {
         tags: 'solo ' + waifu

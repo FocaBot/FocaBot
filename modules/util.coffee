@@ -20,4 +20,6 @@ class Util extends BotModule
       e = e.replace '{n}', param if typeof param is 'number'
     mathjs.eval(e)
 
+  delay: (ms)-> new Promise (resolve)-> setTimeout((-> resolve()), ms)
+
 module.exports = Util

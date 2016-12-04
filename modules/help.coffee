@@ -8,7 +8,7 @@ class HelpModule extends BotModule
     pfx = d.data.prefix or @prefix
     gstr = ""
     if msg.guild
-      gstr = "\nPrefix for \`#{msg.guild.name}\`: #{pfx}"
+      gstr = "\nPrefix for `#{msg.guild.name}`: #{pfx}"
     reply = """
     **#{@engine.name} #{@engine.version}**
     Made by @TheBITLINK#3141

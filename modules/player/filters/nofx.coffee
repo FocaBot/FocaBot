@@ -1,4 +1,4 @@
-AudioFilter = require '../models/audioFilter'
+AudioFilter = require './base'
 
 class NoFilter extends AudioFilter
   name: "[NOFX]"

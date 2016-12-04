@@ -1,11 +1,11 @@
 EventEmitter = require 'events'
 
 class AudioQueueInstance extends EventEmitter
-  constructor: (data, guildData)->
+  constructor: (data, @guildData)->
     @items = []
     @nowPlaying = {}
     @update data
-    { @audioPlayer } = guildData
+    { @audioPlayer } = @guildData
 
   update: (@data)=> # Object.assign(@, @data)
     { @timestamp, @guildId, @updatedBy } = @data
@@ -17,6 +17,7 @@ class AudioQueueInstance extends EventEmitter
       i.textChannel = Core.bot.Channels.get(i.textChannel) if i.textChannel
     try
       deserializeItems @nowPlaying
+    try
       deserializeItems item for item in @items
 
   addToQueue: (item)=>
@@ -34,6 +35,8 @@ class AudioQueueInstance extends EventEmitter
     @nowPlaying = @items.shift()
     if not @nowPlaying
       return @nextItem() if @items.length
+      @audioPlayer.clean(true)
+      @emit 'updated'
       return @emit 'end'
     @emit 'updated'
     @play @getFlags(@nowPlaying)
@@ -54,7 +57,7 @@ class AudioQueueInstance extends EventEmitter
     true
 
   getFlags: (item)=>
-    return {} if not item.filters.length
+    return {} if not item.filters or item.filters.length
     flags = []; inputFlags = []; filters = []
     inRuntime = item.status isnt 'queue'
 
@@ -65,7 +68,7 @@ class AudioQueueInstance extends EventEmitter
       else if filter.FFMPEGArgs
         flags = flags.concat filter.FFMPEGArgs
       else if filter.FFMPEGFilter
-        filters.push filter.toFFMPEGFilter()
+        filters.push filter.FFMPEGFilter
     flags.push '-af', filters.join ', '
     { input: inputFlags, output: flags }
 
