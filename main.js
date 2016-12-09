@@ -13,7 +13,7 @@ const focaBot = new FocaBotCore({
   admins:     JSON.parse(env.BOT_ADMINS),
   adminRoles: JSON.parse(env.BOT_ADMIN_ROLES),
   djRoles:    JSON.parse(env.BOT_DJ_ROLES),
-  shardCount: parseInt(env.instances), // PM2
+  shardCount: env.NODE_APP_INSTANCE ? os.cpus().length : undefined,
   shardIndex: parseInt(env.NODE_APP_INSTANCE),
   debug: true,
   modulePath: path.join(__dirname, 'modules/'),
