@@ -6,7 +6,7 @@ class Util extends BotModule
     Core.util = @
 
   parseTime: (time)->
-    t = time.split(':').reverse()
+    t = time.toString().split(':').reverse()
     moment.duration {
       seconds: t[0]
       minutes: t[1]

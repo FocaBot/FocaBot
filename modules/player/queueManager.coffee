@@ -1,5 +1,6 @@
 GuildQueue = require './models/guildQueue'
 QueueInstance = require './queueInstance'
+{ delay } = Core.util
 
 class AudioQueueManager
   constructor: (@playerModule)->
@@ -17,7 +18,7 @@ class AudioQueueManager
       if not d.isSaved() and @instances[d.guildId]
         delete @instances[d.guildId]
       else if @instances[d.guildId]?
-        @instances[d.guildId].update(d)
+        @instances[d.guildId].update(d) if d.updatedBy isnt (process.env.NODE_APP_INSTANCE or '0')
 
   getForGuild: (guild)=>
     return @instances[guild.id] if @instances[guild.id]?
@@ -39,7 +40,7 @@ class AudioQueueManager
           requestedBy: itm.requestedBy.id if itm.requestedBy
           voiceChannel: itm.voiceChannel.id if itm.voiceChannel
           textChannel: itm.textChannel.id if itm.textChannel
-          duration: null if not isFinite(itm.duration)
+          duration: itm.duration or null
         })
       instance.data.merge({
         timestamp: new Date()
@@ -48,11 +49,16 @@ class AudioQueueManager
         items: serializeItems(instance.items)
       })
       instance.data.save()
+    # Event Messages
     instance.on 'playing', (item)=>
       try
         m = await item.textChannel.sendMessage @hud.nowPlaying(instance, item, true)
         await delay(5000)
         m.delete() if instance.guildData.data.autoDel
+    instance.on 'added', (item)=>
+      try item.textChannel.sendMessage 'Added to the queue:',
+                                       false,
+                                       @hud.addItem(item, instance.items.length)
     @instances[guild.id] = instance
     instance
 

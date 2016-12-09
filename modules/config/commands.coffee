@@ -13,6 +13,14 @@ class ConfigCommands
         type: Boolean
       allowWaifus:
         type: Boolean
+      allowTags:
+        type: Boolean
+      greet:
+        type: String
+        min: 1
+      farewell:
+        type: String
+        min: 1
       maxSongLength:
         type: Number
         integer: true
@@ -45,7 +53,7 @@ class ConfigCommands
         ]
       } if not args[1]
       param = @params[args[0]]
-      value = args[1]
+      value = args.slice(1).join(' ')
       switch param.type
         when String
           return sendHelp 'Value is too short' if param.min and param.min > value.length

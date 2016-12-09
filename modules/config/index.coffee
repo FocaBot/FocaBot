@@ -13,6 +13,9 @@ Guild = Core.db.createModel "Guild", {
   allowNSFW: type.boolean().default(false)
   voteSkip: type.boolean().default(true)
   allowWaifus: type.boolean().default(true)
+  allowTags: type.boolean().default(true)
+  greet: type.string().default('off')
+  farewell: type.string().default('off')
   maxSongLength: type.number().default(1800) # 30 minutes
 }
 
@@ -30,6 +33,7 @@ class ConfigModule extends BotModule
           restricted: false
           allowNSFW: true
           voteSkip: false
+          allowTags: true
           allowWaifus: true
         }
       } if not guild 

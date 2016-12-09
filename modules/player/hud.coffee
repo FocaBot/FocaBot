@@ -3,83 +3,67 @@ url = require 'url'
 
 class AudioHUD
   constructor: (@audioModule)->
-    { @engine } = @audioModule
-    { @permissions, @prefix, @bot } = @engine
+    { @prefix } = Core
 
-  generateProgressBar: (pcnt)=>
-    path = '───────────────'
-    return path + '─' if pcnt < 0 or isNaN pcnt
-    handle = '🔘'
-    pos = Math.floor pcnt * path.length
-    path.substr(0, pos) + handle + path.substr(pos)
-
-  getDisplayName: (member, mention)=>
-    member.mention if mention
-    member.nick or member.username
-
-  parseTime: (seconds)=>
-    return moment.utc(seconds * 1000).format("HH:mm:ss") if isFinite(seconds)
-    '∞'
-
-  generateProgressOuter: (q, itm)=>
-    qI = itm or q.nowPlaying
-    vI = '🔊'
-    tS = if q.audioPlayer.encStream? then q.audioPlayer.timestamp else 1
-    pB = @generateProgressBar tS / qI.duration
-    cT = @parseTime tS
-    """
-    ```fix
-     ▶  #{vI}  #{pB} #{cT}
-    ```
-    """
-
-  parseFilters: (filters)=>
-    filterstr = ""
-    filterstr += filter for filter in filters
-    filterstr
+  ###
+  # Messages
+  ###
 
   nowPlaying: (q, qI, mention)=>
     """
     #{@generateProgressOuter q, qI}
-    Now playing in __#{qI.playInChannel.name}__:
     >`#{qI.title}` (#{@parseTime qI.duration}) #{@parseFilters qI.filters}
 
-    Requested by: **#{@getDisplayName qI.requestedBy, mention}** 
+    In: **#{qI.voiceChannel.name}**, Requested by: **#{@getDisplayName qI.requestedBy, mention}** 
     """
-  
-  queue: (g, page=1)=>
-    m = @nowPlaying g, g.queue.currentItem, false
+
+  queue: (q, page=1)=>
+    m = ""
+    m += @nowPlaying q, q.nowPlaying, false if q.nowPlaying
     page = 1 if isNaN page
 
-    return m + "\nThe queue seems to be empty." if g.queue.items.length <= 0
+    return m + "\nThe queue seems to be empty." if q.items.length <= 0
     itemsPerPage = 10
     ix = (page-1) * itemsPerPage
     max = ix + itemsPerPage
-    return m + "\nThere's no such thing as page #{page}" if g.queue.items.length < max-itemsPerPage or page < 1
+    return m + "\nThere's no such thing as page #{page}" if q.items.length < max-itemsPerPage or page < 1
     pI = if page > 1 then (' - Page ' + page) else ''
 
-    m += "\n**Up next:** (#{g.queue.items.length} items#{pI})\n"
+    m += "\n**Up next:** (#{q.items.length} items#{pI})\n"
 
-    for qI, i in g.queue.items.slice ix, max
+    for qI, i in q.items.slice ix, max
       m += "**#{ix+i+1}.** `#{qI.title}` #{@parseFilters qI.filters}" +
            "(#{@parseTime qI.duration}) Requested By #{@getDisplayName qI.requestedBy}\n"
     
-    m += "Use #{@prefix}queue #{page+1} to see the next page." if max < g.queue.items.length
+    m += "Use #{@prefix}queue #{page+1} to see the next page." if max < q.items.length
     m
 
-  setVolume: (g, member)=>
+  swapItems: (user, items, indexes)=>
     """
-    #{@generateProgressOuter g}
-    #{@getDisplayName member, true} set the volume to #{g.audioPlayer.volume}
-    """
-  
-  getVolume: (g)=>
-    """
-    #{@generateProgressOuter g}
-    Current volume: #{g.audioPlayer.volume}
+    #{@getDisplayName user} swapped some items:
+    ```fix
+    * #{indexes[1]+1} -> #{indexes[0]+1}
+      #{items[0].title}
+    
+    * #{indexes[0]+1} -> #{indexes[1]+1}
+      #{items[1].title}
+    ```
     """
 
-  addItem: (guild, aby, item, pos)=>
+  moveItem: (user, item, indexes)=>
+    """
+    #{@getDisplayName user} moved the following item:
+    ```fix
+    * #{indexes[0]+1} -> #{indexes[1]+1}
+      #{item.title}
+    ```
+    """
+
+  ###
+  # Embeds
+  ###
+
+  addItem: (item, pos)=>
     reply =
       url: item.sauce
       color: 0xAAFF00
@@ -94,13 +78,13 @@ class AudioHUD
         { name: 'Position in queue:', value: "##{pos}", inline: true }
       ]
       footer:
-        icon_url: aby.avatarURL
-        text: "Requested by #{@getDisplayName aby}"
+        icon_url: item.requestedBy.avatarURL
+        text: "Requested by #{@getDisplayName item.requestedBy}"
     fstr = @parseFilters(item.filters)
     reply.description = "**Filters**: #{fstr}" if fstr
     reply
   
-  removeItem: (guild, aby, item)=>
+  removeItem: (item, removedBy)=>
     reply =
       url: item.sauce
       color: 0xF44277
@@ -113,44 +97,66 @@ class AudioHUD
       fields: [
         { name: 'Length:', value: "#{@parseTime item.duration}\n‌‌ ", inline: true }
       ]
-      footer:
-        icon_url: aby.avatarURL
-        text: "Removed by #{@getDisplayName aby}"
+    if removedBy
+      reply.footer =
+        icon_url: removedBy.avatarURL
+        text: "Removed by #{@getDisplayName removedBy}" 
     fstr = @parseFilters(item.filters)
     reply.description = "**Filters**: #{fstr}" if fstr
     reply
-  
-  getIcon: (u)=>
-    uri = url.parse(u)
-    "#{uri.protocol}//#{uri.host}/favicon.ico"
 
-  addPlaylist: (aby, length)=>
+  addPlaylist: (user, length)=>
     reply =
       color: 0x42A7F4
       description: "Added a playlist of **#{length}** items to the queue!"
       footer:
-        icon_url: aby.avatarURL
-        text: "Requested by #{@getDisplayName aby}"
+        icon_url: user.avatarURL
+        text: "Requested by #{@getDisplayName user}"
+  
+  ###
+  # Functions
+  ###
 
-  swapItems: (guild, aby, items, indexes)=>
+  generateProgressBar: (pcnt)=>
+    path = '───────────────'
+    return path + '─' if pcnt < 0 or isNaN pcnt
+    handle = '🔘'
+    pos = Math.floor pcnt * path.length
+    path.substr(0, pos) + handle + path.substr(pos)
+
+  getDisplayName: (member, mention)=>
+    member.mention if mention
+    member.nick or member.username
+
+  generateProgressOuter: (q, itm)=>
+    qI = itm or q.nowPlaying
+    vI = '🔊'
+    try
+      tS = q.audioPlayer.timestamp or null
+    catch
+      tS = q.getTransformedTimestamp(qI, qI.time) or null
+    pB = @generateProgressBar tS / qI.duration
+    cT = @parseTime tS
+    iC = "▶"
+    iC = "⏸" if qI.status is 'paused' or qI.status is 'suspended'
     """
-    #{@getDisplayName aby} swapped some items:
     ```fix
-    * #{indexes[1]+1} -> #{indexes[0]+1}
-      #{items[0].title}
-    
-    * #{indexes[0]+1} -> #{indexes[1]+1}
-      #{items[1].title}
+     #{iC}  #{vI}  #{pB} #{cT}
     ```
     """
 
-  moveItem: (guild, aby, item, indexes)=>
-    """
-    #{@getDisplayName aby} moved the following item:
-    ```fix
-    * #{indexes[0]+1} -> #{indexes[1]+1}
-      #{item.title}
-    ```
-    """
+  parseFilters: (filters)=>
+    return "" if not filters
+    filterstr = ""
+    filterstr += filter.display for filter in filters
+    filterstr
+
+  parseTime: (seconds)=>
+    return moment.utc(seconds * 1000).format("HH:mm:ss") if isFinite(seconds)
+    '∞'
+
+  getIcon: (u)=>
+    uri = url.parse(u)
+    "#{uri.protocol}//#{uri.host}/favicon.ico"
 
 module.exports = AudioHUD

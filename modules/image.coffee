@@ -27,7 +27,7 @@ class ImageModule extends BotModule
       includeCommandNameInArgs: true
     }, (msg, args, d)=>
       random = args[0].indexOf('rimg') >= 0
-      nsfw = d.data.allowNSFW and args[0].indexOf('imgn') >= 0
+      nsfw = (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0) and args[0].indexOf('imgn') >= 0
 
       @getImages(args[1], nsfw).then (r)=>
         return msg.reply 'No results.' if not r.items?

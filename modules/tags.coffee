@@ -12,8 +12,9 @@ class TagModule extends BotModule
   init: =>
     { @permissions } = @engine
 
-    @registerCommand '+', {argSeparator: ' '}, (msg, args)=>
+    @registerCommand '+', {argSeparator: ' '}, (msg, args, d)=>
       return if msg.author.bot or args.length < 2
+      return if not d.data.allowTags and not @permissions.isDJ msg.member
       tag = new Tag {
         key: args[0].toLowerCase()
         reply: args.slice(1).join(' ')
@@ -22,8 +23,9 @@ class TagModule extends BotModule
       tag.save().then =>
         msg.reply 'Tag saved!'
 
-    @registerCommand '-', {argSeparator: ' '}, (msg, args)=>
+    @registerCommand '-', {argSeparator: ' '}, (msg, args, d)=>
       return if msg.author.bot or args.length < 1
+      return if not d.data.allowTags and not @permissions.isDJ msg.member
       q = { by: msg.author.id, key: args[0] }
       if args.length > 1
         if args[1].toLowerCase() is 'all' and @permissions.isOwner msg.author
@@ -36,8 +38,9 @@ class TagModule extends BotModule
         msg.reply "Deleted #{results.length} tag(s)!"
         result.delete() for result in results
 
-    @registerCommand "!", { argSeparator: ' ' }, (msg, args)=>
+    @registerCommand "!", { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 1
+      return if not d.data.allowTags and not @permissions.isDJ msg.member
       Tag.filter({ key: args[0].toLowerCase() }).run().then (results)=>
         chance = new Chance()
         tag = chance.pickone results

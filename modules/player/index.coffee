@@ -22,7 +22,7 @@ class PlayerModule extends BotModule
     # Handle playlists
     if typeof info.forEach is 'function'
       return msg.reply "Only people with the DJ role (or higher) is allowed to add playlists." if not @permissions.isDJ(msg.member)
-      # msg.channel.sendMessage '', false, @hud.addPlaylist(msg.author, info.length)
+      msg.channel.sendMessage '', false, @hud.addPlaylist(msg.member, info.length)
       return info.forEach (v)=> @handleVideoInfo(v, msg, args, gdata, true)
 
     queue = await @q.getForGuild msg.guild
@@ -45,13 +45,13 @@ class PlayerModule extends BotModule
     # Add to queue
     queue.addToQueue({
       title: info.title
-      duration
       requestedBy: msg.member
       voiceChannel: msg.member.getVoiceChannel()
       textChannel: msg.channel
       path: info.url
       sauce: info.webpage_url
       thumbnail: info.thumbnail
+      duration
       filters
     })
 
@@ -74,14 +74,17 @@ class PlayerModule extends BotModule
       resolve(info)
 
   getFilters: (arg, member, playing)=>
+    return [] if not arg
     filters = []
     for filter in arg.match(/\w+=?\S*/g)
       name = filter.split('=')[0]
       param = filter.split('=')[1]
       Filter = audioFilters[name]
       continue if not Filter
-      filters.push(new Filter(param, member, playing, filters))
+      f = new Filter(param, member, playing, filters)
+      if playing and f.avoidRuntime
+        throw f.display + ' is a static filter and cannot be applied during playback.'
+      filters.push(f)
     filters
-
 
 module.exports = PlayerModule
