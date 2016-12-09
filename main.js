@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('coffee-script/register');
+const os = require('os');
 const path = require('path');
 const FocaBotCore = require('focabot-core');
 const { env } = process;
