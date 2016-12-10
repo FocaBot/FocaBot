@@ -6,7 +6,7 @@ getInfo = promisify(youtubedl.getInfo)
 
 class AudioModuleCommands
   constructor: (@audioModule)->
-    { @q, @hud, @getFilters } = @audioModule
+    { @q, @hud } = @audioModule
     { @permissions } = Core
     { @parseTime } = Core.util
     @m = @audioModule
@@ -33,13 +33,10 @@ class AudioModuleCommands
       queue = await @q.getForGuild msg.guild
       msg.delete() if d.data.autoDel
       u = msg.member.nick or msg.author.username
-      # temporary workaround
-      if not queue.audioPlayer.voiceConnection
-        return queue.nextItem() if queue.nowPlaying and queue.nowPlaying.status is 'playing'
       # Some checks
       return if msg.author.bot
       return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
-      return msg.reply 'You must be in the same voice channel the bot is in.' if queue.audioPlayer.voiceConnection.channelId isnt msg.member.getVoiceChannel().id
+      return msg.reply 'You must be in the same voice channel the bot is in.' if queue.nowPlaying.voiceChannel.id isnt msg.member.getVoiceChannel().id
       return msg.reply 'Nothing being played in this server.' if not queue.nowPlaying and not queue.items.length
       # Vote skip
       if not @permissions.isDJ(msg.member) and msg.author.id isnt queue.nowPlaying.requestedBy.id
@@ -48,7 +45,7 @@ class AudioModuleCommands
 
         return msg.reply 'Did you really try to skip this song **again**?' if msg.author.id in queue.nowPlaying.voteSkip
         # Democracy!
-        targetVotes = Math.round(msg.member.getVoiceChannel().members.length * 0.4) # ~40% of channel members
+        targetVotes = Math.round(queue.nowPlaying.voiceChannel.members.length * 0.4) # ~40% of channel members
         queue.nowPlaying.voteSkip.push(msg.author.id)
         votes = queue.nowPlaying.voteSkip.length
         msg.channel.sendMessage "**#{u}** voted to skip the current song (#{votes}/#{targetVotes})"
@@ -195,10 +192,11 @@ class AudioModuleCommands
         for filter in queue.nowPlaying.filters
           return msg.reply "The static filter #{filter.display} avoids further filter changes." if filter.avoidRuntime
       try
-        filters = @getFilters(args, msg.member, true)
+        filters = @m.getFilters(args, msg.member, true)
       catch e
-        if typeof errors is 'string'
-          return msg.reply 'A filter reported errors:', false, { description: errors, color: 0xFF0000 }
+        if typeof e is 'string'
+          return msg.reply 'A filter reported errors:', false, { description: e, color: 0xFF0000 }
+        else Core.log e,2
       queue.updateFilters queue.nowPlaying, filters
 
 module.exports = AudioModuleCommands

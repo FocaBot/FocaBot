@@ -1,10 +1,10 @@
 AudioFilter = require './base'
 
 class SpeedFilter extends AudioFilter
-  name: 'speed'
-  display: '[Speed]'
-
   constructor: (@param, member, playing, filters)->
+    @name = 'speed'
+    @display = '[Speed]'
+
     for filter in filters
       throw "[Speed] You can't use this filter twice." if filter.name is 'speed'
     @speed = parseFloat(@param)

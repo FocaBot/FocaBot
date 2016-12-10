@@ -1,10 +1,10 @@
 AudioFilter = require './base'
 
 class HighPassFilter extends AudioFilter
-  name: 'highpass'
-  display: '[HighPass]'
-
   constructor: (@param)->
+    @name = 'highpass'
+    @display = '[HighPass]'
+    
     @name = 'highpass'
     @frq = parseInt(@param) or 1015
     throw 'Frequency must not be higher than 50000' if @frq > 50000

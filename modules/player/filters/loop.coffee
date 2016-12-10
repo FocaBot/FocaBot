@@ -1,13 +1,14 @@
 AudioFilter = require './base'
-{ isDJ } = Core.permissions
+{ permissions } = Core
 { parseTime } = Core.util
 
 class LoopFilter extends AudioFilter
-  name: 'loop'
-  display: '[Loop]'
-  avoidRuntime: true
-
   constructor: (@param, member, playing, filters)->
+    @name = 'loop'
+    @display = '[Loop]'
+    @avoidRuntime = true
+
+    throw "[Loop] Not enough permissions to use this filter" if not permissions.isDJ member
     for filter in filters
       throw "You can't use this filter twice." if filter.name is 'loop'
     splt = @param.split '-'

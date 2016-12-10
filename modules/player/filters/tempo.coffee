@@ -1,10 +1,10 @@
 AudioFilter = require './base'
 
 class TempoFilter extends AudioFilter
-  name: 'tempo'
-  display: '[Tempo]'
-
   constructor: (@param, member, playing, filters)->
+    @name = 'tempo'
+    @display = '[Tempo]'
+
     @speed = parseFloat(@param)
     throw '[Tempo] Requested speed is not a number.' if not @speed
     throw '[Tempo] Speed must not be higher than 2' if @speed > 2

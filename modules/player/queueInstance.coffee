@@ -66,7 +66,7 @@ class AudioQueueInstance extends EventEmitter
   getFlags: (item)=>
     return {} if not item.filters or not item.filters.length
     flags = []; inputFlags = []; filters = []
-    inRuntime = item.status isnt 'queue'
+    inRuntime = item.status and item.status isnt 'queue'
 
     for filter in item.filters
       continue if filter.avoidRuntime and inRuntime
@@ -99,7 +99,10 @@ class AudioQueueInstance extends EventEmitter
   pause: =>
     if not @nowPlaying? or not isFinite(@nowPlaying.duration) or @nowPlaying.status is 'paused' or @nowPlaying.status is 'suspended'
       return false
-    @nowPlaying.time = @getTransformedTimestamp @nowPlaying, @audioPlayer.timestamp, true
+    try
+      @nowPlaying.time = @getTransformedTimestamp @nowPlaying, @audioPlayer.timestamp, true
+    catch
+      @nowPlaying.time = 0
     @nowPlaying.status = 'paused'
     @audioPlayer.stop()
     @emit 'updated'

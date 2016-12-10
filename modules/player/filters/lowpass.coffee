@@ -1,10 +1,10 @@
 AudioFilter = require './base'
 
-class LowPassFilter extends AudioFilter
-  name: 'lowpass'
-  display: '[LowPass]'
-  
+class LowPassFilter extends AudioFilter  
   constructor: (@param)->
+    @name = 'lowpass'
+    @display = '[LowPass]'
+    
     @frq = parseInt(@param) or 1015
     throw 'Frequency must not be higher than 50000' if @frq > 50000
     throw 'Frequency must not be lower than 100' if @frq < 100
