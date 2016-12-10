@@ -35,14 +35,14 @@ class ImageModule extends BotModule
           msg.reply '', false, {
             title: '[click for sauce]'
             url: r.items[0].image.contextLink
-            image: { r.items[0].link }
+            image: { url: r.items[0].link }
           }
         else
           image = @chance.pickone r.items
           msg.reply '', false, {
             title: '[click for sauce]'
             url: image.image.contextLink
-            image: { image.link }
+            image: { url: image.link }
           }
       .catch (err)=>
         return msg.reply 'Daily limit exceeded.' if err.statusCode is 403
