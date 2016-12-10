@@ -32,10 +32,18 @@ class ImageModule extends BotModule
       @getImages(args[1], nsfw).then (r)=>
         return msg.reply 'No results.' if not r.items?
         if not random
-          msg.channel.uploadFile request(r.items[0].link), @getImageName(r.items[0])
+          msg.reply '', false, {
+            title: '[click for sauce]'
+            url: r.items[0].image.contextLink
+            image: { r.items[0].link }
+          }
         else
           image = @chance.pickone r.items
-          msg.channel.uploadFile request(image.link), @getImageName(image)
+          msg.reply '', false, {
+            title: '[click for sauce]'
+            url: image.image.contextLink
+            image: { image.link }
+          }
       .catch (err)=>
         return msg.reply 'Daily limit exceeded.' if err.statusCode is 403
         msg.reply 'Something went wrong.'
@@ -63,11 +71,5 @@ class ImageModule extends BotModule
           r.save()
         .then (obj)=>
           return obj.response
-
-  getImageName: (image)=>
-    ext = image.mime.split('/')[1] or 'jpg' # jpg if no extension set
-    .replace 'jpeg', 'jpg'
-    .replace 'animatedgif', 'gif'
-    name = image.title + '.' + ext
 
 module.exports = ImageModule
