@@ -3,7 +3,7 @@ url = require 'url'
 
 class AudioHUD
   constructor: (@audioModule)->
-    { @prefix } = Core
+    { @prefix } = Core.settings
 
   ###
   # Messages
