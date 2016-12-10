@@ -9,12 +9,13 @@ class AudioHUD
   # Messages
   ###
 
-  nowPlaying: (q, qI, mention)=>
+  nowPlaying: (q, qI)=>
     """
     #{@generateProgressOuter q, qI}
+    Now playing in **#{qI.voiceChannel.name}**:
     >`#{qI.title}` (#{@parseTime qI.duration}) #{@parseFilters qI.filters}
 
-    In: **#{qI.voiceChannel.name}**, Requested by: **#{@getDisplayName qI.requestedBy, mention}** 
+    Requested by: **#{@getDisplayName qI.requestedBy}** 
     """
 
   queue: (q, page=1)=>
@@ -112,6 +113,29 @@ class AudioHUD
       footer:
         icon_url: user.avatarURL
         text: "Requested by #{@getDisplayName user}"
+
+  nowPlayingEmbed: (q, qI)=>
+    r ={
+      color: 0xCCAA00
+      author:
+        name: qI.title
+        icon_url: @getIcon qI.sauce
+      url: qI.sauce
+      title: '[click for sauce]'
+      description: @generateProgressOuter q, qI
+      thumbnail:
+        url: qI.thumbnail
+      footer:
+        text: "Requested by #{@getDisplayName qI.requestedBy}"
+        icon_url: qI.requestedBy.avatarURL
+      fields: [
+        { inline: true, name: 'Length', value: @parseTime qI.duration }
+        
+      ]
+    }
+    if qI.filters and qI.filters.length
+      r.fields.push { inline: true, name: 'Filters', value: @parseFilters qI.filters }
+    r
   
   ###
   # Functions
@@ -124,9 +148,7 @@ class AudioHUD
     pos = Math.floor pcnt * path.length
     path.substr(0, pos) + handle + path.substr(pos)
 
-  getDisplayName: (member, mention)=>
-    member.mention if mention
-    member.nick or member.username
+  getDisplayName: (member)=> member.nick or member.username
 
   generateProgressOuter: (q, itm)=>
     qI = itm or q.nowPlaying

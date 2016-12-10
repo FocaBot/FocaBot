@@ -80,7 +80,9 @@ class AudioModuleCommands
     @m.registerCommand 'np', (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
       return 'Nothing being played.' if not queue.nowPlaying
-      m = await msg.channel.sendMessage @hud.nowPlaying(queue, queue.nowPlaying, true)
+      m = await msg.channel.sendMessage "Now playing in `#{queue.nowPlaying.voiceChannel.name}`:", 
+                                        false,
+                                        @hud.nowPlayingEmbed(queue, queue.nowPlaying)
       if d.data.autoDel
         msg.delete()
         await delay(15000)
