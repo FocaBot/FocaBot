@@ -28,6 +28,7 @@ Imgur = require('request-promise').defaults {
 class ImageModule extends BotModule
   init: =>
     @chance = new Chance()
+    { @prefix } = Core.settings
 
     @registerCommand 'img', {
       allowDM: true
@@ -54,12 +55,10 @@ class ImageModule extends BotModule
           }
       .catch (err)=>
         if err.statusCode is 403
-          # Try imgur as fallback
-          return @commands['imgur'].func(msg, args, { nsfw, data: d.data })
+          return msg.reply "Daily limit exceeded for this command. (Try #{@prefix}imgur)."
         msg.reply 'Something went wrong.'
 
     @registerCommand 'imgur', (msg, args, d)=>
-      
       try
         # Find something on imgur
         results = await Imgur.get('/gallery/search/top/0/', json: true, qs: {
@@ -67,7 +66,7 @@ class ImageModule extends BotModule
         })
         # Random by default
         if results.success and results.data
-          nsfw = if d.nsfw? then d.nsfw else d.data.allowNSFW
+          nsfw = (d.data.allowNSFW or msg.channel.name.indexOf('nsfw'))
           image = @chance.pickone results.data.filter (i)=>
             not i.is_album and not i.is_ad and (nsfw or not i.nsfw)
           msg.reply '', false, {
