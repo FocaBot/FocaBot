@@ -12,7 +12,13 @@ class AudioQueueManager
       try
         queue = @instances[e.guildId] if @instances[e.guildId]?
         return if not queue or not queue.nowPlaying or e.channelId isnt queue.nowPlaying.voiceChannel.id
-        if e.channel.members.length <= 1
+        return queue.nextItem() if not e.channel
+        # Handle Voice Channel Changes
+        if e.user.id is Core.bot.User.id
+          return queue.nextItem() if not e.newChannelId
+          queue.nowPlaying.voiceChannel = Core.bot.Channels.get(e.newChannelId)
+          queue.emit('updated')
+        if queue.nowPlaying.voiceChannel.members.length <= 1
           # No members left on voice channel.
           if queue.pause()
             queue.nowPlaying.status = 'suspended'
