@@ -2,7 +2,8 @@ AudioFilter = require './base'
 
 class NoFilter extends AudioFilter
   constructor:->
-    @name = "[NOFX]"
+    @display = "[NOFX]"
+    @name = "nofx"
     @avoidRuntime = true
   
 module.exports = NoFilter
