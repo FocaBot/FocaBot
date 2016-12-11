@@ -66,6 +66,9 @@ class AudioModuleCommands
     # Pause
     @m.registerCommand 'pause', { djOnly: true }, (msg)=>
       queue = await @q.getForGuild msg.guild
+      if queue.nowPlaying.filters
+        for filter in queue.nowPlaying.filters
+          return msg.reply "You can't pause this song (static filter #{filter.display})." if filter.avoidRuntime
       queue.pause()
 
     # Resume
