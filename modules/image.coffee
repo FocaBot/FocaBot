@@ -17,6 +17,14 @@ CSE = require('request-promise').defaults {
   simple: true
 }
 
+# Imgur fallback
+Imgur = require('request-promise').defaults {
+  baseUrl: 'https://api.imgur.com/3/'
+  headers:
+    Authorization: "Client-ID #{process.env.IMGUR_KEY}"
+  simple: true
+}
+
 class ImageModule extends BotModule
   init: =>
     @chance = new Chance()
@@ -45,8 +53,33 @@ class ImageModule extends BotModule
             image: { url: image.link }
           }
       .catch (err)=>
-        return msg.reply 'Daily limit exceeded.' if err.statusCode is 403
+        if err.statusCode is 403
+          # Try imgur as fallback
+          return @commands['imgur'].func(msg, args, { nsfw, data: d.data })
         msg.reply 'Something went wrong.'
+
+    @registerCommand 'imgur', (msg, args, d)=>
+      
+      try
+        # Find something on imgur
+        results = await Imgur.get('/gallery/search/top/0/', json: true, qs: {
+          q: args
+        })
+        # Random by default
+        if results.success and results.data
+          nsfw = if d.nsfw? then d.nsfw else d.data.allowNSFW
+          image = @chance.pickone results.data.filter (i)=>
+            not i.is_album and not i.is_ad and (nsfw or not i.nsfw)
+          msg.reply '', false, {
+            title: '[click for sauce]'
+            url: "https://imgur.com/#{image.id}"
+            image: { url: image.link }
+          }
+        else msg.reply 'No results.'
+      catch err
+        if err.statusCode is 403
+          return msg.reply 'Daily limit exceeded.'
+        msg.reply 'Something went wrong.'        
   
   getImages: (query, nsfw)=>
     safe = 'high'
