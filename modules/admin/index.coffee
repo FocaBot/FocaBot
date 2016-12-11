@@ -44,7 +44,7 @@ class AdminModule extends BotModule
 
   restartFunc: (msg)=>
     msg.channel.sendMessage 'FocaBot is restarting...'
-    .then ()-> process.exit() # Let's hope PM2 restarts it :)
+    .then ()-> childProcess.exec('pm2 restart focaBot')
 
   updateFunc: (msg,args,d,bot)=>
       @pullFunc msg,args,bot
