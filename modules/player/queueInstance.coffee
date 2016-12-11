@@ -60,8 +60,9 @@ class AudioQueueInstance extends EventEmitter
     @emit 'playing', item
     @emit 'start', item if offset is 0
     stream.on 'end', ()=>
-      @nextItem() if not item.skipped or item.status is 'paused'
-      @emit 'end', item
+      if item.status isnt 'paused' or not item.skipped
+        @nextItem()
+        @emit 'end', item
 
   getFlags: (item)=>
     return {} if not item.filters or not item.filters.length

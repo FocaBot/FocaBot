@@ -10,7 +10,7 @@ class LoopFilter extends AudioFilter
 
     throw "[Loop] Not enough permissions to use this filter" if not permissions.isDJ member
     for filter in filters
-      throw "You can't use this filter twice." if filter.name is 'loop'
+      throw "[Loop] You can't use this filter twice." if filter.name is 'loop'
     splt = @param.split '-'
     @start = parseTime(splt[0])
     @length = parseTime(splt[1]) - @start

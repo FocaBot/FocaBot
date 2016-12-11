@@ -35,12 +35,12 @@ class AudioModuleCommands
       u = msg.member.nick or msg.author.username
       # Some checks
       return if msg.author.bot
-      return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
-      return msg.reply 'You must be in the same voice channel the bot is in.' if queue.nowPlaying.voiceChannel.id isnt msg.member.getVoiceChannel().id
       return msg.reply 'Nothing being played in this server.' if not queue.nowPlaying and not queue.items.length
       # Vote skip
       if not @permissions.isDJ(msg.member) and msg.author.id isnt queue.nowPlaying.requestedBy.id
         return msg.reply "You are not allowed to skip songs." if not data.data.voteSkip
+        return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
+      return msg.reply 'You must be in the same voice channel the bot is in.' if queue.nowPlaying.voiceChannel.id isnt msg.member.getVoiceChannel().id
         queue.nowPlaying.voteSkip = [] if not queue.nowPlaying.voteSkip
 
         return msg.reply 'Did you really try to skip this song **again**?' if msg.author.id in queue.nowPlaying.voteSkip

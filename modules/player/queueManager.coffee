@@ -7,6 +7,24 @@ class AudioQueueManager
     @instances = {}
     { @hud } = @playerModule
     @initFeed()
+    # Suspend playback when no users are on the voice channel
+    Core.bot.Dispatcher.on 'VOICE_CHANNEL_LEAVE', (e)=>
+      try
+        queue = @instances[e.guildId] if @instances[e.guildId]?
+        return if not queue or not queue.nowPlaying or e.channelId isnt queue.nowPlaying.voiceChannel.id
+        if e.channel.members.length <= 1
+          # No members left on voice channel.
+          if queue.pause()
+            queue.nowPlaying.status = 'suspended'
+            queue.emit('updated')
+    # Resume playback when a user re-joins
+    Core.bot.Dispatcher.on 'VOICE_CHANNEL_JOIN', (e)=>
+      try
+        queue = @instances[e.guildId] if @instances[e.guildId]?
+        return if not queue or not queue.nowPlaying or e.channelId isnt queue.nowPlaying.voiceChannel.id
+        if e.channel.members.length > 1 and queue.nowPlaying.status is 'suspended'
+          queue.nowPlaying.status = 'paused'
+          queue.resume()
 
   initFeed: =>
     @feed = await GuildQueue.changes()
