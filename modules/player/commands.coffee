@@ -36,8 +36,12 @@ class AudioModuleCommands
       # Some checks
       return if msg.author.bot
       return msg.reply 'Nothing being played in this server.' if not queue.nowPlaying and not queue.items.length
-      # Vote skip
-      if not @permissions.isDJ(msg.member) and msg.author.id isnt queue.nowPlaying.requestedBy.id
+      # Instant skip for DJs and people who requested the current element
+      if @permissions.isDJ(msg.member) or msg.author is queue.nowPlaying.requestedBy.id
+        msg.channel.sendMessage "**#{u}** skipped the current song."
+        queue.nextItem()
+      # Vote skip if enabled
+      else
         return msg.reply "You are not allowed to skip songs." if not data.data.voteSkip
         return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
         return msg.reply 'You must be in the same voice channel the bot is in.' if queue.nowPlaying.voiceChannel.id isnt msg.member.getVoiceChannel().id
@@ -53,9 +57,6 @@ class AudioModuleCommands
         if votes >= targetVotes
           msg.channel.sendMessage "Skipping current song ~~with the power of democracy~~." # lol
           queue.nextItem()
-      else
-        msg.channel.sendMessage "**#{u}** skipped the current song."
-        queue.nextItem()
 
     # Clear / Stop
     @m.registerCommand 'clear', { aliases: ['stop'], djOnly: true }, (msg)=>
@@ -77,7 +78,7 @@ class AudioModuleCommands
       queue.resume()
 
     # Now Playing (np)
-    @m.registerCommand 'np', (msg, args, d)=>
+    @m.registerCommand 'np', { aliases: ['nowplaying'] }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
       return 'Nothing being played.' if not queue.nowPlaying
       m = await msg.channel.sendMessage "Now playing in `#{queue.nowPlaying.voiceChannel.name}`:", 
@@ -89,12 +90,14 @@ class AudioModuleCommands
         m.delete()
 
     # View Queue
-    @m.registerCommand 'queue', (msg, args, d)=>
+    @m.registerCommand 'queue', { aliases: ['q'] }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
-      m = await msg.channel.sendMessage @hud.queue queue, parseInt args
+      m = await msg.channel.sendMessage @hud.nowPlaying(queue, queue.nowPlaying),
+                                        false,
+                                        @hud.queue(queue, parseInt(args) or 1)
       if d.data.autoDel
         msg.delete()
-        await delay(15000)
+        await delay(30000)
         m.delete()
 
     # Shuffle

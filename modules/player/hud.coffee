@@ -18,27 +18,6 @@ class AudioHUD
     Requested by: **#{@getDisplayName qI.requestedBy}** 
     """
 
-  queue: (q, page=1)=>
-    m = ""
-    m += @nowPlaying q, q.nowPlaying, false if q.nowPlaying
-    page = 1 if isNaN page
-
-    return m + "\nThe queue seems to be empty." if q.items.length <= 0
-    itemsPerPage = 10
-    ix = (page-1) * itemsPerPage
-    max = ix + itemsPerPage
-    return m + "\nThere's no such thing as page #{page}" if q.items.length < max-itemsPerPage or page < 1
-    pI = if page > 1 then (' - Page ' + page) else ''
-
-    m += "\n**Up next:** (#{q.items.length} items#{pI})\n"
-
-    for qI, i in q.items.slice ix, max
-      m += "**#{ix+i+1}.** `#{qI.title}` #{@parseFilters qI.filters}" +
-           "(#{@parseTime qI.duration}) Requested By #{@getDisplayName qI.requestedBy}\n"
-    
-    m += "Use #{@prefix}queue #{page+1} to see the next page." if max < q.items.length
-    m
-
   swapItems: (user, items, indexes)=>
     """
     #{@getDisplayName user} swapped some items:
@@ -136,6 +115,33 @@ class AudioHUD
     if qI.filters and qI.filters.length
       r.fields.push { inline: true, name: 'Filters', value: @parseFilters qI.filters }
     r
+
+  queue: (q, page=1)=>
+
+    return { description: 'Nothing currently on queue.' } if not q.items.length
+
+    itemsPerPage = 10
+    pages = Math.ceil(q.items.length / itemsPerPage)
+    if page > pages
+      return { color: 0xFF0000, description: "Page #{page} does not exist." }
+
+    r = {
+      color: 0x00AAFF
+      title: "Up next"
+      description: ''
+      footer:
+        text: "#{q.items.length} total items. (Page #{page}/#{pages})"
+    }
+
+    offset = (page-1) * itemsPerPage
+    max = offset + itemsPerPage
+
+    for qI, i in q.items.slice offset, max
+      r.description += "**#{offset+i+1}.** [#{qI.title}](#{qI.sauce}) #{@parseFilters qI.filters}" +
+                        "(#{@parseTime qI.duration}) Requested By #{@getDisplayName qI.requestedBy}\n"
+    
+    r.description += "Use #{@prefix}queue #{page+1} to see the next page." if page < pages
+    r
   
   ###
   # Functions
@@ -150,7 +156,7 @@ class AudioHUD
 
   getDisplayName: (member)=> member.nick or member.username
 
-  generateProgressOuter: (q, itm)=>
+  generateProgressOuter: (q, itm, b=false)=>
     qI = itm or q.nowPlaying
     vI = '🔊'
     try
