@@ -1,16 +1,16 @@
 class HelpModule extends BotModule
   init: =>
-    {@prefix, @getGuildData} = @engine
+    {@prefix} = @engine
     @registerCommand 'help', { allowDM: true }, @helpCommandFunction
     @registerCommand 'filters', { allowDM: true }, @filtersCommandFunction
 
-  helpCommandFunction: (msg, args)=> @getGuildData(msg.guild).then (d)=>
+  helpCommandFunction: (msg, args, d)=>
     pfx = d.data.prefix or @prefix
     gstr = ""
     if msg.guild
       gstr = "\nPrefix for `#{msg.guild.name}`: #{pfx}"
     reply = """
-    **#{@engine.name} #{@engine.version} (#{@engine.versionName})**
+    **#{@engine.name} #{@engine.version}**
     Made by @TheBITLINK#3141
 
     #{gstr}
@@ -27,7 +27,7 @@ class HelpModule extends BotModule
       msg.reply 'Check your DMs!' if msg.channel.guild_id
     
 
-  filtersCommandFunction: (msg,args)=> @getGuildData(msg.guild).then (d)=>
+  filtersCommandFunction: (msg,args)=>
     msg.reply 'To learn more about audio filters, check this link: https://thebitlink.gitbooks.io/focabot-docs/content/Filters.html'
 
 module.exports = HelpModule

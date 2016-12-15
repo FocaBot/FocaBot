@@ -1,8 +1,8 @@
 class PingModule extends BotModule
   init: =>  
     @registerCommand 'ping', { allowDM: true }, (msg, args)->
-      sd = new Date(msg.timestamp).getTime()
-      msg.channel.sendMessage "🏓 Pong!"
-      .then (m)=> m.edit "🏓 Pong! `#{new Date(m.timestamp).getTime() - sd}ms`"
+      originalDate = new Date(msg.timestamp).getTime()
+      m = await msg.channel.sendMessage "🏓 Pong!"
+      m.edit "🏓 Pong! `#{new Date(m.timestamp).getTime() - originalDate}ms`"
 
 module.exports = PingModule

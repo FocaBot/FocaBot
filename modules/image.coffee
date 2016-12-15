@@ -17,9 +17,18 @@ CSE = require('request-promise').defaults {
   simple: true
 }
 
+# Imgur fallback
+Imgur = require('request-promise').defaults {
+  baseUrl: 'https://api.imgur.com/3/'
+  headers:
+    Authorization: "Client-ID #{process.env.IMGUR_KEY}"
+  simple: true
+}
+
 class ImageModule extends BotModule
   init: =>
     @chance = new Chance()
+    { @prefix } = Core.settings
 
     @registerCommand 'img', {
       allowDM: true
@@ -27,18 +36,49 @@ class ImageModule extends BotModule
       includeCommandNameInArgs: true
     }, (msg, args, d)=>
       random = args[0].indexOf('rimg') >= 0
-      nsfw = d.data.allowNSFW and args[0].indexOf('imgn') >= 0
+      nsfw = (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0) and args[0].indexOf('imgn') >= 0
 
       @getImages(args[1], nsfw).then (r)=>
         return msg.reply 'No results.' if not r.items?
         if not random
-          msg.channel.uploadFile request(r.items[0].link), @getImageName(r.items[0])
+          msg.reply '', false, {
+            title: '[click for sauce]'
+            url: r.items[0].image.contextLink
+            image: { url: r.items[0].link }
+          }
         else
           image = @chance.pickone r.items
-          msg.channel.uploadFile request(image.link), @getImageName(image)
+          msg.reply '', false, {
+            title: '[click for sauce]'
+            url: image.image.contextLink
+            image: { url: image.link }
+          }
       .catch (err)=>
-        return msg.reply 'Daily limit exceeded.' if err.statusCode is 403
+        if err.statusCode is 403
+          return msg.reply "Daily limit exceeded for this command. (Try #{@prefix}imgur)."
         msg.reply 'Something went wrong.'
+
+    @registerCommand 'imgur', (msg, args, d)=>
+      try
+        # Find something on imgur
+        results = await Imgur.get('/gallery/search/top/0/', json: true, qs: {
+          q: args
+        })
+        # Random by default
+        if results.success and results.data
+          nsfw = (d.data.allowNSFW or msg.channel.name.indexOf('nsfw'))
+          image = @chance.pickone results.data.filter (i)=>
+            not i.is_album and not i.is_ad and (nsfw or not i.nsfw)
+          msg.reply '', false, {
+            title: '[click for sauce]'
+            url: "https://imgur.com/#{image.id}"
+            image: { url: image.link }
+          }
+        else msg.reply 'No results.'
+      catch err
+        if err.statusCode is 403
+          return msg.reply 'Daily limit exceeded.'
+        msg.reply 'Something went wrong.'        
   
   getImages: (query, nsfw)=>
     safe = 'high'
@@ -63,11 +103,5 @@ class ImageModule extends BotModule
           r.save()
         .then (obj)=>
           return obj.response
-
-  getImageName: (image)=>
-    ext = image.mime.split('/')[1] or 'jpg' # jpg if no extension set
-    .replace 'jpeg', 'jpg'
-    .replace 'animatedgif', 'gif'
-    name = image.title + '.' + ext
 
 module.exports = ImageModule

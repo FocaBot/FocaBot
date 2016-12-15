@@ -1,102 +1,90 @@
-QueueItem = require '../../models/audioQueueItem'
-moment = require 'moment'
-reload = require('require-reload')(require)
-AudioModuleCommands = reload './commands'
-audioFilters = reload '../../filters'
-AudioHud = reload './hud'
+AudioModuleCommands = require './commands'
+QueueManager = require './queueManager'
+AudioHud = require './hud'
+audioFilters = require './filters'
+{ spawn } = require 'child_process'
+{ delay } = Core.util
 
 class PlayerModule extends BotModule
   init: =>
-    { @permissions, @getGuildData } = @engine
-    @audioFilters = audioFilters
+    { @permissions } = @engine
     @hud = new AudioHud @
+    @q = new QueueManager @
     @moduleCommands = new AudioModuleCommands @
+    { @parseTime } = Core.util
 
-  parseTime:(time)=>
-    t = time.split(':').reverse()
-    moment.duration {
-      seconds: t[0]
-      minutes: t[1]
-      hours:   t[2]
-    }
-    .asSeconds()      
+    if Core.settings.debug and Core.commands.registered['eval']
+      @registerCommand 'playereval', { ownerOnly: true }, (msg, args)=>
+        queue = await @q.getForGuild msg.guild
+        Core.commands.registered['eval'].func.call({ queue }, msg, args, queue.guildData, Core.bot, Core)
 
   handleVideoInfo: (info, msg, args, gdata, silent=false)=>
-    # Check if playlist
+    # Handle playlists
     if typeof info.forEach is 'function'
-      if not @permissions.isDJ(msg.author, msg.guild)
-        return msg.reply "Only people with the DJ role (or higher) is allowed to add playlists."
-      # Playlist
-      msg.channel.sendMessage '', false, @hud.addPlaylist(msg.author, info.length)
-      # Iterate over all items
+      return msg.reply "Only people with the DJ role (or higher) is allowed to add playlists." if not @permissions.isDJ(msg.member)
+      msg.channel.sendMessage '', false, @hud.addPlaylist(msg.member, info.length)
       return info.forEach (v)=> @handleVideoInfo(v, msg, args, gdata, true)
-    # Check if duration is valid
+
+    queue = await @q.getForGuild msg.guild
+    info = await @getAdditionalMetadata(info)
+
+    # Check for video length
     duration = @parseTime info.duration
-       
-    if (duration > 1800  and not @permissions.isDJ(msg.author, msg.guild)) or 
+    if (duration > gdata.data.maxSongLength and not @permissions.isDJ(msg.author, msg.guild)) or 
        (duration > 7200  and not @permissions.isAdmin(msg.author, msg.guild)) or
        (duration > 43200 and not @permissions.isOwner(msg.author))
-       # Bot Owner = ∞
       return msg.reply 'The requested song is too long.' if not silent
-      return
-
-    # Get filters
-    filters = []
-    if args[1] and isFinite duration
-      filterR = args[1].split ' '
-      for filter in filterR
-        try
-          f = filter.split '='
-          filter = audioFilters.getFilter f[0], f[1]
-          if filter
-            if filter.isAdminOnly() and not @permissions.isDJ msg.author, msg.guild
-              return msg.reply "#{filter} is only for DJs." if not silent
-              return
-            valErr = filter.validate()
-            if valErr
-              return msg.reply "#{filter} - #{valErr}" if not silent
-              return
-            filters.push filter
-
-    filterstr = " "
-    filterstr += filter for filter in filters
-
-    {queue, audioPlayer} = gdata
-    # Create a new queue item
-    qI = new QueueItem {
+    
+    # Apply filters
+    try
+      filters = @getFilters(args[1], msg.member)
+    catch errors
+      if typeof errors is 'string'
+        return msg.reply 'A filter reported errors:', false, { description: errors, color: 0xFF0000 }
+    
+    # Add to queue
+    queue.addToQueue({
       title: info.title
-      duration
       requestedBy: msg.member
-      playInChannel: msg.member.getVoiceChannel()
-      filters: filters
+      voiceChannel: msg.member.getVoiceChannel()
+      textChannel: msg.channel
       path: info.url
       sauce: info.webpage_url
       thumbnail: info.thumbnail
-    }
-    # Set events
-    durationstr = if isFinite(qI.duration) then moment.utc(qI.duration * 1000).format("HH:mm:ss") else '∞'
-    qI.once 'start', =>
-      msg.channel.sendMessage @hud.nowPlaying gdata, qI, true
-        .then (m)=>
-          if gdata.data.autoDel
-           setTimeout (->m.delete()), 15000
-    
-    qI.once 'end', =>
-      setTimeout (()=>
-        if not queue.items.length and not queue.currentItem
-          try
-            msg.channel.sendMessage 'Nothing more to play.'
-            .then (m)=>
-              if gdata.data.autoDel
-                setTimeout (->m.delete()), 15000
-            audioPlayer.clean true
-      ), 100
+      duration
+      filters
+    })
 
-    queue.addToQueue qI
+  getAdditionalMetadata: (info)=> new Promise (resolve, reject)=>
+    return resolve(info) if isFinite info.duration
+    spawn('ffprobe', [info.url, '-show_format', '-v', 'quiet']).stdout.on 'data', (data)=>
+      try
+        # Parse the output from FFProbe
+        prop = { }
+        pattern = /(.*)=(.*)/g
+        while match = pattern.exec data
+          prop[match[1]] = match[2]
+        # Get the duration
+        info.duration = prop.duration
+        # Try to use metadata from the ID3 tags as well
+        if prop['TAG:title']
+          info.title = ''
+          info.title += "#{prop['TAG:artist']} - " if prop['TAG:artist']
+          info.title += prop['TAG:title']
+      resolve(info)
 
-    if not silent
-      msg.channel.sendMessage 'Added a new item to the queue:',
-                              false,
-                              @hud.addItem(msg.guild, qI.requestedBy, qI, queue.items.length)
+  getFilters: (arg, member, playing)=>
+    return [] if not arg
+    filters = []
+    for filter in arg.match(/\w+=?\S*/g)
+      name = filter.split('=')[0]
+      param = filter.split('=')[1]
+      Filter = audioFilters[name]
+      continue if not Filter
+      f = new Filter(param, member, playing, filters)
+      if playing and f.avoidRuntime
+        throw f.display + ' is a static filter and cannot be applied during playback.'
+      filters.push(f)
+    filters
 
 module.exports = PlayerModule
