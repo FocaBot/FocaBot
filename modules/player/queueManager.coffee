@@ -82,6 +82,7 @@ class AudioQueueManager
         await delay(5000)
         m.delete() if instance.guildData.data.autoDel
     instance.on 'added', (item)=>
+      return if item.playlist
       try item.textChannel.sendMessage 'Added to the queue:',
                                        false,
                                        @hud.addItem(item, instance.items.length)

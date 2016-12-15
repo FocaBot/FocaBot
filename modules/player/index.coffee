@@ -18,7 +18,7 @@ class PlayerModule extends BotModule
         queue = await @q.getForGuild msg.guild
         Core.commands.registered['eval'].func.call({ queue }, msg, args, queue.guildData, Core.bot, Core)
 
-  handleVideoInfo: (info, msg, args, gdata, silent=false)=>
+  handleVideoInfo: (info, msg, args, gdata, playlist=false)=>
     # Handle playlists
     if typeof info.forEach is 'function'
       return msg.reply "Only people with the DJ role (or higher) is allowed to add playlists." if not @permissions.isDJ(msg.member)
@@ -51,6 +51,7 @@ class PlayerModule extends BotModule
       path: info.url
       sauce: info.webpage_url
       thumbnail: info.thumbnail
+      playlist
       duration
       filters
     })
