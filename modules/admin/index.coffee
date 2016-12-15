@@ -92,9 +92,4 @@ class AdminModule extends BotModule
       rp += "**#{ms.author.username}**: #{ms.content}\n"
     msg.channel.sendMessage rp
 
-  resetFunc: (msg, args, data)=>
-    data.queue.clearQueue()
-    try
-      msg.member.getVoiceChannel().leave()
-
 module.exports = AdminModule
