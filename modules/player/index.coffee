@@ -35,8 +35,8 @@ class PlayerModule extends BotModule
     if (duration > gdata.data.maxSongLength and not @permissions.isDJ(msg.author, msg.guild)) or 
        (duration > 7200  and not @permissions.isAdmin(msg.author, msg.guild)) or
        (duration > 43200 and not @permissions.isOwner(msg.author))
-       return if playlist
-       return msg.reply 'The requested song is too long.'
+        return if playlist
+        return msg.reply 'The requested song is too long.'
     
     # Apply filters
     try
