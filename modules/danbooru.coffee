@@ -25,7 +25,7 @@ Waifu = Core.db.createModel 'Waifu', {
 
 class DanbooruModule extends BotModule
   init: =>
-    {@prefix} = @engine
+    {@prefix} = @engine.settings
 
     @registerCommand 'danbooru', {
       allowDM: true
