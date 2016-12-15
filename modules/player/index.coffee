@@ -23,7 +23,9 @@ class PlayerModule extends BotModule
     if typeof info.forEach is 'function'
       return msg.reply "Only people with the DJ role (or higher) is allowed to add playlists." if not @permissions.isDJ(msg.member)
       msg.channel.sendMessage '', false, @hud.addPlaylist(msg.member, info.length)
-      return info.forEach (v)=> @handleVideoInfo(v, msg, args, gdata, true)
+      for v in info
+        await @handleVideoInfo(v, msg, args, gdata, true)
+      return
 
     queue = await @q.getForGuild msg.guild
     info = await @getAdditionalMetadata(info)
@@ -33,13 +35,15 @@ class PlayerModule extends BotModule
     if (duration > gdata.data.maxSongLength and not @permissions.isDJ(msg.author, msg.guild)) or 
        (duration > 7200  and not @permissions.isAdmin(msg.author, msg.guild)) or
        (duration > 43200 and not @permissions.isOwner(msg.author))
-      return msg.reply 'The requested song is too long.' if not silent
+       return if playlist
+       return msg.reply 'The requested song is too long.'
     
     # Apply filters
     try
       filters = @getFilters(args[1], msg.member)
     catch errors
       if typeof errors is 'string'
+        return if playlist
         return msg.reply 'A filter reported errors:', false, { description: errors, color: 0xFF0000 }
     
     # Add to queue
