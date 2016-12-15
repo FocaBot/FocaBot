@@ -10,12 +10,11 @@ class HelpModule extends BotModule
     if msg.guild
       gstr = "\nPrefix for `#{msg.guild.name}`: #{pfx}"
     reply = """
-    **#{@engine.name} #{@engine.version}**
-    Made by @TheBITLINK#3141
-
+    **#{@engine.settings.name} #{@engine.settings.version}**
+    Running FocaBotCore #{@engine.version}
     #{gstr}
     
-    This bot is not yet public, though you can send me a DM if you want it on your server.
+    #{process.env.HELP_MESSAGE or ''}
 
     Changelog: https://thebitlink.gitbooks.io/focabot-docs/content/Changelog.html
     Command List: https://thebitlink.gitbooks.io/focabot-docs/content/Commands.html
