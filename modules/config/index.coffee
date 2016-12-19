@@ -12,6 +12,7 @@ Guild = Core.db.createModel "Guild", {
   autoDel: type.boolean().default(true)
   allowNSFW: type.boolean().default(false)
   voteSkip: type.boolean().default(true)
+  restrict: type.boolean().default(false)
   allowWaifus: type.boolean().default(true)
   allowTags: type.boolean().default(true)
   greet: type.string().default('off')
@@ -34,6 +35,7 @@ class ConfigModule extends BotModule
           allowNSFW: true
           voteSkip: false
           allowTags: true
+          restrict: false
           allowWaifus: true
         }
       } if not guild 
@@ -71,6 +73,17 @@ class ConfigModule extends BotModule
       d = await Core.guilds.getGuild(msg.guild)
       Promise.resolve d.data.prefix or Core.settings.prefix
 
+    # Yes, we're actually overriding the FocaBotCore command handler.
+    origCommandHandler = Object.getPrototypeOf(Core.commands).processMessage
+
+    Object.getPrototypeOf(Core.commands).processMessage = (msg)->
+      try
+        d = await Core.guilds.getGuild(msg.guild)
+        return if d.data.restrict and not Core.permissions.isDJ msg.member
+        origCommandHandler.call(@, msg)
+      catch e
+        Core.log e,2
+    
     @commands = new Commands @
 
 module.exports = ConfigModule
