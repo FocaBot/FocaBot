@@ -11,6 +11,8 @@ class ConfigCommands
         type: Boolean
       voteSkip:
         type: Boolean
+      restrict:
+        type: Boolean
       allowWaifus:
         type: Boolean
       allowTags:
