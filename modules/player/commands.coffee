@@ -42,7 +42,7 @@ class AudioModuleCommands
         queue.nextItem()
       # Vote skip if enabled
       else
-        return msg.reply "You are not allowed to skip songs." if not data.data.voteSkip
+        return msg.reply "You are not allowed to skip songs." if not d.data.voteSkip
         return msg.reply 'You must be in a voice channel.' if not msg.member.getVoiceChannel()
         return msg.reply 'You must be in the same voice channel the bot is in.' if queue.nowPlaying.voiceChannel.id isnt msg.member.getVoiceChannel().id
         queue.nowPlaying.voteSkip = [] if not queue.nowPlaying.voteSkip
