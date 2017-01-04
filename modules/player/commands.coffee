@@ -20,10 +20,10 @@ class AudioModuleCommands
       else urlToFind = args[0]
       try
         # Get info from the URL using ytdl
-        info = await getInfo(urlToFind, ['--netrc', '--default-search', 'ytsearch', '-f', 'bestaudio'])
+        info = await getInfo(urlToFind, ['--netrc', '--default-search', 'ytsearch', '-f', 'bestaudio'], { maxBuffer: Infinity })
       catch
         # probably not a YT link, try again without flags
-        try info = await getInfo(urlToFind, [])
+        try info = await getInfo(urlToFind, [], { maxBuffer: Infinity })
         catch
           msg.reply 'Something went wrong.'
       @audioModule.handleVideoInfo info, msg, args, data
