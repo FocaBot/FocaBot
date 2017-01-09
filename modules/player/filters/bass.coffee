@@ -2,7 +2,9 @@ AudioFilter = require './base'
 { permissions } = Core
 
 class BassFilter extends AudioFilter
-  constructor: (@param, member)->
+  constructor: (param, member)->
+    super
+    @param = param
     @name = 'bass'
     @display = '[Bass]'
 

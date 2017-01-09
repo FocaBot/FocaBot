@@ -1,7 +1,9 @@
 AudioFilter = require './base'
 
 class HighPassFilter extends AudioFilter
-  constructor: (@param)->
+  constructor: (param)->
+    super
+    @param = param
     @name = 'highpass'
     @display = '[HighPass]'
 
