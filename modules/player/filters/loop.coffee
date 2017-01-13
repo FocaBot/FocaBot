@@ -3,9 +3,7 @@ AudioFilter = require './base'
 { parseTime } = Core.util
 
 class LoopFilter extends AudioFilter
-  constructor: (param, member, playing, filters)->
-    super
-    @param = param
+  constructor: (@param, member, playing, filters)->
     @name = 'loop'
     @display = '[Loop]'
     @avoidRuntime = true

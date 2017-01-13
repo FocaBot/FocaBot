@@ -1,9 +1,7 @@
 AudioFilter = require './base'
 
 class DistortFilter extends AudioFilter
-  constructor: (param)->
-    super
-    @param = param
+  constructor: (@param)->
     @name = 'distort'
     @display = '[Distort]'
     

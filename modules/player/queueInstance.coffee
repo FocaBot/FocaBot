@@ -2,11 +2,9 @@ EventEmitter = require 'events'
 Chance = require 'chance'
 
 class AudioQueueInstance extends EventEmitter
-  constructor: (data, guildData)->
-    super
+  constructor: (data, @guildData)->
     @update data
-    @guildData = guildData
-    { @audioPlayer } = guildData
+    { @audioPlayer } = @guildData
 
   update: (@data)=>
     { @timestamp, @guildId } = @data

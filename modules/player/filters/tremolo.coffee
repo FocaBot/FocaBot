@@ -1,9 +1,7 @@
 AudioFilter = require './base'
 
 class TremoloFilter extends AudioFilter  
-  constructor: (param)->
-    super
-    @param = param
+  constructor: (@param)->
     @name = 'tremolo'
     @display = '[Tremolo]'
 

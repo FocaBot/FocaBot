@@ -1,9 +1,7 @@
 AudioFilter = require './base'
 
 class TempoFilter extends AudioFilter
-  constructor: (param, member, playing, filters)->
-    super
-    @param = param
+  constructor: (@param, member, playing, filters)->
     @name = 'tempo'
     @display = '[Tempo]'
 
