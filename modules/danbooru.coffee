@@ -34,7 +34,7 @@ class DanbooruModule extends BotModule
       if d.danbooruDate
         return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 3000
       d.danbooruDate = new Date()
-      tags = 'rating:safe ' + tags if not d.data.allowNSFW or msg.channel.name.indexOf('nsfw') < 0
+      tags = 'rating:safe ' + tags if not d.data.allowNSFW and msg.channel.name.indexOf('nsfw') < 0
       qs = {
         random: true
         tags
