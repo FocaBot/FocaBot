@@ -20,7 +20,7 @@ class AudioModuleCommands
       else urlToFind = args[0]
       try
         # Get info from the URL using ytdl
-        info = await getInfo(urlToFind, ['--netrc', '--default-search', 'ytsearch', '-f', 'bestaudio'], { maxBuffer: Infinity })
+        info = await getInfo(urlToFind, ['--default-search', 'ytsearch', '-f', 'bestaudio'], { maxBuffer: Infinity })
       catch
         # probably not a YT link, try again without flags
         try info = await getInfo(urlToFind, [], { maxBuffer: Infinity })
