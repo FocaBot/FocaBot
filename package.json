@@ -24,7 +24,7 @@
   "homepage": "https://github.com/FocaBot/FocaBot#README",
   "dependencies": {
     "chance": "^1.0.4",
-    "coffee-script": "https://github.com/connec/coffeescript/archive/es2015-classes-new.tar.gz",
+    "coffee-script": "https://github.com/jashkenas/coffeescript/archive/2.tar.gz",
     "dotenv": "^2.0.0",
     "es6-promisify": "^5.0.0",
     "focabot-core": "^1.0.1",
