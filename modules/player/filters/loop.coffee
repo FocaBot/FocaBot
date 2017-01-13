@@ -4,6 +4,7 @@ AudioFilter = require './base'
 
 class LoopFilter extends AudioFilter
   constructor: (@param, member, playing, filters)->
+    super
     @name = 'loop'
     @display = '[Loop]'
     @avoidRuntime = true

@@ -2,6 +2,7 @@ AudioFilter = require './base'
 
 class FlangerFilter extends AudioFilter
   constructor: (@param)->
+    super
     @name = 'flanger'
     @display = '[Flanger]'
 

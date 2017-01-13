@@ -3,6 +3,7 @@ Chance = require 'chance'
 
 class AudioQueueInstance extends EventEmitter
   constructor: (data, @guildData)->
+    super
     @update data
     { @audioPlayer } = @guildData
 

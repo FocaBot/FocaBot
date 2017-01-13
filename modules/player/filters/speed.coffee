@@ -2,6 +2,7 @@ AudioFilter = require './base'
 
 class SpeedFilter extends AudioFilter
   constructor: (@param, member, playing, filters)->
+    super
     @name = 'speed'
     @display = '[Speed]'
 

@@ -3,6 +3,7 @@ AudioFilter = require './base'
 
 class BassFilter extends AudioFilter
   constructor: (@param, member)->
+    super
     @name = 'bass'
     @display = '[Bass]'
 

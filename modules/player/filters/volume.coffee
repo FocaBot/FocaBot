@@ -3,6 +3,7 @@ AudioFilter = require './base'
 
 class VolumeFilter extends AudioFilter
   constructor: (@param, member)->
+    super
     @name = 'volume'
     @display = '[Volume]'
     throw "[Volume] Not enough permissions to use this filter" if not permissions.isDJ member
