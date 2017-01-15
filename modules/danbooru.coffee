@@ -29,114 +29,80 @@ class DanbooruModule extends BotModule
 
     @registerCommand 'danbooru', {
       allowDM: true
-      aliases: ['d']
-    }, (msg, tags, d)=>
+      aliases: ['d', 'safebooru', 'safe']
+      includeCommandNameInArgs: true
+    }, (msg, args, d)=>
+      switch args[0]
+        when 'danbooru', 'd'
+          host = 'danbooru.donmai.us'
+          b = danbooru
+        when 'safebooru', 'safe'
+          host = 'safebooru.donmai.us'
+          b = safebooru
+      tags = args[1]
+      # Rate limiting
       if d.danbooruDate
         return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 3000
       d.danbooruDate = new Date()
-      tags = 'rating:safe ' + tags if not d.data.allowNSFW and msg.channel.name.indexOf('nsfw') < 0
-      qs = {
-        random: true
-        tags
+      # NSFW Filter
+      b = safebooru if not d.data.allowNSFW and msg.channel.name.indexOf('nsfw') < 0
+      try
+        r = await b.get('posts.json', { json: true, qs: { random: true, tags } })
+      catch
+        # the random option of the Danbooru API doesn't work sometimes
+        try r = await b.get('posts.json', { json: true, qs: { tags } })
+        catch error
+          Core.log error, 2
+          msg.reply 'Something went wrong.'
+      return msg.reply 'No results.' if not r.length
+      msg.reply '', false, {
+        title: '[click for sauce]'
+        url: "https://#{host}/posts/#{r[0].id}"
+        image: { url: "https://#{host + r[0].file_url}" }
       }
-      danbooru.get '/posts.json', { json: true, qs }
-      .then (r)=>
-        if r.length
-          url = "https://danbooru.donmai.us#{r[0].file_url}"
-          msg.reply '', false, {
-            title: '[click for sauce]'
-            url: "https://danbooru.donmai.us/posts/#{r[0].id}"
-            image: { url }
-          }
-        else
-          msg.reply 'No results.'
-      .catch (e)=>
-        console.error e
-        msg.reply 'Something went wrong.'
 
-    @registerCommand 'safebooru', {
-      allowDM: true
-      aliases: ['safe']
-    }, (msg, tags, d)=>
-      if d.danbooruDate
-        return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 3000
-      d.danbooruDate = new Date()
-      qs = {
-        random: true
-        tags
-      }
-      safebooru.get '/posts.json', { json: true, qs }
-      .then (r)=>
-        if r.length
-          url = "https://safebooru.donmai.us#{r[0].file_url}"
-          msg.reply '', false, {
-            title: '[click for sauce]'
-            url: "https://safebooru.donmai.us/posts/#{r[0].id}"
-            image: { url }
-          }
-        else
-          msg.reply 'No results.'
-      .catch (e)=>
-        console.error e
-        msg.reply 'Something went wrong.'
-
-    @registerCommand 'setwaifu', { allowDM: true }, (msg, args, d)=>
+    @registerCommand 'setwaifu', { allowDM: true, aliases: 'sw' }, (msg, args, d)=>
       return if not d.data.allowWaifus
       waifu = (args.match(/\S+/) or [''])[0]
       return msg.reply "Usage: ```#{@prefix}setWaifu <safebooru_tag>```" if not waifu
-      # Do a dummy search
-      qs = {
-        tags: 'solo ' + waifu
-      }
-      safebooru.get '/posts.json', { json: true, qs }
-      .then (r)=>
-        return Promise.reject { msg: 'Invalid safebooru tag.' } if not r.length
-        Waifu.filter({ user: msg.author.id }).run()
-      .then (results)=>
-        return results[0] if results[0]?
-        new Waifu { user: msg.author.id }
-      .then (w)=>
+      try
+        # Do a dummy search to check if the tag is valid
+        r = await safebooru.get('/posts.json', { json: true, qs: { tags: 'solo ' + waifu } })
+        return msg.reply 'Invalid safebooru tag.' if not r.length
+        # Check the DB for an existent waifu entry for the current user
+        w = (await Waifu.filter({ user: msg.author.id }).run())[0]
+        # If none, create a new entry
+        w = new Waifu { user: msg.author.id } if not w?
         w.waifu = waifu
-        w.save()
-      .then ()=>
+        await w.save()
         msg.reply 'Success.'
-      .catch (e)=>
-        console.error e
-        return msg.reply e.msg if e.msg
+      catch error
+        Core.log error, 2
         msg.reply 'Something went wrong.'
 
-    @registerCommand 'waifu', {
-      aliases: ['w'],
-      allowDM: true
-    }, (msg, args, d)=>
+    @registerCommand 'waifu', { allowDM: true, aliases: ['w'] }, (msg, args, d)=>
       return if not d.data.allowWaifus
+      # Rate limiting
       if d.danbooruDate
         return msg.reply 'Rate limit excedeed. Wait a few seconds.' if (new Date() - d.danbooruDate) < 3000
       d.danbooruDate = new Date()
-      Waifu.filter({ user: msg.author.id }).run()
-      .then (results)=>
-        return Promise.reject { msg: "Run the #{@prefix}setWaifu command first." } if not results[0]?
-        qs = {
-          random: true
-          tags: 'solo ' + results[0].waifu
+      try
+        # Get the waifu entry for the current user
+        w = (await Waifu.filter({ user: msg.author.id }).run())[0]
+        return msg.reply "Run the #{@prefix}setWaifu command first." if not w?
+        # Make a safebooru search
+        try
+          r = await safebooru.get('/posts.json', { json: true, qs: { random: true, tags: 'solo ' + w.waifu } })
+        catch
+          r = await safebooru.get('/posts.json', { json: true, qs: { tags: 'solo ' + w.waifu } })
+        return msg.reply 'No results.' if not r.length
+        msg.reply '', false, {
+          title: '[click for sauce]'
+          url: "https://safebooru.donmai.us/posts/#{r[0].id}"
+          image: { url: "https://safebooru.donmai.us#{r[0].file_url}" }
         }
-        safebooru.get '/posts.json', { json: true, qs }
-      .then (r)=>
-        if r.length
-          url = "https://safebooru.donmai.us#{r[0].file_url}"
-          msg.reply '', false, {
-            title: '[click for sauce]'
-            url: "https://safebooru.donmai.us/posts/#{r[0].id}"
-            image: { url }
-          }
-        else
-          msg.reply 'No results.'
-      .catch (e)=>
-        console.error e
-        return msg.reply e.msg if e.msg
+      catch error
+        Core.log error, 2
         msg.reply 'Something went wrong.'
-  
-  getFileName: (url)=> url.split('/').reverse()[0]
-
 
 module.exports = DanbooruModule
