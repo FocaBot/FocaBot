@@ -48,6 +48,7 @@ class DanbooruModule extends BotModule
       b = safebooru if not d.data.allowNSFW and msg.channel.name.indexOf('nsfw') < 0
       try
         r = await b.get('posts.json', { json: true, qs: { random: true, tags } })
+        throw 'No results' if not r.length
       catch
         # the random option of the Danbooru API doesn't work sometimes
         try r = await b.get('posts.json', { json: true, qs: { tags } })
@@ -93,6 +94,7 @@ class DanbooruModule extends BotModule
         # Make a safebooru search
         try
           r = await safebooru.get('/posts.json', { json: true, qs: { random: true, tags: 'solo ' + w.waifu } })
+          throw 'No results' if not r.length 
         catch
           r = await safebooru.get('/posts.json', { json: true, qs: { tags: 'solo ' + w.waifu } })
         return msg.reply 'No results.' if not r.length
