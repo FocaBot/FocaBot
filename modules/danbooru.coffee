@@ -61,7 +61,7 @@ class DanbooruModule extends BotModule
         image: { url: "https://#{host + r[0].file_url}" }
       }
 
-    @registerCommand 'setwaifu', { allowDM: true, aliases: 'sw' }, (msg, args, d)=>
+    @registerCommand 'setwaifu', { allowDM: true, aliases: ['sw'] }, (msg, args, d)=>
       return if not d.data.allowWaifus
       waifu = (args.match(/\S+/) or [''])[0]
       return msg.reply "Usage: ```#{@prefix}setWaifu <safebooru_tag>```" if not waifu
