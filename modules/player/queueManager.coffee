@@ -52,10 +52,11 @@ class AudioQueueManager
       qData = q[0]
     else
       qData = await new GuildQueue({ guildId: guild.id }).save()
-    instance = new QueueInstance(qData, await Core.guilds.getGuild(guild))
+    gData = await Core.guilds.getGuild(guild)
+    instance = new QueueInstance(qData, gData)
     instance.on 'updated', =>
       serializeItems = (itm)=>
-        return if not itm 
+        return if not itm
         if itm.forEach
           arr = []
           itm.forEach (i)=> arr.push(serializeItems(i))
@@ -73,10 +74,22 @@ class AudioQueueManager
         items: serializeItems(instance.items)
       })
       instance.data.save()
+      # Dynamic nickname
+      return if not gData.data.dynamicNick
+      currentNick = Core.bot.User.memberOf(guild).nick
+      newNick = null
+      if instance.nowPlaying
+        switch instance.nowPlaying.status
+          when 'playing'
+            newNick = "▶ | " + instance.nowPlaying.title.substr(0, 28)
+          when 'paused', 'suspended'
+            newNick = "⏸ | " + instance.nowPlaying.title.substr(0, 28)
+      if currentNick isnt newNick
+        Core.bot.User.memberOf(guild).setNickname(newNick)
     # Event Messages
     instance.on 'start', (item)=>
       try
-        m = await item.textChannel.sendMessage "Now playing in `#{item.voiceChannel.name}`:", 
+        m = await item.textChannel.sendMessage "Now playing in `#{item.voiceChannel.name}`:",
                                         false,
                                         @hud.nowPlayingEmbed(instance, item)
         await delay(5000)

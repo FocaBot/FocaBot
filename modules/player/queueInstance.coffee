@@ -12,7 +12,7 @@ class AudioQueueInstance extends EventEmitter
     @nowPlaying = @data.nowPlaying
     @items = @data.items
     deserializeItems = (itm)=>
-      return if not itm 
+      return if not itm
       if itm.forEach
         arr = []
         itm.forEach (i)=> arr.push(deserializeItems(i))
@@ -63,7 +63,6 @@ class AudioQueueInstance extends EventEmitter
     stream.on 'end', ()=>
       if item.status isnt 'paused' or not item.skipped
         @nextItem()
-        @emit 'end', item
 
   getFlags: (item)=>
     return {} if not item.filters or not item.filters.length

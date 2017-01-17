@@ -28,6 +28,8 @@ class ConfigCommands
         integer: true
         min: 60
         max: 3600
+      dynamicNick:
+        type: Boolean
     }
 
     @module.registerCommand 'config', { adminOnly: true, argSeparator: ' ' }, (msg,args,d)=>
@@ -51,7 +53,7 @@ class ConfigCommands
         title: msg.guild.name
         fields: [
           { name: 'Parameter', value: args[0], inline: true }
-          { name: 'Current Value', value: d.data[args[0]], inline: true }          
+          { name: 'Current Value', value: d.data[args[0]], inline: true }
         ]
       } if not args[1]
       param = @params[args[0]]
@@ -82,8 +84,8 @@ class ConfigCommands
         color: 0x00AAFF
         fields: [
           { name: 'Parameter', value: args[0], inline: true }
-          { name: 'Current Value', value: d.data[args[0]], inline: true }          
+          { name: 'Current Value', value: d.data[args[0]], inline: true }
         ]
       }
-  
+
 module.exports = ConfigCommands

@@ -18,6 +18,7 @@ Guild = Core.db.createModel "Guild", {
   greet: type.string().default('off')
   farewell: type.string().default('off')
   maxSongLength: type.number().default(1800) # 30 minutes
+  dynamicNick: type.boolean.default(false)
 }
 
 class ConfigModule extends BotModule
@@ -38,12 +39,12 @@ class ConfigModule extends BotModule
           restrict: false
           allowWaifus: true
         }
-      } if not guild 
+      } if not guild
       return Promise.resolve @_guilds[guild.id] if @_guilds[guild.id]
       # Find Guild in the DB
       guilds = await Guild.filter({ discordId: guild.id }).run()
       if guilds[0]
-        data = guilds[0] 
+        data = guilds[0]
       # Create one if not present
       else
         data = await new Guild({
@@ -83,7 +84,7 @@ class ConfigModule extends BotModule
         origCommandHandler.call(@, msg)
       catch e
         Core.log e,2
-    
+
     @commands = new Commands @
 
 module.exports = ConfigModule
