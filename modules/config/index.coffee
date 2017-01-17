@@ -18,7 +18,7 @@ Guild = Core.db.createModel "Guild", {
   greet: type.string().default('off')
   farewell: type.string().default('off')
   maxSongLength: type.number().default(1800) # 30 minutes
-  dynamicNick: type.boolean.default(false)
+  dynamicNick: type.boolean().default(false)
 }
 
 class ConfigModule extends BotModule
