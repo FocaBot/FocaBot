@@ -57,6 +57,8 @@ class AudioQueueInstance extends EventEmitter
 
   play: (flags={}, offset=0, item=@nowPlaying)=>
     stream = await @audioPlayer.play item.voiceChannel, item.path, flags, offset
+    # Set bot as self deafen
+    item.voiceChannel.join(false, true)
     item.status = 'playing'
     @emit 'playing', item
     @emit 'start', item if offset is 0
