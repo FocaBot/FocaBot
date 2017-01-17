@@ -80,7 +80,7 @@ class AudioQueueManager
       newNick = null
       if instance.nowPlaying
         title = instance.nowPlaying.title.substr(0, 28)
-        title = title.substr(0, 29) + '...' if instance.nowPlaying.title.length > 28
+        title = title.substr(0, 25) + '...' if instance.nowPlaying.title.length > 28
         switch instance.nowPlaying.status
           when 'playing'
             newNick = "▶ | " + title
