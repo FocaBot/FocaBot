@@ -15,7 +15,7 @@ class AudioHUD
     Now playing in **#{qI.voiceChannel.name}**:
     >`#{qI.title}` (#{@parseTime qI.duration}) #{@parseFilters qI.filters}
 
-    Requested by: **#{@getDisplayName qI.requestedBy}** 
+    Requested by: **#{@getDisplayName qI.requestedBy}**
     """
 
   swapItems: (user, items, indexes)=>
@@ -24,7 +24,7 @@ class AudioHUD
     ```fix
     * #{indexes[1]+1} -> #{indexes[0]+1}
       #{items[0].title}
-    
+
     * #{indexes[0]+1} -> #{indexes[1]+1}
       #{items[1].title}
     ```
@@ -63,7 +63,7 @@ class AudioHUD
     fstr = @parseFilters(item.filters)
     reply.description = "**Filters**: #{fstr}" if fstr
     reply
-  
+
   removeItem: (item, removedBy)=>
     reply =
       url: item.sauce
@@ -80,7 +80,7 @@ class AudioHUD
     if removedBy
       reply.footer =
         icon_url: removedBy.avatarURL
-        text: "Removed by #{@getDisplayName removedBy}" 
+        text: "Removed by #{@getDisplayName removedBy}"
     fstr = @parseFilters(item.filters)
     reply.description = "**Filters**: #{fstr}" if fstr
     reply
@@ -109,7 +109,7 @@ class AudioHUD
         icon_url: qI.requestedBy.avatarURL
       fields: [
         { inline: true, name: 'Length', value: @parseTime qI.duration }
-        
+
       ]
     }
     if qI.filters and qI.filters.length
@@ -119,6 +119,10 @@ class AudioHUD
   queue: (q, page=1)=>
 
     return { description: 'Nothing currently on queue.' } if not q.items.length
+
+    # Calculate total time
+    totalTime = 0
+    totalTime += el.duration for el in q.items
 
     itemsPerPage = 10
     pages = Math.ceil(q.items.length / itemsPerPage)
@@ -130,7 +134,7 @@ class AudioHUD
       title: "Up next"
       description: ''
       footer:
-        text: "#{q.items.length} total items. (Page #{page}/#{pages})"
+        text: "#{q.items.length} total items. [#{@parseTime totalTime}] (Page #{page}/#{pages})"
     }
 
     offset = (page-1) * itemsPerPage
@@ -139,10 +143,10 @@ class AudioHUD
     for qI, i in q.items.slice offset, max
       r.description += "**#{offset+i+1}.** [#{qI.title}](#{qI.sauce}) #{@parseFilters qI.filters}" +
                         "(#{@parseTime qI.duration}) Requested By #{@getDisplayName qI.requestedBy}\n"
-    
+
     r.description += "Use #{@prefix}queue #{page+1} to see the next page." if page < pages
     r
-  
+
   ###
   # Functions
   ###
