@@ -79,11 +79,13 @@ class AudioQueueManager
       currentNick = Core.bot.User.memberOf(guild).nick
       newNick = null
       if instance.nowPlaying
+        title = instance.nowPlaying.title.substr(0, 28)
+        title = title.substr(0, 29) + '...' if instance.nowPlaying.title.length > 28
         switch instance.nowPlaying.status
           when 'playing'
-            newNick = "▶ | " + instance.nowPlaying.title.substr(0, 28)
+            newNick = "▶ | " + title
           when 'paused', 'suspended'
-            newNick = "⏸ | " + instance.nowPlaying.title.substr(0, 28)
+            newNick = "⏸ | " + title
       if currentNick isnt newNick
         Core.bot.User.memberOf(guild).setNickname(newNick)
     # Event Messages
