@@ -134,7 +134,7 @@ class AudioHUD
       title: "Up next"
       description: ''
       footer:
-        text: "#{q.items.length} total items. [#{@parseTime totalTime}] (Page #{page}/#{pages})"
+        text: "#{q.items.length} total items (#{@parseTime totalTime}). Page #{page}/#{pages}"
     }
 
     offset = (page-1) * itemsPerPage
