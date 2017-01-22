@@ -14,3 +14,5 @@ class GiphyModule extends BotModule {
       return msg.reply 'No results' if not data.length
       msg.reply @chance.pickone(data).url
 }
+
+module.exports = GiphyModule
