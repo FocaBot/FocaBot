@@ -4,7 +4,7 @@ Giphy = require('request-promise').defaults {
   simple: true
 }
 
-class GiphyModule extends BotModule {
+class GiphyModule extends BotModule
   init: =>
     @chance = new Chance()
 
@@ -13,6 +13,5 @@ class GiphyModule extends BotModule {
         { data } = await Giphy.get('search', { qs: { q, api_key: 'dc6zaTOxFJmzC' } })
       return msg.reply 'No results' if not data.length
       msg.reply @chance.pickone(data).url
-}
 
 module.exports = GiphyModule
