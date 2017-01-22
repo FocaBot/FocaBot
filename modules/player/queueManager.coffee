@@ -100,7 +100,7 @@ class AudioQueueManager
       return if item.playlist
       try item.textChannel.sendMessage 'Added to the queue:',
                                        false,
-                                       @hud.addItem(item, instance.items.length)
+                                       @hud.addItem(item, instance)
     @instances[guild.id] = instance
     instance
 

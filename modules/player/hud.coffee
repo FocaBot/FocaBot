@@ -43,7 +43,11 @@ class AudioHUD
   # Embeds
   ###
 
-  addItem: (item, pos)=>
+  addItem: (item, q)=>
+    pos = q.items.length
+    # Calculate estimated time
+    estimated = 0
+    estimated += el.duration for el in q.items
     reply =
       url: item.sauce
       color: 0xAAFF00
@@ -56,6 +60,7 @@ class AudioHUD
       fields: [
         { name: 'Length:', value: "#{@parseTime item.duration}\n‌‌ ", inline: true }
         { name: 'Position in queue:', value: "##{pos}", inline: true }
+        { name: 'Estimated time before playback:', value: @parseTime(estimated)} if estimated
       ]
       footer:
         icon_url: item.requestedBy.avatarURL
