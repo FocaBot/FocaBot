@@ -10,8 +10,8 @@ class GiphyModule extends BotModule
 
     @registerCommand 'giphy', { aliases: ['gif'], allowDM: true }, (msg, q)=>
       try
-        { data } = await Giphy.get('search', { qs: { q, api_key: 'dc6zaTOxFJmzC' } })
+        { data } = await Giphy.get('search', { json: true, qs: { q, api_key: 'dc6zaTOxFJmzC' } })
       return msg.reply 'No results' if not data.length
-      msg.reply @chance.pickone(data).url
+      msg.reply @chance.pickone(data).bitly_url
 
 module.exports = GiphyModule
