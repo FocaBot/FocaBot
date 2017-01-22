@@ -46,7 +46,7 @@ class AudioHUD
   addItem: (item, q)=>
     pos = q.items.length
     # Calculate estimated time
-    estimated = 0
+    estimated = -item.duration
     estimated += el.duration for el in q.items
     reply =
       url: item.sauce
