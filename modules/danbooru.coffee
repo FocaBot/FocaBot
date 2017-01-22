@@ -1,4 +1,3 @@
-request = require 'request'
 { type } = Core.db
 
 danbooru = require('request-promise').defaults {
@@ -94,7 +93,7 @@ class DanbooruModule extends BotModule
         # Make a safebooru search
         try
           r = await safebooru.get('/posts.json', { json: true, qs: { random: true, tags: 'solo ' + w.waifu } })
-          throw 'No results' if not r.length 
+          throw 'No results' if not r.length
         catch
           r = await safebooru.get('/posts.json', { json: true, qs: { tags: 'solo ' + w.waifu } })
         return msg.reply 'No results.' if not r.length
