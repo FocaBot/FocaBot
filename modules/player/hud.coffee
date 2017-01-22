@@ -67,13 +67,13 @@ class AudioHUD
       fields: [
         { name: 'Length:', value: "#{@parseTime item.duration}\n‌‌ ", inline: true }
         { name: 'Position in queue:', value: "##{pos}", inline: true }
-        { name: 'Estimated time before playback:', value: @parseTime(estimated)} if estimated
       ]
       footer:
         icon_url: item.requestedBy.avatarURL
         text: "Requested by #{@getDisplayName item.requestedBy}"
     fstr = @parseFilters(item.filters)
     reply.description = "**Filters**: #{fstr}" if fstr
+    reply.fields.push { name: 'Estimated time before playback:', value: @parseTime(estimated)} if estimated
     reply
 
   removeItem: (item, removedBy)=>
