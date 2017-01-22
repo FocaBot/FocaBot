@@ -30,7 +30,8 @@ class AudioQueueManager
         return if not queue or not queue.nowPlaying or e.channelId isnt queue.nowPlaying.voiceChannel.id
         if e.channel.members.length > 1 and queue.nowPlaying.status is 'suspended'
           queue.nowPlaying.status = 'paused'
-          queue.resume()
+          try
+            queue.resume()
 
   initFeed: =>
     @feed = await GuildQueue.changes()

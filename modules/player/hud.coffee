@@ -47,6 +47,13 @@ class AudioHUD
     pos = q.items.length
     # Calculate estimated time
     estimated = -item.duration
+    # Get current timestamp
+    if q.nowPlaying
+      try
+        tS = q.audioPlayer.timestamp or null
+      catch
+        tS = q.getTransformedTimestamp(q.nowPlaying, q.nowPlaying.time) or null
+      estimated += q.nowPlaying.duration - tS
     estimated += el.duration for el in q.items
     reply =
       url: item.sauce
