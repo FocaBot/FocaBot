@@ -1,6 +1,6 @@
 {
   "name": "discord-foca-bot",
-  "version": "0.6.0",
+  "version": "0.5.5",
   "description": "Music with Seals!",
   "main": "main.coffee",
   "scripts": {

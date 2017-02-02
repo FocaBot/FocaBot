@@ -8,7 +8,7 @@ class HelpModule extends BotModule
     pfx = d.data.prefix or @prefix
     gstr = ""
     if msg.guild
-      gstr = "\n**Prefix for #{msg.guild.name}**: `#{pfx}`"
+      gstr = "\n**Prefix for #{msg.guild.name}**: `#{pfx}`\n"
     msg.channel.sendMessage '', false, {
       url: 'https://focabot.thebit.link/'
       color: 0x00AAFF if not Core.settings.debug
@@ -18,16 +18,15 @@ class HelpModule extends BotModule
         icon_url: Core.bot.User.avatarURL
       }
       description: """
-      Running FocaBotCore #{@engine.version}
-      #{gstr}
-      #{process.env.HELP_MESSAGE or ''}
+      #{gstr}#{process.env.HELP_MESSAGE or ''}
       """
       fields: [
         {
           name: 'Help Links:',
           value: "[Commands](https://focabot.thebit.link/commands?prefix=#{encodeURIComponent pfx}) / " +
           "[Filters](https://focabot.thebit.link/filters?prefix=#{encodeURIComponent pfx}) / " +
-          "[Manual](https://focabot.thebit.link/manual)"
+          "[Manual](https://focabot.thebit.link/manual) / " +
+          "[GitHub](https://github.com/FocaBot)"
         }
       ]
       footer:
