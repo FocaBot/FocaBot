@@ -8,25 +8,37 @@ class HelpModule extends BotModule
     pfx = d.data.prefix or @prefix
     gstr = ""
     if msg.guild
-      gstr = "\nPrefix for `#{msg.guild.name}`: #{pfx}"
-    reply = """
-    **#{@engine.settings.name} #{@engine.settings.version}**
-    Running FocaBotCore #{@engine.version}
-    #{gstr}
-    
-    #{process.env.HELP_MESSAGE or ''}
-
-    Changelog: https://thebitlink.gitbooks.io/focabot-docs/content/Changelog.html
-    Command List: https://thebitlink.gitbooks.io/focabot-docs/content/Commands.html
-    Audio Filters: https://thebitlink.gitbooks.io/focabot-docs/content/Filters.html
-    Configuration: https://thebitlink.gitbooks.io/focabot-docs/content/Configuration.html
-    """
-    msg.author.openDM().then (dm)=>
-      dm.sendMessage reply
-      msg.reply 'Check your DMs!' if msg.channel.guild_id
-    
+      gstr = "\n**Prefix for #{msg.guild.name}**: `#{pfx}`"
+    msg.channel.sendMessage '', false, {
+      url: 'https://focabot.thebit.link/'
+      color: 0x00AAFF if not Core.settings.debug
+      color: 0xFF3300 if Core.settings.debug
+      author: {
+        name: "#{@engine.settings.name} #{@engine.settings.version}"
+        icon_url: Core.bot.User.avatarURL
+      }
+      description: """
+      Running FocaBotCore #{@engine.version}
+      #{gstr}
+      #{process.env.HELP_MESSAGE or ''}
+      """
+      fields: [
+        {
+          name: 'Help Links:',
+          value: "[Commands](https://focabot.thebit.link/commands?prefix=#{encodeURIComponent pfx}) / " +
+          "[Filters](https://focabot.thebit.link/filters?prefix=#{encodeURIComponent pfx}) / " +
+          "[Manual](https://focabot.thebit.link/manual)"
+        }
+      ]
+      footer:
+        icon_url: "https://cdn.discordapp.com/avatars/164588804362076160/a_fb8ec7f2fefd17b5759a403e18f27929.jpg"
+        text: "Made by TheBITLINK#3141"
+    }
+    # msg.author.openDM().then (dm)=>
+    #   dm.sendMessage reply
+    #   msg.reply 'Check your DMs!' if msg.channel.guild_id
 
   filtersCommandFunction: (msg,args)=>
-    msg.reply 'To learn more about audio filters, check this link: https://thebitlink.gitbooks.io/focabot-docs/content/Filters.html'
+    msg.reply 'To learn more about audio filters, check this link: https://focabot.thebit.link/filters?prefix=#{encodeURIComponent pfx}'
 
 module.exports = HelpModule
