@@ -59,6 +59,7 @@ class AudioHUD
       url: item.sauce
       color: 0xAAFF00
       title: '[click for sauce]'
+      description: '[[donate]](https://tblnk.me/focabot-donate/)'
       author:
         name: item.title
         icon_url: @getIcon item.sauce
@@ -81,6 +82,7 @@ class AudioHUD
       url: item.sauce
       color: 0xF44277
       title: '[click for sauce]'
+      description: '[[donate]](https://tblnk.me/focabot-donate/)'
       author:
         name: item.title
         icon_url: @getIcon item.sauce
@@ -113,7 +115,10 @@ class AudioHUD
         icon_url: @getIcon qI.sauce
       url: qI.sauce
       title: '[click for sauce]'
-      description: @generateProgressOuter q, qI
+      description: """
+      [[donate]](https://tblnk.me/focabot-donate/)
+      #{@generateProgressOuter q, qI}
+      """
       thumbnail:
         url: qI.thumbnail
       footer:

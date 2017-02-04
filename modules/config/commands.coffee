@@ -39,7 +39,7 @@ class ConfigCommands
             name: r
           title: '[Click for help]'
           color: 0xFF3300
-          url: 'https://thebitlink.gitbooks.io/focabot-docs/content/Configuration.html'
+          url: 'https://focabot.thebit.link/manual#configuration'
         }
       return msg.reply """
       Usage:
