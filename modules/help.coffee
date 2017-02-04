@@ -38,6 +38,6 @@ class HelpModule extends BotModule
     #   msg.reply 'Check your DMs!' if msg.channel.guild_id
 
   filtersCommandFunction: (msg,args)=>
-    msg.reply 'To learn more about audio filters, check this link: https://focabot.thebit.link/filters?prefix=#{encodeURIComponent pfx}'
+    msg.reply "To learn more about audio filters, check this link: https://focabot.thebit.link/filters?prefix=#{encodeURIComponent pfx}"
 
 module.exports = HelpModule
