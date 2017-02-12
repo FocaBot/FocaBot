@@ -3,7 +3,7 @@ AudioFilter = require './base'
 
 class VolumeFilter extends AudioFilter
   constructor: (@param, member)->
-    super
+    super()
     @name = 'volume'
     @display = '[Volume]'
     throw "[Volume] Not enough permissions to use this filter" if not permissions.isDJ member
@@ -13,5 +13,5 @@ class VolumeFilter extends AudioFilter
     @FFMPEGFilter = @escape "volume=#{@gain}dB"
     @display = "[#{@gain}dB]"
     true
-  
+
 module.exports = VolumeFilter

@@ -2,7 +2,7 @@ AudioFilter = require './base'
 
 class TempoFilter extends AudioFilter
   constructor: (@param, member, playing, filters)->
-    super
+    super()
     @name = 'tempo'
     @display = '[Tempo]'
 
@@ -14,5 +14,5 @@ class TempoFilter extends AudioFilter
     @display = "[#{@speed}x Tempo]"
     @timeModifier = "{n} / #{@speed}"
     @inverseTime = "{n} * #{@speed}"
-  
+
 module.exports = TempoFilter

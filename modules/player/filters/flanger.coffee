@@ -2,7 +2,7 @@ AudioFilter = require './base'
 
 class FlangerFilter extends AudioFilter
   constructor: (@param)->
-    super
+    super()
     @name = 'flanger'
     @display = '[Flanger]'
 
@@ -11,5 +11,5 @@ class FlangerFilter extends AudioFilter
     throw '[Flanger] Speed must not be lower than 0.1' if @speed < 0.1
     @FFMPEGFilter = @escape "flanger=speed=#{@speed}"
     @display = "[Flanger #{@speed}]"
-  
+
 module.exports = FlangerFilter

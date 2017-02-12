@@ -4,7 +4,7 @@ AudioFilter = require './base'
 
 class LoopFilter extends AudioFilter
   constructor: (@param, member, playing, filters)->
-    super
+    super()
     @name = 'loop'
     @display = '[Loop]'
     @avoidRuntime = true
@@ -22,5 +22,5 @@ class LoopFilter extends AudioFilter
     @display = "[Looped from #{@start}s to #{@length + @start}s #{@loops} times]"
     @timeModifier = "{n} + (#{@length}*#{@loops})"
     @inverseTime = "0"
-  
+
 module.exports = LoopFilter

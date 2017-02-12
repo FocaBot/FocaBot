@@ -2,7 +2,7 @@ AudioFilter = require './base'
 
 class HighPassFilter extends AudioFilter
   constructor: (@param)->
-    super
+    super()
     @name = 'highpass'
     @display = '[HighPass]'
 
@@ -12,5 +12,5 @@ class HighPassFilter extends AudioFilter
     throw '[HighPass] Frequency must not be lower than 100' if @frq < 100
     @FFMPEGFilter = @escape "highpass=f=#{@frq}"
     @display = "[HighPass@#{@frq}Hz]"
-  
+
 module.exports = HighPassFilter

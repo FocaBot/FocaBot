@@ -1,8 +1,8 @@
 AudioFilter = require './base'
 
-class LowPassFilter extends AudioFilter  
+class LowPassFilter extends AudioFilter
   constructor: (@param)->
-    super
+    super()
     @name = 'lowpass'
     @display = '[LowPass]'
 
@@ -11,5 +11,5 @@ class LowPassFilter extends AudioFilter
     throw '[LowPass] Frequency must not be lower than 100' if @frq < 100
     @FFMPEGFilter = @escape "lowpass=f=#{@frq}"
     @display = "[LowPass@#{@frq}Hz]"
-  
+
 module.exports = LowPassFilter

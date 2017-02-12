@@ -3,7 +3,7 @@ AudioFilter = require './base'
 
 class BassFilter extends AudioFilter
   constructor: (@param, member)->
-    super
+    super()
     @name = 'bass'
     @display = '[Bass]'
 
@@ -13,5 +13,5 @@ class BassFilter extends AudioFilter
     throw '[Bass] Gain must not be lower than -20' if @gain< -20
     @FFMPEGFilter = @escape "bass=g=#{@gain}"
     @display = "[#{@gain}x Bass]"
-  
+
 module.exports = BassFilter
