@@ -81,7 +81,7 @@ class AudioModuleCommands
     @m.registerCommand 'np', { aliases: ['nowplaying'] }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
       return 'Nothing being played.' if not queue.nowPlaying
-      m = await msg.channel.sendMessage "Now playing in `#{queue.nowPlaying.voiceChannel.name}`:", 
+      m = await msg.channel.sendMessage "Now playing in `#{queue.nowPlaying.voiceChannel.name}`:",
                                         false,
                                         @hud.nowPlayingEmbed(queue, queue.nowPlaying)
       if d.data.autoDel
@@ -120,7 +120,7 @@ class AudioModuleCommands
       else m = await msg.reply "Here's the sauce of the current item: #{queue.nowPlaying.sauce}"
       await delay(15000)
       m.delete() if d.data.autoDel
-    
+
     # Remove Last / Undo
     @m.registerCommand 'removelast', { aliases: ['undo'] }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild

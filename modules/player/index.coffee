@@ -32,12 +32,12 @@ class PlayerModule extends BotModule
 
     # Check for video length
     duration = @parseTime info.duration
-    if (duration > gdata.data.maxSongLength and not @permissions.isDJ(msg.author, msg.guild)) or 
+    if (duration > gdata.data.maxSongLength and not @permissions.isDJ(msg.author, msg.guild)) or
        (duration > 7200  and not @permissions.isAdmin(msg.author, msg.guild)) or
        (duration > 43200 and not @permissions.isOwner(msg.author))
         return if playlist
         return msg.reply 'The requested song is too long.'
-    
+
     # Apply filters
     try
       filters = @getFilters(args[1], msg.member)
@@ -45,7 +45,7 @@ class PlayerModule extends BotModule
       if typeof errors is 'string'
         return if playlist
         return msg.reply 'A filter reported errors:', false, { description: errors, color: 0xFF0000 }
-    
+
     # Add to queue
     queue.addToQueue({
       title: info.title
@@ -59,6 +59,10 @@ class PlayerModule extends BotModule
       duration
       filters
     })
+
+    # Skip if there was a previous item playing prior to a bot restart
+    if queue.nowPlaying and queue.nowPlaying.status is 'playing' and not queue.audioPlayer.encoderStream
+      queue.nextItem()
 
   getAdditionalMetadata: (info)=> new Promise (resolve, reject)=>
     return resolve(info) if isFinite info.duration
