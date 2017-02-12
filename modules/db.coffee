@@ -8,6 +8,8 @@ class DataBaseModule extends BotModule
       port: process.env.DB_PORT
       authKey: process.env.DB_AUTH
       db: process.env.DB_NAME
+      user: process.env.DB_USER
+      password: process.env.DB_PASS
     }
 
 module.exports = DataBaseModule
