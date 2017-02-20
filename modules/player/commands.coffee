@@ -83,7 +83,7 @@ class AudioModuleCommands
       return 'Nothing being played.' if not queue.nowPlaying
       m = await msg.channel.sendMessage "Now playing in `#{queue.nowPlaying.voiceChannel.name}`:",
                                         false,
-                                        @hud.nowPlayingEmbed(queue, queue.nowPlaying)
+                                        await @hud.nowPlayingEmbed(queue, queue.nowPlaying)
       if d.data.autoDel
         msg.delete()
         await delay(15000)
@@ -92,7 +92,7 @@ class AudioModuleCommands
     # View Queue
     @m.registerCommand 'queue', { aliases: ['q'] }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
-      m = await msg.channel.sendMessage @hud.nowPlaying(queue, queue.nowPlaying),
+      m = await msg.channel.sendMessage await @hud.nowPlaying(queue, queue.nowPlaying),
                                         false,
                                         @hud.queue(queue, parseInt(args) or 1)
       if d.data.autoDel

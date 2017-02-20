@@ -30,7 +30,7 @@ class AudioQueueInstance extends EventEmitter
 
   addToQueue: (item)=>
     if item.path and item.voiceChannel
-      item.originalDuration = item.duration
+      item.originalDuration = item.duration or null
       item.duration = @getTransformedTimestamp(item)
       @items.push(item)
       @emit 'added', item
@@ -100,10 +100,11 @@ class AudioQueueInstance extends EventEmitter
     @emit 'updated'
 
   pause: =>
-    if not @nowPlaying? or not isFinite(@nowPlaying.duration) or @nowPlaying.status is 'paused' or @nowPlaying.status is 'suspended'
+    if not @nowPlaying? or (not isFinite(@nowPlaying.duration) and not @nowPlaying.radioStream) or @nowPlaying.status is 'paused' or @nowPlaying.status is 'suspended'
       return false
     try
-      @nowPlaying.time = @getTransformedTimestamp @nowPlaying, @audioPlayer.timestamp, true
+      if not @nowPlaying.radioStream
+        @nowPlaying.time = @getTransformedTimestamp @nowPlaying, @audioPlayer.timestamp, true
     catch
       @nowPlaying.time = 0
     @nowPlaying.status = 'paused'

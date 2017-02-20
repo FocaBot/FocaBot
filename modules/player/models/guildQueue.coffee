@@ -22,6 +22,7 @@ GuildQueue = Core.db.createModel 'GuildQueue', {
     thumbnail: type.string()
     originalDuration: type.number()
     voteSkip: [type.string()]
+    radioStream: type.boolean().default(false)
     status: type.string().default('playing')
     time: type.number()
   }
@@ -37,6 +38,7 @@ GuildQueue = Core.db.createModel 'GuildQueue', {
     sauce: type.string()
     thumbnail: type.string()
     originalDuration: type.number()
+    radioStream: type.boolean().default(false)
     status: type.string().default('queue')
   }]
 }

@@ -1,5 +1,6 @@
 moment = require 'moment'
 url = require 'url'
+{ spawn } = require 'child_process'
 
 class AudioHUD
   constructor: (@audioModule)->
@@ -10,10 +11,16 @@ class AudioHUD
   ###
 
   nowPlaying: (q, qI)=>
+    rD = ''
+    if qI.radioStream
+      meta = await @getRadioTrack(qI)
+      rD += "\n\n**__Radio Stream__**"
+      rD += "\n**Track Title:** `#{meta.current}`" if meta.current
+      rD += "\n**Next Track:** `#{meta.next}`" if meta.next
     """
     #{@generateProgressOuter q, qI}
     Now playing in **#{qI.voiceChannel.name}**:
-    >`#{qI.title}` (#{@parseTime qI.duration}) #{@parseFilters qI.filters}
+    >`#{qI.title}` (#{@parseTime qI.duration}) #{@parseFilters qI.filters}#{rD}
 
     Requested by: **#{@getDisplayName qI.requestedBy}**
     """
@@ -126,11 +133,15 @@ class AudioHUD
         icon_url: qI.requestedBy.avatarURL
       fields: [
         { inline: true, name: 'Length', value: @parseTime qI.duration }
-
       ]
     }
     if qI.filters and qI.filters.length
       r.fields.push { inline: true, name: 'Filters', value: @parseFilters qI.filters }
+    if qI.radioStream
+      meta = await @getRadioTrack(qI)
+      r.description += "\n**__Radio Stream__**"
+      r.description += "\n**Track Title:** `#{meta.current}`" if meta.current
+      r.description += "\n**Next Track:** `#{meta.next}`" if meta.next
     r
 
   queue: (q, page=1)=>
@@ -188,6 +199,9 @@ class AudioHUD
     cT = @parseTime tS
     iC = "▶"
     iC = "⏸" if qI.status is 'paused' or qI.status is 'suspended'
+    if qI.radioStream
+      iC = "📻"
+      cT = "--:--:--"
     """
     ```fix
      #{iC}  #{vI}  #{pB} #{cT}
@@ -197,15 +211,31 @@ class AudioHUD
   parseFilters: (filters)=>
     return "" if not filters
     filterstr = ""
-    filterstr += filter.display for filter in filters
+    filterstr += "\\" + filter.display for filter in filters
     filterstr
 
   parseTime: (seconds)=>
+    return '--:--:--' if not seconds
     return moment.utc(seconds * 1000).format("HH:mm:ss") if isFinite(seconds)
     '∞'
 
   getIcon: (u)=>
     uri = url.parse(u)
     "#{uri.protocol}//#{uri.host}/favicon.ico"
+
+  getRadioTrack: (qI)=> new Promise (resolve, reject)=>
+    d = ''
+    p = spawn('ffprobe', [qI.path, '-show_format', '-v', 'quiet', '-print_format', 'json'])
+    p.stdout.on 'data', (data)=> d += data
+    p.on 'close', (code)=>
+      return resolve { current: '???', next: '???' } if code
+      try
+        prop = JSON.parse(d).format
+        return resolve {
+          current: prop.tags.StreamTitle
+          next: prop.tags.StreamNext
+        }
+      catch
+        return resolve { current: '???', next: '???' }
 
 module.exports = AudioHUD

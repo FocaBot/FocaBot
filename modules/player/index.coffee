@@ -55,6 +55,7 @@ class PlayerModule extends BotModule
       path: info.url
       sauce: info.webpage_url
       thumbnail: info.thumbnail
+      radioStream: info.isRadioStream or false
       playlist
       duration
       filters
@@ -65,21 +66,25 @@ class PlayerModule extends BotModule
       queue.nextItem()
 
   getAdditionalMetadata: (info)=> new Promise (resolve, reject)=>
-    return resolve(info) if isFinite info.duration
-    spawn('ffprobe', [info.url, '-show_format', '-v', 'quiet']).stdout.on 'data', (data)=>
+    return resolve(info) if info.duration and isFinite(info.duration)
+    d = ""
+    p = spawn('ffprobe', [info.url, '-show_format', '-v', 'quiet', '-print_format', 'json'])
+    p.stdout.on 'data', (data)=> d += data
+    p.on 'close', (code)=>
+      return reject "Process exited with code #{code}" if code
       try
-        # Parse the output from FFProbe
-        prop = { }
-        pattern = /(.*)=(.*)/g
-        while match = pattern.exec data
-          prop[match[1]] = match[2]
+        prop = JSON.parse(d).format
         # Get the duration
-        info.duration = prop.duration
+        info.duration = prop.duration or NaN
         # Try to use metadata from the ID3 tags as well
-        if prop['TAG:title']
+        if prop.tags.title
           info.title = ''
-          info.title += "#{prop['TAG:artist']} - " if prop['TAG:artist']
-          info.title += prop['TAG:title']
+          info.title += "#{prop.tags.artist} - " if prop.tags.artist
+          info.title += prop.tags.title
+        # Is this an internet radio stream?
+        if prop.tags.StreamTitle or prop.tags['icy-name']
+          info.isRadioStream = true
+          info.title = prop.tags['icy-name'] if prop.tags['icy-name']
       resolve(info)
 
   getFilters: (arg, member, playing)=>

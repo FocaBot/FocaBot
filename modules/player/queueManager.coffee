@@ -94,7 +94,7 @@ class AudioQueueManager
       try
         m = await item.textChannel.sendMessage "Now playing in `#{item.voiceChannel.name}`:",
                                         false,
-                                        @hud.nowPlayingEmbed(instance, item)
+                                        await @hud.nowPlayingEmbed(instance, item)
         await delay(5000)
         m.delete() if instance.guildData.data.autoDel
     instance.on 'added', (item)=>
