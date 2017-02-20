@@ -113,10 +113,13 @@ class AudioQueueInstance extends EventEmitter
     true
 
   resume: =>
-    if not @nowPlaying? or not isFinite(@nowPlaying.duration) or @nowPlaying.status isnt 'paused'
+    if not @nowPlaying? or (not isFinite(@nowPlaying.duration) and not @nowPlaying.radioStream) or @nowPlaying.status isnt 'paused'
       return false
 
     flags = @getFlags(@nowPlaying)
+    if @nowPlaying.radioStream
+      await @play()
+      return @emit 'updated'
     if @nowPlaying.time isnt 0
       if flags.input
         flags.input = flags.input.concat ['-ss', @nowPlaying.time]
