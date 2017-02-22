@@ -12,7 +12,7 @@ class AudioModuleCommands
     @m = @audioModule
 
     # Play
-    @m.registerCommand 'play', { argSeparator: '|' }, (msg,args,data)=>
+    @m.registerCommand 'play', { aliases: ['p'], argSeparator: '|' }, (msg,args,data)=>
       return msg.reply 'No video specified.' if not args[0].trim() and not msg.attachments[0]
       return msg.reply 'You must be in a voice channel to request songs.' if not msg.member.getVoiceChannel()
       # Use first attachment if present
@@ -78,7 +78,7 @@ class AudioModuleCommands
       queue.resume()
 
     # Now Playing (np)
-    @m.registerCommand 'np', { aliases: ['nowplaying'] }, (msg, args, d)=>
+    @m.registerCommand 'np', { aliases: ['nowplaying', 'n'] }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
       return 'Nothing being played.' if not queue.nowPlaying
       m = await msg.channel.sendMessage "Now playing in `#{queue.nowPlaying.voiceChannel.name}`:",
@@ -112,7 +112,7 @@ class AudioModuleCommands
         m.delete() if d.data.autoDel
 
     # Sauce
-    @m.registerCommand 'sauce', (msg, args, d)=>
+    @m.registerCommand 'sauce', { aliases: ['src'] }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
       return msg.channel.sendMessage "Nothing being played on the current server." if not queue.nowPlaying
       if not queue.nowPlaying.sauce
@@ -122,7 +122,7 @@ class AudioModuleCommands
       m.delete() if d.data.autoDel
 
     # Remove Last / Undo
-    @m.registerCommand 'removelast', { aliases: ['undo'] }, (msg, args, d)=>
+    @m.registerCommand 'removelast', { aliases: ['undo', 'rl'] }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
       return msg.channel.sendMessage 'The queue is empty.' if not queue.items.length
       [..., last] = queue.items
@@ -138,7 +138,7 @@ class AudioModuleCommands
         m.delete() if d.data.autoDel
 
     # Remove
-    @m.registerCommand 'remove', (msg, args, d)=>
+    @m.registerCommand 'remove', { aliases: ['rm'] }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
       index = (parseInt args) - 1
       itm = queue.items[index]
@@ -159,7 +159,7 @@ class AudioModuleCommands
         m.delete() if d.data.autoDel
 
     # Swap
-    @m.registerCommand 'swap', { djOnly: true, argSeparator: ' ' }, (msg, args, d)=>
+    @m.registerCommand 'swap', { aliases: ['sw'], djOnly: true, argSeparator: ' ' }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
       return msg.channel.sendMessage "Invalid arguments provided." if args.length < 2
       indexes = [parseInt(args[0])-1, parseInt(args[1])-1]
@@ -169,7 +169,7 @@ class AudioModuleCommands
       msg.channel.sendMessage @hud.swapItems msg.member, items, indexes
 
     # Move
-    @m.registerCommand 'move', { djOnly: true, argSeparator: ' ' }, (msg, args)=>
+    @m.registerCommand 'move', { aliases: ['mv'], djOnly: true, argSeparator: ' ' }, (msg, args)=>
       queue = await @q.getForGuild msg.guild
       return msg.channel.sendMessage "Invalid arguments provided." if args.length < 2
       indexes = [parseInt(args[0])-1, parseInt(args[1])-1]
@@ -179,7 +179,7 @@ class AudioModuleCommands
       msg.channel.sendMessage @hud.moveItem msg.member, item, indexes
 
     # Seek
-    @m.registerCommand 'seek', (msg, args)=>
+    @m.registerCommand 'seek', { aliases: ['s'] }, (msg, args)=>
       queue = await @q.getForGuild msg.guild
       return if not isFinite queue.nowPlaying.duration
       return if not @permissions.isDJ(msg.author, msg.guild) and msg.author.id isnt queue.nowPlaying.requestedBy.id
