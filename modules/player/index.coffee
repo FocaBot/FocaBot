@@ -21,7 +21,7 @@ class PlayerModule extends BotModule
 
     # Check for video length
     duration = @parseTime info.duration
-    if @checkLength(duration, msg)
+    if @checkLength(duration, msg, gdata)
       msg.reply('The requested video is too long') unless playlist
       return
 
@@ -64,7 +64,7 @@ class PlayerModule extends BotModule
       await @handleVideoInfo(v, msg, args, gdata, true)
     return
 
-  checkLength: (duration, msg)=>
+  checkLength: (duration, msg, gdata)=>
     unless isFinite(duration) and duration > 0
       return 2 unless @permissions.isDJ(msg.members)
     if (duration > gdata.data.maxSongLength and not @permissions.isDJ(msg.member)) or
