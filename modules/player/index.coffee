@@ -66,7 +66,7 @@ class PlayerModule extends BotModule
 
   checkLength: (duration, msg, gdata)=>
     unless isFinite(duration) and duration > 0
-      return 2 unless @permissions.isDJ(msg.members)
+      return 2 unless @permissions.isDJ(msg.member)
     if (duration > gdata.data.maxSongLength and not @permissions.isDJ(msg.member)) or
       (duration > 7200  and not @permissions.isAdmin(msg.member)) or
       (duration > 43200 and not @permissions.isOwner(msg.author))
