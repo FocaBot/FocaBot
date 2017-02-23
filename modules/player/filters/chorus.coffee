@@ -1,7 +1,7 @@
 AudioFilter = require './base'
 
 class ChorusFilter extends AudioFilter
-  constructor:->
+  constructor: ->
     super()
     @name = 'chorus'
     @display = '[Chorus]'

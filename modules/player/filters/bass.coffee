@@ -7,7 +7,7 @@ class BassFilter extends AudioFilter
     @name = 'bass'
     @display = '[Bass]'
 
-    throw "[Bass] Not enough permissions to use this filter" if not permissions.isDJ member
+    throw '[Bass] Not enough permissions to use this filter' unless permissions.isDJ(member)
     @gain = parseInt(@param) or 2
     throw '[Bass] Gain must not be higher than 20' if @gain > 20
     throw '[Bass] Gain must not be lower than -20' if @gain< -20

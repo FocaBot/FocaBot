@@ -1,7 +1,7 @@
 AudioFilter = require './base'
 
 class ReverseFilter extends AudioFilter
-  constructor:->
+  constructor: ->
     super()
     @name = 'reverse'
     @display = '[Reversed]'

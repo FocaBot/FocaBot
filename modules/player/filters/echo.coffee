@@ -1,7 +1,7 @@
 AudioFilter = require './base'
 
 class EchoFilter extends AudioFilter
-  constructor:->
+  constructor: ->
     super()
     @name = 'echo'
     @display = '[Echo]'

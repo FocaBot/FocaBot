@@ -1,7 +1,7 @@
 AudioFilter = require './base'
 
 class PhaserFilter extends AudioFilter
-  constructor:->
+  constructor: ->
     super()
     @name = 'phaser'
     @display = '[Phaser]'
