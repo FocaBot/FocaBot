@@ -12,9 +12,9 @@ class TagModule extends BotModule
   init: =>
     { @permissions } = @engine
 
-    @registerCommand '+', {argSeparator: ' '}, (msg, args, d)=>
+    @registerCommand '+', { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 2
-      return if not d.data.allowTags and not @permissions.isDJ msg.member
+      return unless d.data.allowTags or @permissions.isDJ msg.member
       tag = new Tag {
         key: args[0].toLowerCase()
         reply: args.slice(1).join(' ')
@@ -23,9 +23,9 @@ class TagModule extends BotModule
       tag.save().then =>
         msg.reply 'Tag saved!'
 
-    @registerCommand '-', {argSeparator: ' '}, (msg, args, d)=>
+    @registerCommand '-', { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 1
-      return if not d.data.allowTags and not @permissions.isDJ msg.member
+      return unless d.data.allowTags or @permissions.isDJ msg.member
       q = { by: msg.author.id, key: args[0] }
       if args.length > 1
         if args[1].toLowerCase() is 'all' and @permissions.isOwner msg.author
@@ -38,9 +38,9 @@ class TagModule extends BotModule
         msg.reply "Deleted #{results.length} tag(s)!"
         result.delete() for result in results
 
-    @registerCommand "!", { argSeparator: ' ' }, (msg, args, d)=>
+    @registerCommand '!', { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 1
-      return if not d.data.allowTags and not @permissions.isDJ msg.member
+      return unless d.data.allowTags or @permissions.isDJ msg.member
       Tag.filter({ key: args[0].toLowerCase() }).run().then (results)=>
         chance = new Chance()
         tag = chance.pickone results
@@ -49,11 +49,11 @@ class TagModule extends BotModule
     @registerCommand 'taginfo', { ownerOnly: true, argSeparator: ' ' }, (msg, args, data, bot)=>
       return if msg.author.bot or args.length < 1
       Tag.filter({ key: args[0].toLowerCase() }).run().then (results)=>
-        r = ""
+        r = ''
         for tag in results
           try
             u = bot.Users.get(tag.by)
-            r += "\n(#{u.username}##{u.discriminator}): #{tag.reply.substr(0,32)}..."   
-        msg.channel.sendMessage r   
+            r += "\n(#{u.username}##{u.discriminator}): #{tag.reply.substr(0,32)}..."
+        msg.channel.sendMessage r
 
 module.exports = TagModule

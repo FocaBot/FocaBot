@@ -46,8 +46,8 @@ class ConfigCommands
       \`\`\`
       #{Core.settings.prefix}config <parameter> [value]
       \`\`\`
-      """ if not args[0]
-      return sendHelp 'Invalid Parameter.' if not @params[args[0]]
+      """ unless args[0]
+      return sendHelp 'Invalid Parameter.' unless @params[args[0]]
       # Send current value if not asked for new value
       return msg.reply '', false, {
         title: msg.guild.name
@@ -55,7 +55,7 @@ class ConfigCommands
           { name: 'Parameter', value: args[0], inline: true }
           { name: 'Current Value', value: d.data[args[0]], inline: true }
         ]
-      } if not args[1]
+      } unless args[1]
       param = @params[args[0]]
       value = args.slice(1).join(' ')
       switch param.type

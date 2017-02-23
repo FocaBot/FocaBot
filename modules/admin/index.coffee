@@ -4,7 +4,7 @@ request = require 'request'
 
 class AdminModule extends BotModule
   init: =>
-    {@permissions} = @engine
+    { @permissions } = @engine
     # Admin Commands
     adminOptions =
       adminOnly: true
@@ -27,7 +27,7 @@ class AdminModule extends BotModule
   setnickFunc: (msg, args)=>
     @bot.User.memberOf(msg.guild).setNickname args
     .then ()=>
-      msg.reply "Nickname changed succesfully!"
+      msg.reply 'Nickname changed succesfully!'
     .catch (error)=>
       console.error error
       msg.reply "Couldn't set nickname for the bot. Make sure it has enough permissions."
@@ -47,8 +47,8 @@ class AdminModule extends BotModule
     .then ()-> childProcess.exec('pm2 restart focaBot')
 
   updateFunc: (msg,args,d,bot)=>
-      @pullFunc msg,args,bot
-      .then ()=> @restartFunc msg,args,bot
+    @pullFunc msg, args, bot
+    .then ()=> @restartFunc msg,args,bot
 
   pullFunc: (msg,args,d,bot)=> @execFunc msg, 'git pull', bot
 
@@ -78,8 +78,8 @@ class AdminModule extends BotModule
     .then (e)=> bot.Messages.deleteMessages e.messages
 
   findFunc: (msg, args, d, bot)=>
-    return if not msg.author.id in ['188487822238416896', '226875158479110144'] and not @permissions.isOwner msg.author
-    rp = ""
+    return if not @permissions.isOwner msg.author
+    rp = ''
     msgs =  bot.Messages.filter (m)=>
       m.content.indexOf(args) >= 0 and
       m.guild.id is msg.guild.id and
@@ -88,7 +88,7 @@ class AdminModule extends BotModule
     .slice 0,10
     rp = "#{msg.member.mention} here's what i found for `#{args}`:\n"
     for ms in msgs
-      rp += "__(deleted)__ " if ms.deleted
+      rp += '__(deleted)__ ' if ms.deleted
       rp += "**#{ms.author.username}**: #{ms.content}\n"
     msg.channel.sendMessage rp
 

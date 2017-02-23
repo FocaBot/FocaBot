@@ -1,5 +1,5 @@
 class GreetModule extends BotModule
-  init:=>
+  init: =>
     { Dispatcher } = @engine.bot
 
     Dispatcher.on 'GUILD_MEMBER_ADD', (e)=>

@@ -36,11 +36,12 @@ class ImageModule extends BotModule
       includeCommandNameInArgs: true
     }, (msg, args, d)=>
       random = args[0].indexOf('rimg') >= 0
-      nsfw = (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0) and args[0].indexOf('imgn') >= 0
+      nsfw = (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0) and
+            args[0].indexOf('imgn') >= 0
 
       @getImages(args[1], nsfw).then (r)=>
-        return msg.reply 'No results.' if not r.items?
-        if not random
+        return msg.reply 'No results.' unless r.items?
+        unless random
           msg.reply '', false, {
             title: '[click for sauce]'
             url: r.items[0].image.contextLink
@@ -78,8 +79,8 @@ class ImageModule extends BotModule
       catch err
         if err.statusCode is 403
           return msg.reply 'Daily limit exceeded.'
-        msg.reply 'Something went wrong.'        
-  
+        msg.reply 'Something went wrong.'
+
   getImages: (query, nsfw)=>
     safe = 'high'
     safe = 'off' if nsfw
@@ -96,7 +97,7 @@ class ImageModule extends BotModule
           cx: process.env.GOOGLE_CX
           key: process.env.GOOGLE_KEY
           safe
-        }}
+        } }
         .then (resp)=>
           r.response = resp
           r.expires = new Date(Date.now() + 0x48190800) # 14 days

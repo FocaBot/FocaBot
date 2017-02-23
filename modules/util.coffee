@@ -10,7 +10,7 @@ class Util extends BotModule
     moment.duration {
       seconds: t[0]
       minutes: t[1]
-      hours:   t[2]
+      hours: t[2]
     }
     .asSeconds()
 

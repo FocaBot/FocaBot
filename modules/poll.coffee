@@ -4,7 +4,7 @@ class PollModule extends BotModule
   init: =>
     { @permissions } = @engine
 
-    @registerCommand 'poll', {argSeparator: '|'}, (msg, args)=>
+    @registerCommand 'poll', { argSeparator: '|' }, (msg, args)=>
       # Validate poll
       return msg.reply 'Too many answers!!.' if args.length > 16
       return msg.reply 'You need to specify at least 2 answers.' if args.length < 3
