@@ -1,4 +1,4 @@
-CoffeeScript = require 'coffee-script'
+CoffeeScript = require 'coffeescript'
 prune = require 'json-prune'
 format = require 'json-format'
 reload = require('require-reload')(require)
@@ -18,13 +18,13 @@ class EvalModule extends BotModule
       j = (obj, length)->
         pruned = prune obj, length
         p "\`\`\`json\n#{format(JSON.parse(pruned),formatSettings)}\n\`\`\`"
-      eval(CoffeeScript.compile(args, bare: true))
+      eval(CoffeeScript.compile("(=>#{args})()", bare: true))
     # JavaScript Eval Command
     @registerCommand 'jseval', evalOptions, (msg, args, d, bot, engine)->
       p = (text)-> msg.channel.sendMessage text
       j = (obj, length)->
         pruned = prune obj, length
         p "\`\`\`json\n#{format(JSON.parse(pruned),formatSettings)}\n\`\`\`"
-      eval args
+      eval "(async function () {#{args}})()"
 
 module.exports = EvalModule
