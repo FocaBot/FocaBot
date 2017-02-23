@@ -220,7 +220,7 @@ class AudioModuleCommands
     # Update Filters
     @m.registerCommand 'fx', { aliases: ['setfilters', 'updatefilters', '|'] }, (msg, args)=>
       queue = await @q.getForGuild msg.guild
-      return unless isFinite queue.nowPlaying.duration and queue.nowPlaying.duration > 0
+      return unless isFinite(queue.nowPlaying.duration) and queue.nowPlaying.duration > 0
       return unless @permissions.isDJ(msg.author, msg.guild) or
                     msg.author.id isnt queue.nowPlaying.requestedBy.id
       if queue.nowPlaying.filters
