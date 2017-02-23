@@ -11,23 +11,24 @@ class AudioQueueManager
     Core.bot.Dispatcher.on 'VOICE_CHANNEL_LEAVE', (e)=>
       try
         queue = @instances[e.guildId] if @instances[e.guildId]?
-        return if not queue or not queue.nowPlaying or e.channelId isnt queue.nowPlaying.voiceChannel.id
-        return queue.nextItem() if not e.channel
+        return unless queue.nowPlaying and
+                      e.channelId is queue.nowPlaying.voiceChannel.id
+        return queue.nextItem() unless e.channel
         # Handle Voice Channel Changes
         if e.user.id is Core.bot.User.id
           return queue.nextItem() if not e.newChannelId
           queue.nowPlaying.voiceChannel = Core.bot.Channels.get(e.newChannelId)
           queue.emit('updated')
-        if queue.nowPlaying.voiceChannel.members.length <= 1
+        if queue.nowPlaying.voiceChannel.members.length <= 1 and queue.pause()
           # No members left on voice channel.
-          if queue.pause()
-            queue.nowPlaying.status = 'suspended'
-            queue.emit('updated')
+          queue.nowPlaying.status = 'suspended'
+          queue.emit('updated')
+
     # Resume playback when a user re-joins
     Core.bot.Dispatcher.on 'VOICE_CHANNEL_JOIN', (e)=>
       try
         queue = @instances[e.guildId] if @instances[e.guildId]?
-        return if not queue or not queue.nowPlaying or e.channelId isnt queue.nowPlaying.voiceChannel.id
+        return unless queue.nowPlaying and e.channelId is queue.nowPlaying.voiceChannel.id
         if e.channel.members.length > 1 and queue.nowPlaying.status is 'suspended'
           queue.nowPlaying.status = 'paused'
           try
@@ -43,7 +44,8 @@ class AudioQueueManager
       if not d.isSaved() and @instances[d.guildId]
         delete @instances[d.guildId]
       else if @instances[d.guildId]?
-        @instances[d.guildId].update(d) if d.updatedBy isnt (process.env.NODE_APP_INSTANCE or '0')
+        if d.updatedBy isnt (process.env.NODE_APP_INSTANCE or '0')
+          @instances[d.guildId].update(d)
 
   getForGuild: (guild)=>
     return @instances[guild.id] if @instances[guild.id]?
@@ -76,17 +78,18 @@ class AudioQueueManager
       })
       instance.data.save()
       # Dynamic nickname
-      return if not gData.data.dynamicNick
+      return unless gData.data.dynamicNick
       currentNick = Core.bot.User.memberOf(guild).nick
       newNick = null
+      await delay(1000)
       if instance.nowPlaying
         title = instance.nowPlaying.title.substr(0, 28)
         title = title.substr(0, 25) + '...' if instance.nowPlaying.title.length > 28
         switch instance.nowPlaying.status
           when 'playing'
-            newNick = "▶ | " + title
+            newNick = '▶ | ' + title
           when 'paused', 'suspended'
-            newNick = "⏸ | " + title
+            newNick = '⏸ | ' + title
       if currentNick isnt newNick
         Core.bot.User.memberOf(guild).setNickname(newNick)
     # Event Messages

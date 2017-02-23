@@ -1,7 +1,7 @@
 preset = require './preset'
 filter = (name)-> require "./#{name}"
 
-module.exports = {
+module.exports =
   bass: filter 'bass'               # | bass=20                    [DJ]
   chorus: filter 'chorus'           # | chorus
   distort: filter 'distort'         # | distort=5
@@ -22,4 +22,3 @@ module.exports = {
   chipmunk: preset 'speed', '2.0'   # | chipmunk
   vaporwave: preset 'speed','0.75'  # | vaporwave
   earrape: preset 'volume', '25'    # | earrape                    [DJ]
-}

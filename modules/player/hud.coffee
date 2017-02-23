@@ -14,7 +14,7 @@ class AudioHUD
     rD = ''
     if qI.radioStream
       meta = await @getRadioTrack(qI)
-      rD += "\n\n**__Radio Stream__**"
+      rD += '\n\n**__Radio Stream__**'
       rD += "\n**Track Title:** `#{meta.current}`" if meta.current
       rD += "\n**Next Track:** `#{meta.next}`" if meta.next
     """
@@ -81,7 +81,10 @@ class AudioHUD
         text: "Requested by #{@getDisplayName item.requestedBy}"
     fstr = @parseFilters(item.filters)
     reply.description = "**Filters**: #{fstr}" if fstr
-    reply.fields.push { name: 'Estimated time before playback:', value: @parseTime(estimated)} if estimated
+    reply.fields.push {
+      name: 'Estimated time before playback:',
+      value: @parseTime(estimated)
+    } if estimated
     reply
 
   removeItem: (item, removedBy)=>
@@ -139,7 +142,7 @@ class AudioHUD
       r.fields.push { inline: true, name: 'Filters', value: @parseFilters qI.filters }
     if qI.radioStream
       meta = await @getRadioTrack(qI)
-      r.description += "\n**__Radio Stream__**"
+      r.description += '\n**__Radio Stream__**'
       r.description += "\n**Track Title:** `#{meta.current}`" if meta.current
       r.description += "\n**Next Track:** `#{meta.next}`" if meta.next
     r
@@ -159,7 +162,7 @@ class AudioHUD
 
     r = {
       color: 0x00AAFF
-      title: "Up next"
+      title: 'Up next'
       description: ''
       footer:
         text: "#{q.items.length} total items (#{@parseTime totalTime}). Page #{page}/#{pages}"
@@ -169,9 +172,10 @@ class AudioHUD
     max = offset + itemsPerPage
 
     for qI, i in q.items.slice offset, max
-      r.description += "**#{offset+i+1}.** [#{qI.title}](#{qI.sauce}) #{@parseFilters qI.filters}" +
-                        "(#{@parseTime qI.duration}) Requested By #{@getDisplayName qI.requestedBy}\n"
-
+      r.description += """
+      **#{offset+i+1}.** [#{qI.title}](#{qI.sauce}) #{@parseFilters qI.filters} \
+      (#{@parseTime qI.duration}) Requested By #{@getDisplayName qI.requestedBy}\n
+      """
     r.description += "Use #{@prefix}queue #{page+1} to see the next page." if page < pages
     r
 
@@ -197,11 +201,11 @@ class AudioHUD
       tS = q.getTransformedTimestamp(qI, qI.time) or null
     pB = @generateProgressBar tS / qI.duration
     cT = @parseTime tS
-    iC = "▶"
-    iC = "⏸" if qI.status is 'paused' or qI.status is 'suspended'
+    iC = '▶'
+    iC = '⏸' if qI.status is 'paused' or qI.status is 'suspended'
     if qI.radioStream
-      iC = "📻"
-      cT = "--:--:--"
+      iC = '📻'
+      cT = '--:--:--'
     """
     ```fix
      #{iC}  #{vI}  #{pB} #{cT}
@@ -209,14 +213,13 @@ class AudioHUD
     """
 
   parseFilters: (filters)=>
-    return "" if not filters
-    filterstr = ""
-    filterstr += "\\" + filter.display for filter in filters
+    filterstr = ''
+    filterstr += '\\' + filter.display for filter in filters
     filterstr
 
   parseTime: (seconds)=>
     return '--:--:--' if not seconds
-    return moment.utc(seconds * 1000).format("HH:mm:ss") if isFinite(seconds)
+    return moment.utc(seconds * 1000).format('HH:mm:ss') if isFinite(seconds)
     '∞'
 
   getIcon: (u)=>

@@ -100,11 +100,13 @@ class AudioQueueInstance extends EventEmitter
     @emit 'updated'
 
   pause: =>
-    if not @nowPlaying? or (not isFinite(@nowPlaying.duration) and not @nowPlaying.radioStream) or @nowPlaying.status is 'paused' or @nowPlaying.status is 'suspended'
-      return false
+    return false unless @nowPlaying? and
+                @nowPlaying.status isnt 'paused' and
+                @nowPlaying.status isnt 'suspended'
     try
-      if not @nowPlaying.radioStream
+      if isFinite(@nowPlaying.duration) and @nowPlaying.duration > 0
         @nowPlaying.time = @getTransformedTimestamp @nowPlaying, @audioPlayer.timestamp, true
+      else @nowPlaying.time = 0
     catch
       @nowPlaying.time = 0
     @nowPlaying.status = 'paused'
@@ -113,11 +115,10 @@ class AudioQueueInstance extends EventEmitter
     true
 
   resume: =>
-    if not @nowPlaying? or (not isFinite(@nowPlaying.duration) and not @nowPlaying.radioStream) or @nowPlaying.status isnt 'paused'
-      return false
+    return false unless @nowPlaying? and @nowPlaying.status is 'paused'
 
     flags = @getFlags(@nowPlaying)
-    if @nowPlaying.radioStream
+    unless isFinite(@nowPlaying.duration) and @nowPlaying.duration > 0
       await @play()
       return @emit 'updated'
     if @nowPlaying.time isnt 0

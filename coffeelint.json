@@ -22,7 +22,7 @@
   },
   "cyclomatic_complexity": {
     "level": "warn",
-    "value": 10
+    "value": 12
   },
   "duplicate_key": {
     "level": "error"
@@ -45,7 +45,7 @@
     "value": "unix"
   },
   "max_line_length": {
-    "value": 80,
+    "value": 96,
     "level": "error",
     "limitComments": true
   },
@@ -71,7 +71,7 @@
     "level": "ignore"
   },
   "no_implicit_braces": {
-    "level": "error",
+    "level": "ignore",
     "strict": true
   },
   "no_implicit_parens": {
@@ -117,14 +117,14 @@
     "level": "ignore"
   },
   "non_empty_constructor_needs_parens": {
-    "level": "warn"
+    "level": "ignore"
   },
   "prefer_english_operator": {
     "level": "ignore",
     "doubleNotLevel": "ignore"
   },
   "space_operators": {
-    "level": "warn"
+    "level": "ignore"
   },
   "spacing_after_comma": {
     "level": "ignore"
