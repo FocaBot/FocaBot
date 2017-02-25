@@ -51,6 +51,7 @@ class AudioModuleCommands
     @m.registerCommand 'voteskip', { aliases: ['vs'] }, (msg, args, d)=>
       queue = await @q.getForGuild(msg.guild)
       msg.delete() if d.data.autoDel and not msg.deleted
+      u = msg.member.nick or msg.author.username
       return msg.reply 'You are not allowed to skip songs.' unless d.data.voteSkip
       return msg.reply 'You must be in a voice channel.' unless msg.member.getVoiceChannel()
       if queue.nowPlaying.voiceChannel.id isnt msg.member.getVoiceChannel().id
