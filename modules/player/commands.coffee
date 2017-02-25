@@ -13,7 +13,7 @@ class AudioModuleCommands
 
     # Play
     @m.registerCommand 'play', { aliases: ['p'], argSeparator: '|' }, (msg,args,data)=>
-      return msg.reply 'No video specified.' unless args[0].trim() and not msg.attachments[0]
+      return msg.reply 'No video specified.' unless args[0].trim() or msg.attachments[0]
       unless msg.member.getVoiceChannel()
         return msg.reply 'You must be in a voice channel to request songs.'
       # Use first attachment if present
