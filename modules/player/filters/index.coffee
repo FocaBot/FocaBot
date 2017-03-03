@@ -18,7 +18,7 @@ module.exports =
   tempo: filter 'tempo'             # | tempo=1
   tremolo: filter 'tremolo'         # | tremolo=5
   volume: filter 'volume'           # | volume=0                   [DJ]
-  nightcore: preset 'speed', '1.5'  # | nightcore
+  nightcore: preset 'speed', '1.22' # | nightcore
   chipmunk: preset 'speed', '2.0'   # | chipmunk
   vaporwave: preset 'speed','0.75'  # | vaporwave
   earrape: preset 'volume', '25'    # | earrape                    [DJ]
