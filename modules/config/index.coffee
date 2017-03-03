@@ -5,7 +5,7 @@
 Commands = require './commands'
 
 # DB Model
-Guild = Core.db.createModel "Guild", {
+Guild = Core.db.createModel 'Guild', {
   id: type.string()
   discordId: type.string()
   prefix: type.string()
@@ -70,7 +70,8 @@ class ConfigModule extends BotModule
 
     # Custom Prefixes
     Object.getPrototypeOf(Core.commands).getPrefix = (msg)->
-      return Promise.resolve Core.settings.prefix if msg.content.indexOf(Core.settings.prefix) is 0
+      if msg.content.indexOf(Core.settings.prefix) is 0
+        return Promise.resolve Core.settings.prefix
       d = await Core.guilds.getGuild(msg.guild)
       Promise.resolve d.data.prefix or Core.settings.prefix
 
