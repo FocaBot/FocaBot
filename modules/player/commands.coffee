@@ -205,6 +205,15 @@ class AudioModuleCommands
       item = queue.move indexes[0], indexes[1]
       msg.channel.sendMessage @hud.moveItem msg.member, item, indexes
 
+    # Move to first place
+    @m.registerCommand 'bump', { djOnly: true }, (msg, args)=>
+      queue = await @q.getForGuild msg.guild
+      return msg.channel.sendMessage 'Invalid arguments provided.' unless parseInt(args) > 0
+      unless queue.items[parseInt(args)-1]
+        return msg.channel.sendMessage "Can't find the specified item in the queue."
+      item = queue.move parseInt(args)-1, 0
+      msg.channel.sendMessage @hud.moveItem msg.member, item, indexes
+
     # Seek
     @m.registerCommand 'seek', { aliases: ['s'] }, (msg, args)=>
       queue = await @q.getForGuild msg.guild
