@@ -181,7 +181,7 @@ class AudioModuleCommands
 
     # Swap
     @m.registerCommand 'swap', {
-      aliases: ['sw'], djOnly: true, argSeparator: ' '
+      aliases: ['sp'], djOnly: true, argSeparator: ' '
     }, (msg, args, d)=>
       queue = await @q.getForGuild msg.guild
       return msg.channel.sendMessage 'Invalid arguments provided.' unless args.length is 2
