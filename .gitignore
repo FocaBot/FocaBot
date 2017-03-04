@@ -82,4 +82,5 @@ bin
 watch.bat
 # Application Data
 data
-lsyncd.lua
+# Still a big WIP
+modules/lastfm
