@@ -1,10 +1,13 @@
 childProcess = require 'child_process'
 os = require 'os'
 request = require 'request'
+Blacklist = require './blacklist'
 
 class AdminModule extends BotModule
   init: =>
     { @permissions } = @engine
+    @blacklist = new Blacklist
+    @blacklist.init()
     # Admin Commands
     adminOptions =
       adminOnly: true
@@ -20,9 +23,10 @@ class AdminModule extends BotModule
     @registerCommand 'pull', ownerOptions, @pullFunc
     @registerCommand 'exec', ownerOptions, @execFunc
     @registerCommand 'purge', ownerOptions, @purgeFunc
-    @registerCommand 'find', @findFunc
     @registerCommand 'setavatar', ownerOptions, @setavatarFunc
     @registerCommand 'setusername', ownerOptions, @setusernameFunc
+    @registerCommand 'blacklist', ownerOptions, @blacklistFunc
+    @registerCommand 'unblacklist', ownerOptions, @unblacklistFunc
 
   setnickFunc: (msg, args)=>
     @bot.User.memberOf(msg.guild).setNickname args
@@ -77,19 +81,18 @@ class AdminModule extends BotModule
     msg.channel.fetchMessages limit
     .then (e)=> bot.Messages.deleteMessages e.messages
 
-  findFunc: (msg, args, d, bot)=>
-    return if not @permissions.isOwner msg.author
-    rp = ''
-    msgs =  bot.Messages.filter (m)=>
-      m.content.indexOf(args) >= 0 and
-      m.guild.id is msg.guild.id and
-      m.author.id isnt msg.author.id and
-      m.author.id isnt bot.User.id
-    .slice 0,10
-    rp = "#{msg.member.mention} here's what i found for `#{args}`:\n"
-    for ms in msgs
-      rp += '__(deleted)__ ' if ms.deleted
-      rp += "**#{ms.author.username}**: #{ms.content}\n"
-    msg.channel.sendMessage rp
+  blacklistFunc: (msg)=>
+    return msg.reply 'No user specified' unless msg.mentions[0]
+    u = msg.mentions[0]
+    await @blacklist.add(u)
+    return msg.reply "Successfully blacklisted **#{u.username}##{u.discriminator}**."
+
+  unblacklistFunc: (msg)=>
+    return msg.reply 'No user specified' unless msg.mentions[0]
+    u = msg.mentions[0]
+    await @blacklist.remove(u)
+    return msg.reply """
+    Successfully removed **#{u.username}##{u.discriminator}** from the blacklist.
+    """
 
 module.exports = AdminModule

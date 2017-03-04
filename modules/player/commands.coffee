@@ -46,7 +46,7 @@ class AudioModuleCommands
         return queue.nextItem()
       return msg.reply 'You are not allowed to skip songs.' unless d.data.voteSkip
       # Vote skip if enabled
-      Core.commands.plain.voteskip.exec(msg, args, d)
+      Core.commands.run('voteskip', msg, args)
 
     @m.registerCommand 'voteskip', { aliases: ['vs'] }, (msg, args, d)=>
       queue = await @q.getForGuild(msg.guild)
