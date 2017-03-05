@@ -17,6 +17,8 @@ class ConfigCommands
         type: Boolean
       allowTags:
         type: Boolean
+      allowImages:
+        type: Boolean
       greet:
         type: String
         min: 1

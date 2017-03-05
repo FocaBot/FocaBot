@@ -11,6 +11,7 @@ Guild = Core.db.createModel 'Guild', {
   prefix: type.string()
   autoDel: type.boolean().default(true)
   allowNSFW: type.boolean().default(false)
+  allowImages: type.boolean().default(true)
   voteSkip: type.boolean().default(true)
   restrict: type.boolean().default(false)
   allowWaifus: type.boolean().default(true)

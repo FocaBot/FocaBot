@@ -35,6 +35,7 @@ class ImageModule extends BotModule
       aliases: ['rimg','imgn','rimgn']
       includeCommandNameInArgs: true
     }, (msg, args, d)=>
+      return unless d.data.allowImages
       random = args[0].indexOf('rimg') >= 0
       nsfw = (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0) and
             args[0].indexOf('imgn') >= 0
@@ -60,6 +61,7 @@ class ImageModule extends BotModule
         msg.reply 'Something went wrong.'
 
     @registerCommand 'imgur', (msg, args, d)=>
+      return unless d.data.allowImages
       try
         # Find something on imgur
         results = await Imgur.get('/gallery/search/top/0/', json: true, qs: {

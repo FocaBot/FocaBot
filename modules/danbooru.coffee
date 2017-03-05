@@ -31,6 +31,7 @@ class DanbooruModule extends BotModule
       aliases: ['d', 'safebooru', 'safe']
       includeCommandNameInArgs: true
     }, (msg, args, d)=>
+      return unless d.data.allowImages
       switch args[0]
         when 'danbooru', 'd'
           host = 'danbooru.donmai.us'
@@ -44,7 +45,7 @@ class DanbooruModule extends BotModule
         return msg.reply 'Rate limit excedeed. Wait a few seconds.'
       d.danbooruDate = new Date()
       # NSFW Filter
-      b = safebooru unless d.data.allowNSFW or msg.channel.name.indexOf('nsfw') < 0
+      b = safebooru unless d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0
       try
         r = await b.get('posts.json', { json: true, qs: { random: true, tags } })
         throw 'No results' unless r.length
@@ -62,7 +63,7 @@ class DanbooruModule extends BotModule
       }
 
     @registerCommand 'setwaifu', { allowDM: true, aliases: ['sw'] }, (msg, args, d)=>
-      return unless d.data.allowWaifus
+      return unless d.data.allowWaifus and d.data.allowImages
       waifu = (args.match(/\S+/) or [''])[0]
       return msg.reply "Usage: ```#{@prefix}setWaifu <safebooru_tag>```" unless waifu
       try
@@ -81,7 +82,7 @@ class DanbooruModule extends BotModule
         msg.reply 'Something went wrong.'
 
     @registerCommand 'waifu', { allowDM: true, aliases: ['w'] }, (msg, args, d)=>
-      return unless d.data.allowWaifus
+      return unless d.data.allowWaifus and d.data.allowImages
       # Rate limiting
       if d.danbooruDate and (new Date() - d.danbooruDate) < 3000
         return msg.reply 'Rate limit excedeed. Wait a few seconds.'
