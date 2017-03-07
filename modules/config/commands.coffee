@@ -77,7 +77,7 @@ class ConfigCommands
           value = parseInt(value) if param.integer
           return sendHelp 'Value is not a number.' if not isFinite(value)
           return sendHelp 'Value is too high' if param.max and value > param.max
-          return sendHelp 'Value is too low' if param.min and value > param.min
+          return sendHelp 'Value is too low' if param.min and value < param.min
           d.data[args[0]] = value
       # Save the changes
       await d.data.save()
