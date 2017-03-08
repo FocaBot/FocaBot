@@ -3,7 +3,7 @@ request = require 'request'
 
 class SealModule extends BotModule
   init: =>
-    @registerCommand 'seal', { allowDM: true }, (msg, args)->
+    @registerCommand 'seal', { allowDM: true }, (msg, args, d)->
       return unless d.data.allowImages
       chance = new Chance()
       if chance.integer({ min: 0, max: 100 }) > 2
