@@ -12,9 +12,11 @@ class StatusModule extends BotModule
       => "#{@bootDate.fromNow(true)} since last restart." if @debug
       => "Shard #{(Core.settings.shardIndex or 0)+1}/#{Core.settings.shardCount or 1}" if @debug
     ]
+
+  ready: =>
     @int = setInterval =>
       @changeStatus()
-    , 15000
+    , 30000
     @changeStatus()
 
   changeStatus: =>
@@ -26,7 +28,7 @@ class StatusModule extends BotModule
     sm = 'dnd' if @debug
     @bot.User.setStatus sm, newStatus
 
-  beforeUnload: =>
+  unload: =>
     clearInterval @int
 
 module.exports = StatusModule

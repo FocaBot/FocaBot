@@ -23,7 +23,7 @@ class StatsModule extends BotModule
         totalGuilds = @bot.Guilds.length
         totalVoice = @bot.VoiceConnections.length
 
-      msg.channel.sendMessage '', false, {
+      r = {
         author:
           name: Core.settings.name + ' ' + Core.settings.version
           icon_url: Core.bot.User.avatarURL
@@ -40,31 +40,33 @@ class StatsModule extends BotModule
             **Memory Usage**: #{mem}MB
             """
           }
-          {
-            name: "Overall"
-            value: """
-            **Guilds**: #{totalGuilds}
-            **Voice Connections**: #{totalVoice}
-            """
-          }
-          {
-            name: "System"
-            value: """
-            **Platform**: #{os.platform()} #{os.release()} #{os.arch()}
-            **Load Average**: #{loadAvg}
-            **Free Memory**: #{memfree}MB
-            """
-          }
-          {
-            name: 'FocaBotCore'
-            value: """
-            **Version**: #{Core.version}
-            **Modules**: #{Object.keys(Core.modules.loaded).length} modules loaded.
-            **Commands**: #{totalCommands} commands registered. (#{totalCommands - excludingAliases} are aliases)
-            """
-          }
         ]
       }
+      if Core.settings.shardCount
+        r.fields.push {
+          name: "Overall"
+          value: """
+          **Guilds**: #{totalGuilds}
+          **Voice Connections**: #{totalVoice}
+          """
+        }
+      r.fields.push {
+        name: "System"
+        value: """
+        **Platform**: #{os.platform()} #{os.release()} #{os.arch()}
+        **Load Average**: #{loadAvg}
+        **Free Memory**: #{memfree}MB
+        """
+      }
+      r.fields.push {
+        name: 'FocaBotCore'
+        value: """
+        **Version**: #{Core.version}
+        **Modules**: #{Object.keys(Core.modules.loaded).length} modules loaded.
+        **Commands**: #{totalCommands} commands registered. (#{totalCommands - excludingAliases} are aliases)
+        """
+      }
+      msg.channel.sendMessage '', false, r
 
   updateStats:->
     stats = (await Core.data.get('Stats')) or []
