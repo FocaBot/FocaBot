@@ -18,7 +18,8 @@ const focaBot = new FocaBotCore({
   shardIndex: env.NODE_APP_INSTANCE ? parseInt(env.NODE_APP_INSTANCE) : undefined,
   debug: true,
   modulePath: path.join(__dirname, 'modules/'),
-  redisURL: env.REDIS_URL
+  redisURL: env.REDIS_URL,
+  watch: true
 })
 
 // These modules go first.
