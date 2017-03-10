@@ -5,33 +5,45 @@ class ConfigCommands
         type: String
         min: 1
         max: 5
+        def: Core.settings.prefix
       autoDel:
         type: Boolean
+        def: true
       allowNSFW:
         type: Boolean
+        def: false
       voteSkip:
         type: Boolean
+        def: true
       restrict:
         type: Boolean
+        def: false
       allowWaifus:
         type: Boolean
+        def: true
       allowTags:
         type: Boolean
+        def: true
       allowImages:
         type: Boolean
+        def: true
       greet:
         type: String
         min: 1
+        def: 'off'
       farewell:
         type: String
         min: 1
+        def: 'off'
       maxSongLength:
         type: Number
         integer: true
         min: 60
-        max: 3600
+        max: 10800
+        def: 1800
       dynamicNick:
         type: Boolean
+        def: false
     }
 
     @module.registerCommand 'config', { adminOnly: true, argSeparator: ' ' }, (msg,args,d)=>
@@ -55,7 +67,7 @@ class ConfigCommands
         title: msg.guild.name
         fields: [
           { name: 'Parameter', value: args[0], inline: true }
-          { name: 'Current Value', value: d.data[args[0]], inline: true }
+          { name: 'Current Value', value: d.data[args[0]] || @params[args[0]].def, inline: true }
         ]
       } unless args[1]
       param = @params[args[0]]
@@ -80,7 +92,7 @@ class ConfigCommands
           return sendHelp 'Value is too low' if param.min and value < param.min
           d.data[args[0]] = value
       # Save the changes
-      await d.data.save()
+      await d.saveData()
       msg.reply 'Setting saved!', false, {
         title: msg.guild.name
         color: 0x00AAFF

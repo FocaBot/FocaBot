@@ -17,12 +17,12 @@ const focaBot = new FocaBotCore({
   shardCount: env.NODE_APP_INSTANCE ? os.cpus().length : undefined,
   shardIndex: env.NODE_APP_INSTANCE ? parseInt(env.NODE_APP_INSTANCE) : undefined,
   debug: true,
-  modulePath: path.join(__dirname, 'modules/')
+  modulePath: path.join(__dirname, 'modules/'),
   redisURL: env.REDIS_URL
 })
 
 // These modules go first.
-// focaBot.modules.load(['db', 'config', 'util'])
+focaBot.modules.load(['config', 'util'])
 // Load the modules.
 focaBot.modules.load(JSON.parse(env.BOT_MODULES))
 
