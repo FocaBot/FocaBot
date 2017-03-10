@@ -7,7 +7,7 @@ const { env } = process
 
 const focaBot = new FocaBotCore({
   name: 'FocaBot',
-  version: '0.5.6 (Berserk Búho)',
+  version: 'dev-0.6.x',
   prefix: env.BOT_PREFIX,
   token: env.BOT_TOKEN,
   owner: JSON.parse(env.BOT_OWNER),
@@ -16,12 +16,13 @@ const focaBot = new FocaBotCore({
   djRoles: JSON.parse(env.BOT_DJ_ROLES),
   shardCount: env.NODE_APP_INSTANCE ? os.cpus().length : undefined,
   shardIndex: env.NODE_APP_INSTANCE ? parseInt(env.NODE_APP_INSTANCE) : undefined,
-  debug: false,
+  debug: true,
   modulePath: path.join(__dirname, 'modules/')
+  redisURL: env.REDIS_URL
 })
 
 // These modules go first.
-focaBot.modules.load(['db', 'config', 'util'])
+// focaBot.modules.load(['db', 'config', 'util'])
 // Load the modules.
 focaBot.modules.load(JSON.parse(env.BOT_MODULES))
 
