@@ -36,6 +36,7 @@ class HelpModule extends BotModule
     }
 
   filtersCommandFunction: (msg,args)=>
+    pfx = d.data.prefix or @prefix
     msg.reply """
     To learn more about audio filters, check this link: \
     https://focabot.thebit.link/filters?prefix=#{encodeURIComponent pfx}
