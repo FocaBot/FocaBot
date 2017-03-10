@@ -1,7 +1,8 @@
+reload = require('require-reload')(require)
+Commands = reload './commands'
+
 # Configuration Manager
 # Must be loaded before all standard modules.
-Commands = require './commands'
-
 class ConfigModule extends BotModule
   init: =>
     # Reset guild cache

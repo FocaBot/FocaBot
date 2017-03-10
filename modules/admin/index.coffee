@@ -1,7 +1,8 @@
+reload = require('require-reload')(require)
 childProcess = require 'child_process'
 os = require 'os'
 request = require 'request'
-Blacklist = require './blacklist'
+Blacklist = reload './blacklist'
 
 class AdminModule extends BotModule
   init: =>
@@ -14,7 +15,7 @@ class AdminModule extends BotModule
     @registerCommand 'setnick', adminOptions, @setnickFunc
     @registerCommand 'clean', adminOptions, @cleanFunc
     @registerCommand 'reset', adminOptions, @resetFunc
-    # Restart Command
+    # Owner Commands
     ownerOptions =
       ownerOnly: true
       allowDM: true
@@ -27,6 +28,14 @@ class AdminModule extends BotModule
     @registerCommand 'setusername', ownerOptions, @setusernameFunc
     @registerCommand 'blacklist', ownerOptions, @blacklistFunc
     @registerCommand 'unblacklist', ownerOptions, @unblacklistFunc
+    # Module Management
+    modOptions =
+      ownerOnly: true
+      allowDM: true
+      argSeparator: ','
+    @registerCommand 'load', modOptions, @loadFunc
+    @registerCommand 'unload', modOptions, @unloadFunc
+    @registerCommand 'reload', modOptions, @reloadFunc        
 
   setnickFunc: (msg, args)=>
     @bot.User.memberOf(msg.guild).setNickname args
@@ -94,5 +103,21 @@ class AdminModule extends BotModule
     return msg.reply """
     Successfully removed **#{u.username}##{u.discriminator}** from the blacklist.
     """
+
+  # Module management
+  loadFunc: (msg, args)=>
+    try
+      Core.modules.load(args)
+      msg.reply('Success!')
+
+  unloadFunc: (msg, args)=>
+    try
+      Core.modules.unload(args)
+      msg.reply('Success!')
+
+  reloadFunc: (msg, args)=>
+    try
+      Core.modules.reload(args)
+      msg.reply('Success!')
 
 module.exports = AdminModule

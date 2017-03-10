@@ -1,31 +1,30 @@
-{ type } = Core.db
-
-Blacklist = Core.db.createModel 'Blacklist', {
-  id: type.string()
-  users: [type.string()]
-}
-
 class BlacklistSC
   init: =>
-    @doc = await Blacklist.filter({}).run()[0]
-    @doc = new Blacklist(users: []) unless @doc?
-    Core.settings.blacklist = @doc.users
+    Core.settings.blacklist = (await Core.data.get('Blacklist')) or []
     # Auto Update
-    @feed = await Blacklist.changes()
-    @feed.each (error, d)=> Core.settings.blacklist = d.users
+    Core.data.subscribe('blacklist')
+    Core.data.on 'message', (channel, data)=>
+      return unless channel is 'blacklist'
+      Core.settings.blacklist = data
 
   add: (user)=>
     u = user
     u = user.id if user.id
-    unless u in @doc.users
-      @doc.users.push(u)
-      await @doc.save()
+    unless u in Core.settings.blacklist
+      Core.settings.blacklist.push(u)
+      # Save
+      await Core.data.set('Blacklist', Core.settings.blacklist)
+      # Notify the other shards
+      Core.data.publish('blacklist', Core.settings.blacklist)
 
   remove: (user)=>
     u = user
     u = user.id if user.id
     if u in @doc.users
-      @doc.users.splice(@doc.users.indexOf(u), 1)
-      await @doc.save()
+      Core.settings.blacklist.splice(Core.settings.blacklist.indexOf(u), 1)
+      # Save
+      await Core.data.set('Blacklist', Core.settings.blacklist)
+      # Notify the other shards
+      Core.data.publish('blacklist', Core.settings.blacklist)
 
 module.exports = BlacklistSC
