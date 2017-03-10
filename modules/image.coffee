@@ -1,15 +1,5 @@
 Chance = require 'chance'
 request = require 'request'
-{ type } = Core.db
-
-# Cache results in DB
-CachedResults = Core.db.createModel 'SearchResults', {
-  id: type.string()
-  query: type.string()
-  nsfw: type.boolean()
-  response: type.object()
-  expires: type.date()
-}
 
 # Google Image Search API
 CSE = require('request-promise').defaults {
@@ -38,24 +28,22 @@ class ImageModule extends BotModule
       return unless d.data.allowImages
       random = args[0].indexOf('rimg') >= 0
       nsfw = (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0) and
-            args[0].indexOf('imgn') >= 0
-
-      @getImages(args[1], nsfw).then (r)=>
+             args[0].indexOf('imgn') >= 0
+      # Find the image
+      try
+        r = await @getImages(args[1], nsfw)
         return msg.reply 'No results.' unless r.items?
-        unless random
-          msg.reply '', false, {
-            title: '[click for sauce]'
-            url: r.items[0].image.contextLink
-            image: { url: r.items[0].link }
-          }
-        else
-          image = @chance.pickone r.items
-          msg.reply '', false, {
-            title: '[click for sauce]'
-            url: image.image.contextLink
-            image: { url: image.link }
-          }
-      .catch (err)=>
+        # Pick the first result by default
+        image = r.items[0]
+        # Pick a random result if using the random command
+        image = @chance.pickone r.items if random
+        # Send the image
+        msg.reply '', false, {
+          title: '[click for sauce]'
+          url: r.items[0].image.contextLink
+          image: { url: r.items[0].link }
+        }
+      catch err
         if err.statusCode is 403
           return msg.reply "Daily limit exceeded for this command. (Try #{@prefix}imgur)."
         msg.reply 'Something went wrong.'
@@ -69,7 +57,7 @@ class ImageModule extends BotModule
         })
         # Random by default
         if results.success and results.data
-          nsfw = (d.data.allowNSFW or msg.channel.name.indexOf('nsfw'))
+          nsfw = (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0)
           image = @chance.pickone results.data.filter (i)=>
             not i.is_album and not i.is_ad and (nsfw or not i.nsfw)
           msg.reply '', false, {
@@ -86,25 +74,20 @@ class ImageModule extends BotModule
   getImages: (query, nsfw)=>
     safe = 'high'
     safe = 'off' if nsfw
-    CachedResults.filter({ query, nsfw }).run().then (results)=>
-      # Check if the query is already cached and not expired
-      if results[0]? and results[0].expires - Date.now() > 0
-        return Promise.resolve(results[0].response)
-      else
-        r = results[0] or new CachedResults({ query })
-        # Fetch the results straight from Google
-        CSE.get 'v1', { json: true, qs: {
-          searchType: 'image'
-          q: query
-          cx: process.env.GOOGLE_CX
-          key: process.env.GOOGLE_KEY
-          safe
-        } }
-        .then (resp)=>
-          r.response = resp
-          r.expires = new Date(Date.now() + 0x48190800) # 14 days
-          r.save()
-        .then (obj)=>
-          return obj.response
+    dbq = "CachedSearch:#{query}"
+    dbq = "CachedSearchNSFW:#{query}" if nsfw
+    result = await Core.data.get(dbq)
+    # Check if the query is already cached
+    return result if result?
+    # Fetch the results straight from Google
+    result = await CSE.get 'v1', { json: true, qs: {
+      searchType: 'image'
+      q: query
+      cx: process.env.GOOGLE_CX
+      key: process.env.GOOGLE_KEY
+      safe
+    } }
+    await Core.data.set(dbq, result, 0x127500)
+    return result
 
 module.exports = ImageModule
