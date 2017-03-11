@@ -39,9 +39,8 @@ class PlayerModule extends BotModule
     player.on 'start', (item)=> @events.emit('start', player, item)
     player.on 'end', (item)=> @events.emit('end', player, item)
     player.on 'stopped', => @events.emit('stopped', player)
-    player.queue.on 'newItem', (item)=> @events.emit('newQueueItem', player, player.queue, item)
-    player.queue.on 'removed', (item, user)=>
-      @events.emit('queueRemoved', player, player.queue, item, user)
+    player.queue.on 'newItem', (data)=> @events.emit('newQueueItem', player, player.queue, data)
+    player.queue.on 'removed', (data)=> @events.emit('queueRemoved', player, player.queue, data)
     player.queue.on 'swapped', (data)=> @events.emit('queueSwapped', player, player.queue, data)
     player.queue.on 'moved', (data)=> @events.emit('queueMoved', player, player.queue, data)
     player.queue.on 'shuffled', => @events.emit('queueShuffled', player, player.queue)

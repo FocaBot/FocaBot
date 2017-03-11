@@ -47,7 +47,7 @@ class QueueItem {
    * @type {Discordie.IGuildMember}
    */
   get requestedBy () {
-    return Users.get(this._d.requestedBy)
+    return Users.get(this._d.requestedBy).memberOf(this.voiceChannel.guild)
   }
 
   set requestedBy (v) {

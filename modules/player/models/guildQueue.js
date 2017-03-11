@@ -73,7 +73,7 @@ class GuildQueue extends EventEmitter {
     })
     if (item.textChannel && item.textChannel.id) itm.textChannel = item.textChannel.id
     // Add the item
-    const index = this._d.items.push(itm)
+    const index = this._d.items.push(itm) - 1
     const i = this.items[index]
     // Emit events
     if (!silent) this.emit('newItem', { index, item: i })
@@ -95,7 +95,7 @@ class GuildQueue extends EventEmitter {
   remove (index, user) {
     if (!isFinite(index) || index >= this._d.items.length) return false
     const item = new QueueItem(this._d.items.splice(index, 1)[0])
-    this.emit('removed', item, user)
+    this.emit('removed', { item, user })
     this.emit('updated')
     return { item }
   }

@@ -12,11 +12,11 @@ class PlayerHUD
                                               await @nowPlayingEmbed(item)
       await delay(5000)
       m.delete() if player.guildData.data.autoDel
-    @events.on 'newQueueItem', (player, queue, item)=> try
+    @events.on 'newQueueItem', (player, queue, { item, index })=> try
       # Show "Item Added" when a new item is added
       item.textChannel.sendMessage 'Added to the queue:',
                                    false,
-                                   @addItem(item, player)
+                                   @addItem(item, index + 1, player)
 
   ###
   # Messages
@@ -64,9 +64,7 @@ class PlayerHUD
   ###
   # Embeds
   ###
-  addItem: (item, player)=>
-    # Calculate position in queue
-    pos = player.queue._d.items.length
+  addItem: (item, pos, player)=>
     # Calculate estimated time
     estimated = -item.duration
     if player.queue._d.nowPlaying
@@ -95,7 +93,7 @@ class PlayerHUD
     if estimated
       reply.fields.push {
         name: 'Estimated time before playback:',
-        value: @parseTime(estimated)
+        value: @util.displayTime(estimated)
       }
     reply
 
@@ -107,7 +105,7 @@ class PlayerHUD
       description: '[[donate]](https://tblnk.me/focabot-donate/)'
       author:
         name: item.title
-        icon_url: @getIcon item.sauce
+        icon_url: @util.getIcon item.sauce
       thumbnail:
         url: item.thumbnail
       fields: [
@@ -140,7 +138,7 @@ class PlayerHUD
       """
       author:
         name: item.title
-        icon_url: @getIcon item.sauce
+        icon_url: @util.getIcon item.sauce
       thumbnail:
         url: item.thumbnail
       footer:
