@@ -1,15 +1,17 @@
 reload = require('require-reload')(require)
 EventEmitter = require 'events'
-AudioHud = reload './hud'
+PlayerHud = reload './hud'
+PlayerUtil = reload './util'
 AudioFilters = reload './filters'
 GuildPlayer = reload './models/guildPlayer'
 
 class PlayerModule extends BotModule
   init: =>
     @_guilds = {}
-    @hud = new AudioHud @
     @filters = AudioFilters
     @events = new EventEmitter
+    @util = new PlayerUtil @
+    @hud = new PlayerHud @
     Core.data.subscribe('GuildQueueFeed')
     Core.data.on('message', @_messageHandler)
     Core.bot.Dispatcher.on 'VOICE_CHANNEL_JOIN', @_handleVoiceJoin
@@ -38,7 +40,8 @@ class PlayerModule extends BotModule
     player.on 'end', (item)=> @events.emit('end', player, item)
     player.on 'stopped', => @events.emit('stopped', player)
     player.queue.on 'newItem', (item)=> @events.emit('newQueueItem', player, player.queue, item)
-    player.queue.on 'removed', (item)=> @events.emit('queueRemoved', player, player.queue, item)
+    player.queue.on 'removed', (item, user)=>
+      @events.emit('queueRemoved', player, player.queue, item, user)
     player.queue.on 'swapped', (data)=> @events.emit('queueSwapped', player, player.queue, data)
     player.queue.on 'moved', (data)=> @events.emit('queueMoved', player, player.queue, data)
     player.queue.on 'shuffled', => @events.emit('queueShuffled', player, player.queue)

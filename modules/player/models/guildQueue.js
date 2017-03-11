@@ -89,12 +89,13 @@ class GuildQueue extends EventEmitter {
   /**
    * Remove item at index
    * @param {number} index
+   * @param {Discordie.IGuildMember} user - User that requested the item removal
    * @returns {object}
    */
-  remove (index) {
+  remove (index, user) {
     if (!isFinite(index) || index >= this._d.items.length) return false
     const item = new QueueItem(this._d.items.splice(index, 1)[0])
-    this.emit('removed', item)
+    this.emit('removed', item, user)
     this.emit('updated')
     return { item }
   }
@@ -111,41 +112,44 @@ class GuildQueue extends EventEmitter {
    * Swaps 2 items
    * @param {number} index1
    * @param {number} index2
+   * @param {Discordie.IGuildMember} user - User that requested the swap
    * @returns {object}
    */
-  swap (index1, index2) {
+  swap (index1, index2, user) {
     if (!this._d.items[index1] || !this._d.items[index2]) return
     const _item1 = this._d.items[index1]
     this._d.items[index1] = this._d.items[index2]
     this._d.items[index2] = _item1
     const items = [ this.items[index2], this.items[index2] ]
-    this.emit('swapped', { index1, index2, items })
+    this.emit('swapped', { index1, index2, items, user })
     this.emit('updated')
-    return { index1, index2, items }
+    return { index1, index2, items, user }
   }
 
   /**
    * Moves an item to another position
    * @param {number} index - Index of the item
    * @param {number} position - New position
+   * @param {Discordie.IGuildMember} user
    * @returns {object}
    */
-  move (index, position) {
+  move (index, position, user) {
     if (index >= this._d.items.length || position >= this._d.items.length) return
     if (index < 0 || position < 0) return
     this._d.items.splice(position, 0, this._d.items.splice(index, 1)[0])
     const item = this.items[position]
-    this.emit('moved', { index, position, item })
+    this.emit('moved', { index, position, item, user })
     this.emit('updated')
-    return { index, position, item }
+    return { index, position, item, user }
   }
 
   /**
    * Moves an item to the first position
    * @param {number} index - Index of the item
+   * @param {Discordie.IGuildMember} user
    * @returns {object}
    */
-  bump (index) {
+  bump (index, user) {
     return this.move(index, 0)
   }
 

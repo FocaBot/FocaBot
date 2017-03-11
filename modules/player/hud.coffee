@@ -1,33 +1,48 @@
-moment = require 'moment'
-url = require 'url'
-{ spawn } = require 'child_process'
+{ delay } = Core.util
 
-class AudioHUD
+class PlayerHUD
   constructor: (@audioModule)->
     { @prefix } = Core.settings
+    { @events, @util } = @audioModule
+    # Handle events
+    @events.on 'start', (player, item)=> try
+      # Show "Now Playing" when an item starts playing
+      m = await item.textChannel.sendMessage "Now playing in `#{item.voiceChannel.name}`:",
+                                              false,
+                                              await @nowPlayingEmbed(item)
+      await delay(5000)
+      m.delete() if player.guildData.data.autoDel
+    @events.on 'newQueueItem', (player, queue, item)=> try
+      # Show "Item Added" when a new item is added
+      item.textChannel.sendMessage 'Added to the queue:',
+                                   false,
+                                   @addItem(item, player)
 
   ###
   # Messages
   ###
-
-  nowPlaying: (q, qI)=>
-    rD = ''
-    if qI.radioStream
-      meta = await @getRadioTrack(qI)
-      rD += '\n\n**__Radio Stream__**'
-      rD += "\n**Track Title:** `#{meta.current}`" if meta.current
-      rD += "\n**Next Track:** `#{meta.next}`" if meta.next
+  nowPlaying: (item)=>
     """
-    #{@generateProgressOuter q, qI}
-    Now playing in **#{qI.voiceChannel.name}**:
-    >`#{qI.title}` (#{@parseTime qI.duration}) #{@parseFilters qI.filters}#{rD}
+    #{@generateProgressOuter item}
+    Now playing in **#{item.voiceChannel.name}**:
+    >`#{item.title}` (#{@util.displayTime item.duration}) #{@util.displayFilters item.filters}
+    #{if item.radioStream then '\n\n' + @radioInfo(item) + '\n' else ''}
+    Requested by: **#{@item.requestedBy.name}**
+    """
 
-    Requested by: **#{@getDisplayName qI.requestedBy}**
+  radioInfo: (item)=>
+    return '' unless item.radioStream
+    meta = await @getRadioTrack(item)
+    """
+    **__Radio Stream__**
+
+    **Track Title:** `#{meta.current or '???'}`
+    **Next Track:** `#{meta.next or '???'}
     """
 
   swapItems: (user, items, indexes)=>
     """
-    #{@getDisplayName user} swapped some items:
+    #{user.name} swapped some items:
     ```fix
     * #{indexes[1]+1} -> #{indexes[0]+1}
       #{items[0].title}
@@ -39,7 +54,7 @@ class AudioHUD
 
   moveItem: (user, item, indexes)=>
     """
-    #{@getDisplayName user} moved the following item:
+    #{user.name} moved the following item:
     ```fix
     * #{indexes[0]+1} -> #{indexes[1]+1}
       #{item.title}
@@ -49,19 +64,15 @@ class AudioHUD
   ###
   # Embeds
   ###
-
-  addItem: (item, q)=>
-    pos = q.items.length
+  addItem: (item, player)=>
+    # Calculate position in queue
+    pos = player.queue._d.items.length
     # Calculate estimated time
     estimated = -item.duration
-    # Get current timestamp
-    if q.nowPlaying
-      try
-        tS = q.audioPlayer.timestamp or null
-      catch
-        tS = q.getTransformedTimestamp(q.nowPlaying, q.nowPlaying.time) or null
-      estimated += q.nowPlaying.duration - tS
-    estimated += el.duration for el in q.items
+    if player.queue._d.nowPlaying
+      estimated += player.queue.nowPlaying.duration - item.time
+    estimated += el.duration for el in player.queue.items
+
     reply =
       url: item.sauce
       color: 0xAAFF00
@@ -69,22 +80,23 @@ class AudioHUD
       description: '[[donate]](https://tblnk.me/focabot-donate/)'
       author:
         name: item.title
-        icon_url: @getIcon item.sauce
+        icon_url: @util.getIcon item.sauce
       thumbnail:
         url: item.thumbnail
       fields: [
-        { name: 'Length:', value: "#{@parseTime item.duration}\n‌‌ ", inline: true }
+        { name: 'Length:', value: "#{@util.displayTime item.duration}\n‌‌ ", inline: true }
         { name: 'Position in queue:', value: "##{pos}", inline: true }
       ]
       footer:
         icon_url: item.requestedBy.avatarURL
-        text: "Requested by #{@getDisplayName item.requestedBy}"
-    fstr = @parseFilters(item.filters)
-    reply.description = "**Filters**: #{fstr}" if fstr
-    reply.fields.push {
-      name: 'Estimated time before playback:',
-      value: @parseTime(estimated)
-    } if estimated
+        text: "Requested by #{item.requestedBy.name}"
+    if item.filters and item.filters.length
+      reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
+    if estimated
+      reply.fields.push {
+        name: 'Estimated time before playback:',
+        value: @parseTime(estimated)
+      }
     reply
 
   removeItem: (item, removedBy)=>
@@ -99,14 +111,14 @@ class AudioHUD
       thumbnail:
         url: item.thumbnail
       fields: [
-        { name: 'Length:', value: "#{@parseTime item.duration}\n‌‌ ", inline: true }
+        { name: 'Length:', value: "#{@util.displayTime item.duration}\n‌‌ ", inline: true }
       ]
     if removedBy
       reply.footer =
         icon_url: removedBy.avatarURL
-        text: "Removed by #{@getDisplayName removedBy}"
-    fstr = @parseFilters(item.filters)
-    reply.description = "**Filters**: #{fstr}" if fstr
+        text: "Removed by #{removedBy.name}"
+    if item.filters and item.filters.length
+      reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
     reply
 
   addPlaylist: (user, length)=>
@@ -115,40 +127,36 @@ class AudioHUD
       description: "Added a playlist of **#{length}** items to the queue!"
       footer:
         icon_url: user.avatarURL
-        text: "Requested by #{@getDisplayName user}"
+        text: "Requested by #{user.name}"
 
-  nowPlayingEmbed: (q, qI)=>
+  nowPlayingEmbed: (item)=>
     r ={
+      url: item.sauce
       color: 0xCCAA00
-      author:
-        name: qI.title
-        icon_url: @getIcon qI.sauce
-      url: qI.sauce
       title: '[click for sauce]'
       description: """
       [[donate]](https://tblnk.me/focabot-donate/)
-      #{@generateProgressOuter q, qI}
+      #{@generateProgressOuter item}
       """
+      author:
+        name: item.title
+        icon_url: @getIcon item.sauce
       thumbnail:
-        url: qI.thumbnail
+        url: item.thumbnail
       footer:
-        text: "Requested by #{@getDisplayName qI.requestedBy}"
-        icon_url: qI.requestedBy.avatarURL
+        text: "Requested by #{item.requestedBy.name}"
+        icon_url: item.requestedBy.avatarURL
       fields: [
-        { inline: true, name: 'Length', value: @parseTime qI.duration }
+        { inline: true, name: 'Length', value: @util.displayTime item.duration }
       ]
     }
-    if qI.filters and qI.filters.length
-      r.fields.push { inline: true, name: 'Filters', value: @parseFilters qI.filters }
-    if qI.radioStream
-      meta = await @getRadioTrack(qI)
-      r.description += '\n**__Radio Stream__**'
-      r.description += "\n**Track Title:** `#{meta.current}`" if meta.current
-      r.description += "\n**Next Track:** `#{meta.next}`" if meta.next
+    if item.filters and item.filters.length
+      r.fields.push { inline: true, name: 'Filters', value: @util.displayFilters item.filters }
+    if item.radioStream
+      r.description += "\n#{@getRadioTrack(item)}"
     r
 
   queue: (q, page=1)=>
-
     return { description: 'Nothing currently on queue.' } if not q.items.length
 
     # Calculate total time
@@ -156,7 +164,7 @@ class AudioHUD
     totalTime += el.duration for el in q.items
 
     itemsPerPage = 10
-    pages = Math.ceil(q.items.length / itemsPerPage)
+    pages = Math.ceil(q._d.items.length / itemsPerPage)
     if page > pages
       return { color: 0xFF0000, description: "Page #{page} does not exist." }
 
@@ -165,7 +173,9 @@ class AudioHUD
       title: 'Up next'
       description: ''
       footer:
-        text: "#{q.items.length} total items (#{@parseTime totalTime}). Page #{page}/#{pages}"
+        text: """
+        #{q._d.items.length} total items (#{@util.displayTime totalTime}). Page #{page}/#{pages}
+        """
     }
 
     offset = (page-1) * itemsPerPage
@@ -173,8 +183,8 @@ class AudioHUD
 
     for qI, i in q.items.slice offset, max
       r.description += """
-      **#{offset+i+1}.** [#{qI.title}](#{qI.sauce}) #{@parseFilters qI.filters} \
-      (#{@parseTime qI.duration}) Requested By #{@getDisplayName qI.requestedBy}\n
+      **#{offset+i+1}.** [#{qI.title}](#{qI.sauce}) #{@util.displayFilters qI.filters} \
+      (#{@util.displayTime qI.duration}) Requested By #{qI.requestedBy.name}\n
       """
     r.description += "Use #{@prefix}queue #{page+1} to see the next page." if page < pages
     r
@@ -182,63 +192,15 @@ class AudioHUD
   ###
   # Functions
   ###
-
-  generateProgressBar: (pcnt)=>
-    path = '───────────────'
-    return path + '─' if pcnt < 0 or isNaN pcnt
-    handle = '🔘'
-    pos = Math.floor pcnt * path.length
-    path.substr(0, pos) + handle + path.substr(pos)
-
-  getDisplayName: (member)=> member.nick or member.username
-
-  generateProgressOuter: (q, itm, b=false)=>
-    qI = itm or q.nowPlaying
-    vI = '🔊'
-    try
-      tS = q.audioPlayer.timestamp or null
-    catch
-      tS = q.getTransformedTimestamp(qI, qI.time) or null
-    pB = @generateProgressBar tS / qI.duration
-    cT = @parseTime tS
+  generateProgressOuter: (item)=>
+    pB = @util.generateProgressBar item.time / item.duration
     iC = '▶'
-    iC = '⏸' if qI.status is 'paused' or qI.status is 'suspended'
-    if qI.radioStream
-      iC = '📻'
-      cT = '--:--:--'
+    iC = '⏸' if item.status is 'paused' or item.status is 'suspended'
+    iC = '📻' if item.radioStream
     """
     ```fix
-     #{iC}  #{vI}  #{pB} #{cT}
+     #{iC}  🔊  #{pB} #{@util.displayTime(item.time)}
     ```
     """
 
-  parseFilters: (filters)=>
-    filterstr = ''
-    filterstr += '\\' + filter.display for filter in filters
-    filterstr
-
-  parseTime: (seconds)=>
-    return '--:--:--' if not seconds
-    return moment.utc(seconds * 1000).format('HH:mm:ss') if isFinite(seconds)
-    '∞'
-
-  getIcon: (u)=>
-    uri = url.parse(u)
-    "#{uri.protocol}//#{uri.host}/favicon.ico"
-
-  getRadioTrack: (qI)=> new Promise (resolve, reject)=>
-    d = ''
-    p = spawn('ffprobe', [qI.path, '-show_format', '-v', 'quiet', '-print_format', 'json'])
-    p.stdout.on 'data', (data)=> d += data
-    p.on 'close', (code)=>
-      return resolve { current: '???' } if code
-      try
-        prop = JSON.parse(d).format
-        return resolve {
-          current: prop.tags.StreamTitle
-          next: prop.tags.StreamNext
-        }
-      catch
-        return resolve { current: '???' }
-
-module.exports = AudioHUD
+module.exports = PlayerHUD
