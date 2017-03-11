@@ -9,15 +9,21 @@ class GuildPlayer extends EventEmitter {
   /**
    * Creates a new instance
    * @param {Discordie.IGuild} guild - The associated guild
+   * @param {Guild} gData - Guild data
    * @param {object} qData - The queue data
    */
-  constructor (guild, qData) {
+  constructor (guild, gData, qData) {
     super()
     /**
      * The associated guild
      * @type {Discordie.IGuild}
      */
     this.guild = guild
+    /**
+     * The Guild Data
+     * @type {Guild}
+     */
+    this.guildData = gData
     /**
      * The AudioPlayer for this guild
      * @type {FocaBotCore.AudioPlayer}

@@ -17,8 +17,10 @@ class PlayerModule extends BotModule
 
   getForGuild: (guild)=>
     return @_guilds[guild.id] if @_guilds[guild.id]?
+    # Get guild data
+    gData = await Core.guilds.getGuild(guild)
     # Create a new player object
-    player = new GuildPlayer @, await Core.data.get("GuildQueue:#{guild.id}") or {
+    player = new GuildPlayer @, gData, await Core.data.get("GuildQueue:#{guild.id}") or {
       # "empty" queue
       nowPlaying: undefined
       frozen: false
@@ -32,6 +34,7 @@ class PlayerModule extends BotModule
     player.on 'suspended', (item)=> @events.emit('suspended', player, item)
     player.on 'seek', (item, time)=> @events.emit('seek', player, item, time)
     player.on 'filtersUpdated', (item)=> @events.emit('filtersUpdated', player, item)
+    player.on 'start', (item)=> @events.emit('start', player, item)
     player.on 'end', (item)=> @events.emit('end', player, item)
     player.on 'stopped', => @events.emit('stopped', player)
     player.queue.on 'newItem', (item)=> @events.emit('newQueueItem', player, player.queue, item)
