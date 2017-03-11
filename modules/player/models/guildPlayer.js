@@ -58,6 +58,7 @@ class GuildPlayer extends EventEmitter {
       this.queue._d.nowPlaying = this.queue._d.items.shift()
       this.play()
     })
+    if (!silent) this.queue.emit('updated')
   }
 
   /**
@@ -72,7 +73,8 @@ class GuildPlayer extends EventEmitter {
     if (!isFinite(item.duration) || item.duration <= 0) throw new Error("Can't pause streams.")
     this.queue.nowPlaying.status = 'paused'
     this.audioPlayer.stop()
-    this.emit('paused', item)
+    if (!silent) this.emit('paused', item)
+    if (!silent) this.queue.emit('updated')
   }
 
   /**
@@ -85,7 +87,8 @@ class GuildPlayer extends EventEmitter {
     if (item.status === 'paused' || item.status === 'suspended' || item.status === 'queue') return
     this.queue.nowPlaying.status = 'suspended'
     this.audioPlayer.stop()
-    this.emit('suspended', item)
+    if (!silent) this.emit('suspended', item)
+    if (!silent) this.queue.emit('updated')
   }
 
   /**
@@ -122,6 +125,7 @@ class GuildPlayer extends EventEmitter {
     item.filters = newFilters
     if (shouldResume) this.resume(true)
     this.emit('filtersUpdated', item)
+    this.queue.emit('updated')
   }
 
   /**
@@ -134,6 +138,7 @@ class GuildPlayer extends EventEmitter {
     this.queue._d.nowPlaying = this.queue._d.items.shift()
     this.audioPlayer.stop()
     this.play()
+    this.queue.emit('updated')
   }
 
   /**
@@ -143,6 +148,7 @@ class GuildPlayer extends EventEmitter {
     this.queue.clear()
     this.emit('stopped')
     this.audioPlayer.clean(true)
+    this.queue.emit('updated')
   }
 }
 

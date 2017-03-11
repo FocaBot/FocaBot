@@ -41,8 +41,8 @@ class PlayerModule extends BotModule
     player.queue.on 'shuffled', => @events.emit('queueShuffled', player, player.queue)
     player.queue.on 'cleared', => @events.emit('queueCleared', player, player.queue)
     player.queue.on 'updated', => @events.emit('queueUpdated', player, player.queue)
+    # Save data on each update
     player.queue.on 'updated', =>
-      # Save data
       await Core.data.set("GuildQueue:#{guild.id}", player.queue._d)
       # Notify other instances when the queue gets updated
       Core.data.publish('GuildQueueFeed', {
