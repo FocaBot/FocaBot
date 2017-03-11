@@ -201,7 +201,6 @@ class QueueItem {
    * @type {object}
    */
   get flags () {
-    if (!this.filters.length) return { }
     const flags = { input: [], output: [] }
     const filters = []
     // Apply the flags of each filter
@@ -211,9 +210,9 @@ class QueueItem {
       if (filter.FFMPEGFilter) filters.push(filter.FFMPEGFilter)
     })
     // Append the filters
-    flags.output.push('-af', filters.join(', '))
+    if (filters.length) flags.output.push('-af', filters.join(', '))
     // Current Time
-    flags.input.push('-ss', this.originalTime)
+    if (this.originalTime > 0) flags.input.push('-ss', this.originalTime)
     return flags
   }
 
