@@ -16,7 +16,7 @@ class PlayerModule extends BotModule
     Core.bot.Dispatcher.on 'VOICE_CHANNEL_LEAVE', @_handleVoiceLeave
 
   getForGuild: (guild)=>
-    return @_guilds[guild.id] if @_guilds[guild.id]??
+    return @_guilds[guild.id] if @_guilds[guild.id]?
     # Create a new player object
     player = new GuildPlayer @, await Core.data.get("GuildQueue:#{guild.id}") or {
       # "empty" queue
@@ -50,6 +50,7 @@ class PlayerModule extends BotModule
         guild: guild.id
         by: Core.settings.shardIndex or 0
       })
+    player
 
   _messageHandler: (channel, message)=>
     return unless channel is 'GuildQueueFeed' and message.type

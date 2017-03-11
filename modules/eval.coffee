@@ -18,7 +18,7 @@ class EvalModule extends BotModule
       j = (obj, length)->
         pruned = prune obj, length
         p "\`\`\`json\n#{format(JSON.parse(pruned),formatSettings)}\n\`\`\`"
-      eval(CoffeeScript.compile("(=>\n#{args.replace(/\n/, '\n  ')}\n)()", bare: true))
+      eval(CoffeeScript.compile("(=>\n  #{args.replace(/\n/, '\n  ')}\n)()", bare: true))
     # JavaScript Eval Command
     @registerCommand 'jseval', evalOptions, (msg, args, d, bot, engine)->
       p = (text)-> msg.channel.sendMessage text
