@@ -1,7 +1,7 @@
 const reload = require('require-reload')(require)
 const EventEmitter = require('events')
 const Chance = require('chance')
-const QueueItem = require('./queueItem')
+const QueueItem = reload('./queueItem')
 
 /**
  * Represents the queue of a guild
@@ -26,15 +26,15 @@ class GuildQueue extends EventEmitter {
    * Currently playing item
    * @type {QueueItem}
    */
-  get nowPlaying() {
-    return this._d.nowPlaying ? new QueueItem(data.nowPlaying) : undefined
+  get nowPlaying () {
+    return this._d.nowPlaying ? new QueueItem(this._d.nowPlaying) : undefined
   }
 
   /**
    * Items in the queue
    * @type {QueueItem[]}
    */
-  get items() {
+  get items () {
     return Object.freeze(this._d.items ? this._d.items.map(item => new QueueItem(item)) : [])
   }
 
@@ -73,16 +73,16 @@ class GuildQueue extends EventEmitter {
     if (item.textChannel && item.textChannel.id) itm.textChannel = item.textChannel.id
     // Add the item
     const index = this._d.items.push(itm)
-    const item = this.items[index]
+    const i = this.items[index]
     // Emit events
-    this.emit('newItem', { index, item })
+    this.emit('newItem', { index, item: i })
     this.emit('updated')
     // Nothing being played right now? Start playback inmediately
     if (!this.nowPlaying || !this.player.audioPlayer.encoderStream) {
       this._d.nowPlaying = this._d.items.shift()
       this.player.play()
     }
-    return { index, item }
+    return { index, i }
   }
 
   /**

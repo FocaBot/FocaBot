@@ -23,14 +23,15 @@ class TagModule extends BotModule
       return unless d.data.allowTags or @permissions.isDJ msg.member
       # Try to get existing tag
       tag = await Core.data.get("Tag:#{args[0].toLowerCase()}")
-      return msg.reply "Deleted 0 tag(s)!" unless tag?
+      return msg.reply 'Deleted 0 tag(s)!' unless tag?
       # Filter out the desired tags
       filtered = tag.filter (reply)=>
         if args.length > 1
           # Owner is allowed to delete all responses of a tag
           return false if args[1] is 'all' and @permissions.isOwner msg.author
           # Also allowed to delete responses made by others
-          return false if reply.reply is args.slice(1).join(' ') and @permissions.isOwner msg.author
+          if reply.reply is args.slice(1).join(' ') and @permissions.isOwner msg.author
+            return false
           # Other people can only delete their own
           return false if reply.by is msg.author.id and reply.reply is args.slice(1).join(' ')
         else
@@ -57,7 +58,7 @@ class TagModule extends BotModule
       tag = await Core.data.get("Tag:#{args[0].toLowerCase()}")
       return unless tag?
       # Generate a list of responses
-      r = ""
+      r = ''
       for res in tag
         u = bot.Users.get(tag.by) or { username: 'Unknown', discriminator: tag.by }
         r += "\n(#{u.username}##{u.discriminator}): #{tag.reply.substr(0,32)}..."

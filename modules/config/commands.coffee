@@ -67,7 +67,11 @@ class ConfigCommands
         title: msg.guild.name
         fields: [
           { name: 'Parameter', value: args[0], inline: true }
-          { name: 'Current Value', value: d.data[args[0]] || @params[args[0]].def, inline: true }
+          {
+            name: 'Current Value'
+            value: d.data[args[0]] || @params[args[0]].def
+            inline: true
+          }
         ]
       } unless args[1]
       param = @params[args[0]]

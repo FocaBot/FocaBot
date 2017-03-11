@@ -1,7 +1,6 @@
 const reload = require('require-reload')(require)
 const EventEmitter = require('events')
-const Chance = require('chance')
-const GuildQueue = require('./guildQueue')
+const GuildQueue = reload('./guildQueue')
 
 /**
  * Guild Music Player
@@ -10,7 +9,7 @@ class GuildPlayer extends EventEmitter {
   /**
    * Creates a new instance
    * @param {Discordie.IGuild} guild - The associated guild
-   * @param {object} qData - The queue data 
+   * @param {object} qData - The queue data
    */
   constructor (guild, qData) {
     super()
@@ -95,7 +94,7 @@ class GuildPlayer extends EventEmitter {
     if (item.stat) throw new Error("Can't seek (static filters)")
     if (item.duration <= 0) throw new Error("Can't seek (livestream)")
     if (time > item.duration || time < 0) throw new Error('Invalid position.')
-    const shouldResume = (item.status === 'playing') 
+    const shouldResume = (item.status === 'playing')
     this.pause()
     item.time = time
     if (shouldResume) this.play()
@@ -113,10 +112,10 @@ class GuildPlayer extends EventEmitter {
     if (newFilters.filter(filter => filter.avoidRuntime).length) {
       throw new Error("There's one or more static filters in the new filters.")
     }
-    const shouldResume = (item.status === 'playing') 
+    const shouldResume = (item.status === 'playing')
     this.pause()
     item.filters = newFilters
-    this.resume()
+    if (shouldResume) this.resume()
   }
 }
 

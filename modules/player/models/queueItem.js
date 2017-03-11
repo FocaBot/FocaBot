@@ -6,7 +6,7 @@ const { Users, Channels } = Core.bot
 class QueueItem {
   /**
    * Instantiates a new queue item
-   * @param {object} data 
+   * @param {object} data
    */
   constructor (data) {
     this._d = data
@@ -20,7 +20,7 @@ class QueueItem {
     return this._d.title
   }
 
-  set title(v) {
+  set title (v) {
     this._d.title = v
   }
 
@@ -157,7 +157,7 @@ class QueueItem {
 
   /**
    * Playback status.
-   * 
+   *
    * Can be either 'playing', 'paused', 'queue', or 'suspended'
    * @type {string}
    */

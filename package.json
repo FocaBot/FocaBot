@@ -42,5 +42,12 @@
   },
   "devDependencies": {
     "coffee-errors": "^0.8.6"
+  },
+  "standard": {
+    "globals": [
+      "Core",
+      "BotCommand",
+      "BotModule"
+    ]
   }
 }

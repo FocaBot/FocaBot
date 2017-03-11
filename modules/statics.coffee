@@ -44,14 +44,14 @@ class StatsModule extends BotModule
       }
       if Core.settings.shardCount
         r.fields.push {
-          name: "Overall"
+          name: 'Overall'
           value: """
           **Guilds**: #{totalGuilds}
           **Voice Connections**: #{totalVoice}
           """
         }
       r.fields.push {
-        name: "System"
+        name: 'System'
         value: """
         **Platform**: #{os.platform()} #{os.release()} #{os.arch()}
         **Load Average**: #{loadAvg}
@@ -63,12 +63,13 @@ class StatsModule extends BotModule
         value: """
         **Version**: #{Core.version}
         **Modules**: #{Object.keys(Core.modules.loaded).length} modules loaded.
-        **Commands**: #{totalCommands} commands registered. (#{totalCommands - excludingAliases} are aliases)
+        **Commands**: #{totalCommands} commands registered. \
+        (#{totalCommands - excludingAliases} are aliases)
         """
       }
       msg.channel.sendMessage '', false, r
 
-  updateStats:->
+  updateStats: ->
     stats = (await Core.data.get('Stats')) or []
     stats[Core.settings.shardIndex or 0] = {
       guilds: Core.bot.Guilds.length
@@ -76,7 +77,7 @@ class StatsModule extends BotModule
     }
     Core.data.set('Stats', stats)
 
-  ready:=>
+  ready: =>
     @updateStats()
     Core.bot.Dispatcher.on('VOICE_CONNECTED', @updateStats)
     Core.bot.Dispatcher.on('VOICE_DISCONNECTED', @updateStats)
@@ -84,7 +85,7 @@ class StatsModule extends BotModule
     Core.bot.Dispatcher.on('GUILD_DELETE', @updateStats)
 
 
-  unload:=>
+  unload: =>
     # Remove all listeners
     Core.bot.Dispatcher.removeListener('VOICE_CONNECTED', @updateStats)
     Core.bot.Dispatcher.removeListener('VOICE_DISCONNECTED', @updateStats)
