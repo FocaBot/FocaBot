@@ -32,8 +32,9 @@ class GuildPlayer extends EventEmitter {
 
   /**
    * Starts playback
+   * @param {boolean} silent - When set to true, no events will be emitted
    */
-  async play () {
+  async play (silent = false) {
     if (!this.queue.nowPlaying) return
     if (this.queue.nowPlaying.status === 'playing' && this.audioPlayer.encoderStream) return
     const item = this.queue.nowPlaying
@@ -41,7 +42,7 @@ class GuildPlayer extends EventEmitter {
     // Set bot as self deafen
     item.voiceChannel.join(false, true)
     item.status = 'playing'
-    this.emit('playing', item)
+    if (!silent) this.emit('playing', item)
     if (item.time === 0) this.emit('start', item)
     // Keep track of the time
     if (item.duration > 0) {
@@ -52,6 +53,7 @@ class GuildPlayer extends EventEmitter {
     // Handle stream end
     stream.on('end', () => {
       if (item.status === 'paused' || item.status === 'suspended') return
+      this.emit('end', item)
       if (!this.queue._d.items.length) return this.stop()
       this.queue._d.nowPlaying = this.queue._d.shift()
       this.play()
@@ -60,8 +62,9 @@ class GuildPlayer extends EventEmitter {
 
   /**
    * Pauses playback
+   * @param {boolean} silent - When set to true, no events will be emitted
    */
-  pause () {
+  pause (silent = false) {
     const item = this.queue.nowPlaying
     // Can we pause?
     if (!item || item.stat) return
@@ -74,8 +77,9 @@ class GuildPlayer extends EventEmitter {
 
   /**
    * Suspends playback (pretty much the same as pause() but without the stream and filter checks)
+   * @param {boolean} silent - When set to true, no events will be emitted
    */
-  suspend () {
+  suspend (silent = false) {
     const item = this.queue.nowPlaying
     if (!item || item.stat) return
     if (item.status === 'paused' || item.status === 'suspended' || item.status === 'queue') return
@@ -95,9 +99,10 @@ class GuildPlayer extends EventEmitter {
     if (item.duration <= 0) throw new Error("Can't seek (livestream)")
     if (time > item.duration || time < 0) throw new Error('Invalid position.')
     const shouldResume = (item.status === 'playing')
-    this.pause()
+    this.pause(true)
     item.time = time
-    if (shouldResume) this.play()
+    if (shouldResume) this.play(true)
+    this.emit('seek', item, time)
   }
 
   /**
@@ -113,9 +118,31 @@ class GuildPlayer extends EventEmitter {
       throw new Error("There's one or more static filters in the new filters.")
     }
     const shouldResume = (item.status === 'playing')
-    this.pause()
+    this.pause(true)
     item.filters = newFilters
-    if (shouldResume) this.resume()
+    if (shouldResume) this.resume(true)
+    this.emit('filtersUpdated', item)
+  }
+
+  /**
+   * Skips current item and starts playing the next one
+   */
+  skip () {
+    const item = this.queue.nowPlaying
+    if (!item && !this.queue._d.items.length) return
+    if (!this.queue._d.items.length) return this.stop()
+    this.queue._d.nowPlaying = this.queue._d.shift()
+    this.audioPlayer.stop()
+    this.play()
+  }
+
+  /**
+   * Stops playback and clears the queue
+   */
+  stop () {
+    this.queue.clear()
+    this.emit('stopped')
+    this.audioPlayer.clean(true)
   }
 }
 

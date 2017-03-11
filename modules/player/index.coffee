@@ -1,112 +1,103 @@
-AudioModuleCommands = require './commands'
-QueueManager = require './queueManager'
-AudioHud = require './hud'
-audioFilters = require './filters'
-{ spawn } = require 'child_process'
-{ delay } = Core.util
+reload = require('require-reload')(require)
+EventEmitter = require 'events'
+AudioHud = reload './hud'
+AudioFilters = reload './filters'
+GuildPlayer = reload './models/guildPlayer'
 
 class PlayerModule extends BotModule
   init: =>
-    { @permissions } = @engine
+    @_guilds = {}
     @hud = new AudioHud @
-    @q = new QueueManager @
-    @moduleCommands = new AudioModuleCommands @
-    { @parseTime } = Core.util
+    @filters = AudioFilters
+    @events = new EventEmitter
+    Core.data.subscribe('GuildQueueFeed')
+    Core.data.on('message', @_messageHandler)
+    Core.bot.Dispatcher.on 'VOICE_CHANNEL_JOIN', @_handleVoiceJoin
+    Core.bot.Dispatcher.on 'VOICE_CHANNEL_LEAVE', @_handleVoiceLeave
 
-  handleVideoInfo: (info, msg, args, gdata, playlist=false)=>
-    # Handle playlists
-    @handlePlaylist(info, msg, args, gdata) if typeof info.forEach is 'function'
-    queue = await @q.getForGuild msg.guild
-    info = await @getAdditionalMetadata(info)
+  getForGuild: (guild)=>
+    return @_guilds[guild.id] if @_guilds[guild.id]??
+    # Create a new player object
+    player = new GuildPlayer @, await Core.data.get("GuildQueue:#{guild.id}") or {
+      # "empty" queue
+      nowPlaying: undefined
+      frozen: false
+      items: []
+    }
+    @_guilds[guild.id] = player
+    @events.emit('newPlayer', player)
+    # Relay all events
+    player.on 'playing', (item)=> @events.emit('playing', player, item)
+    player.on 'paused', (item)=> @events.emit('paused', player, item)
+    player.on 'suspended', (item)=> @events.emit('suspended', player, item)
+    player.on 'seek', (item, time)=> @events.emit('seek', player, item, time)
+    player.on 'filtersUpdated', (item)=> @events.emit('filtersUpdated', player, item)
+    player.on 'end', (item)=> @events.emit('end', player, item)
+    player.on 'stopped', => @events.emit('stopped', player)
+    player.queue.on 'newItem', (item)=> @events.emit('newQueueItem', player, player.queue, item)
+    player.queue.on 'removed', (item)=> @events.emit('queueRemoved', player, player.queue, item)
+    player.queue.on 'swapped', (data)=> @events.emit('queueSwapped', player, player.queue, data)
+    player.queue.on 'moved', (data)=> @events.emit('queueMoved', player, player.queue, data)
+    player.queue.on 'shuffled', => @events.emit('queueShuffled', player, player.queue)
+    player.queue.on 'cleared', => @events.emit('queueCleared', player, player.queue)
+    player.queue.on 'updated', => @events.emit('queueUpdated', player, player.queue)
+    player.queue.on 'updated', =>
+      # Save data
+      await Core.data.set("GuildQueue:#{guild.id}", player.queue._d)
+      # Notify other instances when the queue gets updated
+      Core.data.publish('GuildQueueFeed', {
+        type: 'queueUpdated'
+        guild: guild.id
+        by: Core.settings.shardIndex or 0
+      })
 
-    # Check for video length
-    duration = @parseTime info.duration
-    if @checkLength(duration, msg, gdata)
-      msg.reply('The requested video is too long') unless playlist
-      return
+  _messageHandler: (channel, message)=>
+    return unless channel is 'GuildQueueFeed' and message.type
+    switch message.type
+      # Queue updated outside current instance
+      # This will be used in the future for web-based queue management :D
+      when 'queueUpdated'
+        return unless message.guild and message.by
+        return unless message.by isnt (Core.settings.shardIndex or 0)
+        return unless @_guilds[message.guild]
+        newData = await Core.data.get("GuildQueue:#{guild.id}")
+        # Safety Check
+        return unless newData.items
+        @_guilds[message.guild].queue._d = newData
 
-    # Apply filters
-    try
-      filters = @getFilters(args[1], msg.member)
-    catch errors
-      if typeof errors is 'string'
-        return if playlist
-        return msg.reply 'A filter reported errors:', false, {
-          description: errors,
-          color: 0xFF0000
-        }
+  _handleVoiceJoin: (e)=>
+    return unless @_guilds[e.guildId]
+    player = @_guilds[e.guildId]
+    return unless player.queue.nowPlaying and
+           e.channelId is player.queue._d.nowPlaying.voiceChannel.id
+    # Resume playback if suspended
+    if e.channel.members.length > 1 and player.queue.nowPlaying.status is 'suspended'
+      player.resume()
 
-    # Add to queue
-    queue.addToQueue({
-      title: info.title
-      requestedBy: msg.member
-      voiceChannel: msg.member.getVoiceChannel()
-      textChannel: msg.channel
-      path: info.url
-      sauce: info.webpage_url
-      thumbnail: info.thumbnail
-      radioStream: info.isRadioStream or false
-      playlist
-      duration
-      filters
-    })
+  _handleVoiceLeave: (e)=>
+    return unless @_guilds[e.guildId]
+    player = @_guilds[e.guildId]
+    return unless player.queue.nowPlaying and
+           e.channelId is player.queue._d.nowPlaying.voiceChannel.id
+    # Voice channel deleted
+    return player.skip() unless e.channel
+    # Bot moved from channel
+    if e.user.id is Core.bot.User.id
+      return player.skip() if not e.newChannelId
+      player.queue.nowPlaying._d.voiceChannel = e.newChannelId
+      player.queue.emit('updated')
+    # No members left on voice channel
+    if player.queue.nowPlaying.voiceChannel.members.length <= 1
+      player.suspend()
 
-    # Skip if there was a previous item playing prior to a bot restart
-    queue.nextItem() if queue.nowPlaying and
-                        queue.nowPlaying.status is 'playing' and
-                        not queue.audioPlayer.encoderStream
-
-  handlePlaylist: (info, msg, args, gdata)=>
-    unless @permissions.isDJ(msg.member)
-      return msg.reply 'Only people with the DJ role (or higher) is allowed to add playlists.'
-    msg.channel.sendMessage '', false, @hud.addPlaylist(msg.member, info.length)
-    for v in info
-      await @handleVideoInfo(v, msg, args, gdata, true)
-    return
-
-  checkLength: (duration, msg, gdata)=>
-    unless isFinite(duration) and duration > 0
-      return 2 unless @permissions.isDJ(msg.member)
-    if (duration > gdata.data.maxSongLength and not @permissions.isDJ(msg.member)) or
-      (duration > 7200  and not @permissions.isAdmin(msg.member)) or
-      (duration > 43200 and not @permissions.isOwner(msg.author))
-        return 1
-    0
-
-  getAdditionalMetadata: (info)=> new Promise (resolve, reject)=>
-    return resolve(info) if info.duration and isFinite(info.duration)
-    d = ''
-    p = spawn('ffprobe', [info.url, '-show_format', '-v', 'quiet', '-print_format', 'json'])
-    p.stdout.on 'data', (data)=> d += data
-    p.on 'close', (code)=>
-      return reject "Process exited with code #{code}" if code
-      try
-        prop = JSON.parse(d).format
-        # Get the duration
-        info.duration = prop.duration or NaN
-        # Try to use metadata from the ID3 tags as well
-        if prop.tags.title
-          info.title = ''
-          info.title += "#{prop.tags.artist} - " if prop.tags.artist
-          info.title += prop.tags.title
-        # Is this an internet radio stream?
-        if prop.tags.StreamTitle or prop.tags['icy-name']
-          info.isRadioStream = true
-          info.title = prop.tags['icy-name'] if prop.tags['icy-name']
-      resolve(info)
-
-  getFilters: (arg, member, playing)=>
-    return [] if not arg
-    filters = []
-    for filter in arg.match(/\w+=?\S*/g)
-      name = filter.split('=')[0]
-      param = filter.split('=')[1]
-      Filter = audioFilters[name]
-      continue if not Filter
-      f = new Filter(param, member, playing, filters)
-      if playing and f.avoidRuntime
-        throw f.display + ' is a static filter and cannot be applied during playback.'
-      filters.push(f)
-    filters
+  unload: =>
+    # Remove ALL event listeners
+    Object.keys(@_guilds).forEach (g)=>
+      @_guilds[g].removeAllListeners()
+      @_guilds[g].queue.removeAllListeners()
+    @events.removeAllListeners()
+    Core.data.removeListener('message', @_messageHandler)
+    Core.bot.Dispatcher.removeListener('VOICE_CHANNEL_JOIN', @_handleVoiceJoin)
+    Core.bot.Dispatcher.removeListener('VOICE_CHANNEL_LEAVE', @_handleVoiceLeave)
 
 module.exports = PlayerModule
