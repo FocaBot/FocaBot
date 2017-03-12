@@ -90,15 +90,15 @@ class PlayerHUD
         text: "Requested by #{item.requestedBy.name}"
     if item.filters and item.filters.length
       reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
-    if estimated
-      reply.fields.push {
-        name: 'Estimated time for playback:',
-        value: @util.displayTime(estimated)
-      }
     if item.time and item.time > 0
       reply.fields.push {
         name: 'Start at:'
         value: @util.displayTime(item.time)
+      }
+    if estimated
+      reply.fields.push {
+        name: 'Estimated time before playback:',
+        value: @util.displayTime(estimated)
       }
     reply
 
