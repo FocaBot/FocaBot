@@ -22,6 +22,6 @@ class ConfigModule extends BotModule
       dynamicNick: false
     }
 
-    @commands = new Commands @
+    @cmd = new Commands @
 
 module.exports = ConfigModule
