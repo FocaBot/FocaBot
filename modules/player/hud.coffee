@@ -27,7 +27,7 @@ class PlayerHUD
     Now playing in **#{item.voiceChannel.name}**:
     >`#{item.title}` (#{@util.displayTime item.duration}) #{@util.displayFilters item.filters}
     #{if item.radioStream then '\n\n' + @radioInfo(item) + '\n' else ''}
-    Requested by: **#{@item.requestedBy.name}**
+    Requested by: **#{item.requestedBy.name}**
     """
 
   radioInfo: (item)=>
@@ -181,7 +181,8 @@ class PlayerHUD
 
     for qI, i in q.items.slice offset, max
       r.description += """
-      **#{offset+i+1}.** [#{qI.title}](#{qI.sauce}) #{@util.displayFilters qI.filters} \
+      **#{offset+i+1}.** [#{qI.title.replace(/\]/, '\\]')}](#{qI.sauce.replace(/\)/, '\\)')}) \
+      #{@util.displayFilters qI.filters} \
       (#{@util.displayTime qI.duration}) Requested By #{qI.requestedBy.name}\n
       """
     r.description += "Use #{@prefix}queue #{page+1} to see the next page." if page < pages

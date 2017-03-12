@@ -121,7 +121,7 @@ class GuildQueue extends EventEmitter {
     const _item1 = this._d.items[index1]
     this._d.items[index1] = this._d.items[index2]
     this._d.items[index2] = _item1
-    const items = [ this.items[index2], this.items[index2] ]
+    const items = [ this.items[index1], this.items[index2] ]
     this.emit('swapped', { index1, index2, items, user })
     this.emit('updated')
     return { index1, index2, items, user }

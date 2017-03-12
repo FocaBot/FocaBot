@@ -33,7 +33,8 @@ class GuildPlayer extends EventEmitter {
      * The queue
      * @type {GuildQueue}
      */
-    this.queue = new GuildQueue(qData, this)
+    this.queue = this.guildData.queue || new GuildQueue(qData, this)
+    this.guildData.queue = this.queue // Without this, weird things happen when i reload the module
   }
 
   /**
@@ -60,7 +61,9 @@ class GuildPlayer extends EventEmitter {
     }
     // Handle stream end
     stream.on('end', () => {
-      this.audioPlayer.encoderStream.removeAllListeners('timestamp')
+      try {
+        this.audioPlayer.encoderStream.removeAllListeners('timestamp')
+      } catch (e) {}
       if (item.status === 'paused' || item.status === 'suspended') return
       this.emit('end', item)
       if (!this.queue._d.items.length) return this.stop()

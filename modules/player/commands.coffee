@@ -1,5 +1,5 @@
 { delay, parseTime } = Core.util
-{ run } = Core.commands
+{ commands } = Core
 
 class PlayerCommands
   constructor: (@playerModule)->
@@ -40,7 +40,7 @@ class PlayerCommands
         return player.skip()
       return msg.reply 'You are not allowed to skip songs.' unless d.data.voteSkip
       # Vote skip if enabled
-      run('voteskip', msg, args)
+      commands.run('voteskip', msg, args)
 
     @registerCommand 'voteskip', { aliases: ['vs'] }, (msg, args, d, player)=>
       msg.delete() if d.data.autoDel
@@ -112,14 +112,16 @@ class PlayerCommands
       return '¯\_(ツ)_/¯' unless player.queue._d.nowPlaying
       unless player.queue._d.nowPlaying.sauce
         return msg.reply 'Sorry, no sauce for the current item. :C'
-      m = await msg.reply "Here's the sauce of the current item: #{queue.nowPlaying.sauce}"
+      m = await msg.reply """
+      Here's the sauce of the current item: #{player.queue._d.nowPlaying.sauce}
+      """
       await delay(15000)
       m.delete() if d.data.autoDel
 
     # Remove Last / Undo
     @registerCommand 'removelast', { aliases: ['undo', 'rl'] }, (msg, args, d, player)=>
       return msg.channel.sendMessage 'The queue is empty.' unless player.queue._d.items.length
-      run('remove', msg, player.queue._d.items.length)
+      commands.run('remove', msg, player.queue._d.items.length)
 
     # Remove
     @registerCommand 'remove', { aliases: ['rm'] }, (msg, args, d, player)=>
