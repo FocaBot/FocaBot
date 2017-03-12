@@ -38,19 +38,19 @@ class PlayerCommands
         }
 
     # Skip
-    @registerCommand 'skip', (msg, args, d, player)=>
-      msg.delete() if d.data.autoDel
+    @registerCommand 'skip', (m, args, d, player)=>
+      m.delete() if d.data.autoDel
       # Some checks
-      return if msg.author.bot
+      return if m.author.bot
       unless player.queue._d.items.length or player.queue._d.nowPlaying
-        return msg.reply 'Nothing being played in this server.'
+        return m.reply 'Nothing being played in this server.'
       # Instant skip for DJs and people who requested the current element
-      if @permissions.isDJ(msg.member) or msg.author is player.queue.nowPlaying.requestedBy
-        msg.channel.sendMessage "**#{msg.member.name}** skipped the current song."
+      if @permissions.isDJ(m.member) or m.author.id is player.queue._d.nowPlaying.requestedBy
+        m.channel.sendMessage "**#{m.member.name}** skipped the current song."
         return player.skip()
-      return msg.reply 'You are not allowed to skip songs.' unless d.data.voteSkip
+      return m.reply 'You are not allowed to skip songs.' unless d.data.voteSkip
       # Vote skip if enabled
-      commands.run('voteskip', msg, args)
+      commands.run('voteskip', m, args)
 
     @registerCommand 'voteskip', { aliases: ['vs'] }, (msg, args, d, player)=>
       msg.delete() if d.data.autoDel
