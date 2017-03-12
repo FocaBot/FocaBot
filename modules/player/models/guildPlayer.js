@@ -55,6 +55,7 @@ class GuildPlayer extends EventEmitter {
     if (item.duration > 0) {
       this.audioPlayer.encoderStream.on('timestamp', () => {
         try {
+          if (this.queue._d.nowPlaying.path !== item.path) return
           this.queue.nowPlaying.time = this.audioPlayer.timestamp
         } catch (e) { }
       })
