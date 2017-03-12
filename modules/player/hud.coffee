@@ -92,7 +92,7 @@ class PlayerHUD
       reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
     if estimated
       reply.fields.push {
-        name: 'Estimated time before playback:',
+        name: 'Estimated time for playback:',
         value: @util.displayTime(estimated)
       }
     if item.time and item.time > 0
