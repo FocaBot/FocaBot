@@ -20,15 +20,16 @@ class PlayerCommands
       # Check Voice Connection
       unless m.member.getVoiceChannel()
         return m.reply 'You must be in a voice channel to request songs.'
-      # Get Video Information
-      info = await @util.getInfo(title)
-      info.startAt = time or 0
-      if info.startAt > info.duration or info.startAt < 0
-        return msg.reply 'Invalid start time.'
       try
+        # Get Video Information
+        info = await @util.getInfo(title)
+        info.startAt = time or 0
+        if info.startAt > info.duration or info.startAt < 0
+          return msg.reply 'Invalid start time.'
         if info.forEach # Playlist
-          @util.processPlaylist(info, m, '', d, player)
-        @util.processInfo(info, m, '', d, player)
+          await @util.processPlaylist(info, m, '', d, player)
+        else
+          await @util.processInfo(info, m, '', d, player)
       catch e
         msg.reply 'Something went wrong.', false, {
           color: 0xAA3300
