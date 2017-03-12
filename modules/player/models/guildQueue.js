@@ -66,6 +66,7 @@ class GuildQueue extends EventEmitter {
     const itm = { }
     // Convert the item to a JSON-safe object
     Object.assign(itm, item, {
+      uid: (new Chance()).guid(),
       voteSkip: [],
       status: 'queue',
       requestedBy: item.requestedBy.id || item.requestedBy,

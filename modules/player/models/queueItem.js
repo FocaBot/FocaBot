@@ -13,6 +13,14 @@ class QueueItem {
   }
 
   /**
+   * Unique identifier
+   * @type {string}
+   */
+  get uid () {
+    return this._d.uid
+  }
+
+  /**
    * Title of the element
    * @type {string}
    */
