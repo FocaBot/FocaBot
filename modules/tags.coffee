@@ -8,14 +8,14 @@ class TagModule extends BotModule
       return if msg.author.bot or args.length < 2
       return unless d.data.allowTags or @permissions.isDJ msg.member
       # Get or create a new tag
-      tag = (await Core.db.get("Tag:#{args[0]}")) or []
+      tag = (await Core.data.get("Tag:#{args[0]}")) or []
       # Add the response
       tag.push {
         reply: args.slice(1).join(' ')
         by: msg.author.id
       }
       # Save
-      await Core.db.set("Tag:#{args[0]}", tag)
+      await Core.data.set("Tag:#{args[0]}", tag)
       msg.reply 'Tag saved!'
 
     @registerCommand '-', { argSeparator: ' ' }, (msg, args, d)=>

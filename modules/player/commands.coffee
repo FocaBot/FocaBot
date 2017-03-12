@@ -23,9 +23,17 @@ class PlayerCommands
       # Get Video Information
       info = await @util.getInfo(title)
       info.startAt = time or 0
-      if info.forEach # Playlist
-        @util.processPlaylist(info, m, '', d, player)
-      @util.processInfo(info, m, '', d, player)
+      if info.startAt > info.duration or info.startAt < 0
+        return msg.reply 'Invalid start time.'
+      try
+        if info.forEach # Playlist
+          @util.processPlaylist(info, m, '', d, player)
+        @util.processInfo(info, m, '', d, player)
+      catch e
+        msg.reply 'Something went wrong.', false, {
+          color: 0xAA3300
+          description: e.message or 'Something went wrong.' # Windows 10 Flashbacks
+        }
 
     # Skip
     @registerCommand 'skip', (msg, args, d, player)=>

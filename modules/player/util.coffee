@@ -140,7 +140,7 @@ class PlayerUtil
       sauce: info.webpage_url
       thumbnail: info.thumbnail
       radioStream: info.isRadioStream or false
-      time: info.startAt
+      time: info.startAt if isFinite(info.duration) and info.duration > 0
       duration
       filters
     }, playlist)

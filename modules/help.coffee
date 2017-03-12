@@ -27,7 +27,7 @@ class HelpModule extends BotModule
           [Filters](https://focabot.thebit.link/filters?prefix=#{encodeURIComponent pfx}) / \
           [Manual](https://focabot.thebit.link/manual) / \
           [Donate](https://tblnk.me/focabot-donate) / \
-          [GitHub](https://github.com/FocaBot) / \
+          [GitHub](https://github.com/FocaBot)
           """
         }
       ]
