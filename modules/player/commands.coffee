@@ -25,13 +25,13 @@ class PlayerCommands
         info = await @util.getInfo(title)
         info.startAt = time or 0
         if info.startAt > info.duration or info.startAt < 0
-          return msg.reply 'Invalid start time.'
+          return m.reply 'Invalid start time.'
         if info.forEach # Playlist
           await @util.processPlaylist(info, m, '', d, player)
-        else
-          await @util.processInfo(info, m, '', d, player)
+        else # Video
+          @util.processInfo(info, m, '', d, player)
       catch e
-        msg.reply 'Something went wrong.', false, {
+        m.reply 'Something went wrong.', false, {
           color: 0xAA3300
           description: e.message or 'Something went wrong.' # Windows 10 Flashbacks
         }
