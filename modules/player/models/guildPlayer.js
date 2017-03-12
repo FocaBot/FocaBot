@@ -160,8 +160,9 @@ class GuildPlayer extends EventEmitter {
    */
   stop () {
     this.queue.clear()
-    this.emit('stopped')
     this.audioPlayer.clean(true)
+    this.queue._d.nowPlaying = undefined
+    this.emit('stopped')
     this.queue.emit('updated')
   }
 }

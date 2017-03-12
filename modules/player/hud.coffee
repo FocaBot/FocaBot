@@ -66,11 +66,11 @@ class PlayerHUD
   ###
   addItem: (item, pos, player)=>
     # Calculate estimated time
-    estimated = -item.duration
+    estimated = -item.duration + item.time
     if player.queue._d.nowPlaying
-      estimated += player.queue.nowPlaying.duration - item.time
-    estimated += el.duration for el in player.queue.items
-
+      estimated += player.queue.nowPlaying.duration - player.queue.nowPlaying.time
+    estimated += el.duration - el.time for el in player.queue.items
+    
     reply =
       url: item.sauce
       color: 0xAAFF00
