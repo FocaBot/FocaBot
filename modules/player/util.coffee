@@ -108,7 +108,7 @@ class PlayerUtil
       continue if not Filter
       f = new Filter(param, member, playing, filters)
       if playing and f.avoidRuntime
-        throw f.display + ' is a static filter and cannot be applied during playback.'
+        throw new Error f.display + ' is a static filter and cannot be applied during playback.'
       filters.push(f)
     filters
 

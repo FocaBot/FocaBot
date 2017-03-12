@@ -27,9 +27,9 @@ class PlayerCommands
         if info.startAt > info.duration or info.startAt < 0
           return m.reply 'Invalid start time.'
         if info.forEach # Playlist
-          await @util.processPlaylist(info, m, '', d, player)
+          await @util.processPlaylist(info, m, filters, d, player)
         else # Video
-          @util.processInfo(info, m, '', d, player)
+          @util.processInfo(info, m, filters, d, player)
       catch e
         m.reply 'Something went wrong.', false, {
           color: 0xAA3300
@@ -181,30 +181,19 @@ class PlayerCommands
       catch e
         msg.reply e.message if e.message
 
-###
-
     # Update Filters
-    @m.registerCommand 'fx', { aliases: ['setfilters', 'updatefilters', '|'] }, (msg, args)=>
-      queue = await @q.getForGuild msg.guild
-      return unless isFinite(queue.nowPlaying.duration) and queue.nowPlaying.duration > 0
+    @m.registerCommand 'fx', { aliases: ['|'] }, (msg, args, d, player)=>
       return unless @permissions.isDJ(msg.author, msg.guild) or
-                    msg.author.id isnt queue.nowPlaying.requestedBy.id
-      if queue.nowPlaying.filters
-        for filter in queue.nowPlaying.filters
-          return msg.reply """
-          The static filter #{filter.display} avoids further filter changes.
-          """ if filter.avoidRuntime
+                    msg.author.id is player.queue._d.nowPlaying.requestedBy
       try
-        filters = @m.getFilters(args, msg.member, true)
+        filters = @util.parseFilters(args, msg.member, true)
+        player.updateFilters(filters)
       catch e
-        if typeof e is 'string'
-          return msg.reply 'A filter reported errors:', false, {
-            description: e,
+        if e.message
+          return msg.reply 'Something went wrong', false, {
+            description: e.message,
             color: 0xFF0000
           }
         else Core.log e,2
-      queue.updateFilters queue.nowPlaying, filters
-
-###
 
 module.exports = PlayerCommands
