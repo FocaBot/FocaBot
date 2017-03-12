@@ -97,15 +97,16 @@ class GuildQueue extends EventEmitter {
     const item = new QueueItem(this._d.items.splice(index, 1)[0])
     this.emit('removed', { item, user })
     this.emit('updated')
-    return { item }
+    return { item, user }
   }
 
   /**
    * Remove last item
+   * @param {Discordie.IGuildMember} user - User that requested the item removal
    * @returns {object}
    */
-  removeLast () {
-    return this.remove(this.items.length - 1)
+  removeLast (user) {
+    return this.remove(this.items.length - 1, user)
   }
 
   /**
@@ -116,7 +117,7 @@ class GuildQueue extends EventEmitter {
    * @returns {object}
    */
   swap (index1, index2, user) {
-    if (!this._d.items[index1] || !this._d.items[index2]) return
+    if (!this._d.items[index1] || !this._d.items[index2]) return false
     const _item1 = this._d.items[index1]
     this._d.items[index1] = this._d.items[index2]
     this._d.items[index2] = _item1
@@ -134,8 +135,8 @@ class GuildQueue extends EventEmitter {
    * @returns {object}
    */
   move (index, position, user) {
-    if (index >= this._d.items.length || position >= this._d.items.length) return
-    if (index < 0 || position < 0) return
+    if (index >= this._d.items.length || position >= this._d.items.length) return false
+    if (index < 0 || position < 0) return false
     this._d.items.splice(position, 0, this._d.items.splice(index, 1)[0])
     const item = this.items[position]
     this.emit('moved', { index, position, item, user })

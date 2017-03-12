@@ -2,6 +2,7 @@ reload = require('require-reload')(require)
 EventEmitter = require 'events'
 PlayerHud = reload './hud'
 PlayerUtil = reload './util'
+PlayerCommands = reload './commands'
 AudioFilters = reload './filters'
 GuildPlayer = reload './models/guildPlayer'
 
@@ -12,6 +13,7 @@ class PlayerModule extends BotModule
     @events = new EventEmitter
     @util = new PlayerUtil @
     @hud = new PlayerHud @
+    @cmd = new PlayerCommands @
     Core.data.subscribe('GuildQueueFeed')
     Core.data.on('message', @_messageHandler)
     Core.bot.Dispatcher.on 'VOICE_CHANNEL_JOIN', @_handleVoiceJoin
@@ -57,6 +59,14 @@ class PlayerModule extends BotModule
       })
     player
 
+  registerCommand: (name, options, handler)=>
+    if typeof options is 'function'
+      handler = options
+      options = {}
+    super name, options, (msg, args, data, bot, core)=>
+      player = await @getForGuild(msg.guild)
+      handler(msg, args, data, player, bot, core)
+
   _messageHandler: (channel, message)=>
     return unless channel is 'GuildQueueFeed' and message.type
     switch message.type
@@ -74,17 +84,17 @@ class PlayerModule extends BotModule
   _handleVoiceJoin: (e)=>
     return unless @_guilds[e.guildId]
     player = @_guilds[e.guildId]
-    return unless player.queue.nowPlaying and
-           e.channelId is player.queue._d.nowPlaying.voiceChannel.id
+    return unless player.queue._d.nowPlaying and
+           e.channelId is player.queue._d.nowPlaying.voiceChannel
     # Resume playback if suspended
-    if e.channel.members.length > 1 and player.queue.nowPlaying.status is 'suspended'
-      player.resume()
+    if e.channel.members.length > 1 and player.queue._d.nowPlaying.status is 'suspended'
+      player.play()
 
   _handleVoiceLeave: (e)=>
     return unless @_guilds[e.guildId]
     player = @_guilds[e.guildId]
-    return unless player.queue.nowPlaying and
-           e.channelId is player.queue._d.nowPlaying.voiceChannel.id
+    return unless player.queue._d.nowPlaying and
+           e.channelId is player.queue._d.nowPlaying.voiceChannel
     # Voice channel deleted
     return player.skip() unless e.channel
     # Bot moved from channel

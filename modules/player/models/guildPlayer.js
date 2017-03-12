@@ -53,11 +53,14 @@ class GuildPlayer extends EventEmitter {
     // Keep track of the time
     if (item.duration > 0) {
       this.audioPlayer.encoderStream.on('timestamp', () => {
-        this.queue.nowPlaying.time = this.audioPlayer.timestamp
+        try {
+          this.queue.nowPlaying.time = this.audioPlayer.timestamp
+        } catch (e) { }
       })
     }
     // Handle stream end
     stream.on('end', () => {
+      this.audioPlayer.encoderStream.removeAllListeners('timestamp')
       if (item.status === 'paused' || item.status === 'suspended') return
       this.emit('end', item)
       if (!this.queue._d.items.length) return this.stop()
@@ -77,6 +80,7 @@ class GuildPlayer extends EventEmitter {
     if (!item || item.stat) return
     if (item.status === 'paused' || item.status === 'suspended' || item.status === 'queue') return
     if (!isFinite(item.duration) || item.duration <= 0) throw new Error("Can't pause streams.")
+    if (item.stat) throw new Error("Can't pause (static filters)")
     this.queue.nowPlaying.status = 'paused'
     this.audioPlayer.stop()
     if (!silent) this.emit('paused', item)

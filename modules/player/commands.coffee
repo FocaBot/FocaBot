@@ -1,108 +1,89 @@
-reload = require('require-reload')(require)
-youtubedl = require 'youtube-dl'
-promisify = require 'es6-promisify'
-getInfo = promisify(youtubedl.getInfo)
-{ delay } = Core.util
+{ delay, parseTime } = Core.util
+{ run } = Core.commands
 
-class AudioModuleCommands
-  constructor: (@audioModule)->
-    { @q, @hud } = @audioModule
+class PlayerCommands
+  constructor: (@playerModule)->
+    { @hud, @util, @registerCommand } = @playerModule
     { @permissions } = Core
-    { @parseTime } = Core.util
-    @m = @audioModule
 
     # Play
-    @m.registerCommand 'play', { aliases: ['p'], argSeparator: '|' }, (msg,args,data)=>
-      return msg.reply 'No video specified.' unless args[0].trim() or msg.attachments[0]
-      unless msg.member.getVoiceChannel()
-        return msg.reply 'You must be in a voice channel to request songs.'
-      # Use first attachment if present
-      if msg.attachments[0] then urlToFind = msg.attachments[0].url
-      else urlToFind = args[0]
-      try
-        # Get info from the URL using ytdl
-        info = await getInfo(urlToFind, [
-          '--default-search', 'ytsearch', '-f', 'bestaudio'
-        ], { maxBuffer: Infinity })
-      catch
-        # probably not a YT link, try again without flags
-        try info = await getInfo(urlToFind, [], { maxBuffer: Infinity })
-        catch
-          msg.reply 'Something went wrong.'
-      @audioModule.handleVideoInfo info, msg, args, data
+    @registerCommand 'play', { aliases: ['p', 'request', 'add'] }, (m , args, d, player)=>
+      # Parse user input
+      title = args.split('|')[0].trim()
+      filters = (args.split('|')[1] or '').trim()
+      if args.match(/@\s?(\d+(:\d+)*)/)
+        time = parseTime(args.match(/@\s?(\d+(:\d+)*)/)[1])
+        title = title.replace(/@\s?(\d+(:\d+)*)/, '').trim()
+        filters = filters.replace(/@\s?(\d+(:\d+)*)/, '').trim()
+      title = m.attachments[0].url if m.attachments[0]
+      return m.reply 'No video specified.' unless title
+      # Check Voice Connection
+      unless m.member.getVoiceChannel()
+        return m.reply 'You must be in a voice channel to request songs.'
+      # Get Video Information
+      info = await @util.getInfo(title)
+      info.startAt = time or 0
+      if info.forEach # Playlist
+        @util.processPlaylist(info, m, '', d, player)
+      @util.processInfo(info, m, '', d, player)
 
     # Skip
-    @m.registerCommand 'skip', (msg, args, d)=>
-      queue = await @q.getForGuild(msg.guild)
+    @registerCommand 'skip', (msg, args, d, player)=>
       msg.delete() if d.data.autoDel
-      u = msg.member.nick or msg.author.username
       # Some checks
       return if msg.author.bot
-      unless queue.items.length or queue.nowPlaying
+      unless player.queue._d.items.length or player.queue._d.nowPlaying
         return msg.reply 'Nothing being played in this server.'
       # Instant skip for DJs and people who requested the current element
-      if @permissions.isDJ(msg.member) or msg.author is queue.nowPlaying.requestedBy.id
-        msg.channel.sendMessage "**#{u}** skipped the current song."
-        return queue.nextItem()
+      if @permissions.isDJ(msg.member) or msg.author is player.queue.nowPlaying.requestedBy
+        msg.channel.sendMessage "**#{msg.member.name}** skipped the current song."
+        return player.skip()
       return msg.reply 'You are not allowed to skip songs.' unless d.data.voteSkip
       # Vote skip if enabled
-      Core.commands.run('voteskip', msg, args)
+      run('voteskip', msg, args)
 
-    @m.registerCommand 'voteskip', { aliases: ['vs'] }, (msg, args, d)=>
-      queue = await @q.getForGuild(msg.guild)
-      msg.delete() if d.data.autoDel and not msg.deleted
-      u = msg.member.nick or msg.author.username
+    @registerCommand 'voteskip', { aliases: ['vs'] }, (msg, args, d, player)=>
+      msg.delete() if d.data.autoDel
       return msg.reply 'You are not allowed to skip songs.' unless d.data.voteSkip
       return msg.reply 'You must be in a voice channel.' unless msg.member.getVoiceChannel()
-      if queue.nowPlaying.voiceChannel.id isnt msg.member.getVoiceChannel().id
+      unless player.queue.nowPlaying.voiceChannel is msg.member.getVoiceChannel()
         return msg.reply 'You must be in the same voice channel the bot is in.'
-      queue.nowPlaying.voteSkip = [] unless queue.nowPlaying.voteSkip
-
-      if msg.author.id in queue.nowPlaying.voteSkip
+      if msg.author.id in player.queue.nowPlaying.voteSkip
         return msg.reply 'Did you really try to skip this song **again**?'
       # Democracy!
       # ~40% of channel members
-      targetVotes = Math.round(queue.nowPlaying.voiceChannel.members.length * 0.4)
-      queue.nowPlaying.voteSkip.push(msg.author.id)
-      votes = queue.nowPlaying.voteSkip.length
+      targetVotes = Math.round(player.queue.nowPlaying.voiceChannel.members.length * 0.4)
+      player.queue._d.nowPlaying.voteSkip.push(msg.author.id)
+      votes = player.queue._d.nowPlaying.voteSkip.length
       msg.channel.sendMessage """
-      **#{u}** voted to skip the current song (#{votes}/#{targetVotes})
+      **#{msg.member.name}** voted to skip the current song (#{votes}/#{targetVotes})
       """
 
       if votes >= targetVotes
         msg.channel.sendMessage 'Skipping current song ~~with the power of democracy~~.'
-        queue.nextItem()
+        player.skip()
 
     # Clear / Stop
-    @m.registerCommand 'clear', { aliases: ['stop'], djOnly: true }, (msg)=>
-      queue = await @q.getForGuild msg.guild
-      queue.clearQueue()
+    @registerCommand 'clear', { aliases: ['stop'], djOnly: true }, (msg, a, d, player)=>
+      player.stop()
       msg.channel.sendMessage 'Queue cleared.'
 
     # Pause
-    @m.registerCommand 'pause', { djOnly: true }, (msg)=>
-      queue = await @q.getForGuild msg.guild
-      unless isFinite(queue.nowPlaying.duration) and queue.nowPlaying.duration > 0
-        return msg.reply "You can't pause streams."
-      if queue.nowPlaying.filters
-        for filter in queue.nowPlaying.filters
-          return msg.reply """
-          You can't pause this song (static filter #{filter.display}).
-          """ if filter.avoidRuntime
-      queue.pause()
+    @registerCommand 'pause', { djOnly: true }, (msg, a, d, player)=>
+      try player.pause()
+      catch e
+        msg.reply e.message if e.message
 
     # Resume
-    @m.registerCommand 'resume', { djOnly: true }, (msg)=>
-      queue = await @q.getForGuild msg.guild
-      queue.resume()
+    @registerCommand 'resume', { djOnly: true }, (msg, a , d, player)=>
+      player.play()
 
     # Now Playing (np)
-    @m.registerCommand 'np', { aliases: ['nowplaying', 'n'] }, (msg, args, d)=>
-      queue = await @q.getForGuild msg.guild
-      return 'Nothing being played.' unless queue.nowPlaying
+    @registerCommand 'np', { aliases: ['nowplaying', 'n'] }, (msg, a, d, player)=>
+      return 'Nothing being played.' unless player.queue._d.nowPlaying
       m = await msg.channel.sendMessage(
-        "Now playing in `#{queue.nowPlaying.voiceChannel.name}`:",
-        false, await @hud.nowPlayingEmbed(queue, queue.nowPlaying)
+        "Now playing in `#{player.queue.nowPlaying.voiceChannel.name}`:",
+        false, await @hud.nowPlayingEmbed(player.queue.nowPlaying)
       )
       if d.data.autoDel
         msg.delete()
@@ -110,124 +91,85 @@ class AudioModuleCommands
         m.delete()
 
     # View Queue
-    @m.registerCommand 'queue', { aliases: ['q'] }, (msg, args, d)=>
-      queue = await @q.getForGuild msg.guild
-      m = await msg.channel.sendMessage await @hud.nowPlaying(queue, queue.nowPlaying),
+    @registerCommand 'queue', { aliases: ['q'] }, (msg, args, d, player)=>
+      return 'Nothing being played.' unless player.queue._d.nowPlaying
+      m = await msg.channel.sendMessage await @hud.nowPlaying(player.queue.nowPlaying),
                                         false,
-                                        @hud.queue(queue, parseInt(args) or 1)
+                                        @hud.queue(player.queue, parseInt(args) or 1)
       if d.data.autoDel
         msg.delete()
         await delay(30000)
         m.delete()
 
     # Shuffle
-    @m.registerCommand 'shuffle', { djOnly: true }, (msg, args, d)=>
-      queue = await @q.getForGuild msg.guild
-      if queue.items.length
-        queue.shuffle()
-        msg.channel.sendMessage '✅'
-      else
-        m = await msg.channel.sendMessage 'The queue is empty.'
-        await delay(5000)
-        m.delete() if d.data.autoDel
+    @registerCommand 'shuffle', { djOnly: true }, (msg, a, d, player)=>
+      return msg.channel.sendMessage 'The queue is empty.' unless player.queue._d.items.length
+      player.queue.shuffle()
+      msg.channel.sendMessage '✅'
 
     # Sauce
-    @m.registerCommand 'sauce', { aliases: ['source', 'src'] }, (msg, args, d)=>
-      queue = await @q.getForGuild msg.guild
-      unless queue.nowPlaying
-        return msg.channel.sendMessage 'Nothing being played on the current server.'
-      unless queue.nowPlaying.sauce
-        m = await msg.reply 'Sorry, no sauce for the current item. :C'
-      else m = await msg.reply "Here's the sauce of the current item: #{queue.nowPlaying.sauce}"
+    @registerCommand 'sauce', { aliases: ['source', 'src'] }, (msg, args, d, player)=>
+      return '¯\_(ツ)_/¯' unless player.queue._d.nowPlaying
+      unless player.queue._d.nowPlaying.sauce
+        return msg.reply 'Sorry, no sauce for the current item. :C'
+      m = await msg.reply "Here's the sauce of the current item: #{queue.nowPlaying.sauce}"
       await delay(15000)
       m.delete() if d.data.autoDel
 
     # Remove Last / Undo
-    @m.registerCommand 'removelast', { aliases: ['undo', 'rl'] }, (msg, args, d)=>
-      queue = await @q.getForGuild msg.guild
-      return msg.channel.sendMessage 'The queue is empty.' if not queue.items.length
-      [..., last] = queue.items
-      if last.requestedBy.id is msg.author.id or @permissions.isDJ msg.author, msg.guild
-        item = queue.items[queue.items.length-1]
-        msg.channel.sendMessage 'Removed from the queue:',
-                                false,
-                                @hud.removeItem(item, msg.member)
-        queue.removeLast()
-      else
-        m = await msg.channel.sendMessage 'You can only remove your own items from the queue.'
-        await delay(5000)
-        m.delete() if d.data.autoDel
+    @registerCommand 'removelast', { aliases: ['undo', 'rl'] }, (msg, args, d, player)=>
+      return msg.channel.sendMessage 'The queue is empty.' unless player.queue._d.items.length
+      run('remove', msg, player.queue._d.items.length)
 
     # Remove
-    @m.registerCommand 'remove', { aliases: ['rm'] }, (msg, args, d)=>
-      queue = await @q.getForGuild msg.guild
+    @registerCommand 'remove', { aliases: ['rm'] }, (msg, args, d, player)=>
       index = (parseInt args) - 1
-      itm = queue.items[index]
-      if itm
-        if itm.requestedBy.id is msg.author.id or @permissions.isDJ msg.author, msg.guild
-          item = queue.items[index]
-          msg.channel.sendMessage 'Removed from the queue:',
-                                  false,
-                                  @hud.removeItem(item, msg.member)
-          queue.remove(index)
-        else
-          m = msg.channel.sendMessage 'You can only remove your own items from the queue.'
-          await delay(5000)
-          m.delete() if d.data.autoDel
-      else
-        m = await msg.channel.sendMessage "Can't find the specified item in the queue."
-        await delay(5000)
-        m.delete() if d.data.autoDel
+      itm = player.queue._d.items[index]
+      unless itm
+        return msg.channel.sendMessage "Can't find the specified item in the queue."
+      unless itm.requestedBy is msg.author.id or @permissions.isDJ msg.member
+        return msg.channel.sendMessage 'You can only remove your own items from the queue.'
+      { item } = player.queue.remove(index, msg.member)
+      msg.channel.sendMessage 'Removed from the queue:',
+                              false,
+                              @hud.removeItem(item, msg.member)
 
     # Swap
-    @m.registerCommand 'swap', {
+    @registerCommand 'swap', {
       aliases: ['sp'], djOnly: true, argSeparator: ' '
-    }, (msg, args, d)=>
-      queue = await @q.getForGuild msg.guild
+    }, (msg, args, d, player)=>
       return msg.channel.sendMessage 'Invalid arguments provided.' unless args.length is 2
-      indexes = [parseInt(args[0])-1, parseInt(args[1])-1]
-      for idx of indexes
-        unless queue.items[idx]?
-          return msg.channel.sendMessage "Can't find the specified items in the queue."
-      items = queue.swap(indexes[0], indexes[1])
-      msg.channel.sendMessage @hud.swapItems msg.member, items, indexes
+      result = player.queue.swap(parseInt(args[0])-1, parseInt(args[1])-1, msg.member)
+      return msg.reply 'Something went wrong' unless result
+      msg.channel.sendMessage @hud.swapItems msg.member, result.items,
+                              [result.index1, result.index2]
 
     # Move
-    @m.registerCommand 'move', {
+    @registerCommand 'move', {
       aliases: ['mv'], djOnly: true, argSeparator: ' '
-    }, (msg, args)=>
-      queue = await @q.getForGuild msg.guild
+    }, (msg, args, d, player)=>
       return msg.channel.sendMessage 'Invalid arguments provided.' unless args.length is 2
-      indexes = [parseInt(args[0])-1, parseInt(args[1])-1]
-      for idx of indexes
-        unless queue.items[idx]
-          return msg.channel.sendMessage "Can't find the specified items in the queue."
-      item = queue.move indexes[0], indexes[1]
-      msg.channel.sendMessage @hud.moveItem msg.member, item, indexes
+      result = player.queue.move(parseInt(args[0])-1, parseInt(args[1])-1, msg.member)
+      return msg.reply 'Something went wrong' unless result
+      msg.channel.sendMessage @hud.moveItem msg.member, result.item,
+                              [result.index, result.position]
 
     # Move to first place
-    @m.registerCommand 'bump', { djOnly: true }, (msg, args)=>
-      queue = await @q.getForGuild msg.guild
+    @registerCommand 'bump', { djOnly: true }, (msg, args, d, player)=>
       return msg.channel.sendMessage 'Invalid arguments provided.' unless parseInt(args) > 0
-      unless queue.items[parseInt(args)-1]
-        return msg.channel.sendMessage "Can't find the specified item in the queue."
-      item = queue.move parseInt(args)-1, 0
-      msg.channel.sendMessage @hud.moveItem msg.member, item, indexes
+      result = player.queue.bump(parseInt(args)-1, msg.member)
+      return msg.reply 'Something went wrong' unless result
+      msg.channel.sendMessage @hud.moveItem msg.member, result.item,
+                              [result.index, result.position]
 
     # Seek
-    @m.registerCommand 'seek', { aliases: ['s'] }, (msg, args)=>
-      queue = await @q.getForGuild msg.guild
-      return unless isFinite queue.nowPlaying.duration and queue.nowPlaying.duration > 0
-      return unless @permissions.isDJ(msg.author, msg.guild) or
-                    msg.author.id is queue.nowPlaying.requestedBy.id
-      if queue.nowPlaying.filters
-        for filter in queue.nowPlaying.filters
-          return msg.reply """
-          You can't seek through this song (static filter #{filter.display}).
-          """ if filter.avoidRuntime
-      if @parseTime(args) > queue.nowPlaying.duration or @parseTime(args) < 0
-        return msg.reply "You can't seek to that position"
-      queue.seek @parseTime(args)
+    @registerCommand 'seek', { aliases: ['s'], djOnly: true }, (msg, args, d, player)=>
+      try
+        player.seek(parseTime(args))
+      catch e
+        msg.reply e.message if e.message
+
+###
 
     # Update Filters
     @m.registerCommand 'fx', { aliases: ['setfilters', 'updatefilters', '|'] }, (msg, args)=>
@@ -251,4 +193,6 @@ class AudioModuleCommands
         else Core.log e,2
       queue.updateFilters queue.nowPlaying, filters
 
-module.exports = AudioModuleCommands
+###
+
+module.exports = PlayerCommands

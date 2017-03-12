@@ -1,9 +1,15 @@
 moment = require 'moment'
 url = require 'url'
+youtubedl = require 'youtube-dl'
+promisify = require 'es6-promisify'
 { spawn } = require 'child_process'
+{ parseTime } = Core.util
+ytdl = promisify(youtubedl.getInfo)
 
 class PlayerUtil
   constructor: (@playerModule)->
+    { @permissions } = Core
+    { @hug } = @playerModule
 
   # Converts an array of filters to an user friendly string
   displayFilters: (filters)=>
@@ -45,5 +51,108 @@ class PlayerUtil
     handle = '🔘'
     pos = Math.floor pcnt * path.length
     path.substr(0, pos) + handle + path.substr(pos)
+
+  # Checks the element duration to avoid long items
+  checkLength: (duration, msg, gData)=>
+    unless (isFinite(duration) and duration > 0) or @permissions.isDJ(msg.member)
+      return 2 # Can't add livestreams
+    if (duration > gData.data.maxSongLength and not @permissions.isDJ(msg.member)) or
+      (duration > 7200  and not @permissions.isAdmin(msg.member)) or
+      (duration > 43200 and not @permissions.isOwner(msg.author))
+        return 1 # Video too long
+    0
+
+  # Uses FFProbe to get additional metadata of the file/stream
+  getAdditionalMetadata: (info)=> new Promise (resolve, reject)=>
+    return resolve(info) if (info.duration and isFinite(info.duration)) or info.forEach
+    d = ''
+    p = spawn('ffprobe', [info.url, '-show_format', '-v', 'quiet', '-print_format', 'json'])
+    p.stdout.on 'data', (data)=> d += data
+    p.on 'close', (code)=>
+      return reject "Process exited with code #{code}" if code
+      try
+        prop = JSON.parse(d).format
+        # Get the duration
+        info.duration = prop.duration or NaN
+        # Try to use metadata from the ID3 tags as well
+        if prop.tags.title
+          info.title = ''
+          info.title += "#{prop.tags.artist} - " if prop.tags.artist
+          info.title += prop.tags.title
+        # Is this an internet radio stream?
+        if prop.tags.StreamTitle or prop.tags['icy-name']
+          info.isRadioStream = true
+          info.title = prop.tags['icy-name'] if prop.tags['icy-name']
+      resolve(info)
+
+  # Uses youtube-dl to get information of an URL or search term
+  getInfo: (query)=>
+    flags = ['--default-search', 'ytsearch', '-f', 'bestaudio']
+    try
+      # get information
+      info = await ytdl(query, flags, { maxBuffer: Infinity })
+    catch
+      # probably not a YT link, try again without flags
+      info = await ytdl(query, [], { maxBuffer: Infinity })
+    # Get additional metadata
+    await @getAdditionalMetadata(info)
+
+  # Parses a list of filters (| speed=2 distort, etc)
+  parseFilters: (arg, member, playing)=>
+    return [] if not arg
+    filters = []
+    for filter in arg.match(/\w+=?\S*/g)
+      name = filter.split('=')[0]
+      param = filter.split('=')[1]
+      Filter = @playerModule.filters[name]
+      continue if not Filter
+      f = new Filter(param, member, playing, filters)
+      if playing and f.avoidRuntime
+        throw f.display + ' is a static filter and cannot be applied during playback.'
+      filters.push(f)
+    filters
+
+  # Processes video information (and adds it to the queue)
+  processInfo: (info, msg, filters, gData, player, playlist = false)=>
+    return unless info.url
+    # Check Length
+    duration = parseTime(info.duration)
+    if @checkLength(duration, msg, gData)
+      msg.reply('The requested video is too long') unless playlist
+      return
+    # Parse Filters
+    try
+      filters = @parseFilters(filters, msg.member)
+    catch errors
+      if typeof errors is 'string'
+        return if playlist
+        return msg.reply 'A filter reported errors:', false, {
+          description: errors,
+          color: 0xFF0000
+        }
+    # Add the item to the queue
+    player.queue.addItem({
+      title: info.title
+      requestedBy: msg.member
+      voiceChannel: msg.member.getVoiceChannel()
+      textChannel: msg.channel
+      path: info.url
+      sauce: info.webpage_url
+      thumbnail: info.thumbnail
+      radioStream: info.isRadioStream or false
+      time: info.startAt
+      duration
+      filters
+    }, playlist)
+
+  # Same as processInfo but for playlists
+  processPlaylist: (info, msg, filters, gData, player)=>
+    return unless info.forEach
+    unless @permissions.isDJ(msg.member)
+      return msg.reply 'Only people with the DJ role (or higher) is allowed to add playlists.'
+    msg.channel.sendMessage '', false, @hud.addPlaylist(msg.member, info.length)
+    for v in info
+      @processInfo(await @getAdditionalMetadata(v), msg, filters, gData, player, true)
+    return
 
 module.exports = PlayerUtil
