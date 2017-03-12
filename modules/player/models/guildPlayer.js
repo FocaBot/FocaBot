@@ -137,7 +137,7 @@ class GuildPlayer extends EventEmitter {
     const shouldResume = (item.status === 'playing')
     this.pause(true)
     item.filters = newFilters
-    if (shouldResume) this.resume(true)
+    if (shouldResume) this.play(true)
     this.emit('filtersUpdated', item)
     this.queue.emit('updated')
   }
