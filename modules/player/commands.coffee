@@ -182,7 +182,7 @@ class PlayerCommands
         msg.reply e.message if e.message
 
     # Update Filters
-    @m.registerCommand 'fx', { aliases: ['|'] }, (msg, args, d, player)=>
+    @registerCommand 'fx', { aliases: ['|'] }, (msg, args, d, player)=>
       return unless @permissions.isDJ(msg.author, msg.guild) or
                     msg.author.id is player.queue._d.nowPlaying.requestedBy
       try
