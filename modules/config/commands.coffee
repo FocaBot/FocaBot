@@ -38,8 +38,8 @@ class ConfigCommands
       maxSongLength:
         type: Number
         integer: true
-        min: 60
-        max: 10800
+        min: 15
+        max: 21600
         def: 1800
       dynamicNick:
         type: Boolean
