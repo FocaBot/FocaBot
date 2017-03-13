@@ -189,11 +189,9 @@ class PlayerCommands
         filters = @util.parseFilters(args, msg.member, true)
         player.updateFilters(filters)
       catch e
-        if e.message
-          return msg.reply 'Something went wrong', false, {
-            description: e.message,
-            color: 0xFF0000
-          }
-        else Core.log e,2
+        return msg.reply 'Something went wrong', false, {
+          description: e.message or e,
+          color: 0xFF0000
+        }
 
 module.exports = PlayerCommands
