@@ -210,16 +210,6 @@ class QueueItem {
     return time
   }
 
-  set originalTime (val) {
-    let time = val
-    if (!time) return
-    // Transform the time acording to the filters
-    this.filters.forEach(filter => {
-      if (filter.timeModifier) time = Core.util.evalExpr(filter.timeModifier, time)
-    })
-    this._d.time = val
-  }
-
   /**
    * FFMPEG Flags (from filters and playback position)
    * @type {object}
