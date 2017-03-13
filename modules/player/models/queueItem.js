@@ -95,6 +95,12 @@ class QueueItem {
   }
 
   set filters (v) {
+    let time = this.originalTime
+    // Scale the time according to the filters.
+    v.forEach(filter => {
+      if (filter.timeModifier) time = Core.util.evalExpr(filter.timeModifier, time)
+    })
+    this._d.time = time
     this._d.filters = v
   }
 
