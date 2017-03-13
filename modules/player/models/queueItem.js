@@ -220,7 +220,7 @@ class QueueItem {
     // Append the filters
     if (filters.length) flags.output.push('-af', filters.join(', '))
     // Current Time
-    if (this.originalTime > 0) flags.input.push('-ss', this.originalTime)
+    if (this.originalTime > 0) flags.input.push('-ss', this.time)
     return flags
   }
 
