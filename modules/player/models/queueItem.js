@@ -10,6 +10,7 @@ class QueueItem {
    */
   constructor (data) {
     this._d = data
+    this.warpTime = 0
   }
 
   /**
@@ -220,7 +221,7 @@ class QueueItem {
     // Append the filters
     if (filters.length) flags.output.push('-af', filters.join(', '))
     // Current Time
-    if (this.originalTime > 0) flags.input.push('-ss', this.time)
+    if (this.originalTime > 0) flags.input.push('-ss', this.warpTime || this.time)
     return flags
   }
 

@@ -136,6 +136,7 @@ class GuildPlayer extends EventEmitter {
     }
     const shouldResume = (item.status === 'playing')
     this.pause(true)
+    item.warpTime = item.originalTime
     item.filters = newFilters
     if (shouldResume) this.play(true)
     this.emit('filtersUpdated', item)
