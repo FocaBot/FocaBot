@@ -10,7 +10,6 @@ class QueueItem {
    */
   constructor (data) {
     this._d = data
-    this.warpTime = 0
   }
 
   /**
@@ -198,11 +197,21 @@ class QueueItem {
   get originalTime () {
     let time = this._d.time
     if (!time) return 0
-    // Transform the duration acording to the filters
+    // Transform the time acording to the filters
     this.filters.forEach(filter => {
       if (filter.inverseTime) time = Core.util.evalExpr(filter.inverseTime, time)
     })
     return time
+  }
+
+  set originalTime (val) {
+    let time = val
+    if (!time) return
+    // Transform the time acording to the filters
+    this.filters.forEach(filter => {
+      if (filter.timeModifier) time = Core.util.evalExpr(filter.timeModifier, time)
+    })
+    this._d.time = val
   }
 
   /**
@@ -221,7 +230,7 @@ class QueueItem {
     // Append the filters
     if (filters.length) flags.output.push('-af', filters.join(', '))
     // Current Time
-    if (this.originalTime > 0) flags.input.push('-ss', this.warpTime || this.time)
+    if (this.originalTime > 0) flags.input.push('-ss', this.originalTime)
     return flags
   }
 

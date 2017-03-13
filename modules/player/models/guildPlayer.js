@@ -135,9 +135,10 @@ class GuildPlayer extends EventEmitter {
       throw new Error("There's one or more static filters in the new filters.")
     }
     const shouldResume = (item.status === 'playing')
+    const originalTime = item.originalTime
     this.pause(true)
-    item.warpTime = item.originalTime
     item.filters = newFilters
+    item.originalTime = originalTime
     if (shouldResume) this.play(true)
     this.emit('filtersUpdated', item)
     this.queue.emit('updated')
