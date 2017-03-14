@@ -16,6 +16,7 @@ module.exports =
   reverse: filter 'reverse'         # | reverse                         [S]
   speed: filter 'speed'             # | speed=1
   tempo: filter 'tempo'             # | tempo=1
+  treble: filter 'treble'           # | treble=-10                 [DJ]
   tremolo: filter 'tremolo'         # | tremolo=5
   volume: filter 'volume'           # | volume=0                   [DJ]
   nightcore: preset 'speed', '1.22' # | nightcore
