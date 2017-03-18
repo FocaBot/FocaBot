@@ -45,33 +45,42 @@ class GuildPlayer extends EventEmitter {
     if (!this.queue.nowPlaying) return
     if (this.queue.nowPlaying.status === 'playing' && this.audioPlayer.encoderStream) return
     const item = this.queue.nowPlaying
-    const stream = await this.audioPlayer.play(item.voiceChannel, item.path, item.flags, item.time)
-    // Set bot as self deafen
-    item.voiceChannel.join(false, true)
-    item.status = 'playing'
-    if (!silent) this.emit('playing', item)
-    if (item.time === 0) this.emit('start', item)
     try {
-      this.audioPlayer.encoderStream.removeAllListeners('timestamp')
-    } catch (e) {}
-    // Keep track of the time
-    if (item.duration > 0) {
-      this.audioPlayer.encoderStream.on('timestamp', () => {
-        try {
-          if (this.queue._d.nowPlaying.uid !== item.uid) return
-          this.queue.nowPlaying.time = this.audioPlayer.timestamp
-        } catch (e) { }
+      const stream = await this.audioPlayer.play(item.voiceChannel, item.path, item.flags, item.time)
+      // Set bot as self deafen
+      item.voiceChannel.join(false, true)
+      item.status = 'playing'
+      if (!silent) this.emit('playing', item)
+      if (item.time === 0) this.emit('start', item)
+      try {
+        this.audioPlayer.encoderStream.removeAllListeners('timestamp')
+      } catch (e) {}
+      // Keep track of the time
+      if (item.duration > 0) {
+        this.audioPlayer.encoderStream.on('timestamp', () => {
+          try {
+            if (this.queue._d.nowPlaying.uid !== item.uid) return
+            this.queue.nowPlaying.time = this.audioPlayer.timestamp
+          } catch (e) { }
+        })
+      }
+      // Handle stream end
+      stream.on('end', () => {
+        if (item.status === 'paused' || item.status === 'suspended') return
+        this.emit('end', item)
+        if (!this.queue._d.items.length) return this.stop()
+        this.queue._d.nowPlaying = this.queue._d.items.shift()
+        this.play()
       })
-    }
-    // Handle stream end
-    stream.on('end', () => {
-      if (item.status === 'paused' || item.status === 'suspended') return
-      this.emit('end', item)
+      if (!silent) this.queue.emit('updated')
+    } catch (e) {
+      item.textChannel.sendMessage(
+        "Couldn't join to the voice channel (check permissions). Skipping..."
+      )
       if (!this.queue._d.items.length) return this.stop()
       this.queue._d.nowPlaying = this.queue._d.items.shift()
       this.play()
-    })
-    if (!silent) this.queue.emit('updated')
+    }
   }
 
   /**
