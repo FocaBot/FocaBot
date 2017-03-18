@@ -14,7 +14,7 @@ class TagModule extends BotModule
 
     @registerCommand '+', { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 2
-      return unless d.data.allowTags or @permissions.isDJ msg.member
+      return unless d.data.allowTags
       tag = new Tag {
         key: args[0].toLowerCase()
         reply: args.slice(1).join(' ')
@@ -25,7 +25,7 @@ class TagModule extends BotModule
 
     @registerCommand '-', { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 1
-      return unless d.data.allowTags or @permissions.isDJ msg.member
+      return unless d.data.allowTags
       q = { by: msg.author.id, key: args[0] }
       if args.length > 1
         if args[1].toLowerCase() is 'all' and @permissions.isOwner msg.author
@@ -40,7 +40,7 @@ class TagModule extends BotModule
 
     @registerCommand '!', { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 1
-      return unless d.data.allowTags or @permissions.isDJ msg.member
+      return unless d.data.allowTags
       Tag.filter({ key: args[0].toLowerCase() }).run().then (results)=>
         chance = new Chance()
         tag = chance.pickone results
