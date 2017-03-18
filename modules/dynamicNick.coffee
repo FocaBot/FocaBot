@@ -3,10 +3,10 @@
 # NOTE: THIS MUST BE LOADED AFTER THE PLAYER MODULE
 class DynamicNick extends BotModule
   ready: =>
-    Core.modules.loaded.player.removeListener('playing', @handlePlayback)
-    Core.modules.loaded.player.removeListener('paused', @handlePause)
-    Core.modules.loaded.player.removeListener('suspended', @handlePause)
-    Core.modules.loaded.player.removeListener('stopped', @handleStop)
+    Core.modules.loaded.player.on('playing', @handlePlayback)
+    Core.modules.loaded.player.on('paused', @handlePause)
+    Core.modules.loaded.player.on('suspended', @handlePause)
+    Core.modules.loaded.player.on('stopped', @handleStop)
     
   handlePlayback: ({ guild, guildData }, item)=>
     return unless guildData.data.dynamicNick
