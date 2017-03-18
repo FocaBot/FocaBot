@@ -10,15 +10,15 @@ class DynamicNick extends BotModule
     
   handlePlayback: ({ guild, guildData }, item)=>
     return unless guildData.data.dynamicNick
-    Core.bot.User.memberOf(guild).setNickname("▶ | #{@getTitle(item)}")
+    try Core.bot.User.memberOf(guild).setNickname("▶ | #{@getTitle(item)}")
 
   handlePause: ({ guild, guildData }, item)=>
     return unless guildData.data.dynamicNick
-    Core.bot.User.memberOf(guild).setNickname("⏸ | #{@getTitle(item)}")
+    try Core.bot.User.memberOf(guild).setNickname("⏸ | #{@getTitle(item)}")
 
   handleStop: ({ guild, guildData })=>
     return unless guildData.data.dynamicNick
-    Core.bot.User.memberOf(guild).setNickname(null)
+    try Core.bot.User.memberOf(guild).setNickname(null)
 
   getTitle: (item)=>
     title = item.title.substr(0, 28)
