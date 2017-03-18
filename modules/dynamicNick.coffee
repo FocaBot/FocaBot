@@ -31,3 +31,5 @@ class DynamicNick extends BotModule
     Core.modules.loaded.player.removeListener('paused', @handlePause)
     Core.modules.loaded.player.removeListener('suspended', @handlePause)
     Core.modules.loaded.player.removeListener('stopped', @handleStop)
+
+module.exports = DynamicNick
