@@ -6,7 +6,7 @@ class TagModule extends BotModule
 
     @registerCommand '+', { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 2
-      return unless d.data.allowTags or @permissions.isDJ msg.member
+      return unless d.data.allowTags
       # Get or create a new tag
       tag = (await Core.data.get("Tag:#{args[0]}")) or []
       # Add the response
@@ -20,7 +20,7 @@ class TagModule extends BotModule
 
     @registerCommand '-', { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 1
-      return unless d.data.allowTags or @permissions.isDJ msg.member
+      return unless d.data.allowTags
       # Try to get existing tag
       tag = await Core.data.get("Tag:#{args[0].toLowerCase()}")
       return msg.reply 'Deleted 0 tag(s)!' unless tag?
@@ -44,7 +44,7 @@ class TagModule extends BotModule
 
     @registerCommand '!', { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 1
-      return unless d.data.allowTags or @permissions.isDJ msg.member
+      return unless d.data.allowTags
       # Get the tag
       tag = await Core.data.get("Tag:#{args[0].toLowerCase()}")
       return unless tag?
