@@ -20,6 +20,8 @@ class PlayerCommands
       # Check Voice Connection
       unless m.member.getVoiceChannel()
         return m.reply 'You must be in a voice channel to request songs.'
+      if @util.checkItemCountLimit(player, m.member)
+        return m.reply 'You have exceeded the limit of items in queue for this server.'
       try
         # Get Video Information
         info = await @util.getInfo(title)

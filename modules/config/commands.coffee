@@ -44,6 +44,11 @@ class ConfigCommands
       dynamicNick:
         type: Boolean
         def: false
+      maxItems:
+        type: Number
+        integer: true
+        min: 0
+        def: 0
     }
 
     @module.registerCommand 'config', { adminOnly: true, argSeparator: ' ' }, (msg,args,d)=>
