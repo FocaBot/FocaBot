@@ -24,7 +24,7 @@ class PlayerModule extends BotModule
     # Get guild data
     gData = await Core.guilds.getGuild(guild)
     # Create a new player object
-    player = new GuildPlayer @, gData, await Core.data.get("GuildQueue:#{guild.id}") or {
+    player = new GuildPlayer guild, gData, await Core.data.get("GuildQueue:#{guild.id}") or {
       # "empty" queue
       nowPlaying: undefined
       frozen: false
