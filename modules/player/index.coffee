@@ -65,6 +65,12 @@ class PlayerModule extends BotModule
       options = {}
     super name, options, (msg, args, data, bot, core)=>
       player = await @getForGuild(msg.guild)
+      # Frozen Queue = No Music Commands
+      if player.queue.frozen and not options.ignoreFreeze
+        return msg.reply """
+        The queue is currently frozen. It is in read-only mode until a DJ or \
+        Bot Commander unfreezes it with `#{Core.settings.prefix}unfreeze`
+        """
       handler(msg, args, data, player, bot, core)
 
   _messageHandler: (channel, message)=>

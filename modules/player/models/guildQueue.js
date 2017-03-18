@@ -46,6 +46,11 @@ class GuildQueue extends EventEmitter {
     return this._d.frozen
   }
 
+  set frozen (v) {
+    this._d.frozen = v
+    this.emit('updated')
+  }
+
   /**
    * The associated guild
    * @type {Discordie.IGuild}

@@ -89,7 +89,9 @@ class PlayerCommands
       player.play()
 
     # Now Playing (np)
-    @registerCommand 'np', { aliases: ['nowplaying', 'n'] }, (msg, a, d, player)=>
+    @registerCommand 'np', {
+      aliases: ['nowplaying', 'n'], ignoreFreeze: true
+    }, (msg, a, d, player)=>
       return 'Nothing being played.' unless player.queue._d.nowPlaying
       m = await msg.channel.sendMessage(
         "Now playing in `#{player.queue.nowPlaying.voiceChannel.name}`:",
@@ -101,7 +103,7 @@ class PlayerCommands
         m.delete()
 
     # View Queue
-    @registerCommand 'queue', { aliases: ['q'] }, (msg, args, d, player)=>
+    @registerCommand 'queue', { aliases: ['q'], ignoreFreeze: true }, (msg, args, d, player)=>
       return 'Nothing being played.' unless player.queue._d.nowPlaying
       m = await msg.channel.sendMessage await @hud.nowPlaying(player.queue.nowPlaying),
                                         false,
@@ -118,7 +120,9 @@ class PlayerCommands
       msg.channel.sendMessage '✅'
 
     # Sauce
-    @registerCommand 'sauce', { aliases: ['source', 'src'] }, (msg, args, d, player)=>
+    @registerCommand 'sauce', {
+      aliases: ['source', 'src'], ignoreFreeze: true
+    }, (msg, args, d, player)=>
       return '¯\_(ツ)_/¯' unless player.queue._d.nowPlaying
       unless player.queue._d.nowPlaying.sauce
         return msg.reply 'Sorry, no sauce for the current item. :C'
@@ -193,5 +197,21 @@ class PlayerCommands
           description: e.message or e,
           color: 0xFF0000
         }
+
+    @registerCommand 'freeze', {
+      djOnly: true, aliases: ['lock'], ignoreFreeze: true
+    }, (msg, args, d, { queue })=>
+      return 'Already frozen' if queue.frozen
+      queue.frozen = true
+      msg.reply '''
+      The queue is now frozen. No changes can be made to the playlist unless you unfreeze it.
+      '''
+
+    @registerCommand 'unfreeze', {
+      djOnly: true, aliases: ['unlock', 'thaw'], ignoreFreeze: true
+    }, (msg, args, d, { queue })=>
+      return 'Not frozen' unless queue.frozen
+      queue.frozen = false
+      msg.reply 'The queue is no longer frozen.'
 
 module.exports = PlayerCommands
