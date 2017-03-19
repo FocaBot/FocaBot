@@ -11,8 +11,9 @@ class PlayerModule extends BotModule
     @_guilds = {}
     @filters = AudioFilters
     @events = new EventEmitter
-    @hud = new PlayerHud @
     @util = new PlayerUtil @
+    @hud = new PlayerHud @
+    @util.hud = @hud
     @cmd = new PlayerCommands @
     Core.data.subscribe('GuildQueueFeed')
     Core.data.on('message', @_messageHandler)
