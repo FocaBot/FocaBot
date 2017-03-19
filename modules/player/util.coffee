@@ -9,7 +9,7 @@ ytdl = promisify(youtubedl.getInfo)
 class PlayerUtil
   constructor: (@playerModule)->
     { @permissions } = Core
-    { @hug } = @playerModule
+    { @hud } = @playerModule
 
   # Converts an array of filters to an user friendly string
   displayFilters: (filters)=>

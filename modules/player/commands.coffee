@@ -33,6 +33,7 @@ class PlayerCommands
         else # Video
           @util.processInfo(info, m, filters, d, player)
       catch e
+        console.error e
         m.reply 'Something went wrong.', false, {
           color: 0xAA3300
           # Windows 10 installer flashbacks
