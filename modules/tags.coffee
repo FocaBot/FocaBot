@@ -40,7 +40,7 @@ class TagModule extends BotModule
         true
       # Save the changes
       await Core.data.set("Tag:#{args[0].toLowerCase()}", filtered)
-      msg.reply "Deleted #{tags.length - filtered.length} tag(s)!"
+      msg.reply "Deleted #{tag.length - filtered.length} tag(s)!"
 
     @registerCommand '!', { argSeparator: ' ' }, (msg, args, d)=>
       return if msg.author.bot or args.length < 1
@@ -60,8 +60,8 @@ class TagModule extends BotModule
       # Generate a list of responses
       r = ''
       for res in tag
-        u = bot.Users.get(tag.by) or { username: 'Unknown', discriminator: tag.by }
-        r += "\n(#{u.username}##{u.discriminator}): #{tag.reply.substr(0,32)}..."
+        u = bot.Users.get(res.by) or { username: 'Unknown', discriminator: res.by }
+        r += "\n(#{u.username}##{u.discriminator}): #{res.reply.substr(0,32)}..."
       # Send it
       msg.channel.sendMessage r
 
