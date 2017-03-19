@@ -35,6 +35,7 @@ class GuildPlayer extends EventEmitter {
      */
     this.queue = this.guildData.queue || new GuildQueue(qData, this)
     this.guildData.queue = this.queue // Without this, weird things happen when i reload the module
+    this.setMaxListeners(20)
   }
 
   /**

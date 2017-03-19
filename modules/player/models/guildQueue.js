@@ -20,6 +20,7 @@ class GuildQueue extends EventEmitter {
      */
     this.player = player
     this._d = data
+    this.setMaxListeners(20)
   }
 
   /**
