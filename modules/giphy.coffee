@@ -8,7 +8,7 @@ class GiphyModule extends BotModule
   init: =>
     @chance = new Chance()
 
-    @registerCommand 'giphy', { aliases: ['gif'], allowDM: true }, (msg, q)=>
+    @registerCommand 'giphy', { aliases: ['gif'], allowDM: true }, (msg, q, d)=>
       return unless d.data.allowImages
       try
         { data } = await Giphy.get('search', {
