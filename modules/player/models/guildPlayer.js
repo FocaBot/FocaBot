@@ -76,7 +76,7 @@ class GuildPlayer extends EventEmitter {
       if (!silent) this.queue.emit('updated')
     } catch (e) {
       item.textChannel.sendMessage(
-        "Couldn't join to the voice channel (check permissions). Skipping..."
+        "Couldn't join to the voice channel. Skipping..."
       )
       if (!this.queue._d.items.length) return this.stop()
       this.queue._d.nowPlaying = this.queue._d.items.shift()
