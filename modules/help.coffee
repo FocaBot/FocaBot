@@ -36,7 +36,7 @@ class HelpModule extends BotModule
         text: 'Made by TheBITLINK#3141'
     }
 
-  filtersCommandFunction: (msg,args)=>
+  filtersCommandFunction: (msg,args,d)=>
     pfx = d.data.prefix or @prefix
     msg.reply """
     To learn more about audio filters, check this link: \
