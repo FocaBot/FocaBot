@@ -14,7 +14,7 @@ class AdminModule extends BotModule
       adminOnly: true
     @registerCommand 'setnick', adminOptions, @setnickFunc
     @registerCommand 'clean', adminOptions, @cleanFunc
-    @registerCommand 'reset', adminOptions, @resetFunc
+    @registerCommand 'purge', adminOptions, @purgeFunc
     # Owner Commands
     ownerOptions =
       ownerOnly: true
@@ -23,7 +23,6 @@ class AdminModule extends BotModule
     @registerCommand 'update', ownerOptions, @updateFunc
     @registerCommand 'pull', ownerOptions, @pullFunc
     @registerCommand 'exec', ownerOptions, @execFunc
-    @registerCommand 'purge', ownerOptions, @purgeFunc
     @registerCommand 'setavatar', ownerOptions, @setavatarFunc
     @registerCommand 'setusername', ownerOptions, @setusernameFunc
     @registerCommand 'blacklist', ownerOptions, @blacklistFunc
