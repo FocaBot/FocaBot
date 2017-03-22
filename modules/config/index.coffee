@@ -21,6 +21,7 @@ class ConfigModule extends BotModule
       maxSongLength: 1800 # 30 minutes
       dynamicNick: false
       maxItems: 0
+      allowRNG: true
     }
 
     @cmd = new Commands @

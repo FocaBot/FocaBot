@@ -49,6 +49,9 @@ class ConfigCommands
         integer: true
         min: 0
         def: 0
+      allowRNG:
+        type: Boolean
+        def: true
     }
 
     @module.registerCommand 'config', { adminOnly: true, argSeparator: ' ' }, (msg,args,d)=>
