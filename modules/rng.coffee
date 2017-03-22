@@ -6,7 +6,7 @@ class RNGModule extends BotModule
     @chance = new Chance
     # The classic
     @registerCommand 'roll', (msg, args, d)=>
-      return unless d.data.allowRng
+      return unless d.data.allowRNG
       unless /\d+d\d+/.test(args)
         args = if parseInt(args) then "1d#{parseInt(args)}" else '1d100'
       result = @chance.rpg(args)
@@ -18,7 +18,7 @@ class RNGModule extends BotModule
 
     # Totally not stolen from ChavezBot
     @registerCommand 'choose', { argSeparator: ';' }, (msg, args, d)=>
-      return unless d.data.allowRng
+      return unless d.data.allowRNG
       if args.length < 2
         msg.reply 'Not enough items to choose from. Remember to use `;` to separate them.'
       else
@@ -46,11 +46,11 @@ class RNGModule extends BotModule
       'My sources say no'
       'Outlook not so good'
       'Very doubtful'
-    ] if d.data.allowRng
+    ] if d.data.allowRNG
 
     # Not actually random but ¯\_(ツ)_/¯
     @registerCommand 'rate', (msg, args, d)=>
-      return unless args and d.data.allowRng
+      return unless args and d.data.allowRNG
       for i in [0 ... args.length]
         chr   = args.charCodeAt(i)
         hash  = ((hash << 5) - hash) + chr
