@@ -37,9 +37,7 @@ class PlayerCommands
         m.reply 'Something went wrong.', false, {
           color: 0xAA3300
           # Windows 10 installer flashbacks
-          description: if typeof e.message is 'string'
-            e.message
-          else e.message.split('YouTube said:')[1] or 'Something went wrong.'
+          description: e.message.split('YouTube said:')[1] or 'Something went wrong.'
         }
 
     # Skip
