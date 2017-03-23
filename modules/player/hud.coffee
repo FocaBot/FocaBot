@@ -37,7 +37,7 @@ class PlayerHUD
     **__Radio Stream__**
 
     **Track Title:** `#{meta.current or '???'}`
-    **Next Track:** `#{meta.next or '???'}
+    **Next Track:** `#{meta.next or '???'}`
     """
 
   swapItems: (user, items, indexes)=>
