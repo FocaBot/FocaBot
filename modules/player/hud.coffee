@@ -32,7 +32,7 @@ class PlayerHUD
 
   radioInfo: (item)=>
     return '' unless item.radioStream
-    meta = await @getRadioTrack(item)
+    meta = await @util.getRadioTrack(item)
     """
     **__Radio Stream__**
 
