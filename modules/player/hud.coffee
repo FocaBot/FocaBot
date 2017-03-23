@@ -26,7 +26,7 @@ class PlayerHUD
     #{@generateProgressOuter item}
     Now playing in **#{item.voiceChannel.name}**:
     >`#{item.title}` (#{@util.displayTime item.duration}) #{@util.displayFilters item.filters}
-    #{if item.radioStream then '\n\n' + @radioInfo(item) + '\n' else ''}
+    #{if item.radioStream then '\n\n' + (await @radioInfo(item)) + '\n' else ''}
     Requested by: **#{item.requestedBy.name}**
     """
 
@@ -156,7 +156,7 @@ class PlayerHUD
     if item.filters and item.filters.length
       r.fields.push { inline: true, name: 'Filters', value: @util.displayFilters item.filters }
     if item.radioStream
-      r.description += "\n#{@getRadioTrack(item)}"
+      r.description += "\n#{await @radioInfo(item)}"
     r
 
   queue: (q, page=1)=>
