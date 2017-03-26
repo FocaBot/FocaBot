@@ -94,6 +94,7 @@ class PlayerHUD
       reply.fields.push {
         name: 'Start at:'
         value: @util.displayTime(item.time)
+        inline: true
       }
     if estimated
       reply.fields.push {
