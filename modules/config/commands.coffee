@@ -52,6 +52,9 @@ class ConfigCommands
       allowRNG:
         type: Boolean
         def: true
+      raffleMention:
+        type: Boolean
+        def: false
     }
 
     @module.registerCommand 'config', { adminOnly: true, argSeparator: ' ' }, (msg,args,d)=>
