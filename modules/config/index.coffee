@@ -22,6 +22,7 @@ class ConfigModule extends BotModule
       dynamicNick: false
       maxItems: 0
       allowRNG: true
+      raffleMention: false
     }
 
     @cmd = new Commands @
