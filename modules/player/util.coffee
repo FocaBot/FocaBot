@@ -87,7 +87,7 @@ class PlayerUtil
 
   # Uses youtube-dl to get information of an URL or search term
   getInfo: (query)=>
-    flags = ['--default-search', 'ytsearch', '-i4f', 'bestaudio/best']
+    flags = ['--geo-bypass', '--default-search', 'ytsearch', '-i4f', 'bestaudio/best']
     try
       # get information
       info = await ytdl(query, flags, { maxBuffer: Infinity })
