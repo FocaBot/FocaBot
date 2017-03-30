@@ -79,7 +79,9 @@ class AdminModule extends BotModule
   cleanFunc: (msg,args,d,bot)=>
     hasError = false
     bot.Messages.deleteMessages(msg.channel.messages.filter((m)=>
-      m.author.id is bot.User.id or m.content.indexOf(@engine.prefix) is 0
+      m.author.id is bot.User.id or
+      m.content.indexOf(Core.settings.prefix) is 0 or
+      m.content.indexOf(d.data.prefix) is 0
     ).slice(0 - (parseInt(args) or 50)))
     .catch =>
       msg.channel.sendMessage "Couldn't delete some messages."
