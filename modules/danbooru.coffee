@@ -64,7 +64,7 @@ class DanbooruModule extends BotModule
         return msg.reply "Run the #{@prefix}setWaifu command first." if not waifu?
         # Make a safebooru search
         r = await safebooru.get('/posts.json', {
-          json: true, qs: { random: true, tags: 'solo ' + waifu }
+          json: true, qs: { random: true, tags: "solo #{waifu} #{args}" }
         })
         return msg.reply 'No results.' unless r.length
         # Send the picture
