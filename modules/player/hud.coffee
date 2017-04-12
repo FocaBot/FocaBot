@@ -86,7 +86,7 @@ class PlayerHUD
         { name: 'Position in queue:', value: "##{pos}", inline: true }
       ]
       footer:
-        icon_url: item.requestedBy.avatarURL
+        icon_url: item.requestedBy.staticAvatarURL
         text: "Requested by #{item.requestedBy.name}"
     if item.filters and item.filters.length
       reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
@@ -119,7 +119,7 @@ class PlayerHUD
       ]
     if removedBy
       reply.footer =
-        icon_url: removedBy.avatarURL
+        icon_url: removedBy.staticAvatarURL
         text: "Removed by #{removedBy.name}"
     if item.filters and item.filters.length
       reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
@@ -130,7 +130,7 @@ class PlayerHUD
       color: 0x42A7F4
       description: "Added a playlist of **#{length}** items to the queue!"
       footer:
-        icon_url: user.avatarURL
+        icon_url: user.staticAvatarURL
         text: "Requested by #{user.name}"
 
   nowPlayingEmbed: (item)=>
@@ -149,7 +149,7 @@ class PlayerHUD
         url: item.thumbnail
       footer:
         text: "Requested by #{item.requestedBy.name}"
-        icon_url: item.requestedBy.avatarURL
+        icon_url: item.requestedBy.staticAvatarURL
       fields: [
         { inline: true, name: 'Length', value: @util.displayTime item.duration }
       ]
