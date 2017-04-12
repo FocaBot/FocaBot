@@ -11,7 +11,7 @@ class PlayerModule extends BotModule
     @_guilds = {}
     @filters = AudioFilters
     @events = new EventEmitter
-    @util = new PlayerUtil @
+    @util = PlayerUtil
     @hud = new PlayerHud @
     @util.hud = @hud
     @cmd = new PlayerCommands @

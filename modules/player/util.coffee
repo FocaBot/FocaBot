@@ -1,3 +1,4 @@
+reload = require('require-reload')(require)
 moment = require 'moment'
 url = require 'url'
 youtubedl = require 'youtube-dl'
@@ -5,11 +6,11 @@ promisify = require 'es6-promisify'
 { spawn } = require 'child_process'
 { parseTime } = Core.util
 ytdl = promisify(youtubedl.getInfo)
+filters = reload './filters'
 
 class PlayerUtil
-  constructor: (@playerModule)->
+  constructor: ()->
     { @permissions } = Core
-    { @hud } = @playerModule
 
   # Converts an array of filters to an user friendly string
   displayFilters: (filters)=>
@@ -87,11 +88,18 @@ class PlayerUtil
 
   # Uses youtube-dl to get information of an URL or search term
   getInfo: (query)=>
-    flags = ['--geo-bypass', '--default-search', 'ytsearch', '-i4f', 'bestaudio/best']
+    flags = [
+      '--flat-playlist'
+      '--default-search', 'ytsearch'
+      '--ignore-errors'
+      '--force-ipv4',
+      '-f', 'bestaudio/best'
+    ]
     try
       # get information
       info = await ytdl(query, flags, { maxBuffer: Infinity })
-    catch
+    catch e
+      console.error e
       # probably not a YT link, try again without flags
       info = await ytdl(query, [], { maxBuffer: Infinity })
     # Get additional metadata
@@ -104,7 +112,7 @@ class PlayerUtil
     for filter in arg.match(/\w+=?\S*/g)
       name = filter.split('=')[0]
       param = filter.split('=')[1]
-      Filter = @playerModule.filters[name]
+      Filter = filters[name]
       continue if not Filter
       f = new Filter(param, member, playing, filters)
       if playing and f.avoidRuntime
@@ -113,7 +121,9 @@ class PlayerUtil
     filters
 
   # Processes video information (and adds it to the queue)
-  processInfo: (info, msg, filters, gData, player, playlist = false)=>
+  processInfo: (info, msg, player, playlist = false, voiceChannel)=>
+    gData = player.guildData
+    filters = info.filters
     return unless info.url
     # Check Length
     duration = parseTime(info.duration)
@@ -134,7 +144,7 @@ class PlayerUtil
     player.queue.addItem({
       title: info.title
       requestedBy: msg.member
-      voiceChannel: msg.member.getVoiceChannel()
+      voiceChannel: voiceChannel || msg.member.getVoiceChannel()
       textChannel: msg.channel
       path: info.url
       sauce: info.webpage_url
@@ -145,20 +155,10 @@ class PlayerUtil
       filters
     }, playlist)
 
-  # Same as processInfo but for playlists
-  processPlaylist: (info, msg, filters, gData, player)=>
-    return unless info.forEach
-    unless @permissions.isDJ(msg.member)
-      return msg.reply 'Only people with the DJ role (or higher) is allowed to add playlists.'
-    msg.channel.sendMessage '', false, @hud.addPlaylist(msg.member, info.length)
-    for v in info
-      @processInfo(await @getAdditionalMetadata(v), msg, filters, gData, player, true)
-    return
-
   # Checks item count for user
   checkItemCountLimit: (player, member)=>
     return false if @permissions.isDJ(member) or player.guildData.data.maxItems
     itemCount = player.queue._d.items.filter((item)=> item.requestedBy is member.id).length
     return itemCount > player.guildData.data.maxItems
 
-module.exports = PlayerUtil
+module.exports = new PlayerUtil()

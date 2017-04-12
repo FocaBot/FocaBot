@@ -1,5 +1,7 @@
+reload = require('require-reload')(require)
 { delay, parseTime } = Core.util
 { commands } = Core
+PlaylistImport = reload './models/playlistImport'
 
 class PlayerCommands
   constructor: (@playerModule)->
@@ -7,31 +9,51 @@ class PlayerCommands
     { @permissions } = Core
 
     # Play
-    @registerCommand 'play', { aliases: ['p', 'request', 'add'] }, (m , args, d, player)=>
-      # Parse user input
-      title = args.split('|')[0].trim()
-      filters = (args.split('|')[1] or '').trim()
-      if args.match(/@\s?(\d+(:\d+)*)/)
-        time = parseTime(args.match(/@\s?(\d+(:\d+)*)/)[1])
-        title = title.replace(/@\s?(\d+(:\d+)*)/, '').trim()
-        filters = filters.replace(/@\s?(\d+(:\d+)*)/, '').trim()
-      title = m.attachments[0].url if m.attachments[0]
-      return m.reply 'No video specified.' unless title
+    @registerCommand 'play', { aliases: ['p', 'request', 'add'] }, (m, args, d, player)=>
       # Check Voice Connection
       unless m.member.getVoiceChannel()
         return m.reply 'You must be in a voice channel to request songs.'
+      # Check item limit
       if @util.checkItemCountLimit(player, m.member)
         return m.reply 'You have exceeded the limit of items in queue for this server.'
+      # Process request
       try
-        # Get Video Information
-        info = await @util.getInfo(title)
-        info.startAt = time or 0
-        if info.startAt > info.duration or info.startAt < 0
-          return m.reply 'Invalid start time.'
-        if info.forEach # Playlist
-          await @util.processPlaylist(info, m, filters, d, player)
-        else # Video
-          @util.processInfo(info, m, filters, d, player)
+        items = args.split('\n').map (item) =>
+          i =
+            url: item.split('|')[0].trim()
+            filters: (item.split('|')[1] or '').trim()
+          if item.match(/@\s?(\d+(:\d+)*)/)
+            i =
+              time: parseTime(args.match(/@\s?(\d+(:\d+)*)/)[1])
+              url: title.replace(/@\s?(\d+(:\d+)*)/, '').trim()
+              filters: filters.replace(/@\s?(\d+(:\d+)*)/, '').trim()
+          i
+      catch e
+        console.error e
+        return m.reply(e.message) if e.message
+      try
+        # Single request
+        if items.length is 1
+          # Get Video Information
+          info = await @util.getInfo(items[0].url)
+          # Single video
+          unless info.forEach
+            info.startAt = items[0].time
+            info.filters = items[0].filters
+            if info.startAt > info.duration or info.startAt < 0
+              return m.reply 'Invalid start time.'
+              @util.processInfo(info, m, player)
+          # Playlist
+          else
+            return m.reply('Only DJs can add playlists.') unless Core.permissions.isDJ(m.member)
+            plImport = new PlaylistImport(m, info, items[0].filters, player)
+            await plImport.import()
+        # Multiple requests
+        else
+          unless Core.permissions.isDJ(m.member)
+            return m.reply('Only DJs can request multiple videos at once.')
+          plImport = new PlaylistImport(m, items, '', player)
+          await plImport.import()
       catch e
         console.error e
         m.reply 'Something went wrong.', false, {
