@@ -1,7 +1,6 @@
 reload = require('require-reload')(require)
 { delay, parseTime } = Core.util
 { commands } = Core
-PlaylistImport = reload './models/playlistImport'
 
 class PlayerCommands
   constructor: (@playerModule)->
@@ -11,55 +10,54 @@ class PlayerCommands
     # Play
     @registerCommand 'play', { aliases: ['p', 'request', 'add'] }, (m, args, d, player)=>
       # Check Voice Connection
-      unless m.member.getVoiceChannel()
+      vc = m.member.getVoiceChannel()
+      unless vc
         return m.reply 'You must be in a voice channel to request songs.'
       # Check item limit
       if @util.checkItemCountLimit(player, m.member)
         return m.reply 'You have exceeded the limit of items in queue for this server.'
       # Process request
+      q = args.split('|')[0].trim()
+      filters = (args.split('|')[1] or '').trim()
+      time = 0
+      if args.match(/@\s?(\d+(:\d+)*)/)
+        time = parseTime(args.match(/@\s?(\d+(:\d+)*)/)[1])
+        q = q.replace(/@\s?(\d+(:\d+)*)/, '').trim()
+        filters = filters.replace(/@\s?(\d+(:\d+)*)/, '').trim()
       try
-        items = args.split('\n').map (item) =>
-          i =
-            url: item.split('|')[0].trim()
-            filters: (item.split('|')[1] or '').trim()
-          if item.match(/@\s?(\d+(:\d+)*)/)
-            i =
-              time: parseTime(args.match(/@\s?(\d+(:\d+)*)/)[1])
-              url: title.replace(/@\s?(\d+(:\d+)*)/, '').trim()
-              filters: filters.replace(/@\s?(\d+(:\d+)*)/, '').trim()
-          i
-      catch e
-        console.error e
-        return m.reply(e.message) if e.message
-      try
-        # Single request
-        if items.length is 1
-          # Get Video Information
-          info = await @util.getInfo(items[0].url)
+        info = await @util.getInfo(q)
+        unless info.partial
           # Single video
-          unless info.forEach
-            info.startAt = items[0].time
-            info.filters = items[0].filters
-            if info.startAt > info.duration or info.startAt < 0
-              return m.reply 'Invalid start time.'
-              @util.processInfo(info, m, player)
-          # Playlist
-          else
-            return m.reply('Only DJs can add playlists.') unless Core.permissions.isDJ(m.member)
-            plImport = new PlaylistImport(m, info, items[0].filters, player)
-            await plImport.import()
-        # Multiple requests
+          vid = await @util.getAdditionalMetadata(info.items[0])
+          if vid.startAt > vid.duration or vid.startAt < 0
+            return m.reply 'Invalid start time.'
+          vid.startAt = time
+          vid.filters = filters
+          @util.processInfo(vid, m, player, false, vc)
         else
-          unless Core.permissions.isDJ(m.member)
-            return m.reply('Only DJs can request multiple videos at once.')
-          plImport = new PlaylistImport(m, items, '', player)
-          await plImport.import()
+          # Playlist
+          return m.reply('Only DJs can add playlists.') unless Core.permissions.isDJ(m.member)
+          @hud.addPlaylist(m.member, info, m.channel)
+          info.on 'done', =>
+            info.items.forEach (item, i)=>
+              vid = await @util.getAdditionalMetadata(item)
+              return if vid.startAt > vid.duration or vid.startAt < 0
+              vid.startAt = time
+              vid.filters = filters
+              @util.processInfo(vid, m, player, true, vc)
+              # Start playback if not started already
+              if i is (info.items.length - 1) and not player.queue.nowPlaying
+                player.queue._d.nowPlaying = player.queue._d.items.shift()
+                player.play()
       catch e
         console.error e
-        m.reply 'Something went wrong.', false, {
+        description = 'Something went wrong.'
+        if e.message
+          description = e.message.split('YouTube said:')[1]
+        m.reply '', false, {
           color: 0xAA3300
           # Windows 10 installer flashbacks
-          description: e.message.split('YouTube said:')[1] or 'Something went wrong.'
+          description
         }
 
     # Skip

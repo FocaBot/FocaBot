@@ -64,9 +64,10 @@ class GuildQueue extends EventEmitter {
    * Add an item to the queue
    * @param {object} item - Item to add
    * @param {boolean} silent - If true, no event will be emitted
+   * @param {boolean} noPlayback - If true, playback will not be triggered
    * @returns {object}
    */
-  addItem (item, silent = false) {
+  addItem (item, silent = false, noPlayback = false) {
     if (!item.path || !item.voiceChannel || !item.requestedBy) return false
     if (item.duration <= 0) item.filters = []
     const itm = { }
@@ -86,7 +87,7 @@ class GuildQueue extends EventEmitter {
     if (!silent) this.emit('newItem', { index, item: i })
     if (!silent) this.emit('updated')
     // Nothing being played right now? Start playback inmediately
-    if (!this.nowPlaying || !this.player.audioPlayer.encoderStream) {
+    if ((!this.nowPlaying || !this.player.audioPlayer.encoderStream) && !noPlayback) {
       this._d.nowPlaying = this._d.items.shift()
       this.player.play()
     }

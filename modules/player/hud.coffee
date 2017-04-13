@@ -125,13 +125,28 @@ class PlayerHUD
       reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
     reply
 
-  addPlaylist: (user, length)=>
-    reply =
-      color: 0x42A7F4
-      description: "Added a playlist of **#{length}** items to the queue!"
-      footer:
-        icon_url: user.staticAvatarURL
-        text: "Requested by #{user.name}"
+  addPlaylist: (user, playlist, channel)=>
+    message = undefined
+    updateMessage = =>
+      embed = {
+        author:
+          name: if playlist.partial then 'Loading Playlist...' else '✅ Playlist Added!'
+          icon_url: if playlist.partial then 'https://d.thebitlink.com/wheel.gif'
+        description: "**#{playlist.items.length}** items loaded so far..."
+        footer:
+          icon_url: user.staticAvatarURL
+          text: "Requested by #{user.name}"
+      }
+      unless message
+        message = await channel.sendMessage '', false, embed
+      else
+        message.edit '', embed
+    updateMessage()
+    if playlist.partial
+      interval = setInterval(updateMessage, 2500)
+      playlist.on 'done', =>
+        updateMessage()
+        clearInterval(interval)
 
   nowPlayingEmbed: (item)=>
     r ={

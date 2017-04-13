@@ -1,11 +1,9 @@
 reload = require('require-reload')(require)
 moment = require 'moment'
 url = require 'url'
-youtubedl = require 'youtube-dl'
-promisify = require 'es6-promisify'
 { spawn } = require 'child_process'
 { parseTime } = Core.util
-ytdl = promisify(youtubedl.getInfo)
+ytdl = require('ytdl-getinfo').getInfo
 filters = reload './filters'
 
 class PlayerUtil
@@ -89,21 +87,19 @@ class PlayerUtil
   # Uses youtube-dl to get information of an URL or search term
   getInfo: (query)=>
     flags = [
-      '--flat-playlist'
-      '--default-search', 'ytsearch'
+      '--default-search=ytsearch'
       '--ignore-errors'
       '--force-ipv4',
-      '-f', 'bestaudio/best'
+      '--format=bestaudio/best'
     ]
     try
-      # get information
-      info = await ytdl(query, flags, { maxBuffer: Infinity })
+      info = await ytdl(query, flags)
     catch e
       console.error e
       # probably not a YT link, try again without flags
-      info = await ytdl(query, [], { maxBuffer: Infinity })
+      info = await ytdl(query, [])
     # Get additional metadata
-    await @getAdditionalMetadata(info)
+    await info
 
   # Parses a list of filters (| speed=2 distort, etc)
   parseFilters: (arg, member, playing)=>
@@ -153,7 +149,7 @@ class PlayerUtil
       time: info.startAt if isFinite(info.duration) and info.duration > 0
       duration
       filters
-    }, playlist)
+    }, playlist, playlist)
 
   # Checks item count for user
   checkItemCountLimit: (player, member)=>
