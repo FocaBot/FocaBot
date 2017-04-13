@@ -18,6 +18,7 @@ class PlayerCommands
         return m.reply 'You have exceeded the limit of items in queue for this server.'
       # Process request
       q = args.split('|')[0].trim()
+      q = m.attachments[0].url if m.attachments[0]
       filters = (args.split('|')[1] or '').trim()
       time = 0
       if args.match(/@\s?(\d+(:\d+)*)/)
