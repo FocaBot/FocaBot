@@ -229,7 +229,7 @@ class PlayerHUD
     iC = '📻' if item.radioStream
     """
     ```fix
-     #{iC}  #{generateVolumeInd item.volume}  #{pB} #{@util.displayTime(item.time)}
+     #{iC}  #{@generateVolumeInd item.volume}  #{pB} #{@util.displayTime(item.time)}
     ```
     """
 
