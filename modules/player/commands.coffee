@@ -227,7 +227,7 @@ class PlayerCommands
         player.volume = parseInt(args) / 100
         await delay(100)
         return m.reply """
-        **#{m.member.name}** set the volume to **#{parseInt args}.
+        **#{m.member.name}** set the volume to **#{parseInt args}**.
         #{@hud.generateProgressOuter(player.queue.nowPlaying)}
         """
       catch e

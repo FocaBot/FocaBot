@@ -104,7 +104,7 @@ class QueueItem {
     const filters = (this._d.filters || [])
     // Append volume filter
     if (this.queue.player.volume !== 1) {
-      filters.push({
+      return filters.concat({
         FFMPEGFilter: `volume=${this.queue.player.volume}`,
         display: ''
       })
