@@ -229,8 +229,13 @@ class PlayerHUD
     iC = '📻' if item.radioStream
     """
     ```fix
-     #{iC}  🔊  #{pB} #{@util.displayTime(item.time)}
+     #{iC}  #{generateVolumeInd item.volume}  #{pB} #{@util.displayTime(item.time)}
     ```
     """
+
+  generateVolumeInd: (vol)=>
+    return '🔊' if vol >= 0.6
+    return '🔉' if vol >= 0.3
+    '🔈'
 
 module.exports = PlayerHUD

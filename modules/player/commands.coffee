@@ -219,6 +219,19 @@ class PlayerCommands
           color: 0xFF0000
         }
 
+    # Change Volume
+    @registerCommand 'volume', { alisases: ['vol'], djOnly: true }, (msg, args, d , player)=>
+      return msg.reply 'Invalid volume' if parseInt(args) > 100 or parseInt(args) < 0
+      try
+        player.volume = parseInt(args) / 100
+        return msg.reply """
+        **#{msg.member.name}** set the volume to **#{parseInt args}.
+        #{@hud.generateProgressOuter(player.queue.nowPlaying)}
+        """
+      catch e
+        m.reply e.message if e.message
+
+    # Freeze / Unfreeze
     @registerCommand 'freeze', {
       djOnly: true, aliases: ['lock'], ignoreFreeze: true
     }, (msg, args, d, { queue })=>

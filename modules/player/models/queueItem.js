@@ -7,9 +7,11 @@ class QueueItem {
   /**
    * Instantiates a new queue item
    * @param {object} data
+   * @param {GuildQueue} queue
    */
-  constructor (data) {
+  constructor (data, queue) {
     this._d = data
+    this.queue = queue
   }
 
   /**
@@ -87,11 +89,27 @@ class QueueItem {
   }
 
   /**
+   * Volume
+   * @type {number}
+   */
+  get volume () {
+    return this.queue.player.volume
+  }
+
+  /**
    * Filters
    * @type {AudioFilter[]}
    */
   get filters () {
-    return this._d.filters || []
+    const filters = (this._d.filters || [])
+    // Append volume filter
+    if (this.queue.player.volume !== 1) {
+      filters.push({
+        FFMPEGFilter: `volume=${this.queue.player.volume}`,
+        display: ''
+      })
+    }
+    return filters
   }
 
   set filters (v) {

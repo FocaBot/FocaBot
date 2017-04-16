@@ -28,7 +28,7 @@ class GuildQueue extends EventEmitter {
    * @type {QueueItem}
    */
   get nowPlaying () {
-    return this._d.nowPlaying ? new QueueItem(this._d.nowPlaying) : undefined
+    return this._d.nowPlaying ? new QueueItem(this._d.nowPlaying, this) : undefined
   }
 
   /**
@@ -36,7 +36,7 @@ class GuildQueue extends EventEmitter {
    * @type {QueueItem[]}
    */
   get items () {
-    return Object.freeze(this._d.items ? this._d.items.map(item => new QueueItem(item)) : [])
+    return Object.freeze(this._d.items ? this._d.items.map(item => new QueueItem(item, this)) : [])
   }
 
   /**

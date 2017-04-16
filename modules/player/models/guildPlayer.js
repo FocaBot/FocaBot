@@ -153,6 +153,27 @@ class GuildPlayer extends EventEmitter {
   }
 
   /**
+   * Player Volume
+   * @type {number}
+   */
+  get volume () {
+    return this.queue._d.volume || 1
+  }
+
+  set volume (v) {
+    const item = this.queue.nowPlaying
+    if (!item) return
+    if (item.stat) throw new Error('The current song has one or more static filters.')
+    if (item.duration <= 0) throw new Error("Can't change volume (livestream)")
+    const shouldResume = (item.status === 'playing')
+    this.pause(true)
+    this.queue._d.volume = v
+    if (shouldResume) this.play(true)
+    this.emit('filtersUpdated', item)
+    this.queue.emit('updated')
+  }
+
+  /**
    * Skips current item and starts playing the next one
    */
   skip () {
