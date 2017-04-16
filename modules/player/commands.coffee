@@ -220,7 +220,13 @@ class PlayerCommands
         }
 
     # Change Volume
-    @registerCommand 'volume', { alisases: ['vol'], djOnly: true }, (m, args, d , player)=>
+    @registerCommand 'volume', { alisases: ['vol'] }, (m, args, d , player)=>
+      unless args
+        return m.reply """
+        Current Volume: **#{player.volume*100}**.
+        #{@hud.generateProgressOuter(player.queue.nowPlaying)}
+        """
+      return m.reply 'Only DJs can change the volume.' unless @permissions.isDJ(msg.member)
       return m.reply 'Invalid volume' if parseInt(args) > 100 or
              parseInt(args) < 0 or !isFinite(args)
       try
