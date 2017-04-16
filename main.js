@@ -16,7 +16,7 @@ const focaBot = new FocaBotCore({
   djRoles: JSON.parse(env.BOT_DJ_ROLES),
   shardCount: env.NODE_APP_INSTANCE ? os.cpus().length : undefined,
   shardIndex: env.NODE_APP_INSTANCE ? parseInt(env.NODE_APP_INSTANCE) : undefined,
-  debug: true,
+  debug: false,
   modulePath: path.join(__dirname, 'modules/'),
   redisURL: env.REDIS_URL,
   watch: true
