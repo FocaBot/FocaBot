@@ -55,6 +55,12 @@ class ConfigCommands
       raffleMention:
         type: Boolean
         def: false
+      commandChannel:
+        type: 'TextChannel'
+        def: ''
+      voiceChannel:
+        type: String
+        def: '*'
     }
 
     @module.registerCommand 'config', { adminOnly: true, argSeparator: ' ' }, (msg,args,d)=>
@@ -106,6 +112,12 @@ class ConfigCommands
           return sendHelp 'Value is too high' if param.max and value > param.max
           return sendHelp 'Value is too low' if param.min and value < param.min
           d.data[args[0]] = value
+        when 'TextChannel'
+          m = value.match(/<#(\d+)>/)
+          if m
+            d.data[args[0]] = m[1]
+          else
+            d.data[args[0]] = ''
       # Save the changes
       await d.saveData()
       msg.reply 'Setting saved!', false, {
