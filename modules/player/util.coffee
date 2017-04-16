@@ -4,7 +4,7 @@ url = require 'url'
 { spawn } = require 'child_process'
 { parseTime } = Core.util
 ytdl = require('ytdl-getinfo').getInfo
-filters = reload './filters'
+filterdb = reload './filters'
 
 class PlayerUtil
   constructor: ()->
@@ -108,7 +108,7 @@ class PlayerUtil
     for filter in arg.match(/\w+=?\S*/g)
       name = filter.split('=')[0]
       param = filter.split('=')[1]
-      Filter = filters[name]
+      Filter = filterdb[name]
       continue if not Filter
       f = new Filter(param, member, playing, filters)
       if playing and f.avoidRuntime
@@ -118,17 +118,15 @@ class PlayerUtil
 
   # Processes video information (and adds it to the queue)
   processInfo: (info, msg, player, playlist = false, voiceChannel)=>
-    gData = player.guildData
-    filters = info.filters
     return unless info.url
     # Check Length
     duration = parseTime(info.duration)
-    if @checkLength(duration, msg, gData)
+    if @checkLength(duration, msg, player.guildData)
       msg.reply('The requested video is too long') unless playlist
       return
     # Parse Filters
     try
-      filters = @parseFilters(filters, msg.member)
+      filters = @parseFilters(info.filters, msg.member)
     catch errors
       if typeof errors is 'string'
         return if playlist

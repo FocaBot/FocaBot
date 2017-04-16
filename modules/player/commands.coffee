@@ -30,7 +30,7 @@ class PlayerCommands
         unless info.partial
           # Single video
           vid = await @util.getAdditionalMetadata(info.items[0])
-          if vid.startAt > vid.duration or vid.startAt < 0
+          if time > vid.duration or time < 0
             return m.reply 'Invalid start time.'
           vid.startAt = time
           vid.filters = filters
@@ -42,7 +42,7 @@ class PlayerCommands
           info.on 'done', =>
             info.items.forEach (item, i)=>
               vid = await @util.getAdditionalMetadata(item)
-              return if vid.startAt > vid.duration or vid.startAt < 0
+              return if time > vid.duration or time < 0
               vid.startAt = time
               vid.filters = filters
               @util.processInfo(vid, m, player, true, vc)

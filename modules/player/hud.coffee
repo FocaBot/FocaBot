@@ -127,24 +127,34 @@ class PlayerHUD
 
   addPlaylist: (user, playlist, channel)=>
     message = undefined
+    sending = false
     updateMessage = =>
+      return if sending
       embed = {
         author:
           name: if playlist.partial then 'Loading Playlist...' else '✅ Playlist Added!'
           icon_url: if playlist.partial then 'https://d.thebitlink.com/wheel.gif'
-        description: "**#{playlist.items.length}** items loaded so far..."
+        description: """
+        **#{playlist.items.length}** items\
+        #{if playlist.partial then ' loaded so far..' else ''}.
+        """
         footer:
           icon_url: user.staticAvatarURL
           text: "Requested by #{user.name}"
       }
       unless message
+        sending = true
         message = await channel.sendMessage '', false, embed
+        sending = false
       else
-        message.edit '', embed
+        sending = true
+        await message.edit '', embed
+        sending = false
     updateMessage()
     if playlist.partial
       interval = setInterval(updateMessage, 2500)
       playlist.on 'done', =>
+        sending = false
         updateMessage()
         clearInterval(interval)
 
