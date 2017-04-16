@@ -7,7 +7,7 @@ const { env } = process
 
 const focaBot = new FocaBotCore({
   name: 'FocaBot',
-  version: '0.6.0 (Cool Cóndor)',
+  version: 'dev-0.6.1',
   prefix: env.BOT_PREFIX,
   token: env.BOT_TOKEN,
   owner: JSON.parse(env.BOT_OWNER),
@@ -16,7 +16,7 @@ const focaBot = new FocaBotCore({
   djRoles: JSON.parse(env.BOT_DJ_ROLES),
   shardCount: env.NODE_APP_INSTANCE ? os.cpus().length : undefined,
   shardIndex: env.NODE_APP_INSTANCE ? parseInt(env.NODE_APP_INSTANCE) : undefined,
-  debug: false,
+  debug: true,
   modulePath: path.join(__dirname, 'modules/'),
   redisURL: env.REDIS_URL,
   watch: true
