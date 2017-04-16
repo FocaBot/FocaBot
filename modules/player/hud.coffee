@@ -75,32 +75,26 @@ class PlayerHUD
       url: item.sauce
       color: 0xAAFF00
       title: '[click for sauce]'
-      description: '[[donate]](https://tblnk.me/focabot-donate/)'
+      description: """
+      [[donate]](https://tblnk.me/focabot-donate/)
+      **Length**: #{@util.displayTime item.duration}
+      **Position in queue**: ##{pos}
+      """
       author:
         name: item.title
         icon_url: @util.getIcon item.sauce
       thumbnail:
         url: item.thumbnail
-      fields: [
-        { name: 'Length:', value: "#{@util.displayTime item.duration}\n‌‌ ", inline: true }
-        { name: 'Position in queue:', value: "##{pos}", inline: true }
-      ]
       footer:
         icon_url: item.requestedBy.staticAvatarURL
         text: "Requested by #{item.requestedBy.name}"
     if item.filters and item.filters.length
-      reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
+      reply.description += "\n**Filters**: #{@util.displayFilters(item.filters)}"
     if item.time and item.time > 0
-      reply.fields.push {
-        name: 'Start at:'
-        value: @util.displayTime(item.time)
-        inline: true
-      }
+      reply.description += "\n**Start at**: #{@util.displayTime(item.time)}"
     if estimated
-      reply.fields.push {
-        name: 'Estimated time before playback:',
-        value: @util.displayTime(estimated)
-      }
+      est = @util.displayTime(estimated)
+      reply.description += "\n**Estimated time before playback**: #{est}"
     reply
 
   removeItem: (item, removedBy)=>
@@ -108,21 +102,21 @@ class PlayerHUD
       url: item.sauce
       color: 0xF44277
       title: '[click for sauce]'
-      description: '[[donate]](https://tblnk.me/focabot-donate/)'
+      description: """
+      [[donate]](https://tblnk.me/focabot-donate/)
+      **Length**: #{@util.displayTime item.duration}
+      """
       author:
         name: item.title
         icon_url: @util.getIcon item.sauce
       thumbnail:
         url: item.thumbnail
-      fields: [
-        { name: 'Length:', value: "#{@util.displayTime item.duration}\n‌‌ ", inline: true }
-      ]
     if removedBy
       reply.footer =
         icon_url: removedBy.staticAvatarURL
         text: "Removed by #{removedBy.name}"
     if item.filters and item.filters.length
-      reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
+      reply.description += "\n**Filters**: #{@util.displayFilters(item.filters)}"
     reply
 
   addPlaylist: (user, playlist, channel)=>
@@ -166,6 +160,7 @@ class PlayerHUD
       description: """
       [[donate]](https://tblnk.me/focabot-donate/)
       #{@generateProgressOuter item}
+      **Length**: #{@util.displayTime item.duration}
       """
       author:
         name: item.title
@@ -175,14 +170,11 @@ class PlayerHUD
       footer:
         text: "Requested by #{item.requestedBy.name}"
         icon_url: item.requestedBy.staticAvatarURL
-      fields: [
-        { inline: true, name: 'Length', value: @util.displayTime item.duration }
-      ]
     }
     if item.filters and item.filters.length
-      r.fields.push { inline: true, name: 'Filters', value: @util.displayFilters item.filters }
+      r.description += "\n**Filters**: #{@util.displayFilters item.filters}"
     if item.radioStream
-      r.description += "\n#{await @radioInfo(item)}"
+      r.description += "\n\n#{await @radioInfo(item)}"
     r
 
   queue: (q, page=1)=>
