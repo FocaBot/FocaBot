@@ -15,7 +15,7 @@ class PlayerCommands
         return m.reply 'You must be in a voice channel to request songs.'
       # Check voice channel name
       if d.data.voiceChannel isnt '*' and d.data.voiceChannel isnt vc.name and
-         not @permissions.isAdmin(msg.member)
+         not @permissions.isAdmin(m.member)
         return m.reply "You're not allowed to use the bot on the current voice channel."
       # Check item limit
       if @util.checkItemCountLimit(player, m.member)
