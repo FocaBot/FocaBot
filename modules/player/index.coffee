@@ -29,6 +29,7 @@ class PlayerModule extends BotModule
       # "empty" queue
       nowPlaying: undefined
       frozen: false
+      volume: 1
       items: []
     }
     @_guilds[guild.id] = player

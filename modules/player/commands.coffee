@@ -221,9 +221,11 @@ class PlayerCommands
 
     # Change Volume
     @registerCommand 'volume', { alisases: ['vol'], djOnly: true }, (m, args, d , player)=>
-      return m.reply 'Invalid volume' if parseInt(args) > 100 or parseInt(args) < 0
+      return m.reply 'Invalid volume' if parseInt(args) > 100 or
+             parseInt(args) < 0 or !isFinite(args)
       try
         player.volume = parseInt(args) / 100
+        await delay(100)
         return m.reply """
         **#{m.member.name}** set the volume to **#{parseInt args}.
         #{@hud.generateProgressOuter(player.queue.nowPlaying)}

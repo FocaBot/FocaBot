@@ -13,7 +13,8 @@ class PlayerUtil
   # Converts an array of filters to an user friendly string
   displayFilters: (filters)=>
     filterstr = ''
-    filterstr += '\\' + filter.display for filter in filters
+    for filter in filters
+      filterstr += '\\' + filter.display if filter.display
     filterstr
 
   # Displays a timestamp (seconds) as a user friendly string
