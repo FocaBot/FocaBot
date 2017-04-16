@@ -82,14 +82,14 @@ class PlayerHUD
       thumbnail:
         url: item.thumbnail
       fields: [
-        { name: 'Length:', value: "#{@util.displayTime item.duration}\n‌‌ ", inline: true }
+        { name: 'Length:', value: @util.displayTime item.duration, inline: true }
         { name: 'Position in queue:', value: "##{pos}", inline: true }
       ]
       footer:
         icon_url: item.requestedBy.staticAvatarURL
         text: "Requested by #{item.requestedBy.name}"
-    if item.filters and item.filters.length
-      reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
+    if @util.displayFilters(item.filters)
+      reply.description += "\n**Filters**: #{@util.displayFilters(item.filters)}"
     if item.time and item.time > 0
       reply.fields.push {
         name: 'Start at:'
@@ -115,14 +115,14 @@ class PlayerHUD
       thumbnail:
         url: item.thumbnail
       fields: [
-        { name: 'Length:', value: "#{@util.displayTime item.duration}\n‌‌ ", inline: true }
+        { name: 'Length:', value: @util.displayTime item.duration, inline: true }
       ]
     if removedBy
       reply.footer =
         icon_url: removedBy.staticAvatarURL
         text: "Removed by #{removedBy.name}"
-    if item.filters and item.filters.length
-      reply.description = "**Filters**: #{@util.displayFilters(item.filters)}"
+    if @util.displayFilters(item.filters)
+      reply.description += "\n**Filters**: #{@util.displayFilters(item.filters)}"
     reply
 
   addPlaylist: (user, playlist, channel)=>
@@ -179,7 +179,7 @@ class PlayerHUD
         { inline: true, name: 'Length', value: @util.displayTime item.duration }
       ]
     }
-    if item.filters and item.filters.length
+    if @util.displayFilters(item.filters)
       r.fields.push { inline: true, name: 'Filters', value: @util.displayFilters item.filters }
     if item.radioStream
       r.description += "\n#{await @radioInfo(item)}"

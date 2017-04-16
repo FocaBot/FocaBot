@@ -222,20 +222,24 @@ class PlayerCommands
     # Change Volume
     @registerCommand 'volume', { alisases: ['vol'] }, (m, args, d , player)=>
       unless args
-        return m.reply """
-        Current Volume: **#{player.volume*100}**.
-        #{@hud.generateProgressOuter(player.queue.nowPlaying)}
-        """
+        r = "Current Volume: **#{player.volume*100}**."
+        if player.queue.nowPlaying
+          r += "\n#{@hud.generateProgressOuter(player.queue.nowPlaying)}"
+        mr = await m.reply r
+        await delay(5000)
+        return mr.delete()
       return m.reply 'Only DJs can change the volume.' unless @permissions.isDJ(msg.member)
       return m.reply 'Invalid volume' if parseInt(args) > 100 or
              parseInt(args) < 0 or !isFinite(args)
       try
         player.volume = parseInt(args) / 100
         await delay(100)
-        return m.reply """
-        **#{m.member.name}** set the volume to **#{parseInt args}**.
-        #{@hud.generateProgressOuter(player.queue.nowPlaying)}
-        """
+        r = "Set global volume to **#{player.volume*100}**."
+        if player.queue.nowPlaying
+          r += "\n#{@hud.generateProgressOuter(player.queue.nowPlaying)}"
+        mr = await m.reply r
+        await delay(5000)
+        return mr.delete()
       catch e
         m.reply e.message if e.message
 
