@@ -7,7 +7,7 @@ const { env } = process
 
 const focaBot = new FocaBotCore({
   name: 'FocaBot',
-  version: 'dev-0.6.1',
+  version: '0.6.1 (Dangerous Dodo)',
   prefix: env.BOT_PREFIX,
   token: env.BOT_TOKEN,
   owner: JSON.parse(env.BOT_OWNER),

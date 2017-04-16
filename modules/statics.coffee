@@ -54,6 +54,7 @@ class StatsModule extends BotModule
         name: 'System'
         value: """
         **Platform**: #{os.platform()} #{os.release()} #{os.arch()}
+        **Node Version**: #{process.version}
         **Load Average**: #{loadAvg}
         **Free Memory**: #{memfree}MB
         """
