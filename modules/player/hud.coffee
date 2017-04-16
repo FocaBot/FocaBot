@@ -74,9 +74,8 @@ class PlayerHUD
     reply =
       url: item.sauce
       color: 0xAAFF00
-      title: '[click for sauce]'
       description: """
-      [[donate]](https://tblnk.me/focabot-donate/)
+      [[sauce]](#{item.sauce}) / [[donate]](https://tblnk.me/focabot-donate/)
       **Length**: #{@util.displayTime item.duration}
       **Position in queue**: ##{pos}
       """
@@ -101,9 +100,8 @@ class PlayerHUD
     reply =
       url: item.sauce
       color: 0xF44277
-      title: '[click for sauce]'
       description: """
-      [[donate]](https://tblnk.me/focabot-donate/)
+      [[sauce]](#{item.sauce}) / [[donate]](https://tblnk.me/focabot-donate/)
       **Length**: #{@util.displayTime item.duration}
       """
       author:
@@ -156,9 +154,8 @@ class PlayerHUD
     r ={
       url: item.sauce
       color: 0xCCAA00
-      title: '[click for sauce]'
       description: """
-      [[donate]](https://tblnk.me/focabot-donate/)
+      [[sauce]](#{item.sauce}) / [[donate]](https://tblnk.me/focabot-donate/)
       #{@generateProgressOuter item}
       **Length**: #{@util.displayTime item.duration}
       """
@@ -174,7 +171,7 @@ class PlayerHUD
     if item.filters and item.filters.length
       r.description += "\n**Filters**: #{@util.displayFilters item.filters}"
     if item.radioStream
-      r.description += "\n\n#{await @radioInfo(item)}"
+      r.description += "\n#{await @radioInfo(item)}"
     r
 
   queue: (q, page=1)=>
