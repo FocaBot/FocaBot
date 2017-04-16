@@ -227,8 +227,9 @@ class PlayerCommands
           r += "\n#{@hud.generateProgressOuter(player.queue.nowPlaying)}"
         mr = await m.reply r
         await delay(5000)
-        return mr.delete()
-      return m.reply 'Only DJs can change the volume.' unless @permissions.isDJ(msg.member)
+        mr.delete() if d.data.autoDel
+        return
+      return m.reply 'Only DJs can change the volume.' unless @permissions.isDJ(m.member)
       return m.reply 'Invalid volume' if parseInt(args) > 100 or
              parseInt(args) < 0 or !isFinite(args)
       try
@@ -239,7 +240,8 @@ class PlayerCommands
           r += "\n#{@hud.generateProgressOuter(player.queue.nowPlaying)}"
         mr = await m.reply r
         await delay(5000)
-        return mr.delete()
+        mr.delete() if d.data.autoDel
+        return
       catch e
         m.reply e.message if e.message
 
