@@ -86,7 +86,7 @@ class ConfigCommands
           { name: 'Parameter', value: args[0], inline: true }
           {
             name: 'Current Value'
-            value: d.data[args[0]] || @params[args[0]].def
+            value: d.data[args[0]] || @params[args[0]].def || '(empty)'
             inline: true
           }
         ]
@@ -125,7 +125,7 @@ class ConfigCommands
         color: 0x00AAFF
         fields: [
           { name: 'Parameter', value: args[0], inline: true }
-          { name: 'Current Value', value: d.data[args[0]], inline: true }
+          { name: 'Current Value', value: d.data[args[0]] || '(empty)', inline: true }
         ]
       }
 
