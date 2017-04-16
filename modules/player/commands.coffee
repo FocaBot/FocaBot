@@ -52,7 +52,11 @@ class PlayerCommands
                 player.play()
       catch e
         console.error e
-        m.reply 'Something went wrong.'
+        m.reply '', false, {
+          color: 0xAA3300
+          # Windows 10 installer flashbacks
+          description: e.message.split('YouTube said:')[1] or 'Something went wrong.'
+        }
 
     # Skip
     @registerCommand 'skip', (m, args, d, player)=>
