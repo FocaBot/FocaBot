@@ -220,7 +220,7 @@ class PlayerCommands
         }
 
     # Change Volume
-    @registerCommand 'volume', { alisases: ['vol'] }, (m, args, d , player)=>
+    @registerCommand 'volume', { aliases: ['vol'] }, (m, args, d , player)=>
       unless args
         r = "Current Volume: **#{player.volume*100}**."
         if player.queue.nowPlaying

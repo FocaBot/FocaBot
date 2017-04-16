@@ -82,7 +82,7 @@ class PlayerHUD
       thumbnail:
         url: item.thumbnail
       fields: [
-        { name: 'Length:', value: @util.displayTime item.duration, inline: true }
+        { name: 'Length:', value: "#{@util.displayTime item.duration}\n ", inline: true }
         { name: 'Position in queue:', value: "##{pos}", inline: true }
       ]
       footer:
@@ -115,7 +115,7 @@ class PlayerHUD
       thumbnail:
         url: item.thumbnail
       fields: [
-        { name: 'Length:', value: @util.displayTime item.duration, inline: true }
+        { name: 'Length:', value: "#{@util.displayTime item.duration}\n ", inline: true }
       ]
     if removedBy
       reply.footer =

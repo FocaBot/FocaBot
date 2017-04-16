@@ -38,7 +38,7 @@
     "request-promise": "^4.1.1",
     "require-reload": "^0.2.2",
     "thinky": "^2.3.6",
-    "ytdl-getinfo": "^1.0.0"
+    "ytdl-getinfo": "^1.0.1"
   },
   "devDependencies": {
     "coffee-errors": "^0.8.6"
