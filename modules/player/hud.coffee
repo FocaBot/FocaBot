@@ -114,9 +114,6 @@ class PlayerHUD
         icon_url: @util.getIcon item.sauce
       thumbnail:
         url: item.thumbnail
-      fields: [
-        { name: 'Length:', value: "#{@util.displayTime item.duration}\n ", inline: true }
-      ]
     if removedBy
       reply.footer =
         icon_url: removedBy.staticAvatarURL
