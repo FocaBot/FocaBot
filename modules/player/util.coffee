@@ -86,22 +86,12 @@ class PlayerUtil
       resolve(info)
 
   # Uses youtube-dl to get information of an URL or search term
-  getInfo: (query)=>
-    info = await ytdl(query, [
+  getInfo: (query)=> await ytdl(query, [
       '--default-search=ytsearch'
       '--ignore-errors'
       '--force-ipv4',
       '--format=bestaudio/best'
     ])
-    # temporary hack, i hope
-    unless info.partial or info.items.length
-      info = await ytdl(query, [
-        '--default-search=ytsearch'
-        '--ignore-errors'
-        '--force-ipv4',
-        '--format=bestaudio/best'
-      ])
-    return info
       
 
   # Parses a list of filters (| speed=2 distort, etc)
