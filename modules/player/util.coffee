@@ -144,7 +144,7 @@ class PlayerUtil
 
   # Checks item count for user
   checkItemCountLimit: (player, member)=>
-    return false if @permissions.isDJ(member) or player.guildData.data.maxItems
+    return false if @permissions.isDJ(member) or not player.guildData.data.maxItems
     itemCount = player.queue._d.items.filter((item)=> item.requestedBy is member.id).length
     return itemCount > player.guildData.data.maxItems
 
