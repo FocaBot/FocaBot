@@ -118,8 +118,6 @@ class PlayerHUD
       reply.footer =
         icon_url: removedBy.staticAvatarURL
         text: "Removed by #{removedBy.name}"
-    if @util.displayFilters(item.filters)
-      reply.description += "\n**Filters**: #{@util.displayFilters(item.filters)}"
     reply
 
   addPlaylist: (user, playlist, channel)=>
