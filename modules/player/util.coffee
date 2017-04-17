@@ -101,6 +101,7 @@ class PlayerUtil
         '--force-ipv4',
         '--format=bestaudio/best'
       ])
+    return info
       
 
   # Parses a list of filters (| speed=2 distort, etc)
