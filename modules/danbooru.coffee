@@ -19,6 +19,13 @@ class DanbooruModule extends BotModule
       b = danbooru
       # NSFW Filter
       b = safebooru unless d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0
+      # Blacklisted tags (discord community guidelines)
+      blacklist = ['loli', 'shota', 'gore', 'guro']
+      for tag in tags.split(' ')
+        if tag in blacklist then return msg.reply 'nope', false, {
+          image:
+            url: 'http://25.media.tumblr.com/tumblr_lqhsh2zVkZ1qjlcvoo1_500.jpg'
+        }
       # Make the search
       r = await b.get('posts.json', { json: true, qs: { random: true, tags } })
       return msg.reply 'No results.' unless r.length
