@@ -8,9 +8,10 @@ class DynamicNick extends BotModule
   handleEnd: (player, item)=>
     return unless player.guildData.data.queueLoop
     # Fetch Video Info Again
-    info = await @util.getInfo(item.sauce)
+    pl = await @util.getInfo(item.sauce)
     # Ignore playlists
-    return info.cancel() if info.partial
+    return pl.cancel() if pl.partial
+    info = pl.items[0]
     # Add the item to the queue again
     player.queue.addItem {
       title: info.title
