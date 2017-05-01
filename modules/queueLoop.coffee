@@ -6,7 +6,7 @@ class DynamicNick extends BotModule
     @events.on('end', @handleEnd)
     
   handleEnd: (player, item)=>
-    return unless player.queueData.data.queueLoop
+    return unless player.guildData.data.queueLoop
     # Fetch Video Info Again
     info = await @util.getInfo(item.sauce)
     # Ignore playlists
