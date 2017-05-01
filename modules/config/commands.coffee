@@ -61,6 +61,9 @@ class ConfigCommands
       voiceChannel:
         type: String
         def: '*'
+      queueLoop:
+        type: Boolean
+        def: false
     }
 
     @module.registerCommand 'config', { adminOnly: true, argSeparator: ' ' }, (msg,args,d)=>

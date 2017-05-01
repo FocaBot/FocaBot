@@ -25,6 +25,7 @@ class ConfigModule extends BotModule
       raffleMention: false
       commandChannel: ''
       voiceChannel: '*'
+      queueLoop: false
     }
 
     @cmd = new Commands @
