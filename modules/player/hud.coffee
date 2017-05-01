@@ -202,6 +202,8 @@ class PlayerHUD
         """
     }
 
+    r.title += ' [Loop Mode]' if q.player.guildData.data.queueLoop
+
     offset = (page-1) * itemsPerPage
     max = offset + itemsPerPage
 
