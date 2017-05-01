@@ -25,7 +25,7 @@ class DynamicNick extends BotModule
       time: 0
       duration: item.duration
       filters: item.filters
-    }, true, true
+    }, true
     
   unload: =>
     @events.removeListener('end', @handleEnd)
