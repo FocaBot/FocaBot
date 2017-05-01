@@ -1,0 +1,24 @@
+{
+  "generic": {
+    "error": "Something went wrong."
+  },
+  "player": {
+    "noVoice": "You must be in a voice channel.",
+    "noSameVoice": "You must be in the same voice channel the bot is in.",    
+    "vcRestrict": "You're not allowed to use the bot on the current voice channel.",
+    "limitReached": "You have reached the limit of items in queue for this server.",
+    "invalidStartTime": "Invalid start time.",
+    "playlistNoDJ": "Only DJs can add playlists.",
+    "nothingPlaying": "Nothing being played in this server.",
+    "userSkipped": "**{1}** skipped the current song.",
+    "skipForbidden": "You're not allowed to skip songs.",
+    "skipMulti": "Did you really try to skip this song **again**?",
+    "voteSkip": "**{1}** voted to skip the current song ({2}/{3}).",
+    "voteSkipSuccess": "Skipping current song ~~with the power of democracy~~.",
+    "queueCleared": "Queue Cleared.",
+    "nowPlaying": "Now playing in `{1}`:",
+    "emptyQueue": "The queue is empty.",
+    "noSauce": "Sorry, no sauce for the current item. :C",
+    "sauce": "Here's the sauce of the current item: "
+  }
+}

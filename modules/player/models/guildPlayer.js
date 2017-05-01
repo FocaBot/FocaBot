@@ -70,8 +70,6 @@ class GuildPlayer extends EventEmitter {
         if (item.status === 'paused' || item.status === 'suspended') return
         this.emit('end', item)
         if (!this.queue._d.items.length) return this.stop()
-        // Queue Loop
-        if (this.guildData.data.queueLoop) this.queue._d.items.push(this.queue._d.nowPlaying)
         this.queue._d.nowPlaying = this.queue._d.items.shift()
         this.play()
       })
