@@ -1,6 +1,6 @@
 class HelpModule extends BotModule
   init: =>
-    { @prefix } = @engine
+    { @prefix } = @engine.settings
     @registerCommand 'help', { allowDM: true }, @helpCommandFunction
     @registerCommand 'filters', { allowDM: true }, @filtersCommandFunction
 
