@@ -74,9 +74,7 @@ class ImageModule extends BotModule
         msg.reply 'Something went wrong.'
 
     @registerCommand 'tumblr', (msg, args, d)=>
-      # Tumblr's API doesn't seem to offer a way to filter out NSFW content, so yeah...
-      return unless d.data.allowImages and
-                    (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0)
+      return unless d.data.allowImages
       # Query the tumblr tag
       tumblr.taggedPosts args, (err, data)=>
         return msg.reply 'Something went wrong.' if err
