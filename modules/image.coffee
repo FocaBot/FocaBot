@@ -1,5 +1,7 @@
 Chance = require 'chance'
 request = require 'request'
+# sorry about this, i lost a bet
+tumblr = require('tumblr.js').createClient { consumer_key: process.env.TUMBLR_CONSUMER_KEY }
 
 # Google Image Search API
 CSE = require('request-promise').defaults {
@@ -70,6 +72,24 @@ class ImageModule extends BotModule
         if err.statusCode is 403
           return msg.reply 'Daily limit exceeded.'
         msg.reply 'Something went wrong.'
+
+    @registerCommand 'tumblr', (msg, args, d)=>
+      # Tumblr's API doesn't seem to offer a way to filter out NSFW content, so yeah...
+      return unless d.data.allowImages and
+                    (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0)
+      # Query the tumblr tag
+      tumblr.tagged args, (err, data)=>
+        return msg.reply 'Something went wrong.' if err or data.meta.status isnt 200
+        # Filter only image results
+        results = data.response.filter((r)=> r.type is 'photo')
+        return msg.reply 'No results.' unless results.length
+        # Pick a random image
+        image = @chance.pickone results
+        msg.reply '', false, {
+          title: '[click for sauce]'
+          url: image.post_url
+          image: { url: image.photos[0].original_size.url }
+        }
 
   getImages: (query, nsfw)=>
     safe = 'high'
