@@ -78,18 +78,22 @@ class ImageModule extends BotModule
       return unless d.data.allowImages and
                     (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0)
       # Query the tumblr tag
-      tumblr.tagged args, (err, data)=>
+      tumblr.taggedPosts args, (err, data)=>
         return msg.reply 'Something went wrong.' if err or data.meta.status isnt 200
         # Filter only image results
-        results = data.response.filter((r)=> r.type is 'photo')
-        return msg.reply 'No results.' unless results.length
-        # Pick a random image
-        image = @chance.pickone results
-        msg.reply '', false, {
-          title: '[click for sauce]'
-          url: image.post_url
-          image: { url: image.photos[0].original_size.url }
-        }
+        try
+          results = data.response.filter((r)=> r.type is 'photo')
+          return msg.reply 'No results.' unless results.length
+          # Pick a random image
+          image = @chance.pickone results
+          msg.reply '', false, {
+            title: '[click for sauce]'
+            url: image.post_url
+            image: { url: image.photos[0].original_size.url }
+          }
+        catch e
+          Core.log e,2
+          msg.reply 'Something went wrong'
 
   getImages: (query, nsfw)=>
     safe = 'high'
