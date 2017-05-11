@@ -79,10 +79,10 @@ class ImageModule extends BotModule
                     (d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0)
       # Query the tumblr tag
       tumblr.taggedPosts args, (err, data)=>
-        return msg.reply 'Something went wrong.' if err or data.meta.status isnt 200
+        return msg.reply 'Something went wrong.' if err
         # Filter only image results
         try
-          results = data.response.filter((r)=> r.type is 'photo')
+          results = data.filter((r)=> r.type is 'photo')
           return msg.reply 'No results.' unless results.length
           # Pick a random image
           image = @chance.pickone results
