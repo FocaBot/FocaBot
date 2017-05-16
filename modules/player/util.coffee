@@ -58,7 +58,7 @@ class PlayerUtil
       return 2 # Can't add livestreams
     if (duration > gData.data.maxSongLength and not @permissions.isDJ(msg.member)) or
       (duration > 43200  and not @permissions.isAdmin(msg.member)) or
-      (duration > 86400 and not @permissions.isOwner(msg.author))
+      (duration > 86400 and not @permissions.isOwner(msg.member))
         return 1 # Video too long
     0
 
