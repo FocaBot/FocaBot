@@ -64,6 +64,10 @@ class PlayerUtil
 
   # Uses FFProbe to get additional metadata of the file/stream
   getAdditionalMetadata: (info)=> new Promise (resolve, reject)=>
+    # Fix for YouTube livestreams
+    if info.is_live
+      info.duration = NaN
+      return resolve(info)
     return resolve(info) if (info.duration and isFinite(info.duration)) or info.forEach
     d = ''
     p = spawn('ffprobe', [info.url, '-show_format', '-v', 'quiet', '-print_format', 'json'])
