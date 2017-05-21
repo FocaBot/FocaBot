@@ -24,7 +24,7 @@
   "homepage": "https://github.com/FocaBot/FocaBot#README",
   "dependencies": {
     "chance": "^1.0.4",
-    "coffeescript": "^2.0.0-alpha1",
+    "coffeescript": "2.0.0-alpha1",
     "dotenv": "^2.0.0",
     "es6-promisify": "^5.0.0",
     "focabot-core": "^1.3.0",
