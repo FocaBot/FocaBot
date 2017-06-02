@@ -117,7 +117,7 @@ class PlayerUtil
   processInfo: (info, msg, player, playlist = false, voiceChannel)=>
     return unless info.url
     # Check Length
-    duration = parseTime(info.duration)
+    duration = parseTime(info.duration or 0)
     if @checkLength(duration, msg, player.guildData)
       msg.reply('The requested video is too long') unless playlist
       return
