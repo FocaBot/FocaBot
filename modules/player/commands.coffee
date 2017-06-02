@@ -34,6 +34,8 @@ class PlayerCommands
         unless info.partial
           # Single video
           try vid = await @util.getAdditionalMetadata(info.items[0])
+          catch e
+            vid = info.items[0]
           if time > vid.duration or time < 0
             return m.reply 'Invalid start time.'
           vid.startAt = time
