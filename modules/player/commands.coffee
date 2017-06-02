@@ -45,7 +45,7 @@ class PlayerCommands
           @hud.addPlaylist(m.member, info, m.channel)
           info.on 'done', =>
             info.items.forEach (item, i)=>
-              vid = await @util.getAdditionalMetadata(item)
+              try vid = await @util.getAdditionalMetadata(item)
               return if time > vid.duration or time < 0
               vid.startAt = time
               vid.filters = filters
