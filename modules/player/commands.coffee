@@ -46,6 +46,8 @@ class PlayerCommands
           info.on 'done', =>
             info.items.forEach (item, i)=>
               try vid = await @util.getAdditionalMetadata(item)
+              catch e
+                vid = item
               return if time > vid.duration or time < 0
               vid.startAt = time
               vid.filters = filters
