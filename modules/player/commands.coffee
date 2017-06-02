@@ -33,9 +33,7 @@ class PlayerCommands
         info = await @util.getInfo(q)
         unless info.partial
           # Single video
-          try vid = await @util.getAdditionalMetadata(info.items[0])
-          catch e
-            vid = info.items[0]
+          vid = await @util.getAdditionalMetadata(info.items[0])
           if time > vid.duration or time < 0
             return m.reply 'Invalid start time.'
           vid.startAt = time
@@ -47,9 +45,7 @@ class PlayerCommands
           @hud.addPlaylist(m.member, info, m.channel)
           info.on 'done', =>
             info.items.forEach (item, i)=>
-              try vid = await @util.getAdditionalMetadata(item)
-              catch e
-                vid = item
+              vid = await @util.getAdditionalMetadata(item)
               return if time > vid.duration or time < 0
               vid.startAt = time
               vid.filters = filters
