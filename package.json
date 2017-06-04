@@ -4,7 +4,7 @@
   "description": "Music with Seals!",
   "main": "main.coffee",
   "scripts": {
-    "start": "node --harmony-async-await main.js",
+    "start": "node main.js",
     "watch": "./node_modules/.bin/coffee -cwmo bin ."
   },
   "repository": {
