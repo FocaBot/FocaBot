@@ -1,0 +1,136 @@
+---
+generic:
+  error: "Une erreur s’est produite."
+  invalidArgs: "Arguments fournis non valides."
+  noResults: "Aucun résultat."
+  success: "Succès !"
+  saved: "Enregistré !"
+  sauceBtn: "\\[fais péter le lien\\]"
+  helpBtn: "\\[consulter l'aide\\]"
+  donateBtn: "\\[faire une donation\\]"
+  commandUsage: "Utilisation :"
+player:
+  noVoice: "Vous devez en premier lieu rejoindre un salon vocal."
+  noSameVoice: "Vous devez être dans le même salon vocal que le bot."
+  notAllowed: "Vous n'êtes pas autorisé à utiliser le bot dans ce salon vocal."
+  queueLimit: "Vous avez dépassé la limite d'éléments dans la file d'attente pour ce serveur."
+  invalidStart: "Temps de départ invalide."
+  playlistNoDJ: "Seuls les DJs peuvent ajouter des playlists."
+  notPlaying: "La liste de lecture est vide."
+  skip: "**{1}** a passé la musique en cours."
+  noSkipAllowed: "Vous n'êtes pas autorisé à passer des musiques."
+  voteSkip: "**{1}** a voté pour passer la musique en cours ({2}/{3})"
+  alreadyVoted: "Tu as vraiment tenté de me faire passer cette musique ***encore une fois*** ?"
+  voteSkipSuccess: "Passons cette musique ~~par le pouvoir de la démocratie~~..."
+  queueCleared: "File d'attente vidée."
+  queueEmpty: "La file d'attente est vide."
+  noSauce: "Désolé, on ne peut pas envoyer la source pour cet élément..."
+  sauce: 'Voici la source envoyée pour l''élément en cours : {1}'
+  noSuchItem: "Impossible de trouver l’élément spécifié dans la file d’attente."
+  onlyRemoveOwn: "Vous pouvez seulement retirer vos propres éléments de la file d'attente."
+  noVolumeChange: "Seuls les DJs peuvent modifier le volume."
+  queueFrozen: "La file d'attente est maintenant figée. Aucun changement ne peut être effectué sans qu'elle ne soit défigée."
+  queueUnfrozen: "La file d'attente n'est plus figée."
+  cantJoin: "Impossible de rejoindre le salon vocal. Passage à l'élément suivant..."
+  noRestrictivePause: "Impossible de mettre en pause (filtres restrictifs)."
+  noStreamPause: "Impossible de mettre des streams en pause."
+  noRestrictiveSeek: "Impossible de changer la position de lecture (filtres restrictifs)."
+  noStreamSeek: "Impossible de changer la position de lecture (livestream)."
+  invalidSeek: "Position invalide."
+  restrictiveFilters: "La musique en cours a un ou plusieurs filtres restrictifs."
+  livestreamFilters: "Impossible de modifier les filtres (livestream)."
+  restrictiveFiltersAdd: "Vous ne pouvez pas ajouter de filtres restrictifs pendant la lecture."
+  noStreamVolume: "Impossible de modifier le volume (livestream)."
+  hud:
+    nowPlaying: "En cours de lecture dans `{1}` :"
+    removed: "Retiré de la file d'attente :"
+    added: "Ajouté à la file d’attente :"
+    currentVolume: 'Volume actuel : **{1}**.'
+    volumeSet: "{1} a défini la valeur globale du volume à **{2}**."
+    requestedBy: "Demandé par {1}"
+    removedBy: "Supprimé par {1}"
+    radioStream: "**__Stream radio__**"
+    radioTrack: '**Titre de la piste** : `{1}`'
+    radioNext: '**Piste suivante** : `{1}`'
+    swap: "{1} a échangé des éléments :"
+    move: "{1} a déplacé les éléments suivants :"
+    length: "Longueur :"
+    position: "Position dans la file d'attente :"
+    filters: "Filtres :"
+    startTime: "Commence à :"
+    estimated: "Durée de lecture estimée :"
+    playlistLoading: "Chargement de la playlist..."
+    playlistCount: "**{1} ** éléments chargés jusqu'à présent."
+    playlistFinalCount: "**{1}** élément(s)."
+    playlistLoaded: "✅ Playlist ajoutée !"
+    noSuchPage: "La page {1} n'existe pas."
+    upNext: "Suivant :"
+    queueFooter: "{1} élément(s) au total ({2}). Page {3}/{4}"
+    queueNext: "Tapez {1} pour voir la page suivante."
+    playlistLoopMode: "🔁 Mode répétition activé ! [Playlist]"
+    songLoopMode: "🔁 Mode répétition activé ! [Musique]"
+config:
+  parameter: "Paramètre :"
+  value: "Valeur :"
+danbooru:
+  invalidTag: "Tag safebooru non valide"
+  noWaifu: "Exécutez la commande {1} d’abord !"
+help:
+  links: "Liens d’aide :"
+  commands: "Commandes"
+  filters: "Filtres"
+  manual: "Manuel"
+  donate: "Faire une donation"
+image:
+  dailyLimit: "Limite quotidienne dépassée pour cette commande."
+poll:
+  tooManyAnswers: "Trop de réponses !!"
+  notEnoughAnswers: "Vous devez spécifier au moins 2 réponses."
+  pollStarted: "{1} a lancé un sondage :"
+raffle:
+  previousRaffleOpen: "Un tirage au sort est déjà ouvert. ({1} participant(s)).\nFermez-le avec `{2}` avant d'en démarrer un nouveau."
+  raffleStarted: "Un nouveau tirage au sort vient de commencer ! Pour vous inscrire, utilisez la commande `{1}`."
+  noRaffle: "Il n'y a aucun tirage au sort actuellement."
+  alreadyJoined: "Vous avez déjà rejoint ce tirage au sort."
+  joined: "{1} a rejoint le tirage au sort ! ({2} participants)."
+  noParticipantsLeft: "Il ne reste aucun participant."
+  winner: "{1} remporte ce tirage au sort !"
+  closed: "Le tirage au sort est maintenant fermé."
+  overview: "**__Vue d'ensemble du tirage au sort__** :"
+  totalParticipants: "**{1}** participant(s) au total."
+  totalWinners: "**{1}** gagnant(s) au total."
+  placements: "**__Tirages__** :"
+  raffleStats: "Statistiques de tirage au sort pour {1}"
+  participated: '**A participé à** : {1}'
+  won: '**A gagné** : {1}'
+  overall: "En moyenne"
+rng:
+  roll: "{1} fait un jet de 🎲 et obtient `{2}`."
+  total: '**Total** : __{1}__.'
+  notEnoughItems: "Il n'y a pas assez d'éléments pour choisir. Pensez-bien à utiliser `;` pour les séparer."
+  choice: "Je choisis {1}."
+  8ball:
+    - C'est certain
+    - Totalement
+    - Sans aucun doute
+    - Oui, sans aucun doute
+    - Vous pouvez y compter
+    - De mon point de vue, oui
+    - Très probablement
+    - Ça s'annonce bien
+    - Oui
+    - Les signes portent à croire que oui
+    - Réponse floue, essayez encore
+    - Réessayez plus tard
+    - Mieux vaut ne rien dire pour le moment
+    - Je ne peux rien prédire pour le moment
+    - Concentrez-vous et posez la question à nouveau
+    - Ne comptez pas dessus
+    - Ma réponse est non
+    - Mes sources me disent non
+    - Ça s'annonce plutôt mal
+    - J'en doute fort
+  rate: "Je donne un {2}/10 à {1}."
+tags:
+  added: "Tag enregistré !"
+  deleted: "{1} tag(s) supprimé(s) !"

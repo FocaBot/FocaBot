@@ -1,0 +1,150 @@
+---
+generic:
+  error: "Algo salió mal."
+  invalidArgs: "Argumentos no válidos."
+  noResults: "Sin resultados."
+  success: "¡Hecho!"
+  saved: "¡Guardado!"
+  sauceBtn: "\\[click para la salsa\\]"
+  helpBtn: "\\[click para ayuda\\]"
+  donateBtn: "\\[donar\\]"
+  commandUsage: "Uso:"
+player:
+  noVoice: "Debes estar en un canal de voz."
+  noSameVoice: "Debes estar en el mismo canal de voz que el bot."
+  notAllowed: "No tienes permitido usar el bot en este canal de voz."
+  queueLimit: "Has superado el límite de elementos en cola para este servidor."
+  invalidStart: "Posición de inicio inválida."
+  playlistNoDJ: "Sólo DJs pueden agregar listas de reproducción."
+  notPlaying: "Nada siendo reproducido actualmente."
+  skip: "**{1}** omitió la canción actual."
+  noSkipAllowed: "No tienes permitido omitir canciones."
+  voteSkip: "**{1}** ha votado para omitir la canción actual ({2}/{3})"
+  alreadyVoted: "¿Realmente intentaste omitir esta canción ***de nuevo***?"
+  voteSkipSuccess: "Omitiendo la canción actual ~~con el poder de la democracia~~..."
+  queueCleared: "Cola vaciada."
+  queueEmpty: "La cola está vacía."
+  noSauce: "No hay salsa para el elemento actual..."
+  sauce: 'Aquí está la salsa del elemento actual: {1}'
+  noSuchItem: "No se puede encontrar el elemento especificado en la cola."
+  onlyRemoveOwn: "Sólo puedes eliminar tu propios elementos de la cola."
+  noVolumeChange: "Sólo DJs pueden cambiar el volumen."
+  queueFrozen: "La cola está congelada. No se podrán realizar mas cambios a la lista de reproducción a no ser que la descongeles."
+  queueUnfrozen: "La cola ya no está congelada."
+  cantJoin: "No me puedo unir al canal de voz, omitiendo..."
+  noRestrictivePause: "No se puede pausar (filtros restrictivos)."
+  noStreamPause: "No se puede pausar transmisiones."
+  noRestrictiveSeek: "Función deshabilitada (filtros restrictivos)."
+  noStreamSeek: "Función deshabilitada (transmisión en vivo)."
+  invalidSeek: "Posición inválida."
+  restrictiveFilters: "La canción actual tiene uno o más filtros restrictivos."
+  livestreamFilters: "No se pueden cambiar los filtros (transmisión en vivo)."
+  restrictiveFiltersAdd: "No puedes agregar filtros restrictivos durante la reproducción."
+  noStreamVolume: "No se puede cambiar el volumen (transmisión en vivo)."
+  hud:
+    nowPlaying: "Reproduciendo actualmente en `{1}`:"
+    removed: "Eliminado de la cola:"
+    added: "Añadido a la cola:"
+    currentVolume: 'Volumen Actual: **{1}**.'
+    volumeSet: "{1} estableció el volumen global en **{2}**."
+    requestedBy: "Solicitado por {1}"
+    removedBy: "Eliminado por {1}"
+    radioStream: "** __Transmisión de radio__ **"
+    radioTrack: '**Título de la pista**: `{1}`'
+    radioNext: '**Siguiente Pista**: `{1}`'
+    swap: "{1} intercambió algunos elementos:"
+    move: "{1} movió el siguiente elemento:"
+    length: "Duración:"
+    position: "Posición en cola:"
+    filters: "Filtros:"
+    startTime: "Posición de inicio:"
+    estimated: "Tiempo estimado para reproducción:"
+    playlistLoading: "Cargando lista de reproducción..."
+    playlistCount: "** {1} ** elementos cargados hasta ahora."
+    playlistFinalCount: "**{1}** elementos."
+    playlistLoaded: "✅ Lista de reproducción agregada!"
+    noSuchPage: "La página {1} no existe."
+    upNext: "A continuación:"
+    queueFooter: "{1} elementos en total ({2}). Página {3}/{4}"
+    queueNext: "Usa {1} para ver la próxima página."
+    playlistLoopMode: "🔁 Modo de bucle activado! [Playlist]"
+    songLoopMode: "🔂 Modo de bucle activado! [Song]"
+admin:
+  languageChanged: "Idioma establecido a {1}!"
+  cantDelete: "No se pudieron eliminar los mensajes. Revisa los permisos del bot."
+  restarting: "FocaBot se está reiniciando..."
+  updating: "FocaBot se está actualizando..."
+  ytdlUpdate: "Descargando la última versión de youtube-dl..."
+  ytdlUpdated: "Se descargó con éxito youtube-dl {1}!"
+  ytdlUpdateError: "No se pudo descargar la última versión de youtube-dl, intenta de nuevo."
+  nickChanged: "Nick cambiado exitosamente!"
+  avatarChanged: "Avatar cambiado exitosamente!"
+  usernameChanged: "Nombre de usuario cambiado exitosamente!"
+  noUserSpecified: "No se especificó un usuario."
+  blacklistAdd: "Se añadió **{1}** a la lista negra."
+  blacklistRemove: "Se eliminó **{1}** de la lista negra."
+config:
+  parameter: "Parámetro:"
+  value: "Valor:"
+danbooru:
+  invalidTag: "Etiqueta de safebooru inválida"
+  noWaifu: "¡Usa el comando {1} primero!"
+help:
+  links: "Enlaces de ayuda:"
+  commands: "Comandos"
+  filters: "Filtros"
+  manual: "Manual"
+  donate: "Donar"
+image:
+  dailyLimit: "Límite diario excedido para este comando."
+poll:
+  tooManyAnswers: "Demasiadas respuestas!!"
+  notEnoughAnswers: "Debes especificar al menos 2 respuestas."
+  pollStarted: "{1} comenzó una encuesta:"
+raffle:
+  previousRaffleOpen: "Un sorteo anterior todavía está abierto. ({1} participantes). Ciérralo con '{2}' antes de comenzar uno nuevo."
+  raffleStarted: "¡Acaba de empezar un nuevo sorteo! Para participar, usa el comando '{1}'."
+  noRaffle: "No hay ningún sorteo sucediendo ahora mismo."
+  alreadyJoined: "Ya estabas en el sorteo."
+  joined: "{1} se unió a la rifa! ({2} participantes)."
+  noParticipantsLeft: "No quedan participantes."
+  winner: "¡{1} ganó el sorteo!"
+  closed: "Se ha cerrado el sorteo."
+  overview: "**__Resumen del sorteo__**:"
+  totalParticipants: "**{1}** participantes totales."
+  totalWinners: "**{1}** ganadores."
+  placements: "**__Posiciones__**:"
+  raffleStats: "Estadísticas de sorteo para {1}"
+  participated: '**Participó**: {1}'
+  won: '**Ganó**: {1}'
+  overall: "En general"
+rng:
+  roll: "{1} 🎲 obtiene`{2}`."
+  total: '**Total**: __{1}__.'
+  notEnoughItems: "No hay suficientes elementos de donde escoger. Recuerda usar `;` para separarlos."
+  choice: "Elijo {1}."
+  8ball:
+    - Ciertamente
+    - Definitivamente
+    - Sin lugar a dudas
+    - Sí, definitivamente
+    - Puedes contar con eso
+    - A mi parecer, si
+    - Muy probablemente
+    - El panorama es bueno
+    - Sí
+    - Las señales indican que si
+    - Respuesta muy vaga, intente de nuevo
+    - Pregunta mas tarde
+    - Mejor no decírtelo por ahora
+    - No puedo predecir ahora
+    - Concéntrate y pregúnta de nuevo
+    - No cuentes con ello
+    - Mi respuesta es no
+    - Mis fuentes dicen que no
+    - El panorama no es muy bueno
+    - Lo dudo mucho
+  rate: "Le daría a {1} un {2}/10."
+tags:
+  added: "¡Etiqueta guardada!"
+  deleted: "¡Se han eliminado {1} etiquetas!"
