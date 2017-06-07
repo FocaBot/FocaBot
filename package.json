@@ -1,11 +1,10 @@
 {
-  "name": "discord-foca-bot",
+  "name": "focabot",
   "version": "0.6.1",
   "description": "Music with Seals!",
   "main": "main.coffee",
   "scripts": {
-    "start": "node main.js",
-    "watch": "./node_modules/.bin/coffee -cwmo bin ."
+    "start": "node main.js"
   },
   "repository": {
     "type": "git",
@@ -25,10 +24,10 @@
   "dependencies": {
     "chance": "^1.0.4",
     "coffeescript": "2.0.0-alpha1",
+    "discord.js": "^11.1.0",
     "dotenv": "^2.0.0",
-    "es6-promisify": "^5.0.0",
+    "erlpack": "https://github.com/hammerandchisel/erlpack/archive/master.tar.gz",
     "focabot-core": "^1.3.0",
-    "get-artist-title": "^1.0.0",
     "json-format": "^0.1.2",
     "json-prune": "^1.0.1",
     "mathjs": "^3.8.0",
@@ -37,8 +36,8 @@
     "request": "^2.74.0",
     "request-promise": "^4.1.1",
     "require-reload": "^0.2.2",
-    "thinky": "^2.3.6",
     "tumblr.js": "^1.1.1",
+    "uws": "^0.14.5",
     "ytdl-getinfo": "^1.0.1"
   },
   "devDependencies": {

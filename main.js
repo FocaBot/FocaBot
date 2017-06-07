@@ -1,33 +1,34 @@
 require('dotenv').config()
 require('coffeescript/register')
-const os = require('os')
-const path = require('path')
-const FocaBotCore = require('focabot-core')
-const { env } = process
 
-const focaBot = new FocaBotCore({
+const path = require('path')
+const Azarasi = require('azarasi')
+
+const focaBot = new Azarasi({
   name: 'FocaBot',
-  version: '0.6.1 (Dangerous Dodo)',
-  prefix: env.BOT_PREFIX,
-  token: env.BOT_TOKEN,
-  owner: JSON.parse(env.BOT_OWNER),
-  admins: JSON.parse(env.BOT_ADMINS),
-  adminRoles: JSON.parse(env.BOT_ADMIN_ROLES),
-  djRoles: JSON.parse(env.BOT_DJ_ROLES),
-  shardCount: env.NODE_APP_INSTANCE ? os.cpus().length : undefined,
-  shardIndex: env.NODE_APP_INSTANCE ? parseInt(env.NODE_APP_INSTANCE) : undefined,
-  debug: false,
+  version: '1.0.0-dev (Elegant Erizo)',
+  prefix: process.env.BOT_PREFIX,
+  token: process.env.BOT_TOKEN,
+  owner: JSON.parse(process.env.BOT_OWNER),
+  admins: JSON.parse(process.env.BOT_ADMINS),
+  adminRoles: JSON.parse(process.env.BOT_ADMIN_ROLES),
+  djRoles: JSON.parse(process.env.BOT_DJ_ROLES),
+  // shardCount: env.NODE_APP_INSTANCE ? os.cpus().length : undefined,
+  // shardIndex: env.NODE_APP_INSTANCE ? parseInt(env.NODE_APP_INSTANCE) : undefined,
+  debug: !!process.env.DEBUG,
   modulePath: path.join(__dirname, 'modules/'),
-  redisURL: env.REDIS_URL,
+  localePath: path.join(__dirname, 'locales/'),
+  locale: 'es_ES',
+  redisURL: process.env.REDIS_URL,
   watch: true
 })
 
 // These modules go first.
-focaBot.modules.load(['config', 'util'])
+// focaBot.modules.load(['config', 'util'])
 // Load the modules.
-focaBot.modules.load(JSON.parse(env.BOT_MODULES))
+focaBot.modules.load(JSON.parse(process.env.BOT_MODULES))
 
 // Let the seals in!!
 focaBot.establishConnection()
 
-console.log(`--- Started (${new Date()}) ---`)
+focaBot.log(`--- Started (${new Date()}) ---`)
