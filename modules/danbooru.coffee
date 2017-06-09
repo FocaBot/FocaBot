@@ -20,9 +20,12 @@ class DanbooruModule extends BotModule
       # NSFW Filter
       b = safebooru unless d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0
       # Blacklisted tags (discord community guidelines)
-      blacklist = ['loli', 'shota', 'gore', 'guro', 'lolicon']
       for tag in tags.split(' ')
-        if tag in blacklist then return msg.reply 'nope', false, {
+        if tag in ['loli', 'shota', 'lolicon'] then return msg.reply '', false, {
+          image:
+            url: 'https://cdn.discordapp.com/attachments/244581077610397699/315655455143886850/Screenshot_from_2017-05-20_21-01-03.png'
+        }
+        if tag in ['gore', 'guro'] then return msg.reply 'nope', false, {
           image:
             url: 'http://25.media.tumblr.com/tumblr_lqhsh2zVkZ1qjlcvoo1_500.jpg'
         }
