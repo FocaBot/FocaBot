@@ -26,7 +26,22 @@ class PlayerUtil
   # Gets a favicon from a URL
   getIcon: (u)=>
     uri = url.parse(u)
-    "#{uri.protocol}//#{uri.host}/favicon.ico"
+    # return "#{uri.protocol}//#{uri.host}/favicon.ico" # Discord doesn't support .ico anymore
+    try
+      tld = uri.hostname.match(/[^.]*\.[^.]*$/)[0]
+      switch tld
+        # coffeelint: disable=max_line_length
+        when 'youtube.com', 'youtu.be' then return 'https://www.youtube.com/yts/img/favicon_48-vfl1s0rGh.png'
+        when 'soundcloud.com' then return 'https://a-v2.sndcdn.com/assets/images/sc-icons/ios-a62dfc8f.png'
+        when 'discordapp.net', 'discordapp.com', 'discord.gg' then return 'https://discordapp.com/assets/2c21aeda16de354ba5334551a883b481.png'
+        when 'facebook.com' then return 'https://en.facebookbrand.com/wp-content/uploads/2016/05/FB-fLogo-Blue-broadcast-2.png'
+        when 'twitch.tv' then return 'https://cdn1.iconfinder.com/data/icons/micon-social-pack/512/twitch-512.png'
+        when 'vimeo.com' then return 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Vimeo_icon_block.png'
+        when 'dailymotion.com' then return 'http://press.dailymotion.com/wp-content/uploads/2010/06/LOGO-PRESS-BLOG.png'
+        when 'bandcamp.com' then return 'https://bandcamp.com/img/buttons/bandcamp-button-bc-circle-aqua-512.png'
+        when 'beatport.com' then return 'https://support.beatport.com/hc/en-us/article_attachments/201330410/Logo_Mark.png'
+        # TODO: Add icons for more sites
+        # coffeelint: enable=max_line_length
 
   # Gets metadata from a radio stream
   getRadioTrack: (qI)=> new Promise (resolve, reject)=>
