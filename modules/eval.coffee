@@ -24,7 +24,7 @@ class EvalModule extends BotModule
       j = (obj, length = 2)->
         pruned = prune obj, length
         p "\`\`\`json\n#{format(JSON.parse(pruned),formatSettings)}\n\`\`\`"
-      eval "(async function () {#{args}})()"
+      eval "return (async function () {#{args}})()"
     # coffeelint: enable=max_line_length
 
 module.exports = EvalModule
