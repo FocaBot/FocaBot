@@ -1,5 +1,5 @@
 class PingModule extends BotModule
-  init: =>
+  init: ->
     @registerCommand 'ping', { allowDM: true }, ({ msg, args })->
       # Send a message and wait until it's sent
       pingMessage = await msg.channel.send '🏓 Pong!'

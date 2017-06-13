@@ -2,7 +2,7 @@ moment = require 'moment'
 mathjs = require 'mathjs'
 
 class Util extends BotModule
-  init: =>
+  init: ->
     Core.util = @
 
   parseTime: (time)->

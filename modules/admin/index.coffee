@@ -7,10 +7,9 @@ ytdl = require 'ytdl-getinfo'
 Blacklist = require './blacklist'
 
 class AdminModule extends BotModule
-  init: =>
-    { @permissions } = Core
-    @blacklist = new Blacklist
-    @blacklist.init()
+  init: ->
+    blacklist = new Blacklist
+    blacklist.init()
     
     #
     # Admin only commands
@@ -154,13 +153,13 @@ class AdminModule extends BotModule
     @registerCommand 'blacklist', owner, ({ msg, args, locale })=>
       return msg.reply locale.admin.noUserSpecified unless msg.mentions.users.first()
       u = msg.mentions.users.first()
-      await @blacklist.add(u)
+      await blacklist.add(u)
       return msg.reply locale.gen locale.admin.blacklistAdd,
                                   "#{u.username}##{u.discriminator}"
     @registerCommand 'unblacklist', owner, ({ msg, args, locale })=>
       return msg.reply locale.admin.noUserSpecified unless msg.mentions.users.first()
       u = msg.mentions.users.first()
-      await @blacklist.remove(u)
+      await blacklist.remove(u)
       return msg.reply locale.gen locale.admin.blacklistRemove,
                                   "#{u.username}##{u.discriminator}"
 

@@ -18,13 +18,13 @@ const focaBot = new Azarasi({
   debug: !!process.env.DEBUG,
   modulePath: path.join(__dirname, 'modules/'),
   localePath: path.join(__dirname, 'locales/'),
-  locale: 'es_ES',
+  locale: 'en_US',
   redisURL: process.env.REDIS_URL,
   watch: true
 })
 
 // These modules go first.
-// focaBot.modules.load(['config', 'util'])
+focaBot.modules.load(['util'])
 
 // Load the translations
 const translations = ['ar_SA', 'en_US', 'es_ES', 'fr_FR']

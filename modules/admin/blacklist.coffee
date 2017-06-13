@@ -1,5 +1,5 @@
 class BlacklistSC
-  init: =>
+  init: ->
     Core.properties.blacklist = (await Core.data.get('Blacklist')) or []
     # Auto Update
     Core.data.subscribe('blacklist')
@@ -7,7 +7,7 @@ class BlacklistSC
       return unless channel is 'blacklist'
       Core.properties.blacklist = data
 
-  add: (user)=>
+  add: (user)->
     u = user
     u = user.id if user.id
     unless u in Core.properties.blacklist
@@ -17,7 +17,7 @@ class BlacklistSC
       # Notify the other shards
       Core.data.publish('blacklist', Core.properties.blacklist)
 
-  remove: (user)=>
+  remove: (user)->
     u = user
     u = user.id if user.id
     if u in Core.properties.blacklist

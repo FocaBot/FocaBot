@@ -11,7 +11,7 @@ danbooru = require('request-promise').defaults danbooru
 safebooru = require('request-promise').defaults safebooru
 
 class DanbooruModule extends BotModule
-  init: =>
+  init: ->
     @registerParameter 'allowWaifus', { type: Boolean, def: true }
 
     @registerCommand 'danbooru', { allowDM: true, aliases: ['d'] }, ({ msg, args, s, l })=>

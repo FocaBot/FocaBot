@@ -81,15 +81,9 @@ co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
 
-coffee-errors@^0.8.6:
-  version "0.8.6"
-  resolved "https://registry.yarnpkg.com/coffee-errors/-/coffee-errors-0.8.6.tgz#66c778a80ae01da663bbfa89841cb91029faabbb"
-
-coffeescript@2.0.0-alpha1:
-  version "2.0.0-alpha1"
-  resolved "https://registry.yarnpkg.com/coffeescript/-/coffeescript-2.0.0-alpha1.tgz#abf8b54b5c20a9c9f707c8aff35b227d1d6b5e3b"
-  dependencies:
-    marked "~0.3.6"
+coffeescript@next:
+  version "2.0.0-beta2"
+  resolved "https://registry.yarnpkg.com/coffeescript/-/coffeescript-2.0.0-beta2.tgz#caafd6a67d903a4333f8b485bcab54ed5147ef7e"
 
 colors@^1.1.2:
   version "1.1.2"
@@ -382,10 +376,6 @@ lodash@^4.13.1, lodash@^4.14.0, lodash@^4.8.2:
 long@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/long/-/long-3.2.0.tgz#d821b7138ca1cb581c172990ef14db200b5c474b"
-
-marked@~0.3.6:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.6.tgz#b2c6c618fccece4ef86c4fc6cb8a7cbf5aeda8d7"
 
 mathjs@^3.8.0:
   version "3.13.3"
