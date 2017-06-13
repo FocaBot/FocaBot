@@ -12,79 +12,75 @@ safebooru = require('request-promise').defaults safebooru
 
 class DanbooruModule extends BotModule
   init: =>
-    { @prefix } = @engine.settings
+    @registerParameter 'allowWaifus', { type: Boolean, def: true }
 
-    @registerCommand 'danbooru', { allowDM: true, aliases: ['d'] }, (msg, tags, d)=>
-      return unless d.data.allowImages
-      b = danbooru
-      # NSFW Filter
-      b = safebooru unless d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0
+    @registerCommand 'danbooru', { allowDM: true, aliases: ['d'] }, ({ msg, args, s, l })=>
+      # Use safebooru if NSFW is disabled
+      b = if msg.channel.nsfw or s.allowNSFW then danbooru else safebooru
       # Blacklisted tags (discord community guidelines)
-      for tag in tags.split(' ')
-        if tag in ['loli', 'shota', 'lolicon'] then return msg.reply '', false, {
-          image:
-            url: 'https://cdn.discordapp.com/attachments/244581077610397699/315655455143886850/Screenshot_from_2017-05-20_21-01-03.png'
-        }
-        if tag in ['gore', 'guro'] then return msg.reply 'nope', false, {
-          image:
-            url: 'http://25.media.tumblr.com/tumblr_lqhsh2zVkZ1qjlcvoo1_500.jpg'
-        }
-      # Make the search
-      r = await b.get('posts.json', { json: true, qs: { random: true, tags } })
-      return msg.reply 'No results.' unless r.length
+      # coffeelint: disable=max_line_length
+      for tag in args.split(' ')
+        if tag in ['loli', 'shota', 'lolicon'] then return msg.reply '', embed: image: url: 'https://cdn.discordapp.com/attachments/244581077610397699/315655455143886850/Screenshot_from_2017-05-20_21-01-03.png'
+        if tag in ['gore', 'guro'] then return msg.reply 'nope', false, embed: image: url: 'http://25.media.tumblr.com/tumblr_lqhsh2zVkZ1qjlcvoo1_500.jpg'
+      # coffeelint: enable=max_line_length
+      # Get a random post
+      try r = await b.get('posts/random.json', { json: true, qs: { tags: args } })
+      catch e
+        if e.response and e.response.statusCode is 404
+          msg.reply l.generic.noResults
+        else
+          Core.log e, 2
+        return
       # Send the picture
-      msg.reply '', false, {
-        title: '[click for sauce]'
-        url: "https://danbooru.donmai.us/posts/#{r[0].id}"
-        image: { url: "https://danbooru.donmai.us#{r[0].file_url}" }
+      msg.reply '', embed: {
+        title: l.generic.sauceBtn
+        url: "https://danbooru.donmai.us/posts/#{r.id}"
+        image: { url: "https://danbooru.donmai.us#{r.file_url}" }
       }
 
-    @registerCommand 'safebooru', { allowDM: true, aliases: ['safe'] }, (msg, tags, d)=>
-      return unless d.data.allowImages
-      # Make the search
-      r = await safebooru.get('posts.json', { json: true, qs: { random: true, tags } })
-      return msg.reply 'No results.' unless r.length
+    @registerCommand 'safebooru', { allowDM: true, aliases: ['safe'] }, ({ msg, args, s, l })=>
+      # Get a random post
+      try r = await safebooru.get('posts/random.json', { json: true, qs: { tags: args } })
+      catch e
+        if e.response and e.response.statusCode is 404
+          msg.reply l.generic.noResults
+        else
+          Core.log e, 2
+        return
       # Send the picture
-      msg.reply '', false, {
-        title: '[click for sauce]'
-        url: "https://safebooru.donmai.us/posts/#{r[0].id}"
-        image: { url: "https://safebooru.donmai.us#{r[0].file_url}" }
+      msg.reply '', embed: {
+        title: l.generic.sauceBtn
+        url: "https://safebooru.donmai.us/posts/#{r.id}"
+        image: { url: "https://safebooru.donmai.us#{r.file_url}" }
       }
 
-    @registerCommand 'setwaifu', { allowDM: true, aliases: ['sw'] }, (msg, args, d)=>
-      return unless d.data.allowWaifus and d.data.allowImages
+    @registerCommand 'setwaifu', { allowDM: true, aliases: ['sw'] }, ({ msg, args, s, l })=>
+      return unless s.allowWaifus
       waifu = (args.match(/\S+/) or [''])[0]
-      return msg.reply "Usage: ```#{@prefix}setWaifu <safebooru_tag>```" unless waifu
+      return msg.reply """
+      #{l.generic.commandUsage} ```#{s.prefix}setWaifu <safebooru_tag>```
+      """ unless waifu
       try
         # Do a dummy search to check if the tag is valid
         r = await safebooru.get('/posts.json', { json: true, qs: { tags: 'solo ' + waifu } })
-        return msg.reply 'Invalid safebooru tag.' unless r.length
+        return msg.reply l.danbooru.invalidTag unless r.length
         # Save the new waifu to the DB
         await Core.data.set("UserWaifu:#{msg.author.id}", waifu)
-        msg.reply 'Success!'
+        msg.reply l.generic.success
       catch error
-        Core.log error, 2
-        msg.reply 'Something went wrong.'
+        Core.log(error, 2)
+        msg.reply l.generic.error
 
-    @registerCommand 'waifu', { allowDM: true, aliases: ['w'] }, (msg, args, d)=>
-      return unless d.data.allowWaifus and d.data.allowImages
+    @registerCommand 'waifu', { allowDM: true, aliases: ['w'] }, ({ msg, args, s, l })=>
+      return unless s.allowWaifus
       try
         # Get the waifu entry for the current user
         waifu = await Core.data.get("UserWaifu:#{msg.author.id}")
-        return msg.reply "Run the #{@prefix}setWaifu command first." if not waifu?
-        # Make a safebooru search
-        r = await safebooru.get('/posts.json', {
-          json: true, qs: { random: true, tags: "solo #{waifu} #{args}" }
-        })
-        return msg.reply 'No results.' unless r.length
-        # Send the picture
-        msg.reply '', false, {
-          title: '[click for sauce]'
-          url: "https://safebooru.donmai.us/posts/#{r[0].id}"
-          image: { url: "https://safebooru.donmai.us#{r[0].file_url}" }
-        }
+        return msg.reply l.gen(l.danbooru.noWaifu, "#{s.prefix}setWaifu") if not waifu?
+        # Run the safebooru command
+        Core.commands.run('safebooru', msg, "solo #{waifu} #{args}")
       catch error
         Core.log error, 2
-        msg.reply 'Something went wrong.'
+        msg.reply l.generic.error
 
 module.exports = DanbooruModule

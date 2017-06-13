@@ -4,7 +4,7 @@ os = require 'os'
 request = require 'request'
 Discord = require 'discord.js'
 ytdl = require 'ytdl-getinfo'
-Blacklist = reload './blacklist'
+Blacklist = require './blacklist'
 
 class AdminModule extends BotModule
   init: =>
@@ -63,7 +63,8 @@ class AdminModule extends BotModule
         { name: locale.config.parameter, value: param, inline: true }
         {
           name: locale.config.value
-          value: Core.settings.getGuildParam(msg.guild, param)
+          value: await Core.settings.getGuildParam(msg.guild, param)
+          inline: true
         }
       ]
     @registerCommand 'enable', admin, ({ msg, args, locale })=>
