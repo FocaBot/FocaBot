@@ -78,7 +78,7 @@ class DanbooruModule extends BotModule
       try
         # Get the waifu entry for the current user
         waifu = await Core.data.get("UserWaifu:#{msg.author.id}")
-        return msg.reply l.gen(l.danbooru.noWaifu, "#{s.prefix}setWaifu") if not waifu?
+        return msg.reply l.gen(l.danbooru.noWaifu, "#{s.prefix}setWaifu") if not waifu
         # Run the safebooru command
         Core.commands.run('safebooru', msg, "solo #{waifu} #{args}")
       catch error
