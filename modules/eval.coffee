@@ -5,26 +5,26 @@ reload = require('require-reload')(require)
 formatSettings =
   type: 'space',
   size: 2
-T = {}
+G = {}
 
 class EvalModule extends BotModule
-  init: =>
-    evalOptions =
-      ownerOnly: true
-      allowDM: true
+  init: ->
+    # coffeelint: disable=max_line_length
+    owner = ownerOnly: true, allowDM: true
     # CoffeeScript Eval Command
-    @registerCommand 'eval', evalOptions, (msg, args, d, bot, engine)->
+    @registerCommand 'eval', owner, ({ msg, args, data, saveData, settings, locale, bot, discord })->
       p = (text)-> msg.channel.sendMessage text
-      j = (obj, length)->
+      j = (obj, length = 2)->
         pruned = prune obj, length
         p "\`\`\`json\n#{format(JSON.parse(pruned),formatSettings)}\n\`\`\`"
-      eval(CoffeeScript.compile("(=>\n  #{args.replace(/\n/g, '\n  ')}\n)()", bare: true))
+      eval(CoffeeScript.compile("(=>\n  #{args.replace(/^/gm, '  ')}\n)()", bare: true))
     # JavaScript Eval Command
-    @registerCommand 'jseval', evalOptions, (msg, args, d, bot, engine)->
+    @registerCommand 'jseval', owner, ({ msg, args, data, saveData, settings, locale, bot, discord })->
       p = (text)-> msg.channel.sendMessage text
-      j = (obj, length)->
+      j = (obj, length = 2)->
         pruned = prune obj, length
         p "\`\`\`json\n#{format(JSON.parse(pruned),formatSettings)}\n\`\`\`"
       eval "(async function () {#{args}})()"
+    # coffeelint: enable=max_line_length
 
 module.exports = EvalModule
