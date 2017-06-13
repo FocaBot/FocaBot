@@ -50,7 +50,7 @@ class AdminModule extends BotModule
       param = args.split(' ')[0]
       value = args.split(' ')[1..].join(' ')
       return msg.reply locale.generic.noParameter unless param
-      return msg.reply locale.config.invalidParameter unless settings[param]
+      return msg.reply locale.config.invalidParameter unless Core.settings.schema[param]
       if value
         try
           await Core.settings.setGuildParam(msg.guild, param, value)
@@ -63,7 +63,7 @@ class AdminModule extends BotModule
         { name: locale.config.parameter, value: param, inline: true }
         {
           name: locale.config.value
-          value: await Core.settings.getGuildParam(msg.guild, param)
+          value: (await Core.settings.getGuildParam(msg.guild, param)).toString()
           inline: true
         }
       ]

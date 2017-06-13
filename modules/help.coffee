@@ -22,7 +22,7 @@ class HelpModule extends BotModule
         color: if Core.properties.debug then 0xFF3300 else 0x00AAFF
         author: {
           name: "#{Core.properties.name} #{Core.properties.version}"
-          icon_url: Core.bot.user.avatarURL
+          icon_url: Core.bot.user.displayAvatarURL
         }
         description: """
         #{gstr}#{process.env.HELP_MESSAGE or ''}
