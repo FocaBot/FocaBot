@@ -26,9 +26,10 @@ class DanbooruModule extends BotModule
       # Get a random post
       try r = await b.get('posts/random.json', { json: true, qs: { tags: args } })
       catch e
-        if e.response and e.response.statusCode is 404
+        if e.statusCode is 404
           msg.reply l.generic.noResults
         else
+          msg.reply l.generic.error
           Core.log e, 2
         return
       # Send the picture
@@ -42,9 +43,10 @@ class DanbooruModule extends BotModule
       # Get a random post
       try r = await safebooru.get('posts/random.json', { json: true, qs: { tags: args } })
       catch e
-        if e.response and e.response.statusCode is 404
+        if e.statusCode is 404
           msg.reply l.generic.noResults
         else
+          msg.reply l.generic.error
           Core.log e, 2
         return
       # Send the picture
