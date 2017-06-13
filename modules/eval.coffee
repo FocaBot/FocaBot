@@ -13,14 +13,14 @@ class EvalModule extends BotModule
     owner = ownerOnly: true, allowDM: true
     # CoffeeScript Eval Command
     @registerCommand 'eval', owner, ({ msg, args, data, saveData, settings, locale, bot, discord })->
-      p = (text)-> msg.channel.sendMessage text
+      p = (text)-> msg.channel.send text
       j = (obj, length = 2)->
         pruned = prune obj, length
         p "\`\`\`json\n#{format(JSON.parse(pruned),formatSettings)}\n\`\`\`"
       eval(CoffeeScript.compile("(=>\n  #{args.replace(/^/gm, '  ')}\n)()", bare: true))
     # JavaScript Eval Command
     @registerCommand 'jseval', owner, ({ msg, args, data, saveData, settings, locale, bot, discord })->
-      p = (text)-> msg.channel.sendMessage text
+      p = (text)-> msg.channel.send text
       j = (obj, length = 2)->
         pruned = prune obj, length
         p "\`\`\`json\n#{format(JSON.parse(pruned),formatSettings)}\n\`\`\`"

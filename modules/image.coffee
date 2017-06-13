@@ -26,7 +26,6 @@ Giphy = require('request-promise').defaults {
 class ImageModule extends BotModule
   init: ->
     chance = new Chance()
-    { @prefix } = Core.settings
 
     @registerCommand 'img', {
       allowDM: true

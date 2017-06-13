@@ -97,6 +97,7 @@ danbooru:
   invalidTag: "Etiqueta de safebooru inválida"
   noWaifu: "¡Usa el comando {1} primero!"
 help:
+  prefix: "Prefijo para {1}:"
   links: "Enlaces de ayuda:"
   commands: "Comandos"
   filters: "Filtros"

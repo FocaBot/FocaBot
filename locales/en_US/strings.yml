@@ -99,6 +99,7 @@ danbooru:
   noWaifu: "Run the {1} command first!"
 help:
   links: "Help links:"
+  prefix: "Prefix for {1}:"
   commands: "Commands"
   filters: "Filters"
   manual: "Manual"
