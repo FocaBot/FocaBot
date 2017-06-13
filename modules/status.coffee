@@ -1,10 +1,10 @@
-moment = require 'moment'
-
 class StatusModule extends BotModule
-  ready: =>
-    if Core.settings.debug
-      Core.bot.User.setStatus 'dnd', Core.settings.version
+  ready: ->
+    if Core.properties.debug
+      Core.bot.user.setStatus 'dnd'
+      Core.bot.user.setGame Core.properties.version
     else
-      Core.bot.User.setStatus 'online', "#{Core.settings.prefix}help | focabot.xyz"
+      Core.bot.user.setStatus 'online'
+      Core.bot.user.setGame "#{Core.properties.prefix}help | focabot.xyz"
 
 module.exports = StatusModule
