@@ -84,9 +84,16 @@ admin:
   noUserSpecified: "No user specified."
   blacklistAdd: "Blacklisted **{1}**."
   blacklistRemove: "Removed **{1}** from the blacklist."
+  noSuchModule: "No such module."
+  noSuchCommand: "No such command."
+  permissionsUpdated: "Permissions Updated!"
+  invalidLevel: "Invalid permission level."
 config:
   parameter: "Parameter:"
   value: "Value:"
+  noParameter: "No parameter specified."
+  invalidParameter: "Invalid parameter specified."
+  invalidValue: "Invalid value specified."
 danbooru:
   invalidTag: "Invalid safebooru tag"
   noWaifu: "Run the {1} command first!"

@@ -48,14 +48,47 @@ class AdminModule extends BotModule
           msg.reply locale.admin.cantDelete
       else msg.reply locale.generic.invalidArgs
     @registerCommand 'config', admin, ({ msg, args, locale, settings })=>
-      # TODO
-    @registerCommand 'enable', admin, ({ msg, args, locale, settings })=>
-      # TODO
-    @registerCommand 'disable', admin, ({ msg, args, locale, settings })=>
-      # TODO
-    @registerCommand 'perm', admin, ({ msg, args, locale, settings })=>
-      # TODO
-    
+      param = args.split(' ')[0]
+      value = args.split(' ')[1..].join(' ')
+      return msg.reply locale.generic.noParameter unless param
+      return msg.reply locale.config.invalidParameter unless settings[param]
+      if value
+        try
+          await Core.settings.setGuildParam(msg.guild, param, value)
+        catch e
+          msg.reply locale.config.invalidValue, embed: {
+            description: e.message
+          }
+      msg.channel.send '', embed: fields: [
+        { name: locale.config.parameter, value: param, inline: true }
+        {
+          name: locale.config.value
+          value: Core.settings.getGuildParam(msg.guild, param)
+        }
+      ]
+    @registerCommand 'enable', admin, ({ msg, args, locale })=>
+      return msg.reply locale.admin.noSuchModule unless Core.modules.loaded[args]
+      try
+        await Core.modules.enableForGuild(msg.guild, args)
+        msg.reply locale.generic.success
+      catch e
+        msg.reply locale.generic.error
+    @registerCommand 'disable', admin, ({ msg, args, locale })=>
+      return msg.reply locale.admin.noSuchModule unless Core.modules.loaded[args]
+      try
+        await Core.modules.disableForGuild(msg.guild, args)
+        msg.reply locale.generic.success
+      catch e
+        msg.reply locale.generic.error
+    @registerCommand 'perm', admin, ({ msg, args, locale, data, save })=>
+      cmd = Core.Commands.registered[args.split(' ')[0]]
+      lvl = args.split(' ')[1]
+      return msg.reply locale.admin.noSuchCommand unless cmd and not cmd.ownerOnly
+      return msg.reply locale.admin.invalidLevel unless lvl in ['*', 'dj', 'admin']
+      data.permissionOverrides = {} unless data.permissionOverrides
+      data.permissionOverrides[cmd.name] = lvl
+      await save()
+      msg.reply locale.admin.permissionsUpdated
     #
     # Owner Only Commands
     #
