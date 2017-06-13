@@ -13,7 +13,7 @@ class RNGModule extends BotModule
       total = 0
       total += dice for dice in result
       reply += "\n\n#{l.gen(l.rng.total, total)}" if result.length > 1
-      msg.channel.sendMessage(reply)
+      msg.channel.send(reply)
 
     # Totally not stolen from ChavezBot
     @registerCommand 'choose', { argSeparator: ';' }, ({ msg, args, l })=>
