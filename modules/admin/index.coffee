@@ -56,7 +56,8 @@ class AdminModule extends BotModule
         try
           await Core.settings.setGuildParam(msg.guild, param, value)
         catch e
-          msg.reply locale.config.invalidValue, embed: {
+          return msg.reply locale.config.invalidValue, embed: {
+            color: 0xEE0000
             description: e.message
           }
       msg.channel.send '', embed: fields: [
@@ -82,7 +83,7 @@ class AdminModule extends BotModule
       catch e
         msg.reply locale.generic.error
     @registerCommand 'perm', admin, ({ msg, args, locale, data, save })=>
-      cmd = Core.Commands.registered[args.split(' ')[0]]
+      cmd = Core.commands.registered[args.split(' ')[0]]
       lvl = args.split(' ')[1]
       return msg.reply locale.admin.noSuchCommand unless cmd and not cmd.ownerOnly
       return msg.reply locale.admin.invalidLevel unless lvl in ['*', 'dj', 'admin']

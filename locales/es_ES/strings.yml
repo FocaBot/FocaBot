@@ -83,9 +83,16 @@ admin:
   noUserSpecified: "No se especificó un usuario."
   blacklistAdd: "Se añadió **{1}** a la lista negra."
   blacklistRemove: "Se eliminó **{1}** de la lista negra."
+  noSuchModule: "No existe ese modulo."
+  noSuchCommand: "No existe ese comando"
+  permissionsUpdated: "Permisos actualizados!"
+  invalidLevel: "Nivel de permiso inválido."
 config:
   parameter: "Parámetro:"
   value: "Valor:"
+  noParameter: "No se especificó un parámetro."
+  invalidParameter: "Parámetro inválido."
+  invalidValue: "Valor inválido."
 danbooru:
   invalidTag: "Etiqueta de safebooru inválida"
   noWaifu: "¡Usa el comando {1} primero!"

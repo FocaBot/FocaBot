@@ -25,6 +25,11 @@ const focaBot = new Azarasi({
 
 // These modules go first.
 // focaBot.modules.load(['config', 'util'])
+
+// Load the translations
+const translations = ['ar_SA', 'en_US', 'es_ES', 'fr_FR']
+translations.forEach(t => focaBot.locales.loadLocale(t))
+
 // Load the modules.
 focaBot.modules.load(JSON.parse(process.env.BOT_MODULES))
 
