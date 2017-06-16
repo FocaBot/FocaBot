@@ -1,0 +1,7 @@
+.vscode
+.env.example
+coffeelint.json
+process.yml
+yarn.lock
+modules/lastfm
+*.db

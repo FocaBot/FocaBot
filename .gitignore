@@ -82,5 +82,6 @@ bin
 watch.bat
 # Application Data
 data
+*.db
 # Still a big WIP
 modules/lastfm
