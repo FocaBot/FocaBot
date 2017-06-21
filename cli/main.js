@@ -70,7 +70,7 @@ fs.exists(configFile, async exists => {
   // Instantiate the bot
   const focaBot = new Azarasi({
     name: 'FocaBot',
-    version: '1.0.0 (Elegant Erizo)',
+    version: '1.0.0-alpha (Elegant Erizo)',
     token: config.token,
     prefix: config.prefix,
     adminRoles: [ config.adminRole ],
@@ -88,7 +88,7 @@ fs.exists(configFile, async exists => {
   focaBot.modules.load(['util', 'admin'])
   focaBot.modules.load(config.modules)
   // Translations
-  const translations = ['ar_SA', 'en_US', 'es_ES', 'fr_FR']
+  const translations = ['ar_SA', 'de_DE', 'en_US', 'es_CL', 'es_ES', 'fr_FR', 'ja_JP', 'pt_PT']
   translations.forEach(t => focaBot.locales.loadLocale(t))
   // Invite Link
   focaBot.bot.on('ready', async () => {

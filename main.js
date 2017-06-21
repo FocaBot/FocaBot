@@ -7,7 +7,7 @@ const Azarasi = require('azarasi')
 
 const focaBot = new Azarasi({
   name: 'FocaBot',
-  version: '1.0.0-dev (Elegant Erizo)',
+  version: '1.0.0-alpha (Elegant Erizo)',
   prefix: process.env.BOT_PREFIX,
   token: process.env.BOT_TOKEN,
   owner: JSON.parse(process.env.BOT_OWNER),
@@ -33,7 +33,7 @@ focaBot.modules.load(['util'])
 focaBot.settings.register('autoDel', { type: Boolean, def: true })
 
 // Load the translations
-const translations = ['ar_SA', 'en_US', 'es_ES', 'fr_FR']
+const translations = ['ar_SA', 'de_DE', 'en_US', 'es_CL', 'es_ES', 'fr_FR', 'ja_JP', 'pt_PT']
 translations.forEach(t => focaBot.locales.loadLocale(t))
 
 // Load the modules.

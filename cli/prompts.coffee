@@ -26,6 +26,7 @@ module.exports =
       { name: 'seal (Sends seal pictures)', value: 'seal', checked: true }
       { name: 'statics (Shows bot statics)', value: 'statics', checked: true }
       { name: 'tags (Custom tags/quotes)', value: 'tags', checked: true }
+      { name: 'inlineCommands (Inline Commands)', value: inlineCommands, checked: true }
     ]
   djRole:
     name: 'djRole'
