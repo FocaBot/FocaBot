@@ -129,30 +129,35 @@ class PlayerHUD
         text: l.gen(l.player.hud.removedBy, removedBy.displayName)
     reply
 
-  addPlaylist: (user, playlist, channel, l)->
+  addPlaylist: (user, playlist, channel, l, s)->
     message = undefined
     sending = false
+    lastCount = 0
     updateMessage = =>
-      return if sending
+      return if sending or playlist.items.length is lastCount
       embed = {
         author:
-          name: if playlist.partial then 'Loading Playlist...' else '✅ Playlist Added!'
+          name: if playlist.partial
+            l.player.hud.playlistLoading
+          else
+            l.player.hud.playlistLoaded
           icon_url: if playlist.partial then 'https://d.thebitlink.com/wheel.gif'
-        description: """
-        **#{playlist.items.length}** items\
-        #{if playlist.partial then ' loaded so far..' else ''}.
-        """
+        description: if playlist.partial
+          l.gen(l.player.hud.playlistCount, playlist.items.length, "#{s.prefix}cancel")
+        else
+          l.gen(l.player.hud.playlistFinalCount, playlist.items.length)
         footer:
           icon_url: user.user.avatarURL
-          text: "Requested by #{user.name}"
+          text: l.gen(l.player.hud.requestedBy, user.displayName)
       }
+      lastCount = playlist.items.length
       unless message
         sending = true
-        message = await channel.sendMessage '', false, embed
+        message = await channel.send '', { embed }
         sending = false
       else
         sending = true
-        await message.edit '', embed
+        await message.edit '', { embed }
         sending = false
     updateMessage()
     if playlist.partial
@@ -160,6 +165,13 @@ class PlayerHUD
       playlist.on 'done', =>
         sending = false
         updateMessage()
+        clearInterval(interval)
+      playlist.on 'cancelled', =>
+        playlist.cancelled = true
+        sending = false
+        if message then message.edit '', embed: {
+          author: name: l.player.hud.playlistCancelled
+        }
         clearInterval(interval)
 
   nowPlayingEmbed: (item, l)->

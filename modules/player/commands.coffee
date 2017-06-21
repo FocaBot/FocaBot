@@ -43,8 +43,14 @@ class PlayerCommands
         else
           # Playlist
           return m.reply(l.player.playlistNoDJ) unless Core.permissions.isDJ(m.member)
-          @hud.addPlaylist(m.member, info, m.channel, l)
+          # Allow only one playlist at once
+          if player.pendingPlaylist?
+            info.cancel()
+            return m.reply(l.player.playlistAlreadyLoading)
+          @hud.addPlaylist(m.member, info, m.channel, l, s)
+          player.pendingPlaylist = { pl: info, by: m.member }
           info.on 'done', =>
+            return if info.cancelled
             info.items.forEach (item, i)=>
               vid = await @util.getAdditionalMetadata(item)
               return if time > vid.duration or time < 0
@@ -273,6 +279,14 @@ class PlayerCommands
       return 'Not frozen' unless player.queue.frozen
       player.queue.frozen = false
       msg.reply l.player.queueUnfrozen
+    
+    @registerCommand 'cancel', ({ msg, player })=>
+      return unless player.pendingPlaylist? and
+                    player.pendingPlaylist.by.id is msg.member.id or
+                    @permissions.isDJ player.pendingPlaylist.by
+      player.pendingPlaylist.pl.cancelled = true
+      player.pendingPlaylist.pl.cancel()
+      delete player.pendingPlaylist
 
   registerCommand: -> @playerModule.registerCommand.apply(@playerModule, arguments)
 

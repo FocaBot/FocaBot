@@ -2,6 +2,7 @@ require('dotenv').config()
 require('coffeescript/register')
 
 const path = require('path')
+const ffmpeg = require('ffmpeg-downloader')
 const Azarasi = require('azarasi')
 
 const focaBot = new Azarasi({
@@ -21,7 +22,8 @@ const focaBot = new Azarasi({
   locale: 'en_US',
   redisURL: process.env.REDIS_URL,
   watch: true,
-  dbFile: process.env.DB_FILE || 'data.db'
+  dbFile: process.env.DB_FILE || 'data.db',
+  ffmpegBin: ffmpeg.path
 })
 
 // These modules go first.

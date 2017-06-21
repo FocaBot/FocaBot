@@ -9,6 +9,7 @@ const home = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'
 const dataPath = path.join(home, '.focaBot')
 const configFile = path.join(dataPath, 'settings.db')
 const Azarasi = require('azarasi')
+const ffmpeg = require('ffmpeg-downloader')
 
 mkdirp.sync(dataPath)
 
@@ -76,7 +77,8 @@ fs.exists(configFile, async exists => {
     djRoles: [ config.djRole ],
     modulePath: path.join(__dirname, '../modules/'),
     localePath: path.join(__dirname, '../locales/'),
-    locale: config.defaultLocale
+    locale: config.defaultLocale,
+    ffmpegBin: ffmpeg.path
   })
 
   // Parameters
