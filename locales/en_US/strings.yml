@@ -42,6 +42,8 @@ player:
   livestreamFilters: "Can't change filters (livestream)."
   restrictiveFiltersAdd: "You can't add restrictive filters during playback."
   noStreamVolume: "Can't change volume (livestream)."
+  tooLong: "The requested video is too long"
+  filterErrors: "A filter reported errors:"
   hud:
     nowPlaying: "Now playing in `{1}`:"
     removed: "Removed from the queue:"
