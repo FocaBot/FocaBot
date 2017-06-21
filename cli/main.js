@@ -78,6 +78,7 @@ fs.exists(configFile, async exists => {
     modulePath: path.join(__dirname, '../modules/'),
     localePath: path.join(__dirname, '../locales/'),
     locale: config.defaultLocale,
+    dbFile: path.join(dataPath, 'data.db'),
     ffmpegBin: ffmpeg.path
   })
 
