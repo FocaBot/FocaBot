@@ -14,7 +14,6 @@ module.exports =(config, file)->
         { name: 'Change the bot token', value: 'token' }
         { name: "Change the command prefix (#{config.prefix})", value: 'prefix' }
         { name: 'Change the modules loaded at startup', value: 'modules' }
-        { name: "Change the owner ID (#{config.owner})", value: 'owner' }
         { name: "Change the DJ role name (#{config.djRole})", value: 'djRole' }
         { name: "Change the Admin role name (#{config.adminRole})", value: 'adminRole' }
         {

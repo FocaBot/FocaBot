@@ -69,4 +69,4 @@ module.exports =->
   If in the future you want to change one of the parameters, run "focabot config" in \
   your terminal.\n
   '''
-  return { token, prefix, modules, owner, djRole, adminRole, defaultLocale }
+  return { token, prefix, modules, djRole, adminRole, defaultLocale }
