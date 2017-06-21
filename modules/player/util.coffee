@@ -5,6 +5,7 @@ url = require 'url'
 { parseTime } = Core.util
 ytdl = require('ytdl-getinfo').getInfo
 filterdb = reload './filters'
+ffprobe = require('ffmpeg-downloader').probePath
 
 class PlayerUtil
   constructor: ()->
@@ -46,7 +47,7 @@ class PlayerUtil
   # Gets metadata from a radio stream
   getRadioTrack: (qI)-> new Promise (resolve, reject)=>
     d = ''
-    p = spawn('ffprobe', [qI.path, '-show_format', '-v', 'quiet', '-print_format', 'json'])
+    p = spawn(ffprobe, [qI.path, '-show_format', '-v', 'quiet', '-print_format', 'json'])
     p.stdout.on 'data', (data)=> d += data
     p.on 'close', (code)=>
       return resolve { current: '???' } if code
