@@ -1,0 +1,136 @@
+---
+generic:
+  error: "Algo correu mal."
+  invalidArgs: "Argumentos inválidos fornecidos."
+  noResults: "Nenhum resultado."
+  success: "Concluído!"
+  saved: "Guardado!"
+  sauceBtn: "\\[clica para fonte\\]"
+  helpBtn: "\\[clique para ajuda\\]"
+  donateBtn: "\\[doar\\]"
+  commandUsage: "Uso:"
+player:
+  noVoice: "Deves estar num canal de voz."
+  noSameVoice: "Deves estar no mesmo canal de voz em que o bot está."
+  notAllowed: "Não te é permitido usar o bot neste canal de voz."
+  queueLimit: "Excedeste o limite de items em fila de espera para este servidor."
+  invalidStart: "Tempo de início inválido."
+  playlistNoDJ: "Apenas DJs podem adicionar playlists."
+  notPlaying: "Nada a ser tocado neste servidor."
+  skip: "**{1}** saltou a música actual."
+  noSkipAllowed: "Não te é permitido saltar músicas."
+  voteSkip: "**{1}** votou para saltar a música actual ({2}/{3})"
+  alreadyVoted: "Tentaste mesmo saltar a música ***de novo***?"
+  voteSkipSuccess: "Saltando a música actual ~~com o poder da democracia~~..."
+  queueCleared: "Fila de espera limpa."
+  queueEmpty: "A fila de espera está vazia."
+  noSauce: "Desculpa, sem fontes para o item actual..."
+  sauce: 'Aqui está a fonte do item actual: {1}'
+  noSuchItem: "Não consigo encontrar o item especificado na fila de espera."
+  onlyRemoveOwn: "Apenas podes remover os teus próprios items da fila da espera."
+  noVolumeChange: "Apenas DJs podem alterar o volume."
+  queueFrozen: "A fila de espera está agora congelada. Não se podem fazer alterações à playlist até a descongelares."
+  queueUnfrozen: "A fila de espera já não está congelada."
+  cantJoin: "Não consegui entrar no canal de voz. Saltando..."
+  noRestrictivePause: "Can't pause (restrictive filters)."
+  noStreamPause: "Não é possível pausar streams."
+  noRestrictiveSeek: "Can't seek (restrictive filters)."
+  noStreamSeek: "Não é possível procurar (livestream)."
+  invalidSeek: "Posição inválida."
+  restrictiveFilters: "The current song has one or more restrictive filters."
+  livestreamFilters: "Não é possível alterar os filtros (livestream)."
+  restrictiveFiltersAdd: "You can't add restrictive filters during playback."
+  noStreamVolume: "Não podes alterar o volume (livestream)."
+  hud:
+    nowPlaying: "Agora a tocar no `{1}`:"
+    removed: "Removido da fila de espera:"
+    added: "Adicionado à fila de espera:"
+    currentVolume: 'Volume actual: * *{1} * *.'
+    volumeSet: "{1} definiu o volume global * *{2} * *."
+    requestedBy: "Pedido pelo {1}"
+    removedBy: "Removido pelo {1}"
+    radioStream: "* * __Stream de rádio__ * *"
+    radioTrack: '* * Título da faixa * *: ''{1}'''
+    radioNext: '* * Próxima faixa* *: ''{1}'''
+    swap: "{1} trocou alguns itens:"
+    move: "{1} moveu o seguinte item:"
+    length: "Duração:"
+    position: "Posição na fila de espera:"
+    filters: "Filtros:"
+    startTime: "Início:"
+    estimated: "Tempo estimado até reprodução:"
+    playlistLoading: "A carregar a playlist..."
+    playlistCount: "* *{1} * * items carregados até agora."
+    playlistFinalCount: "* *{1} * * items."
+    playlistLoaded: "✅ Playlist adicionada!"
+    noSuchPage: "Página {1} não existe."
+    upNext: "A seguir:"
+    queueFooter: "{1} items no total. ({2}). Página{3}/{4}"
+    queueNext: "Usa {1} para ver a próxima página."
+    playlistLoopMode: "🔁 Loop Mode Enabled! [Playlist]"
+    songLoopMode: "🔂 Loop Mode Enabled! [Song]"
+config:
+  parameter: "Parameter:"
+  value: "Value:"
+danbooru:
+  invalidTag: "Invalid safebooru tag"
+  noWaifu: "Run the {1} command first!"
+help:
+  links: "Help links:"
+  commands: "Commands"
+  filters: "Filters"
+  manual: "Manual"
+  donate: "Donate"
+image:
+  dailyLimit: "Daily limit exceeded for this command."
+poll:
+  tooManyAnswers: "Too many answers!!"
+  notEnoughAnswers: "You need to specify at least 2 answers."
+  pollStarted: "{1} started a poll:"
+raffle:
+  previousRaffleOpen: "A previous raffle is still open. ({1} participants).\nClose it with `{2}` before starting a new one."
+  raffleStarted: "A new raffle has just started! To join, use the `{1}` command."
+  noRaffle: "There isn't any raffle going on right now."
+  alreadyJoined: "You already joined this raffle."
+  joined: "{1} joined the raffle! ({2} participants)."
+  noParticipantsLeft: "No participants left."
+  winner: "{1} wins this raffle!"
+  closed: "The raffle is now closed."
+  overview: "**__Raffle Overview__**:"
+  totalParticipants: "**{1}** total participants."
+  totalWinners: "**{1}** total winners."
+  placements: "**__Raffle Placements__**:"
+  raffleStats: "Raffle stats for {1}"
+  participated: '**Participated**: {1}'
+  won: '**Won**: {1}'
+  overall: "Overall"
+rng:
+  roll: "{1} 🎲 rolls `{2}`."
+  total: '**Total**: __{1}__.'
+  notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
+  choice: "Eu escolho {1}."
+  8ball:
+    - De certeza
+    - Decisivamente que sim
+    - Sem dúvida
+    - Sim, definitivamente
+    - Podes contar com isso
+    - Do meu ponto de vista, sim
+    - Muito provável
+    - Boas perspectivas
+    - Sim
+    - Os sinais dizem que sim
+    - Resposta pouco clara, tenta de novo
+    - Pergunta-me novamente mais tarde
+    - É melhor não te dizer agora
+    - Não consigo prever agora
+    - Concentra-te e pergunta de novo
+    - Não contes com isso
+    - A minha resposta é não
+    - As minhas fontes dizem que não
+    - Perspectivas não são boas
+    - Duvido muito
+  rate: "Eu daria a {1} um {2}/10."
+tags:
+  added: "Etiqueta guardada!"
+  deleted: "Apaguei {1} etiquetas!"

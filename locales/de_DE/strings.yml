@@ -1,0 +1,136 @@
+---
+generic:
+  error: "Irgendwas ging schief..."
+  invalidArgs: "Ungültige Argumente verwendet."
+  noResults: "Keine Ergebnisse."
+  success: "Geschafft!"
+  saved: "Gespeichert!"
+  sauceBtn: "\\[Klicken für Quelle\\]"
+  helpBtn: "Drücke für Hilfe"
+  donateBtn: "Spenden"
+  commandUsage: "Verwendung:"
+player:
+  noVoice: "Du musst in einem Sprachkanal sein."
+  noSameVoice: "Du musst im gleichen Sprachkanal wie der Bot sein."
+  notAllowed: "Du darfst den Bot in diesem Sprachkanal nicht benutzen."
+  queueLimit: "Du hast das Limit für Einträge in der Warteschlange für diesen Server überschritten."
+  invalidStart: "Ungültige Startzeit."
+  playlistNoDJ: "Nur DJs können Playlists hinzufügen."
+  notPlaying: "Es wird nichts auf dem Server gespielt."
+  skip: "**{1}** hat den aktuellen Titel übersprungen."
+  noSkipAllowed: "Es ist dir nicht erlaubt, Lieder zu überspringen."
+  voteSkip: "**{1}** hat dafür gestimmt, das aktuelle Lied zu überspringen ({2}/{3})"
+  alreadyVoted: "Hast du grade ernsthaft versucht, das Lied **nochmal** zu überspringen?"
+  voteSkipSuccess: "Das Lied wird dank der Kraft der Demokratie übersprungen..."
+  queueCleared: "Liste gelöscht."
+  queueEmpty: "Die Warteschlange ist leer."
+  noSauce: "Leider wurde keine Quelle zu dem aktuellen Item gefunden..."
+  sauce: 'Hier ist die Quelle des aktuellen Liedes: {1}'
+  noSuchItem: "Das angegebene Element konnte in der Warteschlange nicht gefunden werden."
+  onlyRemoveOwn: "Du kannst nur eigene Lieder aus der Warteschlange löschen."
+  noVolumeChange: "Nur DJs dürfen die Lautstärke ändern."
+  queueFrozen: "Die Warteschlange ist nun fixiert. An der Wiedergabeliste können keine Änderungen vorgenommen werden, es sei denn, du hebst die Fixierung auf."
+  queueUnfrozen: "Die Warteschlange ist nicht mehr fixiert."
+  cantJoin: "Ich konnte dem Sprachkanal nicht beitreten. Überspringen..."
+  noRestrictivePause: "Can't pause (restrictive filters)."
+  noStreamPause: "Streams können nicht pausiert werden."
+  noRestrictiveSeek: "Can't seek (restrictive filters)."
+  noStreamSeek: "(Livestream) kann nicht gefunden werden."
+  invalidSeek: "Ungültige Position."
+  restrictiveFilters: "The current song has one or more restrictive filters."
+  livestreamFilters: "Filter (Livestream) kann nicht geändert werden."
+  restrictiveFiltersAdd: "You can't add restrictive filters during playback."
+  noStreamVolume: "Die Livestream-Lautstärke kann nicht verändert werden."
+  hud:
+    nowPlaying: "Spielt jetzt in `{1}`"
+    removed: "Aus der Warteschlange entfernt:"
+    added: "Zur Warteschlange hinzugefügt:"
+    currentVolume: 'Aktuelle Lautstärke: **{1}**'
+    volumeSet: "{1} hat die globale Lautstärke auf **{2}** gestellt."
+    requestedBy: "Eingereicht von {1}"
+    removedBy: "Gelöscht von {1}"
+    radioStream: "**__Radio Stream__**"
+    radioTrack: '**Liedname**: `{1}`'
+    radioNext: '**Nächstes Lied**: `{1}`'
+    swap: "{1} swapped some items:"
+    move: "{1} moved the following item:"
+    length: "Length:"
+    position: "Position in queue:"
+    filters: "Filters:"
+    startTime: "Start At:"
+    estimated: "Estimated time for playback:"
+    playlistLoading: "Loading playlist..."
+    playlistCount: "**{1}** items loaded so far."
+    playlistFinalCount: "**{1}** items."
+    playlistLoaded: "✅ Playlist Added!"
+    noSuchPage: "Page {1} does not exist."
+    upNext: "Up next:"
+    queueFooter: "{1} total items ({2}). Page {3}/{4}"
+    queueNext: "Use {1} to see the next page."
+    playlistLoopMode: "🔁 Loop Mode Enabled! [Playlist]"
+    songLoopMode: "🔂 Loop Mode Enabled! [Song]"
+config:
+  parameter: "Parameter:"
+  value: "Value:"
+danbooru:
+  invalidTag: "Invalid safebooru tag"
+  noWaifu: "Run the {1} command first!"
+help:
+  links: "Help links:"
+  commands: "Commands"
+  filters: "Filters"
+  manual: "Manual"
+  donate: "Donate"
+image:
+  dailyLimit: "Daily limit exceeded for this command."
+poll:
+  tooManyAnswers: "Too many answers!!"
+  notEnoughAnswers: "You need to specify at least 2 answers."
+  pollStarted: "{1} started a poll:"
+raffle:
+  previousRaffleOpen: "A previous raffle is still open. ({1} participants).\nClose it with `{2}` before starting a new one."
+  raffleStarted: "A new raffle has just started! To join, use the `{1}` command."
+  noRaffle: "There isn't any raffle going on right now."
+  alreadyJoined: "You already joined this raffle."
+  joined: "{1} joined the raffle! ({2} participants)."
+  noParticipantsLeft: "No participants left."
+  winner: "{1} wins this raffle!"
+  closed: "The raffle is now closed."
+  overview: "**__Raffle Overview__**:"
+  totalParticipants: "**{1}** total participants."
+  totalWinners: "**{1}** total winners."
+  placements: "**__Raffle Placements__**:"
+  raffleStats: "Raffle stats for {1}"
+  participated: '**Participated**: {1}'
+  won: '**Won**: {1}'
+  overall: "Overall"
+rng:
+  roll: "{1} 🎲 rolls `{2}`."
+  total: '**Total**: __{1}__.'
+  notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
+  choice: "Ich nehme {1}."
+  8ball:
+    - Es ist sicher
+    - Es ist eindeutig so
+    - Ohne Zweifel
+    - Ja, auf jeden Fall
+    - Du kannst dich drauf verlassen
+    - As I see it, yes
+    - Am ehesten
+    - Gute Aussichten
+    - Ja
+    - Anzeichen deuten auf ja
+    - Reply hazy try again
+    - Frag mich später noch einmal
+    - Sag es mir lieber nicht
+    - Ich kann jetzt nicht vorhersagen
+    - Konzentriere dich und frag nochmal
+    - Verlass dich nicht drauf
+    - Meine Antwort ist nein
+    - Meine Quellen sagen Nein
+    - Outlook not so good
+    - Sehr zweifelhaft
+  rate: "I'd give {1} a {2}/10."
+tags:
+  added: "Stichwort gespeichert!"
+  deleted: "{1} Tags gelöscht!"
