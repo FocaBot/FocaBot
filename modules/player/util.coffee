@@ -71,7 +71,7 @@ class PlayerUtil
   checkLength: (duration, msg, gData)=>
     unless (isFinite(duration) and duration > 0) or @permissions.isDJ(msg.member)
       return 2 # Can't add livestreams
-    if (duration > gData.data.maxSongLength and not @permissions.isDJ(msg.member)) or
+    if (duration > gData.data.settings.maxSongLength and not @permissions.isDJ(msg.member)) or
       (duration > 43200  and not @permissions.isAdmin(msg.member)) or
       (duration > 86400 and not @permissions.isOwner(msg.member))
         return 1 # Video too long
@@ -150,7 +150,7 @@ class PlayerUtil
     player.queue.addItem({
       title: info.title
       requestedBy: msg.member
-      voiceChannel: voiceChannel || msg.member.getVoiceChannel()
+      voiceChannel: voiceChannel || msg.member.voiceChannel
       textChannel: msg.channel
       path: info.url
       sauce: info.webpage_url
@@ -163,8 +163,8 @@ class PlayerUtil
 
   # Checks item count for user
   checkItemCountLimit: (player, member)=>
-    return false if @permissions.isDJ(member) or not player.guildData.data.maxItems
+    return false if @permissions.isDJ(member) or not player.guildData.data.settings.maxItems
     itemCount = player.queue._d.items.filter((item)=> item.requestedBy is member.id).length
-    return itemCount > player.guildData.data.maxItems
+    return itemCount > player.guildData.data.settings.maxItems
 
 module.exports = new PlayerUtil()

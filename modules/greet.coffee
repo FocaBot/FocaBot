@@ -1,5 +1,8 @@
 class GreetModule extends BotModule
   init: ->
+    @registerParameter 'greet', { type: String, min: 1, def: 'off' }
+    @registerParameter 'farewell', { type: String, min: 1, def: 'off' }
+    
     @registerEvent 'discord.guildMemberAdd', (member)=>
       s = await Core.settings.getForGuild(member.guild)
       if s.greet and s.greet isnt 'off'

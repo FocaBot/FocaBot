@@ -1,26 +1,30 @@
 reload = require('require-reload')(require)
-EventEmitter = require 'events'
-PlayerHud = reload './hud'
-PlayerUtil = reload './util'
+# PlayerHud = reload './hud'
+# PlayerUtil = reload './util'
 PlayerCommands = reload './commands'
-AudioFilters = reload './filters'
+# AudioFilters = reload './filters'
 GuildPlayer = reload './models/guildPlayer'
 
 class PlayerModule extends BotModule
-  init: =>
+  init: ->
     @_guilds = {}
     @filters = AudioFilters
-    @events = new EventEmitter
+    { @events } = Core
     @util = PlayerUtil
     @hud = new PlayerHud @
     @util.hud = @hud
     @cmd = new PlayerCommands @
     Core.data.subscribe('GuildQueueFeed')
     Core.data.on('message', @_messageHandler)
-    Core.bot.Dispatcher.on 'VOICE_CHANNEL_JOIN', @_handleVoiceJoin
-    Core.bot.Dispatcher.on 'VOICE_CHANNEL_LEAVE', @_handleVoiceLeave
 
-  getForGuild: (guild)=>
+    # Setting parameters
+    @registerParameter 'voteSkip', { type: Boolean, def: true }
+    @registerParameter 'maxSongLength', { type: Number, def: 1800, min: 60, max: 21600 }
+    @registerParameter 'maxItems'
+    # Core.bot.Dispatcher.on 'VOICE_CHANNEL_JOIN', @_handleVoiceJoin
+    # Core.bot.Dispatcher.on 'VOICE_CHANNEL_LEAVE', @_handleVoiceLeave
+
+  getForGuild: (guild)->
     return @_guilds[guild.id] if @_guilds[guild.id]?
     # Get guild data
     gData = await Core.guilds.getGuild(guild)
@@ -34,6 +38,7 @@ class PlayerModule extends BotModule
     }
     @_guilds[guild.id] = player
     @events.emit('newPlayer', player)
+    ###
     # Relay all events
     player.on 'playing', (item)=> @events.emit('playing', player, item)
     player.on 'paused', (item)=> @events.emit('paused', player, item)
@@ -60,12 +65,14 @@ class PlayerModule extends BotModule
         by: Core.settings.shardIndex or 0
       })
     player
+    ###
 
-  registerCommand: (name, options, handler)=>
+  registerCommand: (name, options, handler)->
     if typeof options is 'function'
       handler = options
       options = {}
-    super name, options, (msg, args, data, bot, core)=>
+    super name, options, (params)=>
+      { msg } = params
       player = await @getForGuild(msg.guild)
       # Frozen Queue = No Music Commands
       if player.queue.frozen and not options.ignoreFreeze
@@ -73,13 +80,12 @@ class PlayerModule extends BotModule
         The queue is currently frozen. It is in read-only mode until a DJ or \
         Bot Commander unfreezes it with `#{Core.settings.prefix}unfreeze`
         """
-      handler(msg, args, data, player, bot, core)
+      handler(Object.assign params, { player, p: player })
 
-  _messageHandler: (channel, message)=>
+  _messageHandler: (channel, message)->
     return unless channel is 'GuildQueueFeed' and message.type
     switch message.type
       # Queue updated outside current instance
-      # This will be used in the future for web-based queue management :D
       when 'queueUpdated'
         return unless message.guild and message.by
         return unless message.by isnt (Core.settings.shardIndex or 0)
@@ -89,6 +95,9 @@ class PlayerModule extends BotModule
         return unless newData.items
         @_guilds[message.guild].queue._d = newData
 
+  ready: ->
+    
+  ###
   _handleVoiceJoin: (e)=>
     return unless @_guilds[e.guildId]
     player = @_guilds[e.guildId]
@@ -113,15 +122,13 @@ class PlayerModule extends BotModule
     # No members left on voice channel
     if player.queue.nowPlaying.voiceChannel.members.length <= 1
       player.suspend()
+  ###
 
-  unload: =>
+  unload: ->
     # Remove ALL event listeners
     Object.keys(@_guilds).forEach (g)=>
       @_guilds[g].removeAllListeners()
       @_guilds[g].queue.removeAllListeners()
-    @events.removeAllListeners()
-    Core.data.removeListener('message', @_messageHandler)
-    Core.bot.Dispatcher.removeListener('VOICE_CHANNEL_JOIN', @_handleVoiceJoin)
-    Core.bot.Dispatcher.removeListener('VOICE_CHANNEL_LEAVE', @_handleVoiceLeave)
+      Core.data.removeListener('message', @_messageHandler)
 
 module.exports = PlayerModule

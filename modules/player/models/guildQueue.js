@@ -87,7 +87,7 @@ class GuildQueue extends EventEmitter {
     if (!silent) this.emit('newItem', { index, item: i })
     if (!silent) this.emit('updated')
     // Nothing being played right now? Start playback inmediately
-    if ((!this.nowPlaying || !this.player.audioPlayer.encoderStream) && !noPlayback) {
+    if ((!this.nowPlaying || (!this.player.audioPlayer.currentStream && this.nowPlaying.status !== 'paused')) && !noPlayback) {
       this._d.nowPlaying = this._d.items.shift()
       this.player.play()
     }

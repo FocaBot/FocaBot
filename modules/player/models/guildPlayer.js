@@ -8,8 +8,8 @@ const GuildQueue = reload('./guildQueue')
 class GuildPlayer extends EventEmitter {
   /**
    * Creates a new instance
-   * @param {Discordie.IGuild} guild - The associated guild
-   * @param {Guild} gData - Guild data
+   * @param {Discord.Guild} guild - The associated guild
+   * @param {Azarasi.Guild} gData - Guild data
    * @param {object} qData - The queue data
    */
   constructor (guild, gData, qData) {
@@ -43,28 +43,37 @@ class GuildPlayer extends EventEmitter {
    * @param {boolean} silent - When set to true, no events will be emitted
    */
   async play (silent = false) {
+    const s = Core.settings.getForGuild(this.guild)
+    const l = Core.locales.getLocale(s.locale)
     if (!this.queue.nowPlaying) return
     if (this.queue.nowPlaying.status === 'playing' && this.audioPlayer.encoderStream) return
     const item = this.queue.nowPlaying
     try {
-      const stream = await this.audioPlayer.play(item.voiceChannel, item.path, item.flags, item.time)
+      const stream = await this.audioPlayer.play(
+        item.voiceChannel,
+        item.path,
+        item.flags,
+        item.time,
+        s.bitrate > 8000 ? s.bitrate : item.voiceChannel.bitrate
+      )
       // Set bot as self deafen
-      item.voiceChannel.join(false, true)
+      // item.voiceChannel.join(false, true)
       item.status = 'playing'
       if (!silent) this.emit('playing', item)
       if (item.time === 0) this.emit('start', item)
       try {
-        this.audioPlayer.encoderStream.removeAllListeners('timestamp')
+        clearInterval(this.timestampInt)
       } catch (e) {}
       // Keep track of the time
       if (item.duration > 0) {
-        this.audioPlayer.encoderStream.on('timestamp', () => {
+        this.timestampInt = setInterval(() => {
           try {
             if (this.queue._d.nowPlaying.uid !== item.uid) return
             this.queue.nowPlaying.time = this.audioPlayer.timestamp
-          } catch (e) { }
-        })
+          } catch (e) {}
+        }, 1000)
       }
+      this.fail = false
       // Handle stream end
       stream.on('end', () => {
         if (item.status === 'paused' || item.status === 'suspended') return
@@ -75,9 +84,8 @@ class GuildPlayer extends EventEmitter {
       })
       if (!silent) this.queue.emit('updated')
     } catch (e) {
-      item.textChannel.sendMessage(
-        "Couldn't join to the voice channel. Skipping..."
-      )
+      if (!this.fail) item.textChannel.sendMessage(l.player.cantJoin)
+      this.fail = true
       if (!this.queue._d.items.length) return this.stop()
       this.queue._d.nowPlaying = this.queue._d.items.shift()
       this.play()
