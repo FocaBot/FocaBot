@@ -5,3 +5,4 @@ process.yml
 yarn.lock
 modules/lastfm
 *.db
+.env

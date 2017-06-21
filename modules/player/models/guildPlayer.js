@@ -83,6 +83,7 @@ class GuildPlayer extends EventEmitter {
       })
       if (!silent) this.queue.emit('updated')
     } catch (e) {
+      Core.log(e, 2)
       if (!this.fail) item.textChannel.send(l.player.cantJoin)
       this.fail = true
       if (!this.queue._d.items.length) return this.stop()
