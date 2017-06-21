@@ -109,6 +109,21 @@ class GuildQueue extends EventEmitter {
   }
 
   /**
+   * Remove Multiple Items
+   * @param {number} index - Start Index
+   * @param {number} count - Number of items to delete
+   * @param {Discordie.IGuildMember} user - User that requested the item removal
+   * @returns {object}
+   */
+  multiRemove (index, count, user) {
+    if (!isFinite(index) || index >= this._d.items.length) return false
+    const items = new QueueItem(this._d.items.splice(index, count)[0])
+    this.emit('removed', { items, user })
+    this.emit('updated')
+    return { items, user }
+  }
+
+  /**
    * Remove last item
    * @param {Discordie.IGuildMember} user - User that requested the item removal
    * @returns {object}

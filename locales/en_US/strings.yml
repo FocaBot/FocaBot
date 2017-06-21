@@ -44,6 +44,7 @@ player:
   noStreamVolume: "Can't change volume (livestream)."
   tooLong: "The requested video is too long"
   filterErrors: "A filter reported errors:"
+  multiRemove: "Removed **{1}** items from the queue!"
   hud:
     nowPlaying: "Now playing in `{1}`:"
     removed: "Removed from the queue:"

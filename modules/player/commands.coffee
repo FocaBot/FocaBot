@@ -159,16 +159,30 @@ class PlayerCommands
       commands.run('remove', msg, player.queue._d.items.length)
 
     # Remove
-    @registerCommand 'remove', { aliases: ['rm'] }, ({ msg, args, l, player })=>
-      index = (parseInt args) - 1
+    @registerCommand 'remove', { aliases: ['rm'], argSeparator: '-' },
+    ({ msg, args, l, player })=>
+      index = (parseInt args[0]) - 1
+      # Check if the item exists
       itm = player.queue._d.items[index]
       unless itm
         return msg.channel.send l.player.noSuchItem
-      unless itm.requestedBy is msg.author.id or @permissions.isDJ msg.member
-        return msg.channel.send l.player.onlyRemoveOwn
-      { item } = player.queue.remove(index, msg.member)
-      msg.channel.sendMessage l.player.hud.removed,
-                              embed: @hud.removeItem(item, msg.member, l)
+      # Delete multiple items
+      if args[1]
+        # Check permissions
+        return msg.reply l.admin.invalidLevel unless @permissions.isDJ msg.member
+        # Calculate number of items to be deleted
+        n = (parseInt args[1]) - (parseInt args[0]) + 1
+        return msg.reply l.generic.invalidArgs if n < 1 or not player.queue._d.items[n-1]
+        # Delet them
+        player.queue.multiRemove(index, n, msg.member)
+        msg.reply l.gen(l.player.multiRemove, n)
+      else
+        # Delete single item
+        unless itm.requestedBy is msg.author.id or @permissions.isDJ msg.member
+          return msg.channel.send l.player.onlyRemoveOwn
+        { item } = player.queue.remove(index, msg.member)
+        msg.channel.sendMessage l.player.hud.removed,
+                                embed: @hud.removeItem(item, msg.member, l)
 
     # Swap
     @registerCommand 'swap', {

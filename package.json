@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/FocaBot/FocaBot#README",
   "dependencies": {
+    "azarasi": "^2.0.0-alpha1",
     "chance": "^1.0.4",
     "coffeescript": "next",
     "discord.js": "^11.1.0",
