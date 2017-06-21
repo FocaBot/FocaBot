@@ -233,6 +233,7 @@ class PlayerHUD
     pB = @util.generateProgressBar item.time / item.duration
     iC = '▶'
     iC = '⏸' if item.status is 'paused' or item.status is 'suspended'
+    iC = '📡' if not item.duration
     iC = '📻' if item.radioStream
     """
     ```fix

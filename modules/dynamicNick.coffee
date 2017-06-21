@@ -1,11 +1,17 @@
 class DynamicNick extends BotModule
   ready: ->
     @registerEvent 'player.playing', ({ guild }, item)=>
-      try guild.members.find('id', core.bot.user.id).setNickname("▶ | #{@getTitle(item)}")
+      iC = '▶'
+      iC = '📡' if not item.duration
+      iC = '📻' if item.radioStream
+      try guild.members.find('id', core.bot.user.id).setNickname("#{iC} | #{@getTitle(item)}")
     @registerEvent 'player.paused', ({ guild }, item)=>
       try guild.members.find('id', core.bot.user.id).setNickname("⏸ | #{@getTitle(item)}")
     @registerEvent 'player.suspended', ({ guild }, item)=>
-      try guild.members.find('id', core.bot.user.id).setNickname("⏸ | #{@getTitle(item)}")
+      iC = '⏸'
+      iC = '📡' if not item.duration
+      iC = '📻' if item.radioStream
+      try guild.members.find('id', core.bot.user.id).setNickname("#{iC} | #{@getTitle(item)}")
     @registerEvent 'player.stopped', ({ guild })=>
       try guild.members.find('id', core.bot.user.id).setNickname(null)
 
