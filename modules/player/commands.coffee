@@ -7,7 +7,7 @@ class PlayerCommands
     { @permissions } = Core
 
     # Play
-    @registerCommand 'play', { aliases: ['p', 'request', 'add'] }, ({ m, args, s, player, l })->
+    @registerCommand 'play', { aliases: ['p', 'request', 'add'] }, ({ m, args, s, player, l })=>
       # Check Voice Connection
       unless m.member.voiceChannel
         return m.reply l.player.noVoice
@@ -39,18 +39,18 @@ class PlayerCommands
             return m.reply l.player.invalidStart
           vid.startAt = time
           vid.filters = filters
-          @util.processInfo(vid, m, player, false, msg.member.voiceChannel)
+          @util.processInfo(vid, m, player, false, m.member.voiceChannel)
         else
           # Playlist
           return m.reply(l.player.playlistNoDJ) unless Core.permissions.isDJ(m.member)
-          @hud.addPlaylist(m.member, info, m.channel)
+          @hud.addPlaylist(m.member, info, m.channel, l)
           info.on 'done', =>
             info.items.forEach (item, i)=>
               vid = await @util.getAdditionalMetadata(item)
               return if time > vid.duration or time < 0
               vid.startAt = time
               vid.filters = filters
-              @util.processInfo(vid, m, player, true, msg.member.voiceChannel)
+              @util.processInfo(vid, m, player, true, m.member.voiceChannel)
               # Start playback if not started already
               if i is (info.items.length - 1) and not player.queue.nowPlaying
                 player.queue._d.nowPlaying = player.queue._d.items.shift()
@@ -104,7 +104,7 @@ class PlayerCommands
 
     # Pause
     @registerCommand 'pause', { djOnly: true }, ({ msg, player })=>
-      try player.pause()
+      try await player.pause()
       catch e
         msg.reply e.message if e.message
 
@@ -118,8 +118,8 @@ class PlayerCommands
     }, ({ msg, s, l, player })=>
       return l.player.notPlaying unless player.queue._d.nowPlaying
       m = await msg.channel.send(
-        l.gen(l.hud.nowPlaying, player.queue.nowPlaying.voiceChannel.name),
-        embed: await @hud.nowPlayingEmbed(player.queue.nowPlaying)
+        l.gen(l.player.hud.nowPlaying, player.queue.nowPlaying.voiceChannel.name),
+        embed: await @hud.nowPlayingEmbed(player.queue.nowPlaying, l)
       )
       if s.autoDel then try
         msg.delete()
@@ -129,8 +129,8 @@ class PlayerCommands
     # View Queue
     @registerCommand 'queue', { aliases: ['q'], ignoreFreeze: true }, ({ msg, a, s, l, p })=>
       return l.player.notPlaying unless p.queue._d.nowPlaying
-      m = await msg.channel.send await @hud.nowPlaying(p.queue.nowPlaying),
-                                       embed: @hud.queue(p.queue, parseInt(a) or 1)
+      m = await msg.channel.send await @hud.nowPlaying(p.queue.nowPlaying, l),
+                                       embed: @hud.queue(p.queue, parseInt(a) or 1, l, s)
       if s.autoDel then try
         msg.delete()
         await delay(30000)
@@ -167,8 +167,8 @@ class PlayerCommands
       unless itm.requestedBy is msg.author.id or @permissions.isDJ msg.member
         return msg.channel.send l.player.onlyRemoveOwn
       { item } = player.queue.remove(index, msg.member)
-      msg.channel.sendMessage l.hud.removed,
-                              embed: @hud.removeItem(item, msg.member)
+      msg.channel.sendMessage l.player.hud.removed,
+                              embed: @hud.removeItem(item, msg.member, l)
 
     # Swap
     @registerCommand 'swap', {
@@ -177,7 +177,8 @@ class PlayerCommands
       return msg.channel.send l.generic.invalidArgs unless args.length is 2
       result = player.queue.swap(parseInt(args[0])-1, parseInt(args[1])-1, msg.member)
       return msg.reply l.generic.error unless result
-      msg.channel.send @hud.swapItems msg.member, result.items, [result.index1, result.index2]
+      msg.channel.send @hud.swapItems msg.member, result.items,
+                                      [result.index1, result.index2], l
 
     # Move
     @registerCommand 'move', {
@@ -186,7 +187,8 @@ class PlayerCommands
       return msg.channel.send l.generic.invalidArgs unless args.length is 2
       result = player.queue.move(parseInt(args[0])-1, parseInt(args[1])-1, msg.member)
       return msg.reply l.generic.error unless result
-      msg.channel.send @hud.moveItem msg.member, result.item, [result.index, result.position]
+      msg.channel.send @hud.moveItem msg.member, result.item,
+                                     [result.index, result.position], l
 
     # Move to first place
     @registerCommand 'bump', { djOnly: true }, ({ msg, args, l, player })=>
@@ -194,12 +196,11 @@ class PlayerCommands
       result = player.queue.bump(parseInt(args)-1, msg.member)
       return msg.reply l.generic.error unless result
       msg.channel.send @hud.moveItem msg.member, result.item,
-                       [result.index, result.position]
+                       [result.index, result.position], l
 
     # Seek
     @registerCommand 'seek', { aliases: ['s'], djOnly: true }, ({ msg, args, player })=>
-      try
-        player.seek(parseTime(args))
+      try await player.seek(parseTime(args))
       catch e
         msg.reply e.message if e.message
 
@@ -209,7 +210,7 @@ class PlayerCommands
                     msg.author.id is player.queue._d.nowPlaying.requestedBy
       try
         filters = @util.parseFilters(args, msg.member, true)
-        player.updateFilters(filters)
+        await player.updateFilters(filters)
       catch e
         return msg.reply 'Something went wrong', embed: {
           description: e.message or e,
@@ -220,7 +221,7 @@ class PlayerCommands
     @registerCommand 'volume', { aliases: ['vol'] }, ({ m, args, s, l, player })=>
       # No arguments = Display Volume
       unless args
-        r = l.gen(l.hud.currantVolume, player.volume*100)
+        r = l.gen(l.player.hud.currantVolume, player.volume*100)
         if player.queue.nowPlaying
           r += "\n#{@hud.generateProgressOuter(player.queue.nowPlaying)}"
         mr = await m.reply r
@@ -234,7 +235,7 @@ class PlayerCommands
       try
         player.volume = parseInt(args) / 100
         await delay(100)
-        r = l.gen(l.hud.volumeSet, m.member.displayName, player.volume*100)
+        r = l.gen(l.player.hud.volumeSet, m.member.displayName, player.volume*100)
         if player.queue.nowPlaying
           r += "\n#{@hud.generateProgressOuter(player.queue.nowPlaying)}"
         mr = await m.reply r

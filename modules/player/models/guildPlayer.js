@@ -16,12 +16,12 @@ class GuildPlayer extends EventEmitter {
     super()
     /**
      * The associated guild
-     * @type {Discordie.IGuild}
+     * @type {Discord.Guild}
      */
     this.guild = guild
     /**
      * The Guild Data
-     * @type {Guild}
+     * @type {Azarasi.Guild}
      */
     this.guildData = gData
     /**
@@ -43,18 +43,17 @@ class GuildPlayer extends EventEmitter {
    * @param {boolean} silent - When set to true, no events will be emitted
    */
   async play (silent = false) {
-    const s = Core.settings.getForGuild(this.guild)
+    const s = await Core.settings.getForGuild(this.guild)
     const l = Core.locales.getLocale(s.locale)
     if (!this.queue.nowPlaying) return
-    if (this.queue.nowPlaying.status === 'playing' && this.audioPlayer.encoderStream) return
+    if (this.queue.nowPlaying.status === 'playing' && this.audioPlayer.currentStream) return
     const item = this.queue.nowPlaying
     try {
       const stream = await this.audioPlayer.play(
         item.voiceChannel,
         item.path,
         item.flags,
-        item.time,
-        s.bitrate > 8000 ? s.bitrate : item.voiceChannel.bitrate
+        item.time
       )
       // Set bot as self deafen
       // item.voiceChannel.join(false, true)
@@ -84,7 +83,7 @@ class GuildPlayer extends EventEmitter {
       })
       if (!silent) this.queue.emit('updated')
     } catch (e) {
-      if (!this.fail) item.textChannel.sendMessage(l.player.cantJoin)
+      if (!this.fail) item.textChannel.send(l.player.cantJoin)
       this.fail = true
       if (!this.queue._d.items.length) return this.stop()
       this.queue._d.nowPlaying = this.queue._d.items.shift()
@@ -96,13 +95,15 @@ class GuildPlayer extends EventEmitter {
    * Pauses playback
    * @param {boolean} silent - When set to true, no events will be emitted
    */
-  pause (silent = false) {
+  async pause (silent = false) {
+    const s = await Core.settings.getForGuild(this.guild)
+    const l = Core.locales.getLocale(s.locale)
     const item = this.queue.nowPlaying
     // Can we pause?
     if (!item || item.stat) return
     if (item.status === 'paused' || item.status === 'suspended' || item.status === 'queue') return
-    if (!isFinite(item.duration) || item.duration <= 0) throw new Error("Can't pause streams.")
-    if (item.stat) throw new Error("Can't pause (static filters)")
+    if (!isFinite(item.duration) || item.duration <= 0) throw new Error(l.player.noStreamPause)
+    if (item.stat) throw new Error(l.player.noRestrictivePause)
     this.queue.nowPlaying.status = 'paused'
     this.audioPlayer.stop()
     if (!silent) this.emit('paused', item)
@@ -127,12 +128,14 @@ class GuildPlayer extends EventEmitter {
    * Hacky seek is still hacky
    * @param {number} time - Position to seek
    */
-  seek (time = 0) {
+  async seek (time = 0) {
+    const s = await Core.settings.getForGuild(this.guild)
+    const l = Core.locales.getLocale(s.locale)
     const item = this.queue.nowPlaying
     if (!item) return
-    if (item.stat) throw new Error("Can't seek (static filters)")
-    if (item.duration <= 0) throw new Error("Can't seek (livestream)")
-    if (time > item.duration || time < 0) throw new Error('Invalid position.')
+    if (item.stat) throw new Error(l.player.noRestrictiveSeek)
+    if (item.duration <= 0) throw new Error(l.player.noStreamSeek)
+    if (time > item.duration || time < 0) throw new Error(l.player.invalidSeek)
     const shouldResume = (item.status === 'playing')
     this.pause(true)
     item.time = time
@@ -144,13 +147,15 @@ class GuildPlayer extends EventEmitter {
    * Changes the filters of the current item
    * @param {AudioFilter[]} newFilters - New filters
    */
-  updateFilters (newFilters) {
+  async updateFilters (newFilters) {
+    const s = await Core.settings.getForGuild(this.guild)
+    const l = Core.locales.getLocale(s.locale)
     const item = this.queue.nowPlaying
     if (!item) return
-    if (item.stat) throw new Error('The current song has one or more static filters.')
-    if (item.duration <= 0) throw new Error("Can't change filters (livestream)")
+    if (item.stat) throw new Error(l.player.restrictiveFilters)
+    if (item.duration <= 0) throw new Error(l.player.livestreamFilters)
     if (newFilters.filter(filter => filter.avoidRuntime).length) {
-      throw new Error("There's one or more static filters in the new filters.")
+      throw new Error(l.player.restrictiveFiltersAdd)
     }
     const shouldResume = (item.status === 'playing')
     this.pause(true)
@@ -169,10 +174,11 @@ class GuildPlayer extends EventEmitter {
   }
 
   set volume (v) {
+    const l = Core.locales.getLocale(this.guildData.data.settings.locale || Core.properties.locale)
     const item = this.queue.nowPlaying
     if (item) {
-      if (item.stat) throw new Error('The current song has one or more static filters.')
-      if (item.duration <= 0) throw new Error("Can't change volume (livestream)")
+      if (item.stat) throw new Error(l.player.restrictiveFilters)
+      if (item.duration <= 0) throw new Error(l.player.noStreamVolume)
       const shouldResume = (item.status === 'playing')
       this.pause(true)
       this.queue._d.volume = v

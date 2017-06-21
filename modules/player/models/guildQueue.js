@@ -54,7 +54,7 @@ class GuildQueue extends EventEmitter {
 
   /**
    * The associated guild
-   * @type {Discordie.IGuild}
+   * @type {Discord.Guild}
    */
   get guild () {
     return this.player.guild

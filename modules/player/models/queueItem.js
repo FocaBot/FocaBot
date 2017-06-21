@@ -1,4 +1,4 @@
-const { Users, Channels } = Core.bot
+const { channels } = Core.bot
 
 /**
  * Represents an item in the queue
@@ -57,7 +57,7 @@ class QueueItem {
    * @type {Discordie.IGuildMember}
    */
   get requestedBy () {
-    return Users.get(this._d.requestedBy).memberOf(this.voiceChannel.guild)
+    return this.queue.guild.members.find('id', this._d.requestedBy)
   }
 
   set requestedBy (v) {
@@ -69,7 +69,7 @@ class QueueItem {
    * @type {Discordie.IVoiceChannel}
    */
   get voiceChannel () {
-    return Channels.get(this._d.voiceChannel)
+    return channels.find('id', this._d.voiceChannel)
   }
 
   set voiceChannel (v) {
@@ -81,7 +81,7 @@ class QueueItem {
    * @type {Discordie.ITextChannel}
    */
   get textChannel () {
-    return Channels.get(this._d.textChannel)
+    return channels.find('id', this._d.textChannel)
   }
 
   set textChannel (v) {

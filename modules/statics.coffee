@@ -2,8 +2,8 @@ moment = require 'moment'
 os = require 'os'
 
 class StatsModule extends BotModule
-  init: =>
-    @registerCommand 'stats', { allowDM: true }, (msg, args)=>
+  init: ->
+    @registerCommand 'stats', { allowDM: true }, ({ msg, args, d })=>
       mem = Math.floor process.memoryUsage().heapTotal / 1024000
       memfree = Math.floor os.freemem() / 1024000
       loadAvg = os.loadavg().map((c)=> c.toFixed(2))
@@ -20,29 +20,31 @@ class StatsModule extends BotModule
           totalVoice += shard.voice
       else
         # Fallback
-        totalGuilds = @bot.Guilds.length
-        totalVoice = @bot.VoiceConnections.length
+        totalGuilds = Core.bot.guilds.array().length
+        totalVoice = Core.bot.voiceConnections.array().length
 
       r = {
         author:
-          name: Core.settings.name + ' ' + Core.settings.version
-          icon_url: Core.bot.User.avatarURL
-        title: 'DEVELOPMENT BRANCH' if Core.settings.debug
+          name: Core.properties.name + ' ' + Core.properties.version
+          icon_url: Core.bot.user.avatarURL
+        title: 'DEBUG MODE ENABLED' if Core.properties.debug
         url: 'https://github.com/FocaBot/FocaBot'
-        color: if Core.settings.debug then 0xFF3300 else 0x00AAFF
+        color: if Core.properties.debug then 0xFF3300 else 0x00AAFF
         fields: [
           {
-            name: "Shard #{(Core.settings.shardIndex or 0)+1}/#{Core.settings.shardCount or 1}"
+            name: """
+            Shard #{(Core.properties.shardIndex or 0)+1}/#{Core.properties.shardCount or 1}
+            """
             value: """
             **Uptime**: #{Core.bootDate.fromNow(true)}
-            **Guilds**: #{@bot.Guilds.length}
-            **Voice Connections**: #{@bot.VoiceConnections.length}
+            **Guilds**: #{@bot.guilds.array().length}
+            **Voice Connections**: #{@bot.voiceConnections.array().length}
             **Memory Usage**: #{mem}MB
             """
           }
         ]
       }
-      if Core.settings.shardCount
+      if Core.properties.shardCount
         r.fields.push {
           name: 'Overall'
           value: """
@@ -60,7 +62,7 @@ class StatsModule extends BotModule
         """
       }
       r.fields.push {
-        name: 'FocaBotCore'
+        name: 'Azarasi Framework'
         value: """
         **Version**: #{Core.version}
         **Modules**: #{Object.keys(Core.modules.loaded).length} modules loaded.
@@ -68,30 +70,21 @@ class StatsModule extends BotModule
         (#{totalCommands - excludingAliases} are aliases)
         """
       }
-      msg.channel.sendMessage '', false, r
+      msg.channel.send '', embed: r
 
   updateStats: ->
     stats = (await Core.data.get('Stats')) or []
-    stats[Core.settings.shardIndex or 0] = {
-      guilds: Core.bot.Guilds.length
-      voice: Core.bot.VoiceConnections.length
+    stats[Core.properties.shardIndex or 0] = {
+      guilds: Core.bot.guilds.array().length
+      voice: Core.bot.voiceConnections.array().length
     }
     Core.data.set('Stats', stats)
 
-  ready: =>
+  ready: ->
     @updateStats()
-    Core.bot.Dispatcher.on('VOICE_CONNECTED', @updateStats)
-    Core.bot.Dispatcher.on('VOICE_DISCONNECTED', @updateStats)
-    Core.bot.Dispatcher.on('GUILD_CREATE', @updateStats)
-    Core.bot.Dispatcher.on('GUILD_DELETE', @updateStats)
-
-
-  unload: =>
-    # Remove all listeners
-    Core.bot.Dispatcher.removeListener('VOICE_CONNECTED', @updateStats)
-    Core.bot.Dispatcher.removeListener('VOICE_DISCONNECTED', @updateStats)
-    Core.bot.Dispatcher.removeListener('GUILD_CREATE', @updateStats)
-    Core.bot.Dispatcher.removeListener('GUILD_DELETE', @updateStats)
+    @registerEvent 'discord.voiceStateUpdate', @updateStats
+    @registerEvent 'discord.guildCreate', @updateStats
+    @registerEvent 'discord.guildDelete', @updateStats
     
 
 module.exports = StatsModule

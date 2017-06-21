@@ -2,47 +2,50 @@
 
 class PlayerHUD
   constructor: (@audioModule)->
-    { @prefix } = Core.settings
-    { @events, @util } = @audioModule
+    { @util } = @audioModule
+
     # Handle events
-    @events.on 'start', (player, item)=> try
+    @audioModule.registerEvent 'player.start', (player, item)=> try
+      s = await Core.settings.getForGuild(player.guild)
+      l = Core.locales.getLocale(s.locale)
       # Show "Now Playing" when an item starts playing
-      m = await item.textChannel.sendMessage "Now playing in `#{item.voiceChannel.name}`:",
-                                              false,
-                                              await @nowPlayingEmbed(item)
+      m = await item.textChannel.send l.gen(l.player.hud.nowPlaying, item.voiceChannel.name),
+                                      embed: await @nowPlayingEmbed(item, l)
       await delay(5000)
-      m.delete() if player.guildData.data.autoDel
-    @events.on 'newQueueItem', (player, queue, { item, index })=> try
+      try m.delete() if s.autoDel
+
+    @audioModule.registerEvent 'player.newQueueItem', (player, queue, { item, index })=> try
+      s = await Core.settings.getForGuild(player.guild)
+      l = Core.locales.getLocale(s.locale)
       # Show "Item Added" when a new item is added
-      item.textChannel.sendMessage 'Added to the queue:',
-                                   false,
-                                   @addItem(item, index + 1, player)
+      item.textChannel.send l.player.hud.added,
+                            embed: @addItem(item, index + 1, player, l)
 
   ###
   # Messages
   ###
-  nowPlaying: (item)=>
+  nowPlaying: (item, l)->
     """
     #{@generateProgressOuter item}
-    Now playing in **#{item.voiceChannel.name}**:
+    #{l.gen(l.player.hud.nowPlaying, item.voiceChannel.name)}
     >`#{item.title}` (#{@util.displayTime item.duration}) #{@util.displayFilters item.filters}
-    #{if item.radioStream then '\n\n' + (await @radioInfo(item)) + '\n' else ''}
-    Requested by: **#{item.requestedBy.name}**
+    #{if item.radioStream then '\n\n' + (await @radioInfo(item, l)) + '\n' else ''}
+    #{l.gen(l.player.hud.requestedBy, item.requestedBy.displayName)}
     """
 
-  radioInfo: (item)=>
+  radioInfo: (item, l)->
     return '' unless item.radioStream
     meta = await @util.getRadioTrack(item)
     """
-    **__Radio Stream__**
+    #{l.player.hud.radioStream}
 
-    **Track Title:** `#{meta.current or '???'}`
-    **Next Track:** `#{meta.next or '???'}`
+    #{l.gen(l.player.hud.radioTrack, meta.current or '???')}
+    #{l.gen(l.player.hud.radioNext, meta.next or '???')}
     """
 
-  swapItems: (user, items, indexes)=>
+  swapItems: (user, items, indexes, l)->
     """
-    #{user.name} swapped some items:
+    #{l.gen(l.player.hud.swap, user.displayName)}
     ```fix
     * #{indexes[1]+1} -> #{indexes[0]+1}
       #{items[0].title}
@@ -52,9 +55,9 @@ class PlayerHUD
     ```
     """
 
-  moveItem: (user, item, indexes)=>
+  moveItem: (user, item, indexes, l)->
     """
-    #{user.name} moved the following item:
+    #{l.gen(l.player.hud.move, user.displayName)}
     ```fix
     * #{indexes[0]+1} -> #{indexes[1]+1}
       #{item.title}
@@ -64,7 +67,7 @@ class PlayerHUD
   ###
   # Embeds
   ###
-  addItem: (item, pos, player)=>
+  addItem: (item, pos, player, l)->
     # Calculate estimated time
     estimated = -item.duration + item.time
     if player.queue._d.nowPlaying
@@ -74,41 +77,47 @@ class PlayerHUD
     reply =
       url: item.sauce
       color: 0xAAFF00
-      title: '[click for sauce]'
-      description: '[[donate]](https://tblnk.me/focabot-donate/)'
+      title: l.generic.sauceBtn
+      description: "[#{l.generic.donateBtn}](https://tblnk.me/focabot-donate/)"
       author:
         name: item.title
         icon_url: @util.getIcon item.sauce
       thumbnail:
         url: item.thumbnail
       fields: [
-        { name: 'Length:', value: "#{@util.displayTime item.duration}\n ", inline: true }
-        { name: 'Position in queue:', value: "##{pos}", inline: true }
+        {
+          name: l.player.hud.length
+          value: "#{@util.displayTime item.duration}\n "
+          inline: true
+        }
+        { name: l.player.hud.position, value: "##{pos}", inline: true }
       ]
       footer:
-        icon_url: item.requestedBy.staticAvatarURL
-        text: "Requested by #{item.requestedBy.name}"
+        icon_url: item.requestedBy.user.avatarURL
+        text: l.gen(l.player.hud.requestedBy, item.requestedBy.displayName)
     if @util.displayFilters(item.filters)
-      reply.description += "\n**Filters**: #{@util.displayFilters(item.filters)}"
+      reply.description += """
+      \n**#{l.player.hud.filters}**: #{@util.displayFilters(item.filters)}
+      """
     if item.time and item.time > 0
       reply.fields.push {
-        name: 'Start at:'
+        name: l.player.hud.startTime
         value: @util.displayTime(item.time)
         inline: true
       }
     if estimated
       reply.fields.push {
-        name: 'Estimated time before playback:',
+        name: l.player.hud.estimated,
         value: @util.displayTime(estimated)
       }
     reply
 
-  removeItem: (item, removedBy)=>
+  removeItem: (item, removedBy, l)->
     reply =
       url: item.sauce
       color: 0xF44277
-      title: '[click for sauce]'
-      description: '[[donate]](https://tblnk.me/focabot-donate/)'
+      title: l.generic.sauceBtn
+      description: "[#{l.generic.donateBtn}](https://tblnk.me/focabot-donate/)"
       author:
         name: item.title
         icon_url: @util.getIcon item.sauce
@@ -116,11 +125,11 @@ class PlayerHUD
         url: item.thumbnail
     if removedBy
       reply.footer =
-        icon_url: removedBy.staticAvatarURL
-        text: "Removed by #{removedBy.name}"
+        icon_url: removedBy.user.avatarURL
+        text: l.gen(l.player.hud.removedBy, removedBy.displayName)
     reply
 
-  addPlaylist: (user, playlist, channel)=>
+  addPlaylist: (user, playlist, channel, l)->
     message = undefined
     sending = false
     updateMessage = =>
@@ -134,7 +143,7 @@ class PlayerHUD
         #{if playlist.partial then ' loaded so far..' else ''}.
         """
         footer:
-          icon_url: user.staticAvatarURL
+          icon_url: user.user.avatarURL
           text: "Requested by #{user.name}"
       }
       unless message
@@ -153,13 +162,13 @@ class PlayerHUD
         updateMessage()
         clearInterval(interval)
 
-  nowPlayingEmbed: (item)=>
+  nowPlayingEmbed: (item, l)->
     r ={
       url: item.sauce
       color: 0xCCAA00
-      title: '[click for sauce]'
+      title: l.generic.sauceBtn
       description: """
-      [[donate]](https://tblnk.me/focabot-donate/)
+      [#{l.generic.donateBtn}](https://tblnk.me/focabot-donate/)
       #{@generateProgressOuter item}
       """
       author:
@@ -168,20 +177,22 @@ class PlayerHUD
       thumbnail:
         url: item.thumbnail
       footer:
-        text: "Requested by #{item.requestedBy.name}"
-        icon_url: item.requestedBy.staticAvatarURL
+        text: l.gen(l.player.hud.requestedBy, item.requestedBy.displayName)
+        icon_url: item.requestedBy.user.avatarURL
       fields: [
-        { inline: true, name: 'Length', value: @util.displayTime item.duration }
+        { inline: true, name: l.player.hud.length, value: @util.displayTime item.duration }
       ]
     }
     if @util.displayFilters(item.filters)
-      r.fields.push { inline: true, name: 'Filters', value: @util.displayFilters item.filters }
+      r.fields.push {
+        inline: true, name: l.player.hud.filters, value: @util.displayFilters item.filters
+      }
     if item.radioStream
       r.description += "\n#{await @radioInfo(item)}"
     r
 
-  queue: (q, page=1)=>
-    return { description: 'Nothing currently on queue.' } if not q.items.length
+  queue: (q, page=1, l, s)->
+    return { description: l.player.hud.queueEmpty } if not q.items.length
 
     # Calculate total time
     totalTime = 0
@@ -190,19 +201,17 @@ class PlayerHUD
     itemsPerPage = 10
     pages = Math.ceil(q._d.items.length / itemsPerPage)
     if page > pages
-      return { color: 0xFF0000, description: "Page #{page} does not exist." }
+      return { color: 0xFF0000, description: l.gen(l.player.hud.noSuchPage, page) }
 
     r = {
       color: 0x00AAFF
-      title: 'Up next'
+      title: l.player.hud.upNext
       description: ''
       footer:
-        text: """
-        #{q._d.items.length} total items (#{@util.displayTime totalTime}). Page #{page}/#{pages}
-        """
+        text: l.gen(
+          l.player.hud.queueFooter, q._d.items.length, @util.displayTime(totalTime), page, pages
+        )
     }
-
-    r.title += ' __**[Loop Mode]**__' if q.player.guildData.data.queueLoop
 
     offset = (page-1) * itemsPerPage
     max = offset + itemsPerPage
@@ -211,15 +220,16 @@ class PlayerHUD
       r.description += """
       **#{offset+i+1}.** [#{qI.title.replace(/\]/, '\\]')}](#{qI.sauce.replace(/\)/, '\\)')}) \
       #{@util.displayFilters qI.filters} \
-      (#{@util.displayTime qI.duration}) Requested By #{qI.requestedBy.name}\n
+      (#{@util.displayTime qI.duration}) \
+      #{l.gen l.player.hud.requestedBy, qI.requestedBy.displayName}\n
       """
-    r.description += "Use #{@prefix}queue #{page+1} to see the next page." if page < pages
+    r.description += l.gen(l.player.hud.queueNext, "#{s.prefix}queue #{page+1}") if page < pages
     r
 
   ###
   # Functions
   ###
-  generateProgressOuter: (item)=>
+  generateProgressOuter: (item)->
     pB = @util.generateProgressBar item.time / item.duration
     iC = '▶'
     iC = '⏸' if item.status is 'paused' or item.status is 'suspended'
@@ -230,7 +240,7 @@ class PlayerHUD
     ```
     """
 
-  generateVolumeInd: (vol)=>
+  generateVolumeInd: (vol)->
     return '🔊' if vol >= 0.6
     return '🔉' if vol >= 0.3
     '🔈'

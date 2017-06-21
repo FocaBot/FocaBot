@@ -107,11 +107,6 @@ class ImageModule extends BotModule
   getImages: (query, nsfw)->
     safe = 'high'
     safe = 'off' if nsfw
-    dbq = "CachedSearch:#{query}"
-    dbq = "CachedSearchNSFW:#{query}" if nsfw
-    result = await Core.data.get(dbq)
-    # Check if the query is already cached
-    return result if result?
     # Fetch the results straight from Google
     result = await CSE.get 'v1', { json: true, qs: {
       searchType: 'image'
@@ -120,7 +115,6 @@ class ImageModule extends BotModule
       key: process.env.GOOGLE_KEY
       safe
     } }
-    await Core.data.set(dbq, result, 0x127500)
     return result
 
 module.exports = ImageModule

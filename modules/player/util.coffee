@@ -11,20 +11,20 @@ class PlayerUtil
     { @permissions } = Core
 
   # Converts an array of filters to an user friendly string
-  displayFilters: (filters)=>
+  displayFilters: (filters)->
     filterstr = ''
     for filter in filters
       filterstr += '\\' + filter.display if filter.display
     filterstr
 
   # Displays a timestamp (seconds) as a user friendly string
-  displayTime: (seconds)=>
+  displayTime: (seconds)->
     return '--:--:--' unless seconds and seconds > 0
     return moment.utc(seconds * 1000).format('HH:mm:ss') if isFinite(seconds)
     '∞'
 
   # Gets a favicon from a URL
-  getIcon: (u)=>
+  getIcon: (u)->
     uri = url.parse(u)
     # return "#{uri.protocol}//#{uri.host}/favicon.ico" # Discord doesn't support .ico anymore
     try
@@ -44,7 +44,7 @@ class PlayerUtil
         # coffeelint: enable=max_line_length
 
   # Gets metadata from a radio stream
-  getRadioTrack: (qI)=> new Promise (resolve, reject)=>
+  getRadioTrack: (qI)-> new Promise (resolve, reject)=>
     d = ''
     p = spawn('ffprobe', [qI.path, '-show_format', '-v', 'quiet', '-print_format', 'json'])
     p.stdout.on 'data', (data)=> d += data
@@ -60,7 +60,7 @@ class PlayerUtil
         return resolve { current: '???' }
 
   # Generates a progress bar (the one used in the "Now Playing" message)
-  generateProgressBar: (pcnt)=>
+  generateProgressBar: (pcnt)->
     path = '───────────────'
     return path + '─' if pcnt < 0 or isNaN pcnt
     handle = '🔘'
@@ -68,17 +68,17 @@ class PlayerUtil
     path.substr(0, pos) + handle + path.substr(pos)
 
   # Checks the element duration to avoid long items
-  checkLength: (duration, msg, gData)=>
+  checkLength: (duration, msg, s)->
     unless (isFinite(duration) and duration > 0) or @permissions.isDJ(msg.member)
       return 2 # Can't add livestreams
-    if (duration > gData.data.settings.maxSongLength and not @permissions.isDJ(msg.member)) or
+    if (duration > s.maxSongLength and not @permissions.isDJ(msg.member)) or
       (duration > 43200  and not @permissions.isAdmin(msg.member)) or
       (duration > 86400 and not @permissions.isOwner(msg.member))
         return 1 # Video too long
     0
 
   # Uses FFProbe to get additional metadata of the file/stream
-  getAdditionalMetadata: (info)=> new Promise (resolve, reject)=>
+  getAdditionalMetadata: (info)-> new Promise (resolve, reject)=>
     # Fix for YouTube livestreams
     if info.is_live
       info.duration = NaN
@@ -105,7 +105,7 @@ class PlayerUtil
       resolve(info)
 
   # Uses youtube-dl to get information of an URL or search term
-  getInfo: (query)=> await ytdl(query, [
+  getInfo: (query)-> await ytdl(query, [
       '--default-search=ytsearch'
       '--ignore-errors'
       '--force-ipv4',
@@ -114,7 +114,7 @@ class PlayerUtil
       
 
   # Parses a list of filters (| speed=2 distort, etc)
-  parseFilters: (arg, member, playing)=>
+  parseFilters: (arg, member, playing)->
     return [] if not arg
     filters = []
     for filter in arg.match(/\w+=?\S*/g)
@@ -129,12 +129,15 @@ class PlayerUtil
     filters
 
   # Processes video information (and adds it to the queue)
-  processInfo: (info, msg, player, playlist = false, voiceChannel)=>
+  processInfo: (info, msg, player, playlist = false, voiceChannel)->
+    s = await Core.settings.getForGuild(player.guild)
+    l = Core.locales.getLocale(s.locale)
+
     return unless info.url
     # Check Length
     duration = parseTime(info.duration or 0)
-    if @checkLength(duration, msg, player.guildData)
-      msg.reply('The requested video is too long') unless playlist
+    if @checkLength(duration, msg, s)
+      msg.reply(l.player.tooLong) unless playlist
       return
     # Parse Filters
     try
@@ -142,7 +145,7 @@ class PlayerUtil
     catch errors
       if typeof errors is 'string'
         return if playlist
-        return msg.reply 'A filter reported errors:', false, {
+        return msg.reply l.player.filterErrors, false, {
           description: errors,
           color: 0xFF0000
         }
@@ -162,7 +165,7 @@ class PlayerUtil
     }, playlist, playlist)
 
   # Checks item count for user
-  checkItemCountLimit: (player, member)=>
+  checkItemCountLimit: (player, member)->
     return false if @permissions.isDJ(member) or not player.guildData.data.settings.maxItems
     itemCount = player.queue._d.items.filter((item)=> item.requestedBy is member.id).length
     return itemCount > player.guildData.data.settings.maxItems

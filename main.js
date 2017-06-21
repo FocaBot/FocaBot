@@ -20,7 +20,8 @@ const focaBot = new Azarasi({
   localePath: path.join(__dirname, 'locales/'),
   locale: 'en_US',
   redisURL: process.env.REDIS_URL,
-  watch: true
+  watch: true,
+  dbFile: process.env.DB_FILE || 'data.db'
 })
 
 // These modules go first.
