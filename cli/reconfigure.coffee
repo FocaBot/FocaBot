@@ -34,17 +34,6 @@ module.exports =->
   """
   { modules } = await iq.prompt [ prompts.modules ]
   console.log '''
-  \nPlease enter your Discord User ID below. This will make FocaBot recognize you \
-  as the bot owner, giving you full access on all servers.
-
-  To get you user ID:
-  1. Go to Discord User Settings -> Appearance
-  2. Enable the "Developer Mode"
-  4. Close settings
-  3. On the member list (right), right click your name and click "Copy ID"\n
-  '''
-  { owner } = await iq.prompt [ prompts.owner ]
-  console.log '''
   \nIf you create a role with "DJ" as name, FocaBot will detect such role and users \
   with that role will have full access to music commands \
   (instant skip, filters, queue management, etc)

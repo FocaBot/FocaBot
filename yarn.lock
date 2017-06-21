@@ -255,6 +255,13 @@ extsprintf@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.0.2.tgz#e1080e0658e300b06294990cc70e1502235fd550"
 
+ffmpeg-downloader@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/ffmpeg-downloader/-/ffmpeg-downloader-1.0.2.tgz#3e89e7512e3ab3ff45f69a8fa2850904092ae07d"
+  dependencies:
+    mkdirp "^0.5.1"
+    request "^2.81.0"
+
 figures@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-2.0.0.tgz#3ab1a2d2a62c8bfb431a0c94cb797a2fce27c962"

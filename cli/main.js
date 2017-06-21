@@ -72,7 +72,6 @@ fs.exists(configFile, async exists => {
     version: '1.0.0 (Elegant Erizo)',
     token: config.token,
     prefix: config.prefix,
-    owner: [ config.owner ],
     adminRoles: [ config.adminRole ],
     djRoles: [ config.djRole ],
     modulePath: path.join(__dirname, '../modules/'),
@@ -93,6 +92,8 @@ fs.exists(configFile, async exists => {
     try {
       const app = await focaBot.bot.fetchApplication()
       focaBot.log('To add the bot to your server, use this link: ')
+      focaBot.properties.owner = [ app.owner.id ]
+      focaBot.permissions.owner = focaBot.properties.owner
       focaBot.log(`https://discordapp.com/oauth2/authorize?client_id=${app.id}&scope=bot&permissions=57408`)
     } catch (e) {}
     focaBot.log('Official Support Server:')

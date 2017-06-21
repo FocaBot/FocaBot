@@ -27,10 +27,6 @@ module.exports =
       { name: 'statics (Shows bot statics)', value: 'statics', checked: true }
       { name: 'tags (Custom tags/quotes)', value: 'tags', checked: true }
     ]
-  owner:
-    name: 'owner'
-    message: 'Bot Owner User ID:'
-    validate: (id)-> /^\d{18,}$/.test(id)
   djRole:
     name: 'djRole'
     message: 'DJ Role Name:'
