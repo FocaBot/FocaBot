@@ -13,13 +13,14 @@
             "runtimeExecutable": null,
             "runtimeArgs": [
                 "--nolazy",
-                "--harmony-async-await"
             ],
             "env": {
                 "NODE_ENV": "development"
             },
             "sourceMaps": true,
-            "outDir": "${workspaceRoot}/bin"
+            "outFiles": [
+                "${workspaceRoot}/bin/*"
+            ]
         },
         {
             "name": "Attach",
