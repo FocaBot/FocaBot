@@ -31,7 +31,6 @@
     "coffeescript": "next",
     "discord.js": "^11.1.0",
     "dotenv": "^2.0.0",
-    "erlpack": "https://github.com/hammerandchisel/erlpack/archive/master.tar.gz",
     "ffmpeg-downloader": "^1.0.4",
     "focabot-core": "^1.3.0",
     "inquirer": "^3.1.0",
