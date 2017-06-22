@@ -164,7 +164,7 @@ class PlayerCommands
     # Remove Last / Undo
     @registerCommand 'removelast', { aliases: ['undo', 'rl'] }, ({ msg, l, player })=>
       return msg.channel.send l.player.queueEmpty unless player.queue._d.items.length
-      commands.run('remove', msg, player.queue._d.items.length)
+      commands.run('remove', msg, [player.queue._d.items.length])
 
     # Remove
     @registerCommand 'remove', { aliases: ['rm'], argSeparator: '-' },
