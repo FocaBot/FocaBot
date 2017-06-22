@@ -64,7 +64,7 @@ class ImageModule extends BotModule
           nsfw = (s.allowNSFW or msg.channel.nsfw)
           image = chance.pickone results.data.filter (i)=>
             not i.is_album and not i.is_ad and (nsfw or not i.nsfw)
-          msg.reply '', false, {
+          msg.reply '', embed: {
             title: l.generic.sauceBtn
             url: "https://imgur.com/#{image.id}"
             image: { url: image.link }
@@ -87,7 +87,7 @@ class ImageModule extends BotModule
           return msg.reply l.generic.noResults unless results.length
           # Pick a random image
           image = chance.pickone results
-          msg.reply '', false, {
+          msg.reply '', embed: {
             title: l.generic.sauceBtn
             url: image.post_url
             image: { url: image.photos[0].original_size.url }
