@@ -1,6 +1,6 @@
 {
   "name": "focabot",
-  "version": "1.0.0-alpha10",
+  "version": "1.0.0-alpha11",
   "description": "Music with Seals!",
   "main": "main.js",
   "scripts": {
@@ -44,7 +44,6 @@
     "request-promise": "^4.1.1",
     "require-reload": "^0.2.2",
     "tumblr.js": "^1.1.1",
-    "uws": "^0.14.5",
     "ytdl-getinfo": "^1.0.1"
   },
   "devDependencies": {},

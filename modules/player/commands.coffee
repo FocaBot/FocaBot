@@ -12,8 +12,8 @@ class PlayerCommands
       unless m.member.voiceChannel
         return m.reply l.player.noVoice
       # Check voice channel name
-      if s.voiceChannel isnt '*' and s.voiceChannel isnt m.member.voiceChannel.name and
-         not @permissions.isAdmin(m.member)
+      if s.voiceChannel and s.voiceChannel isnt '*' and
+         s.voiceChannel isnt m.member.voiceChannel.name and not @permissions.isAdmin(m.member)
         return m.reply l.player.notAllowed
       # Check item limit
       if @util.checkItemCountLimit(player, m.member)
