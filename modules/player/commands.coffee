@@ -71,7 +71,7 @@ class PlayerCommands
 
     # Skip
     @registerCommand 'skip', ({ m, args, s, player, l })=>
-      m.delete() if s.autoDel
+      try m.delete() if s.autoDel
       # Some checks
       return if m.author.bot
       unless player.queue._d.items.length or player.queue._d.nowPlaying
@@ -85,7 +85,7 @@ class PlayerCommands
       commands.run('voteskip', m, args)
 
     @registerCommand 'voteskip', { aliases: ['vs'] }, ({ msg, args, s, player, l })=>
-      msg.delete() if s.autoDel
+      try msg.delete() if s.autoDel
       return msg.reply l.player.noSkipAllowed unless s.voteSkip
       return msg.reply l.player.noVoice unless msg.member.voiceChannel
       unless player.queue.nowPlaying.voiceChannel is msg.member.voiceChannel
@@ -262,7 +262,7 @@ class PlayerCommands
           r += "\n#{@hud.generateProgressOuter(player.queue.nowPlaying)}"
         mr = await m.reply r
         await delay(5000)
-        mr.delete() if s.autoDel
+        try mr.delete() if s.autoDel
         return
       catch e
         m.reply e.message if e.message
