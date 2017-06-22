@@ -94,7 +94,9 @@ class PlayerCommands
         return msg.reply l.player.alreadyVoted
       # Democracy!
       # ~40% of channel members
-      targetVotes = Math.round(player.queue.nowPlaying.voiceChannel.members.length * 0.4)
+      targetVotes = Math.round(
+        player.queue.nowPlaying.voiceChannel.members.array().length * 0.4
+      )
       player.queue._d.nowPlaying.voteSkip.push(msg.author.id)
       votes = player.queue._d.nowPlaying.voteSkip.length
       msg.channel.send l.gen(l.player.voteSkip, msg.member.displayName, votes, targetVotes)

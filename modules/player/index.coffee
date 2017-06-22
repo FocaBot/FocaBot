@@ -18,6 +18,7 @@ class PlayerModule extends BotModule
     Core.data.on('message', @_messageHandler)
 
     # Setting parameters
+    @registerParameter 'voiceChannel', { type: String, def: '*' }
     @registerParameter 'voteSkip', { type: Boolean, def: true }
     @registerParameter 'maxSongLength', { type: Number, def: 1800, min: 60, max: 21600 }
     @registerParameter 'maxItems', { type: Number, def: 0 }
