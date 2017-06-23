@@ -60,9 +60,6 @@ class GuildPlayer extends EventEmitter {
       item.status = 'playing'
       if (!silent) this.emit('playing', item)
       if (item.time === 0) this.emit('start', item)
-      try {
-        clearInterval(this.timestampInt)
-      } catch (e) {}
       // Keep track of the time
       if (item.duration > 0) {
         this.timestampInt = setInterval(() => {
@@ -75,6 +72,9 @@ class GuildPlayer extends EventEmitter {
       this.fail = false
       // Handle stream end
       stream.on('end', () => {
+        try {
+          clearInterval(this.timestampInt)
+        } catch (e) {}
         if (item.status === 'paused' || item.status === 'suspended') return
         this.emit('end', item)
         if (!this.queue._d.items.length) return this.stop()
