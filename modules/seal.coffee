@@ -6,16 +6,15 @@ class SealModule extends BotModule
     @registerCommand 'seal', { allowDM: true }, (msg, args, d)->
       return unless d.data.allowImages
       chance = new Chance()
-      if chance.integer({ min: 0, max: 100 }) > 2
-        # Get a seal from randomse.al
-        seal = chance.integer { min: 1, max: 83 }
-        seal = ('0000' + seal).substring(seal.toString().length)
-        msg.channel.sendMessage "https://randomse.al/seals/#{seal}.jpg"
-      else
-        # Send... this...
-        msg.channel.uploadFile request('''
-        http://danbooru.donmai.us/data/__original_drawn_by_maldives\
-        __71425fe9ff40add3a301d5c5d0cf3baf.png'
-        '''), 'seal.png', 'A strange seal appeared.'
+      # Get a seal from randomse.al
+      seal = chance.integer { min: 1, max: 83 }
+      seal = ('0000' + seal).substring(seal.toString().length)
+      msg.channel.sendMessage "https://randomse.al/seals/#{seal}.jpg"
+
+    # coffeelint: disable=max_line_length
+    # PRAISE THE SEAL!
+    @registerCommand 'pray', { allowDM: true }, (msg, args)=>
+      msg.channel.sendMessage '', false, image: url: 'https://cdn.discordapp.com/attachments/248274146931245056/327639305172287488/praise_the_seal.jpg'
+    # coffeelint: enable=max_line_length
 
 module.exports = SealModule
