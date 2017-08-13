@@ -3,7 +3,7 @@
 
 class PlayerCommands
   constructor: (@playerModule)->
-    { @hud, @util } = @playerModule
+    { @hud, @util, @search } = @playerModule
     { @permissions } = Core
 
     # Play
@@ -22,6 +22,8 @@ class PlayerCommands
       q = args.split('|')[0].trim()
       # Use Attachment URL if present
       q = m.attachments.first().url if m.attachments.first()
+      # Display error if no query
+      return m.reply(l.player.noQuery) unless q
       # Filters
       filters = (args.split('|')[1] or '').trim()
       # Start Position
@@ -291,6 +293,26 @@ class PlayerCommands
       delete player.pendingPlaylist
 
     # Search
+    @registerCommand 'search', ({ m, l, args, player, s })=>
+      return m.reply(l.player.noQuery) unless args
+      # Check Voice Connection
+      unless m.member.voiceChannel
+        return m.reply l.player.noVoice
+      # Check voice channel name
+      if s.voiceChannel and s.voiceChannel isnt '*' and
+         s.voiceChannel isnt m.member.voiceChannel.name and not @permissions.isAdmin(m.member)
+        return m.reply l.player.notAllowed
+      # Check item limit
+      if @util.checkItemCountLimit(player, m.member)
+        return m.reply l.player.queueLimit
+      # Do the search
+      try
+        result = await @search.doSearch(m, l, args)
+        vid = await @util.getAdditionalMetadata(result)
+        vid.filters = []
+        @util.processInfo(vid, m, player, false, m.member.voiceChannel)
+      catch e
+        m.reply e if e.message
 
   registerCommand: -> @playerModule.registerCommand.apply(@playerModule, arguments)
 

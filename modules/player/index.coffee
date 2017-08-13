@@ -2,6 +2,7 @@ reload = require('require-reload')(require)
 PlayerHud = reload './hud'
 PlayerUtil = reload './util'
 PlayerCommands = reload './commands'
+PlayerSearch = reload './search'
 AudioFilters = reload './filters'
 GuildPlayer = reload './models/guildPlayer'
 
@@ -13,6 +14,7 @@ class PlayerModule extends BotModule
     @util = PlayerUtil
     @hud = new PlayerHud @
     @util.hud = @hud
+    @search = new PlayerSearch @
     @cmd = new PlayerCommands @
     Core.data.subscribe('GuildQueueFeed')
     Core.data.on('message', @_messageHandler)

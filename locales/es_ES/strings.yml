@@ -45,6 +45,13 @@ player:
   filterErrors: "Un filtro reportó errores:"
   multiRemove: "Se eliminaron **{1}** elementos de la cola!"
   playlistAlreadyLoading: "Hay otra lista de reproducción en proceso, por favor espera."
+  noQuery: "No se especificó una búsqueda."
+  playlistSaved: "Playlist guardada!"
+  playlistUpdated: "Playlist actualizada!"
+  playlistNotFound: "No existe esa playlist."
+  playlistExists: "Ya existe una playlist con ese ID."
+  playlistForbidden: "No tienes permiso para actualizar esa playlist."
+  playlistDeleted: "Playlist eliminada!"
   hud:
     nowPlaying: "Reproduciendo actualmente en `{1}`:"
     removed: "Eliminado de la cola:"
@@ -74,6 +81,8 @@ player:
     queueNext: "Usa {1} para ver la próxima página."
     playlistLoopMode: "🔁 Modo de bucle activado! [Playlist]"
     songLoopMode: "🔂 Modo de bucle activado! [Song]"
+    searching: "Buscando..."
+    results: "Resultados:"
 admin:
   languageChanged: "Idioma establecido a {1}!"
   cantDelete: "No se pudieron eliminar los mensajes. Revisa si el bot tiene permiso."
