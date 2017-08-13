@@ -6,13 +6,15 @@ class PlayerSearch
     @pending = {}
 
   doSearch: (msg, l, query)->
-    @pending[msg.id] = search = { msg, query, l, react: [] }
+    @pending[msg.id] = search = { msg, query, l }
     search.results = await @util.getInfo("ytsearch10:#{query}")
     if search.results.partial
       await @updateResults(msg.id)
       search.results.on('video', => @updateResults(msg.id))
+      search.results.on('done', => @updateResults(msg.id))
       r = await search.rmsg.awaitReactions (r, u) =>
         r.emoji.name in options and u.id is msg.author.id
+      , max: 1
       try await search.rmsg.delete()
       delete @pending[msg.id]
       video = search.results.items[options.indexOf(r.first().emoji.name)]
@@ -25,7 +27,7 @@ class PlayerSearch
 
   updateResults: (id)->
     return unless @pending[id]
-    { l, results, rmsg, react } = @pending[id]
+    { l, results, rmsg } = @pending[id]
     embed =
       author:
         name: if results.partial then l.player.hud.searching else l.player.hud.results
@@ -35,9 +37,7 @@ class PlayerSearch
       embed.description += "#{options[i]} [#{item.title.replace(/\]/, '\\]')}]"
       embed.description += "(#{item.webpage_url.replace(/\]/, '\\]')})"
       embed.description += " (#{@util.displayTime item.duration})\n"
-      if rmsg and not options[i] in react
-        await @pending[id].rmsg.react(options[i])
-        react.push(options[i])
+      if rmsg then try await rmsg.react(options[i])
     if rmsg then try
       await rmsg.edit('', { embed })
       return rmsg
