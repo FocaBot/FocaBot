@@ -1,7 +1,7 @@
 options = ['🇦','🇧', '🇨','🇩','🇪','🇫','🇬','🇭','🇮','🇯']
 
 class PlayerSearch
-  constructor: (playerModule)->
+  constructor: (@playerModule)->
     { @util } = @playerModule
     @pending = {}
 
