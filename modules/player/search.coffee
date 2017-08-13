@@ -31,9 +31,9 @@ class PlayerSearch
         icon: if results.partial then 'https://d.thebitlink.com/wheel.gif'
       description: ''
     results.items.forEach (result, i)=>
-      description += "#{options[i]} [#{item.title.replace(/\]/, '\\]')}]"
-      description += "(#{item.webpage_url.replace(/\]/, '\\]')})"
-      description += " (#{@util.displayTime item.duration})\n"
+      embed.description += "#{options[i]} [#{item.title.replace(/\]/, '\\]')}]"
+      embed.description += "(#{item.webpage_url.replace(/\]/, '\\]')})"
+      embed.description += " (#{@util.displayTime item.duration})\n"
       if rmsg and not rmsg.reactions.find((r)=> r.emoji.id is options[i])
         pending[id].rmsg.react(options[i])
     if rmsg then try

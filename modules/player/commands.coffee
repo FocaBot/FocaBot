@@ -312,7 +312,8 @@ class PlayerCommands
         vid.filters = []
         @util.processInfo(vid, m, player, false, m.member.voiceChannel)
       catch e
-        m.reply e if e.message
+        Core.log e, 2
+        m.reply e.message if e.message
 
   registerCommand: -> @playerModule.registerCommand.apply(@playerModule, arguments)
 
