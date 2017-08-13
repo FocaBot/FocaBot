@@ -7,7 +7,7 @@ class PlayerSearch
 
   doSearch: (msg, l, query)->
     @pending[msg.id] = search = { msg, query, l }
-    search.results = await @util.getinfo("ytsearch10:#{query}")
+    search.results = await @util.getInfo("ytsearch10:#{query}")
     if search.results.partial
       await @updateResults(msg.id)
       search.results.on('video', => @updateResults(msg.id))
