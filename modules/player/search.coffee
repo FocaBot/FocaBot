@@ -35,11 +35,11 @@ class PlayerSearch
       embed.description += "(#{item.webpage_url.replace(/\]/, '\\]')})"
       embed.description += " (#{@util.displayTime item.duration})\n"
       if rmsg and not rmsg.reactions.find((r)=> r.emoji.id is options[i])
-        pending[id].rmsg.react(options[i])
+        @pending[id].rmsg.react(options[i])
     if rmsg then try
       await rmsg.edit('', { embed })
       return rmsg
     else try
-      return pending[id].rmsg = await @pending[id].msg.channel.send '', { embed }
+      return @pending[id].rmsg = await @pending[id].msg.channel.send '', { embed }
 
 module.exports = PlayerSearch
