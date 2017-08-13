@@ -30,7 +30,7 @@ class PlayerSearch
         name: if results.partial then l.player.hud.searching else l.player.hud.results
         icon: if results.partial then 'https://d.thebitlink.com/wheel.gif'
       description: ''
-    results.items.forEach (result, i)=>
+    results.items.forEach (item, i)=>
       embed.description += "#{options[i]} [#{item.title.replace(/\]/, '\\]')}]"
       embed.description += "(#{item.webpage_url.replace(/\]/, '\\]')})"
       embed.description += " (#{@util.displayTime item.duration})\n"
