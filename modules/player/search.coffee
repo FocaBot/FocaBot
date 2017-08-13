@@ -11,8 +11,9 @@ class PlayerSearch
     if search.results.partial
       await @updateResults(msg.id)
       search.results.on('video', => @updateResults(msg.id))
-      r = await search.rmsg.awaitReactions (r, u) =>
-        r.emoji.id in options and u.id is msg.author.id
+      r = await search.rmsg.awaitReactions((r, u) =>
+        r.emoji.name in options and u.id is msg.author.id
+      , time: 60000)
       try await search.rmsg.delete()
       delete @pending[msg.id]
       video = search.results.items[options.indexOf(r.emoji.id)]
