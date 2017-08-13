@@ -21,7 +21,7 @@ class PlayerCommands
       # Process request
       q = args.split('|')[0].trim()
       # Use Attachment URL if present
-      q = m.attachments[0].url if m.attachments[0]
+      q = m.attachments.first().url if m.attachments.first()
       # Filters
       filters = (args.split('|')[1] or '').trim()
       # Start Position
@@ -289,6 +289,8 @@ class PlayerCommands
       player.pendingPlaylist.pl.cancelled = true
       player.pendingPlaylist.pl.cancel()
       delete player.pendingPlaylist
+
+    # Search
 
   registerCommand: -> @playerModule.registerCommand.apply(@playerModule, arguments)
 
