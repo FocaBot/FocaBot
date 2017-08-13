@@ -1,0 +1,172 @@
+---
+generic:
+  error: "Er is iets fout gegaan."
+  invalidArgs: "Ongeldige argumenten aangeboden."
+  noResults: "Geen zoekresultaten."
+  success: "Succes!"
+  saved: "Opgeslagen!"
+  sauceBtn: "[Klik hier voor bron]"
+  helpBtn: "[Klik voor help]"
+  donateBtn: "[Doneer]"
+  commandUsage: "Gebruik:"
+player:
+  noVoice: "Je moet eerst in een spraakkanaal zitten."
+  noSameVoice: "Je moet in hetzelfde spraakkanaal zitten waar de bot zit."
+  notAllowed: "Je bent niet toegestaan om deze bot te gebruiken in dit spraakkanaal."
+  queueLimit: "U hebt de limiet van objecten in wachtrij voor deze server overschreden."
+  invalidStart: "Ongeldige begintijd."
+  playlistNoDJ: "Alleen DJs kunnen afspeellijsten toevoegen."
+  notPlaying: "Niets in deze server wordt afgespeeld."
+  skip: "**{1}** heeft het huidige nummer overgeslagen."
+  noSkipAllowed: "Je bent niet toegestaan om nummers over te slaan."
+  voteSkip: "**{1}** heeft gestemd om het huidige nummer over te slaan ({2}/{3})"
+  alreadyVoted: "Probeer je echt om dit nummer over te slaan ***twee keer***?"
+  voteSkipSuccess: "Huidige nummer overslaan ~~met de kracht van democratie~~..."
+  queueCleared: "Wachtrij leeggemaakt."
+  queueEmpty: "De wachtrij is leeg."
+  noSauce: "Sorry, geen bron voor het huidige nummer..."
+  sauce: 'Hier is de bron van het huidige nummer: {1}'
+  noSuchItem: "Kan niet het opgegeven nummer in de wachtrij vinden."
+  onlyRemoveOwn: "Je kunt alleen eigen nummers van de wachtrij verwijderen."
+  noVolumeChange: "Alleen DJs kunnen de volume veranderen."
+  queueFrozen: "De wachtrij is bevroren. Geen veranderingen kunnen gemaakt worden aan de wachtrij tot je het hebt ontdooit."
+  queueUnfrozen: "De wachtrij is niet langer bevroren."
+  cantJoin: "Kan niet aan het spraakkanaal deelnemen. Overslaan..."
+  noRestrictivePause: "Niet onderbreken (beperkende filters)."
+  noStreamPause: "Kan niet streams onderbreken."
+  noRestrictiveSeek: "Kan niet de afspeelpositie verplaatsen (beperkende filters)."
+  noStreamSeek: "Kan niet de afspeellocatie veranderen (livestream)."
+  invalidSeek: "Ongeldige positie."
+  restrictiveFilters: "Het huidige nummer heeft een of meer beperkende filters."
+  livestreamFilters: "Kan niet de filters veranderen (livestream)."
+  restrictiveFiltersAdd: "U kunt geen beperkende filters toevoegen tijdens het afspelen."
+  noStreamVolume: "Kan niet de volume veranderen (livestream)."
+  tooLong: "De gevraagde video is te lang"
+  filterErrors: "Een filter heeft fouten gerapporteerd:"
+  multiRemove: "Heeft **{1}** van de wachtrij verwijderd!"
+  playlistAlreadyLoading: "Er wordt al een andere afspeellijst geladen, gelieve te wachten."
+  noQuery: "No query specified."
+  playlistSaved: "Playlist saved!"
+  playlistUpdated: "Playlist updated!"
+  playlistNotFound: "No such playlist."
+  playlistExists: "A playlist with that ID already exists."
+  playlistForbidden: "You don't have permission to update that playlist."
+  playlistDeleted: "Playlist deleted!"
+  hud:
+    nowPlaying: "Nu aan het spelen in `{1}`:"
+    removed: "Verwijderd uit de wachtrij:"
+    added: "Toegevoegd aan wachtrij:"
+    currentVolume: 'Huidige Volume: **{1}**.'
+    volumeSet: "{1} heeft de globale volume veranderd naar **{2}**."
+    requestedBy: "Gevraagd door {1}"
+    removedBy: "Verwijderd door {1}"
+    radioStream: "** __Radio stream__ **"
+    radioTrack: '** Titel van track **: ''{1}'''
+    radioNext: '** Volgende Track **: ''{1}'''
+    swap: "{1} verwisseld sommige nummers:"
+    move: "{1} verplaatst het volgende nummer:"
+    length: "Lengte:"
+    position: "Positie in de wachtrij:"
+    filters: "Filters:"
+    startTime: "Begint bij:"
+    estimated: "Geschatte tijd voor afspelen:"
+    playlistLoading: "Playlist laden..."
+    playlistCount: "**{1}** nummers geladen zo ver. (Gebruik {2} om het te annuleren)"
+    playlistFinalCount: "**{1}** Nummers."
+    playlistLoaded: "✅ Afspeellijst toegevoegd!"
+    playlistCancelled: "(Afspeellijst geannuleerd)"
+    noSuchPage: "Pagina {1} bestaat niet."
+    upNext: "Volgende:"
+    queueFooter: "{1} totale nummers ({2}). Pagina {3}/{4}"
+    queueNext: "Gebruik {1} om de volgende pagina te zien."
+    playlistLoopMode: "🔁 Herhaal modus Ingeschakeld! [Playlist]"
+    songLoopMode: "🔁 Herhaal modus Ingeschakeld! [Song]"
+    searching: "Searching..."
+    results: "Results:"
+admin:
+  languageChanged: "Taal gezet naar {1}!"
+  cantDelete: "Kan niet de berichten verwijderen. Controleer of de bot toestemming heeft."
+  restarting: "Focabot is opnieuw aan het starten..."
+  updating: "FocaBot is aan het updaten..."
+  ytdlUpdate: "Laatste versie van youtube-dl aan het downloaden..."
+  ytdlUpdated: "Met succes youtube-dl {1} gedownload!"
+  ytdlUpdateError: "Kon niet de laatste versie van youtube-dl downloaden, probeer het opnieuw."
+  nickChanged: "Bijnaam met succes veranderd!"
+  avatarChanged: "Avatar veranderd met succes!"
+  usernameChanged: "Gebruikersnaam veranderd met succes!"
+  noUserSpecified: "Geen gebruiker gedefinieerd."
+  blacklistAdd: "**{1} ** is op de zwarte lijst gezet."
+  blacklistRemove: "**{1}** is verwijderd van de Zwarte lijst."
+  noSuchModule: "Geen dergelijke module."
+  noSuchCommand: "Geen dergelijke commando."
+  permissionsUpdated: "Machtigingen bijgewerkt!"
+  invalidLevel: "Ongeldige machtigingsniveau."
+config:
+  parameter: "Parameter:"
+  value: "Waarde:"
+  noParameter: "Geen parameter opgegeven."
+  invalidParameter: "Ongeldige parameter opgegeven."
+  invalidValue: "Ongeldige waarde opgegeven."
+danbooru:
+  invalidTag: "Ongeldige safebooru label"
+  noWaifu: "Voer het {1} commando eerst!"
+help:
+  links: "Help links:"
+  prefix: "Voorvoegsel voor {1}:"
+  commands: "Commando‘s"
+  filters: "Filters"
+  manual: "Handleiding"
+  donate: "Doneer"
+image:
+  dailyLimit: "Dagelijkse limiet overschreden voor deze commando."
+poll:
+  tooManyAnswers: "Te veel antwoorden!!"
+  notEnoughAnswers: "Je moet minstens 2 antwoorden opgeven."
+  pollStarted: "{1} heeft een poll gestart:"
+raffle:
+  previousRaffleOpen: "Een eerdere loterij is nog open. ({1} deelnemers). Sluit het met '{2}' voordat u begint met een nieuwe."
+  raffleStarted: "Een nieuwe loterij is net begonnen! om toetreden, gebruikt u de opdracht '{1}'."
+  noRaffle: "Er is niet een loterij gaande nu."
+  alreadyJoined: "Je bent al toegetreden tot deze loterij."
+  joined: "{1} joined the raffle! ({2} participants)."
+  noParticipantsLeft: "No participants left."
+  winner: "{1} wins this raffle!"
+  closed: "The raffle is now closed."
+  overview: "**__Raffle Overview__**:"
+  totalParticipants: "**{1}** total participants."
+  totalWinners: "**{1}** total winners."
+  placements: "**__Raffle Placements__**:"
+  raffleStats: "Raffle stats for {1}"
+  participated: '**Participated**: {1}'
+  won: '**Won**: {1}'
+  overall: "Overall"
+rng:
+  roll: "{1} 🎲 rolls `{2}`."
+  total: '**Total**: __{1}__.'
+  notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
+  choice: "I choose {1}."
+  8ball:
+    - It is certain
+    - It is decidedly so
+    - Without a doubt
+    - Yes, definitely
+    - You may rely on it
+    - As I see it, yes
+    - Most likely
+    - Outlook good
+    - Yes
+    - Signs point to yes
+    - Reply hazy try again
+    - Ask again later
+    - Better not tell you now
+    - Cannot predict now
+    - Concentrate and ask again
+    - Don't count on it
+    - My reply is no
+    - My sources say no
+    - Outlook not so good
+    - Very doubtful
+  rate: "I'd give {1} a {2}/10."
+tags:
+  added: "Tag saved!"
+  deleted: "Deleted {1} tags!"

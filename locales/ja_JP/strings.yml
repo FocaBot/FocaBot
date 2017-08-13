@@ -45,6 +45,13 @@ player:
   filterErrors: "A filter reported errors:"
   multiRemove: "Removed **{1}** items from the queue!"
   playlistAlreadyLoading: "There's another playlist being loaded, please wait."
+  noQuery: "No query specified."
+  playlistSaved: "Playlist saved!"
+  playlistUpdated: "Playlist updated!"
+  playlistNotFound: "No such playlist."
+  playlistExists: "A playlist with that ID already exists."
+  playlistForbidden: "You don't have permission to update that playlist."
+  playlistDeleted: "Playlist deleted!"
   hud:
     nowPlaying: "`{1}`で再生中:"
     removed: "列から消されました:"
@@ -74,6 +81,8 @@ player:
     queueNext: "Use {1} to see the next page."
     playlistLoopMode: "🔁 Loop Mode Enabled! [Playlist]"
     songLoopMode: "🔂 Loop Mode Enabled! [Song]"
+    searching: "Searching..."
+    results: "Results:"
 admin:
   languageChanged: "Language set to {1}!"
   cantDelete: "Could not delete messages. Check if the bot has permission."
