@@ -6,17 +6,16 @@ class PlayerSearch
     @pending = {}
 
   doSearch: (msg, l, query)->
-    @pending[msg.id] = search = { msg, query, l }
+    @pending[msg.id] = search = { msg, query, l, react: [] }
     search.results = await @util.getInfo("ytsearch10:#{query}")
     if search.results.partial
       await @updateResults(msg.id)
       search.results.on('video', => @updateResults(msg.id))
-      r = await search.rmsg.awaitReactions((r, u) =>
+      r = await search.rmsg.awaitReactions (r, u) =>
         r.emoji.name in options and u.id is msg.author.id
-      , time: 60000)
       try await search.rmsg.delete()
       delete @pending[msg.id]
-      video = search.results.items[options.indexOf(r.emoji.name)]
+      video = search.results.items[options.indexOf(r.first().emoji.name)]
       # Make sure the video exists
       throw new Error(l.generic.error) unless video
       return video
@@ -26,18 +25,19 @@ class PlayerSearch
 
   updateResults: (id)->
     return unless @pending[id]
-    { l, results, rmsg } = @pending[id]
+    { l, results, rmsg, react } = @pending[id]
     embed =
       author:
         name: if results.partial then l.player.hud.searching else l.player.hud.results
-        icon: if results.partial then 'https://d.thebitlink.com/wheel.gif'
+        icon_url: if results.partial then 'https://d.thebitlink.com/wheel.gif'
       description: ''
     for item, i in results.items
       embed.description += "#{options[i]} [#{item.title.replace(/\]/, '\\]')}]"
       embed.description += "(#{item.webpage_url.replace(/\]/, '\\]')})"
       embed.description += " (#{@util.displayTime item.duration})\n"
-      if rmsg and not rmsg.reactions.find((r)=> r.emoji.id is options[i])
+      if rmsg and not options[i] in react
         await @pending[id].rmsg.react(options[i])
+        react.push(options[i])
     if rmsg then try
       await rmsg.edit('', { embed })
       return rmsg
