@@ -16,7 +16,7 @@ class PlayerSearch
       , time: 60000)
       try await search.rmsg.delete()
       delete @pending[msg.id]
-      video = search.results.items[options.indexOf(r.emoji.id)]
+      video = search.results.items[options.indexOf(r.emoji.name)]
       # Make sure the video exists
       throw new Error(l.generic.error) unless video
       return video
@@ -32,12 +32,12 @@ class PlayerSearch
         name: if results.partial then l.player.hud.searching else l.player.hud.results
         icon: if results.partial then 'https://d.thebitlink.com/wheel.gif'
       description: ''
-    results.items.forEach (item, i)=>
+    for item, i in results.items
       embed.description += "#{options[i]} [#{item.title.replace(/\]/, '\\]')}]"
       embed.description += "(#{item.webpage_url.replace(/\]/, '\\]')})"
       embed.description += " (#{@util.displayTime item.duration})\n"
       if rmsg and not rmsg.reactions.find((r)=> r.emoji.id is options[i])
-        @pending[id].rmsg.react(options[i])
+        await @pending[id].rmsg.react(options[i])
     if rmsg then try
       await rmsg.edit('', { embed })
       return rmsg
