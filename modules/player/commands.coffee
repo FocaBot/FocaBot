@@ -245,7 +245,7 @@ class PlayerCommands
     @registerCommand 'volume', { aliases: ['vol'] }, ({ m, args, s, l, player })=>
       # No arguments = Display Volume
       unless args
-        r = l.gen(l.player.hud.currantVolume, player.volume*100)
+        r = l.gen(l.player.hud.currentVolume, player.volume*100)
         if player.queue.nowPlaying
           r += "\n#{@hud.generateProgressOuter(player.queue.nowPlaying)}"
         mr = await m.reply r
