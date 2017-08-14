@@ -33,7 +33,7 @@ focaBot.modules.load(['util'])
 focaBot.settings.register('autoDel', { type: Boolean, def: true })
 
 // Load the translations
-const translations = ['ar_SA', 'de_DE', 'en_US', 'es_CL', 'es_ES', 'fr_FR', 'ja_JP', 'pt_PT']
+const translations = ['ar_SA', 'de_DE', 'en_US', 'es_ES', 'fr_FR', 'ja_JP', 'pt_PT']
 translations.forEach(t => focaBot.locales.loadLocale(t))
 
 // Load the modules.
