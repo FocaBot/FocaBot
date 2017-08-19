@@ -75,6 +75,7 @@ class GuildPlayer extends EventEmitter {
       })
       if (!silent) this.queue.emit('updated')
     } catch (e) {
+      Core.log(e, 2)
       item.textChannel.sendMessage(
         "Couldn't join to the voice channel. Skipping..."
       )
