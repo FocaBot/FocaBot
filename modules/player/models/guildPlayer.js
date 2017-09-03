@@ -71,25 +71,21 @@ class GuildPlayer extends EventEmitter {
       }
       this.fail = false
       // Handle stream end
-      stream.on('end', () => {
+      stream.once('end', () => {
         try {
           clearInterval(this.timestampInt)
         } catch (e) {}
         if (item.status === 'paused' || item.status === 'suspended') return
         this.emit('end', item)
-        if (!this.queue._d.items.length) return this.stop()
-        if (this.queue._d.nowPlaying && item.uid != this.queue.nowPlaying.uid) return
-        this.queue._d.nowPlaying = this.queue._d.items.shift()
-        this.play()
+        if (!this.queue.skipped) this.skip()
+        this.queue.skipped = false
       })
       if (!silent) this.queue.emit('updated')
     } catch (e) {
       Core.log(e, 2)
       if (!this.fail) item.textChannel.send(l.player.cantJoin)
       this.fail = true
-      if (!this.queue._d.items.length) return this.stop()
-      this.queue._d.nowPlaying = this.queue._d.items.shift()
-      this.play()
+      this.skip(silent)
     }
   }
 
@@ -192,15 +188,17 @@ class GuildPlayer extends EventEmitter {
 
   /**
    * Skips current item and starts playing the next one
+   * @param {boolean} silent - When set to true, no events will be emitted
    */
-  skip () {
+  skip (silent = false) {
     const item = this.queue.nowPlaying
     if (!item && !this.queue._d.items.length) return
     if (!this.queue._d.items.length) return this.stop()
     this.queue._d.nowPlaying = this.queue._d.items.shift()
     this.audioPlayer.stop()
     this.play()
-    this.queue.emit('updated')
+    this.queue.skipped = true
+    if(!silent) this.queue.emit('updated')
   }
 
   /**
