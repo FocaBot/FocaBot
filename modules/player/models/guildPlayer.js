@@ -77,6 +77,7 @@ class GuildPlayer extends EventEmitter {
         } catch (e) {}
         if (item.status === 'paused' || item.status === 'suspended') return
         this.emit('end', item)
+        if (item.status === 'skipped') return
         if (!this.queue._d.items.length) return this.stop()
         if (this.queue._d.nowPlaying && item.uid != this.queue.nowPlaying.uid) return
         this.queue._d.nowPlaying = this.queue._d.items.shift()
@@ -196,6 +197,7 @@ class GuildPlayer extends EventEmitter {
   skip () {
     const item = this.queue.nowPlaying
     if (!item && !this.queue._d.items.length) return
+    item.status = 'skipped'
     if (!this.queue._d.items.length) return this.stop()
     this.queue._d.nowPlaying = this.queue._d.items.shift()
     this.audioPlayer.stop()
