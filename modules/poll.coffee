@@ -16,6 +16,6 @@ class PollModule extends BotModule
       for answer,i in poll.answers
         embed.description += "#{options[i]} - #{answer}\n"
       m = await msg.channel.send l.gen(l.poll.pollStarted, msg.author), { embed }
-      try await m.react(options[i]) for i in [0..poll.answers.length-1]
+      await m.react(options[i]) for i in [0..poll.answers.length-1]
 
 module.exports = PollModule
