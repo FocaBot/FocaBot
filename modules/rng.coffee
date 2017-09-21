@@ -51,10 +51,10 @@ class RNGModule extends BotModule
     # Not actually random but ¯\_(ツ)_/¯
     @registerCommand 'rate', (msg, args, d)=>
       return unless args and d.data.allowRNG
+      hash = 0
       for i in [0 ... args.length]
         chr   = args.charCodeAt(i)
         hash  = ((hash << 5) - hash) + chr
-        hash |= 0
       rate = Math.ceil(((hash & 0xFF) / 255) * 10)
       msg.reply "I'd give #{args} a #{rate}/10."
 
