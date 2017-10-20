@@ -6,10 +6,10 @@ class SealModule extends BotModule
     @registerCommand 'seal', { allowDM: true }, (msg, args, d)->
       return unless d.data.allowImages
       chance = new Chance()
-      # Get a seal from randomse.al
+      # Get a seal from random-seal
       seal = chance.integer { min: 1, max: 83 }
       seal = ('0000' + seal).substring(seal.toString().length)
-      msg.channel.sendMessage "https://randomse.al/seals/#{seal}.jpg"
+      msg.channel.sendMessage "https://focabot.github.io/random-seal/seals/#{seal}.jpg"
 
     # coffeelint: disable=max_line_length
     # PRAISE THE SEAL!
