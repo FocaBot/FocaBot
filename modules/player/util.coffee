@@ -86,7 +86,7 @@ class PlayerUtil
       return resolve(info)
     return resolve(info) if (info.duration and isFinite(info.duration)) or info.forEach
     d = ''
-    p = spawn('ffprobe', [info.url, '-show_format', '-v', 'quiet', '-print_format', 'json'])
+    p = spawn(ffprobe, [info.url, '-show_format', '-v', 'quiet', '-print_format', 'json'])
     p.stdout.on 'data', (data)=> d += data
     p.on 'close', (code)=>
       return reject "Process exited with code #{code}" if code
