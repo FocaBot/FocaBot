@@ -20,7 +20,7 @@ class DanbooruModule extends BotModule
       # Blacklisted tags (discord community guidelines)
       # coffeelint: disable=max_line_length
       for tag in args.split(' ')
-        if tag in ['loli', 'shota', 'lolicon'] then return msg.reply '', embed: image: url: 'https://cdn.discordapp.com/attachments/244581077610397699/315655455143886850/Screenshot_from_2017-05-20_21-01-03.png'
+        if tag in ['loli', 'shota', 'lolicon', 'toddlercon'] then return msg.reply '', embed: image: url: 'https://cdn.discordapp.com/attachments/244581077610397699/315655455143886850/Screenshot_from_2017-05-20_21-01-03.png'
         if tag in ['gore', 'guro'] then return msg.reply 'nope', embed: image: url: 'http://25.media.tumblr.com/tumblr_lqhsh2zVkZ1qjlcvoo1_500.jpg'
       # coffeelint: enable=max_line_length
       # Get a random post
