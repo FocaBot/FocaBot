@@ -1,5 +1,5 @@
 osu = require 'node-osu'
-osuApi = new (osu.Api)(process.env.OSU_KEY)
+osuApi = new osu.Api(process.env.OSU_KEY)
 
 class OsuModule extends BotModule
   init: =>
