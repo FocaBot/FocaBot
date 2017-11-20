@@ -2,14 +2,14 @@ osu = require 'node-osu'
 osuApi = new osu.Api(process.env.OSU_KEY)
 
 class OsuModule extends BotModule
-  init: =>
+  init: ->
     @registerCommand 'osu', {
       allowDM: true
       aliases: ['taiko', 'ctb', 'mania']
       includeCommandNameInArgs: true
     }, @osuCheck
 
-  osuCheck: ({msg, args, s, l})=>
+  osuCheck: ({msg, args, s, l})->
     modes = {
       'osu': 0
       'taiko': 1
