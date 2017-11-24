@@ -119,7 +119,7 @@ class PlayerCommands
         msg.reply e.message if e.message
 
     # Resume
-    @registerCommand 'resume', { djOnly: true }, ({ player })=>
+    @registerCommand 'resume', { djOnly: true, aliases: ['unpause'] }, ({ player })=>
       player.play()
 
     # Now Playing (np)
