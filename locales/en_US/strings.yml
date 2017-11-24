@@ -171,3 +171,8 @@ rng:
 tags:
   added: "Tag saved!"
   deleted: "Deleted {1} tags!"
+osu:
+  profile: "osu! Profile for {1}"
+  performance: "Performance: {1}pp (#{2}, {3}#{4})"
+  stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
+  official: "in osu! official server"
