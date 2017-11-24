@@ -1,0 +1,58 @@
+{
+  "graph": {
+    "Stats": {
+      "_": {
+        "#": "Stats",
+        ">": {
+          "val": 1510624775997
+        }
+      },
+      "val": "[{\"guilds\":1,\"voice\":0}]"
+    },
+    "GuildQueue:248272312665767947": {
+      "_": {
+        "#": "GuildQueue:248272312665767947",
+        ">": {
+          "val": 1498189547127.002
+        }
+      },
+      "val": "{\"frozen\":false,\"volume\":1,\"items\":[]}"
+    },
+    "_Channel:GuildQueueFeed": {
+      "_": {
+        "#": "_Channel:GuildQueueFeed",
+        ">": {
+          "val": 1498189547142
+        }
+      },
+      "val": "\"message\""
+    },
+    "uwu": {
+      "_": {
+        "#": "uwu",
+        ">": {
+          "val": 1498058269809
+        }
+      },
+      "val": "\"xd\""
+    },
+    "Guild:248272312665767947": {
+      "_": {
+        "#": "Guild:248272312665767947",
+        ">": {
+          "val": 1498187597809
+        }
+      },
+      "val": "{\"disabledModules\":{\"dynamicNick\":false}}"
+    },
+    "_Channel:GuildData": {
+      "_": {
+        "#": "_Channel:GuildData",
+        ">": {
+          "val": 1498187597811
+        }
+      },
+      "val": "\"message\""
+    }
+  }
+}
