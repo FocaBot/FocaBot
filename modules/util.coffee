@@ -1,5 +1,6 @@
 moment = require 'moment'
 mathjs = require 'mathjs'
+request = require 'request-promise'
 
 class Util extends BotModule
   init: ->
@@ -21,5 +22,13 @@ class Util extends BotModule
     mathjs.eval(e)
 
   delay: (ms)-> new Promise (resolve)-> setTimeout((-> resolve()), ms)
+
+  # I don't like how d.js implements the typing indicator (yeah i'm autistic)
+  sendTyping: (channel)->
+    request("https://discordapp.com/api/v6/channels/#{channel.id}/typing", {
+      method: 'POST'
+      json: true
+      headers: Authorization: "Bot #{Core.bot.token}"
+    })
 
 module.exports = Util
