@@ -44,8 +44,8 @@ class PlayerCommands
           return m.reply('Only DJs can add playlists.') unless Core.permissions.isDJ(m.member)
           @hud.addPlaylist(m.member, info, m.channel)
           info.on 'done', =>
-            info.items.forEach (item, i)=>
-              vid = await @util.getAdditionalMetadata(item)
+            vids = await info.items.map (item, i)=> @util.getAdditionalMetadata
+            vids.forEach (vid, i)=>
               return if time > vid.duration or time < 0
               vid.startAt = time
               vid.filters = filters
