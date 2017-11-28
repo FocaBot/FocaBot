@@ -29,6 +29,7 @@ class PlayerCommands
         time = parseTime(args.match(/@\s?(\d+(:\d+)*)/)[1])
         q = q.replace(/@\s?(\d+(:\d+)*)/, '').trim()
         filters = filters.replace(/@\s?(\d+(:\d+)*)/, '').trim()
+      m.channel.sendTyping()
       try
         info = await @util.getInfo(q)
         unless info.partial
