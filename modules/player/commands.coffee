@@ -189,7 +189,7 @@ class PlayerCommands
         msg.reply l.gen(l.player.multiRemove, n)
       else
         # Delete single item
-        unless itm.requestedBy.id is msg.author.id or @permissions.isDJ msg.member
+        unless (itm.requestedBy.id is msg.author.id) or @permissions.isDJ msg.member
           return msg.channel.send l.player.onlyRemoveOwn
         { item } = player.queue.remove(index, msg.member)
         msg.channel.sendMessage l.player.hud.removed,
