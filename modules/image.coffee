@@ -45,8 +45,8 @@ class ImageModule extends BotModule
         # Send the image
         msg.reply '', embed: {
           title: l.generic.sauceBtn
-          url: r.items[0].image.contextLink
-          image: { url: r.items[0].link }
+          url: image.image.contextLink
+          image: { url: image.link }
         }
       catch err
         if err.statusCode is 403
