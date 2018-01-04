@@ -54,7 +54,7 @@ class StatsModule extends BotModule
           }
         ]
       }
-      if Core.shard.count
+      if Core.shard.count and Core.shard.count > 1
         r.fields.push {
           name: 'Overall'
           value: """
