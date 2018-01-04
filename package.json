@@ -1,6 +1,6 @@
 {
   "name": "focabot",
-  "version": "1.0.0-alpha19",
+  "version": "1.0.0-alpha20",
   "description": "Music with Seals!",
   "main": "main.js",
   "engines": {
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/FocaBot/FocaBot#README",
   "dependencies": {
-    "azarasi": "^2.0.0-alpha9",
+    "azarasi": "^2.0.0-alpha14",
     "chance": "^1.0.4",
     "coffeescript": "next",
     "discord.js": "11.1.0",

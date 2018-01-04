@@ -1,0 +1,6 @@
+{
+  "uid": "FocaBot",
+  "append": true,
+  "watch": false,
+  "script": "main.js"
+}

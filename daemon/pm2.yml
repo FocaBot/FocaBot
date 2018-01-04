@@ -1,9 +1,7 @@
 apps:
-  - name   : focaBot
+  - name   : FocaBot
     script : main.js
-    instances: max
-    exec_mode: cluster
-    env    :
+    env:
       NODE_ENV: production      
     env_staging:
       NODE_ENV: development
