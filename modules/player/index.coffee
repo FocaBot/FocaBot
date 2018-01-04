@@ -16,8 +16,6 @@ class PlayerModule extends BotModule
     @util.hud = @hud
     @search = new PlayerSearch @
     @cmd = new PlayerCommands @
-    Core.data.subscribe('GuildQueueFeed')
-    Core.data.on('message', @_messageHandler)
 
     # Setting parameters
     @registerParameter 'voiceChannel', { type: String, def: '*' }
@@ -65,8 +63,8 @@ class PlayerModule extends BotModule
       # Notify other instances when the queue gets updated
       Core.data.publish('GuildQueueFeed', {
         type: 'queueUpdated'
-        guild: guild.id
-        by: Core.settings.shardIndex or 0
+        guildId: guild.id
+        by: Core.shard.id or 0
       })
     player
 
@@ -84,19 +82,6 @@ class PlayerModule extends BotModule
         Bot Commander unfreezes it with `#{Core.settings.prefix}unfreeze`
         """
       handler(Object.assign params, { player, p: player })
-
-  _messageHandler: (channel, message)->
-    return unless channel is 'GuildQueueFeed' and message.type
-    switch message.type
-      # Queue updated outside current instance
-      when 'queueUpdated'
-        return unless message.guild and message.by
-        return unless message.by isnt (Core.settings.shardIndex or 0)
-        return unless @_guilds[message.guild]
-        newData = await Core.data.get("GuildQueue:#{guild.id}")
-        # Safety Check
-        return unless newData.items
-        @_guilds[message.guild].queue._d = newData
 
   ready: ->
     @registerEvent 'discord.voiceStateUpdate', (oldMember, newMember)=>

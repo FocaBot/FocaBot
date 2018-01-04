@@ -3,18 +3,29 @@ require('coffeescript/register')
 const fs = require('fs')
 const mkdirp = require('mkdirp')
 const path = require('path')
+const Discord = require('discord.js')
 let config
 
 const home = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']
 const dataPath = path.join(home, '.focaBot')
-const configFile = path.join(dataPath, 'settings.db')
-const Azarasi = require('azarasi')
-const ffmpeg = require('ffmpeg-downloader')
+const configFile = path.join(dataPath, 'settings.json')
 
 mkdirp.sync(dataPath)
 
-console.log('FocaBot Bootstrapper v0.1.0')
-console.log('by>thebit.link - https://www.focabot.xyz/')
+console.log(`
+       .-.
+      :   ;
+       "."               FocaBot v1.0.0-alpha (Elegant Erizo)
+       / \\               by > thebit.link
+      /  |
+    .'    \\
+   /.'   \`.\\             Documentation: https://next.focabot.xyz/
+   ' \\    \`\`.            Support Server: https://discord.gg/V5drVUS
+     _\`.____ \`-._        GitHub: https://www.github.com/FocaBot/
+    /^^^^^^^^\`.\\^\\
+   /           \`  \\
+""""""""""""""""""""""""
+`)
 
 async function checkArgv () {
   // Parse argv
@@ -67,42 +78,10 @@ fs.exists(configFile, async exists => {
     // Load configuration
     config = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
   }
-  // Instantiate the bot
-  const focaBot = new Azarasi({
-    name: 'FocaBot',
-    version: '1.0.0-alpha (Elegant Erizo)',
-    token: config.token,
-    prefix: config.prefix,
-    adminRoles: [ config.adminRole ],
-    djRoles: [ config.djRole ],
-    modulePath: path.join(__dirname, '../modules/'),
-    localePath: path.join(__dirname, '../locales/'),
-    locale: config.defaultLocale,
-    dbFile: path.join(dataPath, 'data.db'),
-    ffmpegBin: ffmpeg.path
+
+  const ShardManager = new Discord.ShardingManager('shard.js', {
+    token: config.token
   })
 
-  // Parameters
-  focaBot.settings.register('autoDel', { type: Boolean, def: true })
-  // Modules
-  focaBot.modules.load(['util', 'admin'])
-  focaBot.modules.load(config.modules)
-  // Translations
-  const translations = ['ar_SA', 'de_DE', 'en_US', 'es_CL', 'es_ES', 'fr_FR', 'ja_JP', 'pt_PT']
-  translations.forEach(t => focaBot.locales.loadLocale(t))
-  // Invite Link
-  focaBot.bot.on('ready', async () => {
-    try {
-      const app = await focaBot.bot.fetchApplication()
-      focaBot.log('To add the bot to your server, use this link: ')
-      focaBot.properties.owner = [ app.owner.id ]
-      focaBot.permissions.owner = focaBot.properties.owner
-      focaBot.log(`https://discordapp.com/oauth2/authorize?client_id=${app.id}&scope=bot&permissions=57408`)
-    } catch (e) {}
-    focaBot.log('Official Support Server:')
-    focaBot.log('https://discord.gg/V5drVUS')
-  })
-  // Let the seals in!!
-  focaBot.establishConnection()
-  focaBot.log(`--- Started (${new Date()}) ---`)
+  ShardManager.spawn()
 })

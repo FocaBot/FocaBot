@@ -17,14 +17,18 @@ class EvalModule extends BotModule
       j = (obj, length = 2)->
         pruned = prune obj, length
         p "\`\`\`json\n#{format(JSON.parse(pruned),formatSettings)}\n\`\`\`"
-      eval(CoffeeScript.compile("(=>\n  #{args.replace(/^/gm, '  ')}\n)()", bare: true))
+      eval(CoffeeScript.compile("(->\n#{args.replace(/^/gm, '  ')}\n)()", bare: true))
     # JavaScript Eval Command
     @registerCommand 'jseval', owner, ({ msg, args, data, saveData, settings, locale, bot, discord })->
       p = (text)-> msg.channel.send text
       j = (obj, length = 2)->
         pruned = prune obj, length
         p "\`\`\`json\n#{format(JSON.parse(pruned),formatSettings)}\n\`\`\`"
-      eval "return (async function () {#{args}})()"
+      eval "(async function () {#{args}})()"
+    @registerCommand 'geval', owner, ({ msg, args, data, saveData, settings, locale })->
+      Core.shard.broadcastEval(CoffeeScript.compile("(->\n#{args.replace(/^/gm, '  ')}\n)()", bare: true))
+    @registerCommand 'gjseval', owner, ({ msg, args, data, saveData, settings, locale })->
+      Core.shard.broadcastEval "(async function () {#{args}})()"
     # coffeelint: enable=max_line_length
 
 module.exports = EvalModule

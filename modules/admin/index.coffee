@@ -4,7 +4,7 @@ os = require 'os'
 request = require 'request'
 Discord = require 'discord.js'
 ytdl = require 'ytdl-getinfo'
-Blacklist = require './blacklist'
+Blacklist = reload './blacklist'
 
 class AdminModule extends BotModule
   init: ->
@@ -57,7 +57,7 @@ class AdminModule extends BotModule
         catch e
           return msg.reply locale.config.invalidValue, embed: {
             color: 0xEE0000
-            description: e.message
+            description: e.message || e
           }
       msg.channel.send '', embed: fields: [
         { name: locale.config.parameter, value: param, inline: true }
@@ -95,16 +95,14 @@ class AdminModule extends BotModule
     #
     owner = ownerOnly: true, allowDM: true
     @registerCommand 'restart', owner, ({ msg, args, locale })=>
-      # NOTE: THE RESTART COMMAND JUST RUNS process.exit()
-      # IT ASSUMES YOU ARE USING A PROCESS MANAGER (PM2, forever, systemd, nodemon, etc)
-      # TO BRING THE BOT BACK UP AUTOMATICALLY
       await msg.channel.send locale.admin.restarting
       if args.toLowerCase() is 'global'
         # Trigger a global restart
         shardManager = new Discord.ShardClientUtil(Core.bot)
         shardManager.broadcastEval('process.exit()')
-      # Only restart current shard
-      else process.exit()
+      else
+        # Only restart current shard
+        process.exit()
     # Executes a shell command and sends the output
     @registerCommand 'exec', owner, ({ msg, args })=> new Promise (resolve, reject)=>
       childProcess.exec args, (error, stdout, stderr)->

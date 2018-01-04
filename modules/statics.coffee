@@ -9,8 +9,9 @@ class StatsModule extends BotModule
       loadAvg = os.loadavg().map((c)=> c.toFixed(2))
       totalCommands = Object.keys(Core.commands.plain).length
       excludingAliases = Object.keys(Core.commands.registered).length
-      totalGuilds = 0
-      totalVoice = 0
+      totalGuilds = @bot.guilds.size
+      totalVoice = @bot.voiceConnections.size
+      totalMem = mem
 
       # Get statics from the other shards
       stats = await Core.data.get('Stats')
@@ -18,10 +19,19 @@ class StatsModule extends BotModule
         stats.forEach (shard)=>
           totalGuilds += shard.guilds
           totalVoice += shard.voice
-      else
-        # Fallback
-        totalGuilds = Core.bot.guilds.array().length
-        totalVoice = Core.bot.voiceConnections.array().length
+      
+      if Core.shard.count and Core.shard.count > 1
+        # Count Guilds
+        totalGuilds = (await Core.shard.fetchClientValues('guilds.size'))
+        .reduce((total, guilds) -> total += guilds)
+        # Count Voice Connections
+        totalVoice = (await Core.shard.fetchClientValues('voiceConnections.size'))
+        .reduce((total, voice) -> total += voice)
+        # Total Memory usage
+        totalMem = (await Core.shard.broadcastEval '''
+        Math.floor(process.memoryUsage().heapTotal / 1024000)
+        ''')
+        .reduce((total, mem) -> total += mem)
 
       r = {
         author:
@@ -33,23 +43,24 @@ class StatsModule extends BotModule
         fields: [
           {
             name: """
-            Shard #{(Core.properties.shardIndex or 0)+1}/#{Core.properties.shardCount or 1}
+            Shard #{(Core.shard.id or 0)+1}/#{Core.shard.count or 1}
             """
             value: """
             **Uptime**: #{Core.bootDate.fromNow(true)}
-            **Guilds**: #{@bot.guilds.array().length}
-            **Voice Connections**: #{@bot.voiceConnections.array().length}
+            **Guilds**: #{@bot.guilds.size}
+            **Voice Connections**: #{@bot.voiceConnections.size}
             **Memory Usage**: #{mem}MB
             """
           }
         ]
       }
-      if Core.properties.shardCount
+      if Core.shard.count
         r.fields.push {
           name: 'Overall'
           value: """
           **Guilds**: #{totalGuilds}
           **Voice Connections**: #{totalVoice}
+          **Memory Usage**: #{totalMem}MB
           """
         }
       r.fields.push {
@@ -71,20 +82,5 @@ class StatsModule extends BotModule
         """
       }
       msg.channel.send '', embed: r
-
-  updateStats: ->
-    stats = (await Core.data.get('Stats')) or []
-    stats[Core.properties.shardIndex or 0] = {
-      guilds: Core.bot.guilds.array().length
-      voice: Core.bot.voiceConnections.array().length
-    }
-    Core.data.set('Stats', stats)
-
-  ready: ->
-    @updateStats()
-    @registerEvent 'discord.voiceStateUpdate', @updateStats
-    @registerEvent 'discord.guildCreate', @updateStats
-    @registerEvent 'discord.guildDelete', @updateStats
-    
 
 module.exports = StatsModule

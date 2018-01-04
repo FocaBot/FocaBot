@@ -32,7 +32,7 @@ module.exports =->
   Please select the modules you want FocaBot to load at startup then press enter.
   (If you disable a module here, it won't be available even with the #{prefix}enable command)\n
   """
-  { modules } = await iq.prompt [ prompts.modules ]
+  { modules } = await iq.prompt [ prompts.modules({}, false) ]
   console.log '''
   \nIf you create a role with "DJ" as name, FocaBot will detect such role and users \
   with that role will have full access to music commands \
@@ -66,7 +66,7 @@ module.exports =->
 
   Don't forget to check the documentation to learn how to further customize it!
 
-  If in the future you want to change one of the parameters, run "focabot config" in \
-  your terminal.\n
+  If in the future you want to change one of the parameters, or enable additional modules, \
+  run "focabot config" in your terminal.\n
   '''
   return { token, prefix, modules, djRole, adminRole, defaultLocale }
