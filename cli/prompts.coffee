@@ -29,7 +29,7 @@ module.exports =
       if config.env.GOOGLE_KEY or config.env.IMGUR_KEY or config.env.TUMBLR_CONSUMER_KEY
         choices.push { name: 'image (Image search)', value: 'image', checked: false }
       if config.env.OSU_KEY
-      choices.push { name: 'osu (osu! player statics)', value: 'osu', checked: false }
+        choices.push { name: 'osu (osu! player statics)', value: 'osu', checked: false }
     if advanced
       choices.push { name: 'eval (Evaluate CoffeeScript)', value: 'eval', checked: false }
     if config.modules? then choices.forEach (module)->
