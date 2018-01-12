@@ -79,7 +79,7 @@ fs.exists(configFile, async exists => {
     config = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
   }
 
-  const ShardManager = new Discord.ShardingManager('shard.js', {
+  const ShardManager = new Discord.ShardingManager(path.join(__dirname, 'shard.js'), {
     token: config.token
   })
 
