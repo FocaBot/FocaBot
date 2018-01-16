@@ -32,26 +32,26 @@ player:
   queueFrozen: "Die Warteschlange ist nun fixiert. An der Wiedergabeliste können keine Änderungen vorgenommen werden, es sei denn, du hebst die Fixierung auf."
   queueUnfrozen: "Die Warteschlange ist nicht mehr fixiert."
   cantJoin: "Ich konnte dem Sprachkanal nicht beitreten. Überspringen..."
-  noRestrictivePause: "Can't pause (restrictive filters)."
+  noRestrictivePause: "Kann nicht pausiert werden (restriktive Filter)."
   noStreamPause: "Streams können nicht pausiert werden."
-  noRestrictiveSeek: "Can't seek (restrictive filters)."
+  noRestrictiveSeek: "Kann nicht gespult werden (restriktive Filter)."
   noStreamSeek: "(Livestream) kann nicht gefunden werden."
   invalidSeek: "Ungültige Position."
-  restrictiveFilters: "The current song has one or more restrictive filters."
+  restrictiveFilters: "Der aktuelle Song hat einen oder mehrere restriktive Filter."
   livestreamFilters: "Filter (Livestream) kann nicht geändert werden."
-  restrictiveFiltersAdd: "You can't add restrictive filters during playback."
+  restrictiveFiltersAdd: "Du kannst keine restriktiven Filter während der Wiedergabe hinzufügen."
   noStreamVolume: "Die Livestream-Lautstärke kann nicht verändert werden."
-  tooLong: "The requested video is too long"
-  filterErrors: "A filter reported errors:"
-  multiRemove: "Removed **{1}** items from the queue!"
-  playlistAlreadyLoading: "There's another playlist being loaded, please wait."
-  noQuery: "No query specified."
-  playlistSaved: "Playlist saved!"
-  playlistUpdated: "Playlist updated!"
-  playlistNotFound: "No such playlist."
-  playlistExists: "A playlist with that ID already exists."
-  playlistForbidden: "You don't have permission to update that playlist."
-  playlistDeleted: "Playlist deleted!"
+  tooLong: "Das gewünschte Video ist zu lang"
+  filterErrors: "Ein Filter hat Fehler gemeldet:"
+  multiRemove: "**{1}** Elemente aus der Warteschlange entfernt!"
+  playlistAlreadyLoading: "Eine andere Playlist wird geladen, bitte warten."
+  noQuery: "Keine Anfrage angegeben."
+  playlistSaved: "Playlist gespeichert!"
+  playlistUpdated: "Playlist aktualisiert!"
+  playlistNotFound: "Playlist nicht vorhanden."
+  playlistExists: "Eine Playlist mit dieser ID existiert bereits."
+  playlistForbidden: "Du hast keine Berechtigung, diese Playlist zu aktualisieren."
+  playlistDeleted: "Playlist gelöscht!"
   hud:
     nowPlaying: "Spielt jetzt in `{1}`"
     removed: "Aus der Warteschlange entfernt:"
@@ -63,87 +63,87 @@ player:
     radioStream: "**__Radio Stream__**"
     radioTrack: '**Liedname**: `{1}`'
     radioNext: '**Nächstes Lied**: `{1}`'
-    swap: "{1} swapped some items:"
-    move: "{1} moved the following item:"
-    length: "Length:"
-    position: "Position in queue:"
-    filters: "Filters:"
-    startTime: "Start At:"
-    estimated: "Estimated time for playback:"
-    playlistLoading: "Loading playlist..."
-    playlistCount: "**{1}** items loaded so far. (Use {2} to cancel)"
-    playlistFinalCount: "**{1}** items."
-    playlistLoaded: "✅ Playlist Added!"
-    playlistCancelled: "(Playlist Cancelled)"
-    noSuchPage: "Page {1} does not exist."
-    upNext: "Up next:"
-    queueFooter: "{1} total items ({2}). Page {3}/{4}"
-    queueNext: "Use {1} to see the next page."
-    playlistLoopMode: "🔁 Loop Mode Enabled! [Playlist]"
-    songLoopMode: "🔂 Loop Mode Enabled! [Song]"
-    searching: "Searching..."
-    results: "Results:"
+    swap: "{1} vertauschte Elemente:"
+    move: "{1} verschob folgende Elemente:"
+    length: "Länge:"
+    position: "Position in Warteschlange:"
+    filters: "Filter:"
+    startTime: "Beginnt bei:"
+    estimated: "Voraussichtliche Wiedergabezeit:"
+    playlistLoading: "Lade Playlist..."
+    playlistCount: "**{1}** bisher geladene Elemente. (Benutze {2} zum Abbrechen)"
+    playlistFinalCount: "**{1}** Elemente."
+    playlistLoaded: "✅ Playlist hinzugefügt!"
+    playlistCancelled: "(Playlist abgebrochen)"
+    noSuchPage: "Seite {1} existiert nicht."
+    upNext: "Als nächstes:"
+    queueFooter: "{1} Elemente insgesamt ({2}). Seite {3}/{4}"
+    queueNext: "Verwende {1}, um die nächste Seite zu sehen."
+    playlistLoopMode: "🔁 Schleifen-Modus aktiviert! [Playlist]"
+    songLoopMode: "🔂 Schleifen-Modus aktiviert! [Song]"
+    searching: "Suche..."
+    results: "Ergebnisse:"
 admin:
-  languageChanged: "Language set to {1}!"
-  cantDelete: "Could not delete messages. Check if the bot has permission."
-  restarting: "FocaBot is restarting..."
-  updating: "FocaBot is updating..."
-  ytdlUpdate: "Downloading latest version of youtube-dl..."
-  ytdlUpdated: "Successfully downloaded youtube-dl {1}!"
-  ytdlUpdateError: "Could not download latest version of youtube-dl, please try again."
-  nickChanged: "Nickname changed successfully!"
-  avatarChanged: "Avatar changed successfully!"
-  usernameChanged: "Username changed successfully!"
-  noUserSpecified: "No user specified."
-  blacklistAdd: "Blacklisted **{1}**."
-  blacklistRemove: "Removed **{1}** from the blacklist."
-  noSuchModule: "No such module."
-  noSuchCommand: "No such command."
-  permissionsUpdated: "Permissions Updated!"
-  invalidLevel: "Invalid permission level."
+  languageChanged: "Sprache eingestellt auf {1}!"
+  cantDelete: "Nachrichten konnten nicht gelöscht werden. Überprüfe, ob der Bot berechtigt ist."
+  restarting: "FocaBot startet neu..."
+  updating: "FocaBot wird aktualisiert..."
+  ytdlUpdate: "Herunterladen der neuesten Version von youtube-dl..."
+  ytdlUpdated: "Erfolgreich heruntergeladen youtube-dl {1}!"
+  ytdlUpdateError: "Neueste Version von youtube-dl konnte nicht heruntergeladen werden. Bitte versuche es erneut."
+  nickChanged: "Pseudonym erfolgreich geändert!"
+  avatarChanged: "Avatar erfolgreich geändert!"
+  usernameChanged: "Nutzername erfolgreich geändert!"
+  noUserSpecified: "Kein Benutzer angegeben."
+  blacklistAdd: "**{1}** geblacklistet."
+  blacklistRemove: "**{1}** aus der Blacklist entfernt."
+  noSuchModule: "Modul nicht vorhanden."
+  noSuchCommand: "Befehl nicht vorhanden."
+  permissionsUpdated: "Berechtigungen aktualisiert!"
+  invalidLevel: "Ungültige Berechtigungsstufe."
 config:
   parameter: "Parameter:"
-  value: "Value:"
-  noParameter: "No parameter specified."
-  invalidParameter: "Invalid parameter specified."
-  invalidValue: "Invalid value specified."
+  value: "Wert:"
+  noParameter: "Kein Parameter angegeben."
+  invalidParameter: "Ungültigen Parameter angegeben."
+  invalidValue: "Ungültigen Wert angegeben."
 danbooru:
-  invalidTag: "Invalid safebooru tag"
-  noWaifu: "Run the {1} command first!"
+  invalidTag: "Ungültiger safebooru-tag"
+  noWaifu: "Führe zuerst den Befehl {1} aus!"
 help:
-  links: "Help links:"
-  prefix: "Prefix for {1}:"
-  commands: "Commands"
-  filters: "Filters"
-  manual: "Manual"
-  donate: "Donate"
+  links: "Hilfreiche Links:"
+  prefix: "Präfix für {1}:"
+  commands: "Befehle"
+  filters: "Filter"
+  manual: "Anleitung"
+  donate: "Spenden"
 image:
-  dailyLimit: "Daily limit exceeded for this command."
+  dailyLimit: "Tägliches Limit für diesen Befehl überschritten."
 poll:
-  tooManyAnswers: "Too many answers!!"
-  notEnoughAnswers: "You need to specify at least 2 answers."
-  pollStarted: "{1} started a poll:"
+  tooManyAnswers: "Zu viele Antworten!!"
+  notEnoughAnswers: "Du musst mindestens 2 Antworten angeben."
+  pollStarted: "{1} hat eine Umfrage gestartet:"
 raffle:
-  previousRaffleOpen: "A previous raffle is still open. ({1} participants).\nClose it with `{2}` before starting a new one."
-  raffleStarted: "A new raffle has just started! To join, use the `{1}` command."
-  noRaffle: "There isn't any raffle going on right now."
-  alreadyJoined: "You already joined this raffle."
-  joined: "{1} joined the raffle! ({2} participants)."
-  noParticipantsLeft: "No participants left."
-  winner: "{1} wins this raffle!"
-  closed: "The raffle is now closed."
-  overview: "**__Raffle Overview__**:"
-  totalParticipants: "**{1}** total participants."
-  totalWinners: "**{1}** total winners."
-  placements: "**__Raffle Placements__**:"
-  raffleStats: "Raffle stats for {1}"
-  participated: '**Participated**: {1}'
-  won: '**Won**: {1}'
-  overall: "Overall"
+  previousRaffleOpen: "Eine vorherige Auslosung ist noch offen. ({1} Teilnehmer).\nVor dem Start einer neuen, schließe die Aktuelle mit `{2}`."
+  raffleStarted: "Eine neue Auslosung hat begonnen! Um beizutreten, verwende den `{1}` -Befehl."
+  noRaffle: "Es gibt derzeit keine Auslosung."
+  alreadyJoined: "Du bist der Auslosung bereits beigetreten."
+  joined: "{1} ist der Auslosung beigetreten! ({2} Teilnehmer)."
+  noParticipantsLeft: "Keine Teilnehmer übrig."
+  winner: "{1} hat die Auslosung gewonnen!"
+  closed: "Die Auslosung ist jetzt geschlossen."
+  overview: "**__Übersicht der Auslosung__**:"
+  totalParticipants: "**{1}** Teilnehmer insgesamt."
+  totalWinners: "**{1}** Gewinner insgesamt."
+  placements: "**__Platzierungen der Auslosung__**:"
+  raffleStats: "Auslosungs-Statistik für {1}"
+  participated: '**Teilgenommen**: {1}'
+  won: '**Gewonnen**: {1}'
+  overall: "Insgesamt"
 rng:
-  roll: "{1} 🎲 rolls `{2}`."
-  total: '**Total**: __{1}__.'
-  notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
+  roll: "{1} 🎲 würfelt `{2}`."
+  total: '**Gesamt**: __{1}__.'
+  notEnoughItems: "Nicht genügend Elemente zur Auswahl. Denke daran `;` zu benutzen, um diese zu trennen."
   choice: "Ich nehme {1}."
   8ball:
     - Es ist sicher
@@ -151,12 +151,12 @@ rng:
     - Ohne Zweifel
     - Ja, auf jeden Fall
     - Du kannst dich drauf verlassen
-    - As I see it, yes
+    - So, wie ich es sehe, ja
     - Am ehesten
     - Gute Aussichten
     - Ja
     - Anzeichen deuten auf ja
-    - Reply hazy try again
+    - Antwort unklar, versuche es erneut
     - Frag mich später noch einmal
     - Sag es mir lieber nicht
     - Ich kann jetzt nicht vorhersagen
@@ -164,9 +164,14 @@ rng:
     - Verlass dich nicht drauf
     - Meine Antwort ist nein
     - Meine Quellen sagen Nein
-    - Outlook not so good
+    - Die Aussichten sind nicht so gut
     - Sehr zweifelhaft
-  rate: "I'd give {1} a {2}/10."
+  rate: "Ich würde {1} eine {2}/10 geben."
 tags:
   added: "Stichwort gespeichert!"
   deleted: "{1} Tags gelöscht!"
+osu:
+  profile: "osu! Profile for {1}"
+  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
+  stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
+  official: "in osu! official server"
