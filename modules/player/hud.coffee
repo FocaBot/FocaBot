@@ -31,6 +31,7 @@ class PlayerHUD
     >`#{item.title}` (#{@util.displayTime item.duration}) #{@util.displayFilters item.filters}
     #{if item.radioStream then '\n\n' + (await @radioInfo(item, l)) + '\n' else ''}
     #{l.gen(l.player.hud.requestedBy, item.requestedBy.displayName)}
+    #{@loopModeInd item.queue.loopMode, l}
     """
 
   radioInfo: (item, l)->
@@ -182,7 +183,8 @@ class PlayerHUD
       title: l.generic.sauceBtn
       description: """
       [#{l.generic.donateBtn}](https://tblnk.me/focabot-donate/)
-      #{@generateProgressOuter item}
+      #{@generateProgressOuter item}\
+      #{@loopModeInd item.queue.loopMode, l}
       """
       author:
         name: item.title
@@ -258,5 +260,10 @@ class PlayerHUD
     return '🔊' if vol >= 0.6
     return '🔉' if vol >= 0.3
     '🔈'
+
+  loopModeInd: (loopMode, l)->
+    return "\n#{l.player.hud.songLoopMode}" if loopMode is 'single'
+    return "\n#{l.player.hud.playlistLoopMode}" if loopMode is 'all'
+    ''
 
 module.exports = PlayerHUD

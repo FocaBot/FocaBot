@@ -77,7 +77,15 @@ class GuildPlayer extends EventEmitter {
         } catch (e) {}
         if (item.status === 'paused' || item.status === 'suspended') return
         this.emit('end', item)
+        if (this.queue.loopMode === 'all') {
+          this.queue._d.nowPlaying.time = 0
+          this.queue._d.items.push(this.queue._d.nowPlaying)
+        }
         if (item.status === 'skipped') return
+        if (this.queue.loopMode === 'single') {
+          this.queue._d.nowPlaying.time = 0
+          return this.play()
+        }
         if (!this.queue._d.items.length) return this.stop()
         if (this.queue._d.nowPlaying && item.uid != this.queue.nowPlaying.uid) return
         this.queue._d.nowPlaying = this.queue._d.items.shift()

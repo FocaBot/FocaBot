@@ -313,6 +313,21 @@ class PlayerCommands
         Core.log e, 2
         m.reply e.message if e.message
 
+    # Loop Mode
+    @registerCommand 'loop', { djOnly: true }, ({ msg, args, l, player })->
+      switch args
+        when 'song', 'single', '1'
+          player.queue.loopMode = 'single'
+          msg.channel.send l.player.hud.songLoopMode
+        when 'playlist', 'all', 'queue'
+          player.queue.loopMode = 'all'
+          msg.channel.send l.player.hud.playlistLoopMode
+        when 'off', 'none', 'disable', 'disabled', '0'
+          player.queue.loopMode = 'none'
+          msg.channel.send l.generic.success
+        else
+          msg.channel.send l.generic.invalidArgs
+
   registerCommand: -> @playerModule.registerCommand.apply(@playerModule, arguments)
 
 module.exports = PlayerCommands

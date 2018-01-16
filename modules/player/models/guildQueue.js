@@ -61,6 +61,22 @@ class GuildQueue extends EventEmitter {
   }
 
   /**
+   * The current loop mode
+   * none: Not looping
+   * single: Loop the current item
+   * all: Loop the entire queue
+   * @type {string}
+   */
+  get loopMode () {
+    return this._d.loopMode || 'none'
+  }
+
+  set loopMode (v) {
+    this._d.loopMode = v
+    this.emit('updated')
+  }
+
+  /**
    * Add an item to the queue
    * @param {object} item - Item to add
    * @param {boolean} silent - If true, no event will be emitted
