@@ -45,13 +45,13 @@ player:
   filterErrors: "Un filtre a signalé des erreurs :"
   multiRemove: "**{1}** éléments ont été retirés de la file d'attente !"
   playlistAlreadyLoading: "Il y a déjà une autre playlist en cours de chargement, merci de bien vouloir patienter."
-  noQuery: "No query specified."
-  playlistSaved: "Playlist saved!"
-  playlistUpdated: "Playlist updated!"
-  playlistNotFound: "No such playlist."
-  playlistExists: "A playlist with that ID already exists."
-  playlistForbidden: "You don't have permission to update that playlist."
-  playlistDeleted: "Playlist deleted!"
+  noQuery: "Aucune requête spécifiée."
+  playlistSaved: "Playlist enregistrée !"
+  playlistUpdated: "Playlist mise à jour !"
+  playlistNotFound: "Cette playlist n'existe pas."
+  playlistExists: "Une playlist avec cet ID existe déjà."
+  playlistForbidden: "Vous n'avez pas la permission de mettre à jour cette playlist."
+  playlistDeleted: "Playlist supprimée !"
   hud:
     nowPlaying: "En cours de lecture dans `{1}` :"
     removed: "Retiré de la file d'attente :"
@@ -81,8 +81,8 @@ player:
     queueNext: "Tapez {1} pour voir la page suivante."
     playlistLoopMode: "🔁 Mode répétition activé ! [Playlist]"
     songLoopMode: "🔁 Mode répétition activé ! [Musique]"
-    searching: "Searching..."
-    results: "Results:"
+    searching: "Recherche..."
+    results: "Résultats :"
 admin:
   languageChanged: "Langue définie sur {1} !"
   cantDelete: "Impossible de supprimer de messages. Merci de vérifier si le bot possède les permissions pour."
@@ -170,3 +170,8 @@ rng:
 tags:
   added: "Tag enregistré !"
   deleted: "{1} tag(s) supprimé(s) !"
+osu:
+  profile: "osu! Profile for {1}"
+  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
+  stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
+  official: "in osu! official server"

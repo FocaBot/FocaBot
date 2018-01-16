@@ -46,12 +46,12 @@ player:
   multiRemove: "Se eliminaron **{1}** elementos de la cola!"
   playlistAlreadyLoading: "Hay otra lista de reproducción en proceso, por favor espera."
   noQuery: "No se especificó una búsqueda."
-  playlistSaved: "Playlist guardada!"
-  playlistUpdated: "Playlist actualizada!"
-  playlistNotFound: "No existe esa playlist."
-  playlistExists: "Ya existe una playlist con ese ID."
-  playlistForbidden: "No tienes permiso para actualizar esa playlist."
-  playlistDeleted: "Playlist eliminada!"
+  playlistSaved: "Lista de reproducción guardada!"
+  playlistUpdated: "Lista de reproducción actualizada!"
+  playlistNotFound: "No existe esa lista de reproducción."
+  playlistExists: "Ya existe una lista de reproducción con ese ID."
+  playlistForbidden: "No tienes permiso para actualizar esa lista de reproducción."
+  playlistDeleted: "Lista de reproducción eliminada!"
   hud:
     nowPlaying: "Reproduciendo actualmente en `{1}`:"
     removed: "Eliminado de la cola:"
@@ -172,6 +172,6 @@ tags:
   deleted: "¡Se han eliminado {1} etiquetas!"
 osu:
   profile: "Perfil de osu! para {1}"
-  performance: "Performance: {1}pp (#{2}, {3}#{4})"
+  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
   stats: "▸ **Nivel**: {1}\n▸ **Precisión**: {2}\n▸ **Conteo de jugadas**: {3}\n▸ **Puntaje clasificado**: {4}\n▸ **Puntaje total**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "en el servidor oficial de osu!"

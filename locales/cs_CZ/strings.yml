@@ -1,46 +1,46 @@
 ---
 generic:
-  error: "問題が発生しました。"
-  invalidArgs: "無効な引数が機能されています。"
-  noResults: "検索結果がありません。"
-  success: "成功しました！"
-  saved: "保存しました！"
-  sauceBtn: "ソース確認"
-  helpBtn: "ヘルプ"
-  donateBtn: "寄付する"
-  commandUsage: "Usage:"
+  error: "Něco se pokazilo."
+  invalidArgs: "Zadali jste neplatné argumenty."
+  noResults: "Žádné výsledky."
+  success: "Povedlo se!"
+  saved: "Uloženo!"
+  sauceBtn: "\\[Zjískat odkaz\\]"
+  helpBtn: "\\[Potřebuji pomoc!\\]"
+  donateBtn: "\\[Podpořit vývojáře\\]"
+  commandUsage: "Použití:"
 player:
-  noVoice: "音声チャネルにいる必要があります。"
-  noSameVoice: "You must be in the same voice channel the bot is in."
-  notAllowed: "You are not allowed to use the bot in this voice channel."
-  queueLimit: "You have exceeded the limit of items in queue for this server."
-  invalidStart: "無効な開始時間です。"
-  playlistNoDJ: "DJを持つユーザーだけがプレイリストを追加できます。"
-  notPlaying: "このサーバーに何も再生されていません。"
-  skip: "**{1}** skipped the current song."
-  noSkipAllowed: "You are not allowed to skip songs."
-  voteSkip: "**{1}** voted to skip the current song ({2}/{3})"
-  alreadyVoted: "Did you really try to skip this song ***again***?"
-  voteSkipSuccess: "Skipping current song ~~with the power of democracy~~..."
-  queueCleared: "列がクリアされました。"
-  queueEmpty: "列に何もありません。"
-  noSauce: "申し訳ありませんが、このアイテムにソースがない。"
-  sauce: 'Here''s the sauce of the current item: {1}'
-  noSuchItem: "Can't find the specified item in the queue."
+  noVoice: "Pro použití musíš být v hlasové místnosti."
+  noSameVoice: "Musíš být ve stejné místnosti jako bot."
+  notAllowed: "Nejsi oprávněn používat bota v této hlasové místnosti."
+  queueLimit: "Dosáhl jsi maximální limit písniček ve frontě."
+  invalidStart: "Zadán neplatný čas pro začátek."
+  playlistNoDJ: "Pouze DJ mohou přidávat playlisty."
+  notPlaying: "Zde se nic nehraje."
+  skip: "**{1}** přeskočena aktuální písnička."
+  noSkipAllowed: "Nejsi oprávněn přeskakovat písničky."
+  voteSkip: "**{1}** hlasoval pro přeskočení aktuální písničky ({2}/{3})"
+  alreadyVoted: "Opravdu chceš tuto písničku ***znovu*** přeskočit?"
+  voteSkipSuccess: "Přeskakuji aktuální písničku ~~se silou demokracie ~~..."
+  queueCleared: "Fronta je nyní prázdná."
+  queueEmpty: "Fronta je prázdná."
+  noSauce: "Promiň, není zde odkaz pro tuto skladbu..."
+  sauce: 'Zde je odkaz na aktuální písníčku: {1}'
+  noSuchItem: "Nemohu najít specifikovanou položku ve frontě."
   onlyRemoveOwn: "You can only remove your own items from the queue."
-  noVolumeChange: "DJを持つユーザーだけがボリュームを変化できます。"
+  noVolumeChange: "Pouze DJ může změnit hlasitost bota."
   queueFrozen: "The queue is now frozen. No changes can be made to the playlist unless you unfreeze it."
   queueUnfrozen: "The queue is no longer frozen."
   cantJoin: "Couldn't join voice channel. Skipping..."
   noRestrictivePause: "Can't pause (restrictive filters)."
-  noStreamPause: "音源を停止できません。"
+  noStreamPause: "Can't pause streams."
   noRestrictiveSeek: "Can't seek (restrictive filters)."
   noStreamSeek: "Can't seek (livestream)."
-  invalidSeek: "無効な位置です。"
+  invalidSeek: "Invalid position."
   restrictiveFilters: "The current song has one or more restrictive filters."
-  livestreamFilters: "フィルターを変化できません。 (ライブストリーミング)"
+  livestreamFilters: "Can't change filters (livestream)."
   restrictiveFiltersAdd: "You can't add restrictive filters during playback."
-  noStreamVolume: "ボリュームを変化できません。(ライブストリーミング)"
+  noStreamVolume: "Can't change volume (livestream)."
   tooLong: "The requested video is too long"
   filterErrors: "A filter reported errors:"
   multiRemove: "Removed **{1}** items from the queue!"
@@ -53,21 +53,21 @@ player:
   playlistForbidden: "You don't have permission to update that playlist."
   playlistDeleted: "Playlist deleted!"
   hud:
-    nowPlaying: "`{1}`で再生中:"
-    removed: "列から消されました:"
-    added: "列に追加しました:"
+    nowPlaying: "Now playing in `{1}`:"
+    removed: "Removed from the queue:"
+    added: "Added to the queue:"
     currentVolume: 'Current Volume: **{1}**.'
     volumeSet: "{1} set global volume to **{2}**."
     requestedBy: "Requested by {1}"
-    removedBy: "{1} が除去しました"
-    radioStream: "* * __ラジオストリーミング__ * *"
-    radioTrack: '* * * トラック名 *: ''{1}'''
-    radioNext: '* * 次のトラック *: ''{1}'''
+    removedBy: "Removed by {1}"
+    radioStream: "**__Radio stream__**"
+    radioTrack: '**Track Title**: `{1}`'
+    radioNext: '**Next Track**: `{1}`'
     swap: "{1} swapped some items:"
     move: "{1} moved the following item:"
-    length: "長さ:"
-    position: "列内の位置:"
-    filters: "フィルター:"
+    length: "Length:"
+    position: "Position in queue:"
+    filters: "Filters:"
     startTime: "Start At:"
     estimated: "Estimated time for playback:"
     playlistLoading: "Loading playlist..."
@@ -102,8 +102,8 @@ admin:
   permissionsUpdated: "Permissions Updated!"
   invalidLevel: "Invalid permission level."
 config:
-  parameter: "パラメータ:"
-  value: "値:"
+  parameter: "Parameter:"
+  value: "Value:"
   noParameter: "No parameter specified."
   invalidParameter: "Invalid parameter specified."
   invalidValue: "Invalid value specified."
@@ -111,25 +111,25 @@ danbooru:
   invalidTag: "Invalid safebooru tag"
   noWaifu: "Run the {1} command first!"
 help:
-  links: "ヘルプリンク:"
+  links: "Help links:"
   prefix: "Prefix for {1}:"
-  commands: "コマンド"
-  filters: "フィルター"
-  manual: "マニュアル"
-  donate: "寄付する"
+  commands: "Commands"
+  filters: "Filters"
+  manual: "Manual"
+  donate: "Donate"
 image:
   dailyLimit: "Daily limit exceeded for this command."
 poll:
-  tooManyAnswers: "解答が多すぎています。"
+  tooManyAnswers: "Too many answers!!"
   notEnoughAnswers: "You need to specify at least 2 answers."
   pollStarted: "{1} started a poll:"
 raffle:
   previousRaffleOpen: "A previous raffle is still open. ({1} participants).\nClose it with `{2}` before starting a new one."
   raffleStarted: "A new raffle has just started! To join, use the `{1}` command."
   noRaffle: "There isn't any raffle going on right now."
-  alreadyJoined: "この抽選にもう参加しています。"
+  alreadyJoined: "You already joined this raffle."
   joined: "{1} joined the raffle! ({2} participants)."
-  noParticipantsLeft: "残り参加者はありません。"
+  noParticipantsLeft: "No participants left."
   winner: "{1} wins this raffle!"
   closed: "The raffle is now closed."
   overview: "**__Raffle Overview__**:"
@@ -139,7 +139,7 @@ raffle:
   raffleStats: "Raffle stats for {1}"
   participated: '**Participated**: {1}'
   won: '**Won**: {1}'
-  overall: "全般"
+  overall: "Overall"
 rng:
   roll: "{1} 🎲 rolls `{2}`."
   total: '**Total**: __{1}__.'
@@ -154,10 +154,10 @@ rng:
     - As I see it, yes
     - Most likely
     - Outlook good
-    - はい。
+    - Yes
     - Signs point to yes
     - Reply hazy try again
-    - 後で聞いて下さい。
+    - Ask again later
     - Better not tell you now
     - Cannot predict now
     - Concentrate and ask again
@@ -168,8 +168,8 @@ rng:
     - Very doubtful
   rate: "I'd give {1} a {2}/10."
 tags:
-  added: "タグを保存しました！"
-  deleted: "{1} タグを削除しました！"
+  added: "Tag saved!"
+  deleted: "Deleted {1} tags!"
 osu:
   profile: "osu! Profile for {1}"
   performance: 'Performance: {1}pp (#{2}, {3}#{4})'
