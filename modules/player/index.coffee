@@ -86,8 +86,12 @@ class PlayerModule extends BotModule
                       newMember.voiceChannel.id is player.queue._d.nowPlaying.voiceChannel.id
         # Resume playback if suspended
         if newMember.voiceChannel.members.length > 1 and
-           player.queue._d.nowPlaying.status is 'suspended' then
-           player.play()
+        player.queue._d.nowPlaying.status is 'suspended'
+          player.play()
+          # Remove timeout
+          if player.timeout
+            clearTimeout player.timeout
+            delete player.timeout
       
       # User leaves or switches voice channels
       if not newMember.voiceChannel or newMember.voiceChannel isnt oldMember.voiceChannel
@@ -97,6 +101,11 @@ class PlayerModule extends BotModule
         # Empty voice channel
         if player.queue.nowPlaying.voiceChannel.members.length <= 1
           player.suspend()
+          if not player.timeout
+            # Inactivity timeout
+            player.timeout = setTimeout ->
+              player.stop()
+            , 240 * 60 * 1000 # 4 hours
 
       # Bot Switches Voice Channels
       if newMember.id is Core.bot.user.id and oldMember.voiceChannel isnt newMember.voiceChannel

@@ -84,7 +84,7 @@ class Playlists extends BotModule
           playlist.owner = u.id
           await Core.data.set("Playlist:#{args[1]}", playlist)
           msg.reply l.player.playlistUpdated
-        when 'delete', 'del'
+        when 'delete', 'del', 'd'
           # Fetch the playlist
           return msg.reply l.generic.invalidArgs if not args[1]
           playlist = await Core.data.get("Playlist:#{args[1]}")
