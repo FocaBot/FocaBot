@@ -84,6 +84,16 @@ class Playlists extends BotModule
           playlist.owner = u.id
           await Core.data.set("Playlist:#{args[1]}", playlist)
           msg.reply l.player.playlistUpdated
+        when 'delete', 'del'
+          # Fetch the playlist
+          return msg.reply l.generic.invalidArgs if not args[1]
+          playlist = await Core.data.get("Playlist:#{args[1]}")
+          return msg.reply l.player.playlistNotFound unless playlist
+          # Check if the user is allowed to delete
+          if playlist.owner isnt msg.author.id
+            return msg.reply l.player.playlistForbidden
+          await Core.data.del("Playlist:#{args[1]}")
+          msg.reply l.player.playlistDeleted
         else
           return msg.reply l.generic.invalidArgs
   
