@@ -95,7 +95,7 @@ class Raffle extends BotModule
     @registerCommand 'rafflestats', ({ msg, args, l })=>
       u = msg.mentions.members.first() or msg.member
       uStats = (await Core.data.get("RaffleStats:#{u.id}")) or { total: [], won: [] }
-      msg.channel.sendMessage '', embed: {
+      msg.channel.send '', embed: {
         title: l.gen(l.raffle.raffleStats, u.displayName)
         thumbnail:
           url: u.user.displayAvatarURL

@@ -60,12 +60,6 @@ class PlayerModule extends BotModule
     # Save data on each update
     player.queue.on 'updated', =>
       await Core.data.set("GuildQueue:#{guild.id}", player.queue._d)
-      # Notify other instances when the queue gets updated
-      Core.data.publish('GuildQueueFeed', {
-        type: 'queueUpdated'
-        guildId: guild.id
-        by: Core.shard.id or 0
-      })
     player
 
   registerCommand: (name, options, handler)->
@@ -116,6 +110,5 @@ class PlayerModule extends BotModule
     Object.keys(@_guilds).forEach (g)=>
       @_guilds[g].removeAllListeners()
       @_guilds[g].queue.removeAllListeners()
-      Core.data.removeListener('message', @_messageHandler)
 
 module.exports = PlayerModule

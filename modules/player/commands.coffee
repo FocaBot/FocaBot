@@ -19,11 +19,11 @@ class PlayerCommands
       if @util.checkItemCountLimit(player, m.member)
         return m.reply l.player.queueLimit
       # Process request
-      q = args.split('|')[0].trim()
+      q = args.split('|')[0].trim().split('\n')
       # Use Attachment URL if present
       q = m.attachments.first().url if m.attachments.first()
       # Display error if no query
-      return m.reply(l.player.noQuery) unless q
+      return m.reply(l.player.noQuery) unless q[0]
       # Filters
       filters = (args.split('|')[1] or '').trim()
       # Start Position
@@ -54,16 +54,13 @@ class PlayerCommands
           player.pendingPlaylist = { pl: info, by: m.member }
           info.on 'done', =>
             return if info.cancelled
-            info.items.forEach (item, i)=>
+            delete player.pendingPlaylist
+            for item, i in info.items
               vid = await @util.getAdditionalMetadata(item)
               return if time > vid.duration or time < 0
               vid.startAt = time
               vid.filters = filters
-              @util.processInfo(vid, m, player, true, m.member.voiceChannel)
-              # Start playback if not started already
-              if i is (info.items.length - 1) and not player.queue.nowPlaying
-                player.queue._d.nowPlaying = player.queue._d.items.shift()
-                player.play()
+              @util.processInfo(vid, m, player, true, m.member.voiceChannel, i is 0)
       catch e
         console.error e
         m.reply '', embed: {
@@ -111,7 +108,7 @@ class PlayerCommands
     # Clear / Stop
     @registerCommand 'clear', { aliases: ['stop'], djOnly: true }, ({ msg, player, l })=>
       player.stop()
-      msg.channel.sendMessage l.player.queueCleared
+      msg.channel.send l.player.queueCleared
 
     # Pause
     @registerCommand 'pause', { djOnly: true }, ({ msg, player })=>
@@ -192,7 +189,7 @@ class PlayerCommands
         unless (itm.requestedBy is msg.author.id) or @permissions.isDJ msg.member
           return msg.channel.send l.player.onlyRemoveOwn
         { item } = player.queue.remove(index, msg.member)
-        msg.channel.sendMessage l.player.hud.removed,
+        msg.channel.send l.player.hud.removed,
                                 embed: @hud.removeItem(item, msg.member, l)
 
     # Swap

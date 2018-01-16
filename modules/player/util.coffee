@@ -130,7 +130,7 @@ class PlayerUtil
     filters
 
   # Processes video information (and adds it to the queue)
-  processInfo: (info, msg, player, playlist = false, voiceChannel)->
+  processInfo: (info, msg, player, playlist = false, voiceChannel, play = true)->
     s = await Core.settings.getForGuild(player.guild)
     l = Core.locales.getLocale(s.locale)
 
@@ -163,7 +163,7 @@ class PlayerUtil
       time: info.startAt if isFinite(info.duration) and info.duration > 0
       duration
       filters
-    }, playlist, playlist)
+    }, playlist, not play)
 
   # Checks item count for user
   checkItemCountLimit: (player, member)->

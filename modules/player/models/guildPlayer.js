@@ -199,8 +199,9 @@ class GuildPlayer extends EventEmitter {
     if (!item && !this.queue._d.items.length) return
     item.status = 'skipped'
     if (!this.queue._d.items.length) return this.stop()
-    this.queue._d.nowPlaying = this.queue._d.items.shift()
+    
     this.audioPlayer.stop()
+    this.queue._d.nowPlaying = this.queue._d.items.shift()
     this.play()
     this.queue.emit('updated')
   }

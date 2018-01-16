@@ -133,8 +133,8 @@ class PlayerHUD
     message = undefined
     sending = false
     lastCount = 0
-    updateMessage = =>
-      return if sending or playlist.items.length is lastCount
+    updateMessage = (done)=>
+      return if sending or (playlist.items.length is lastCount and not done)
       embed = {
         author:
           name: if playlist.partial
@@ -152,23 +152,24 @@ class PlayerHUD
       }
       lastCount = playlist.items.length
       unless message
-        sending = true
-        message = await channel.send '', { embed }
-        sending = false
+        sending = channel.send '', { embed }
+        message = await sending
+        sending = null
       else
-        sending = true
-        await message.edit '', { embed }
-        sending = false
+        sending = message.edit '', { embed }
+        await sending
+        sending = null
     updateMessage()
     if playlist.partial
       interval = setInterval(updateMessage, 2500)
-      playlist.on 'done', =>
-        sending = false
-        updateMessage()
+      playlist.once 'done', =>
+        return if playlist.cancelled
+        await sending if sending
+        updateMessage(true)
         clearInterval(interval)
-      playlist.on 'cancelled', =>
+      playlist.once 'cancelled', =>
         playlist.cancelled = true
-        sending = false
+        await sending if sending
         if message then message.edit '', embed: {
           author: name: l.player.hud.playlistCancelled
         }
