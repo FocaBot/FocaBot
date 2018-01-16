@@ -1,0 +1,177 @@
+---
+generic:
+  error: "Něco se pokazilo."
+  invalidArgs: "Zadali jste neplatné argumenty."
+  noResults: "Žádné výsledky."
+  success: "Povedlo se!"
+  saved: "Uloženo!"
+  sauceBtn: "\\[Zjískat odkaz\\]"
+  helpBtn: "\\[Potřebuji pomoc!\\]"
+  donateBtn: "\\[Podpořit vývojáře\\]"
+  commandUsage: "Použití:"
+player:
+  noVoice: "Pro použití musíš být v hlasové místnosti."
+  noSameVoice: "Musíš být ve stejné místnosti jako bot."
+  notAllowed: "Nejsi oprávněn používat bota v této hlasové místnosti."
+  queueLimit: "Dosáhl jsi maximální limit písniček ve frontě."
+  invalidStart: "Zadán neplatný čas pro začátek."
+  playlistNoDJ: "Pouze DJ mohou přidávat playlisty."
+  notPlaying: "Zde se nic nehraje."
+  skip: "**{1}** přeskočena aktuální písnička."
+  noSkipAllowed: "Nejsi oprávněn přeskakovat písničky."
+  voteSkip: "**{1}** hlasoval pro přeskočení aktuální písničky ({2}/{3})"
+  alreadyVoted: "Opravdu chceš tuto písničku ***znovu*** přeskočit?"
+  voteSkipSuccess: "Přeskakuji aktuální písničku ~~se silou demokracie ~~..."
+  queueCleared: "Fronta je nyní prázdná."
+  queueEmpty: "Fronta je prázdná."
+  noSauce: "Promiň, není zde odkaz pro tuto skladbu..."
+  sauce: 'Zde je odkaz na aktuální písníčku: {1}'
+  noSuchItem: "Nemohu najít specifikovanou položku ve frontě."
+  onlyRemoveOwn: "You can only remove your own items from the queue."
+  noVolumeChange: "Pouze DJ může změnit hlasitost bota."
+  queueFrozen: "The queue is now frozen. No changes can be made to the playlist unless you unfreeze it."
+  queueUnfrozen: "The queue is no longer frozen."
+  cantJoin: "Couldn't join voice channel. Skipping..."
+  noRestrictivePause: "Can't pause (restrictive filters)."
+  noStreamPause: "Can't pause streams."
+  noRestrictiveSeek: "Can't seek (restrictive filters)."
+  noStreamSeek: "Can't seek (livestream)."
+  invalidSeek: "Invalid position."
+  restrictiveFilters: "The current song has one or more restrictive filters."
+  livestreamFilters: "Can't change filters (livestream)."
+  restrictiveFiltersAdd: "You can't add restrictive filters during playback."
+  noStreamVolume: "Can't change volume (livestream)."
+  tooLong: "The requested video is too long"
+  filterErrors: "A filter reported errors:"
+  multiRemove: "Removed **{1}** items from the queue!"
+  playlistAlreadyLoading: "There's another playlist being loaded, please wait."
+  noQuery: "No query specified."
+  playlistSaved: "Playlist saved!"
+  playlistUpdated: "Playlist updated!"
+  playlistNotFound: "No such playlist."
+  playlistExists: "A playlist with that ID already exists."
+  playlistForbidden: "You don't have permission to update that playlist."
+  playlistDeleted: "Playlist deleted!"
+  hud:
+    nowPlaying: "Now playing in `{1}`:"
+    removed: "Removed from the queue:"
+    added: "Added to the queue:"
+    currentVolume: 'Current Volume: **{1}**.'
+    volumeSet: "{1} set global volume to **{2}**."
+    requestedBy: "Requested by {1}"
+    removedBy: "Removed by {1}"
+    radioStream: "**__Radio stream__**"
+    radioTrack: '**Track Title**: `{1}`'
+    radioNext: '**Next Track**: `{1}`'
+    swap: "{1} swapped some items:"
+    move: "{1} moved the following item:"
+    length: "Length:"
+    position: "Position in queue:"
+    filters: "Filters:"
+    startTime: "Start At:"
+    estimated: "Estimated time for playback:"
+    playlistLoading: "Loading playlist..."
+    playlistCount: "**{1}** items loaded so far. (Use {2} to cancel)"
+    playlistFinalCount: "**{1}** items."
+    playlistLoaded: "✅ Playlist Added!"
+    playlistCancelled: "(Playlist Cancelled)"
+    noSuchPage: "Page {1} does not exist."
+    upNext: "Up next:"
+    queueFooter: "{1} total items ({2}). Page {3}/{4}"
+    queueNext: "Use {1} to see the next page."
+    playlistLoopMode: "🔁 Loop Mode Enabled! [Playlist]"
+    songLoopMode: "🔂 Loop Mode Enabled! [Song]"
+    searching: "Searching..."
+    results: "Results:"
+admin:
+  languageChanged: "Language set to {1}!"
+  cantDelete: "Could not delete messages. Check if the bot has permission."
+  restarting: "FocaBot is restarting..."
+  updating: "FocaBot is updating..."
+  ytdlUpdate: "Downloading latest version of youtube-dl..."
+  ytdlUpdated: "Successfully downloaded youtube-dl {1}!"
+  ytdlUpdateError: "Could not download latest version of youtube-dl, please try again."
+  nickChanged: "Nickname changed successfully!"
+  avatarChanged: "Avatar changed successfully!"
+  usernameChanged: "Username changed successfully!"
+  noUserSpecified: "No user specified."
+  blacklistAdd: "Blacklisted **{1}**."
+  blacklistRemove: "Removed **{1}** from the blacklist."
+  noSuchModule: "No such module."
+  noSuchCommand: "No such command."
+  permissionsUpdated: "Permissions Updated!"
+  invalidLevel: "Invalid permission level."
+config:
+  parameter: "Parameter:"
+  value: "Value:"
+  noParameter: "No parameter specified."
+  invalidParameter: "Invalid parameter specified."
+  invalidValue: "Invalid value specified."
+danbooru:
+  invalidTag: "Invalid safebooru tag"
+  noWaifu: "Run the {1} command first!"
+help:
+  links: "Help links:"
+  prefix: "Prefix for {1}:"
+  commands: "Commands"
+  filters: "Filters"
+  manual: "Manual"
+  donate: "Donate"
+image:
+  dailyLimit: "Daily limit exceeded for this command."
+poll:
+  tooManyAnswers: "Too many answers!!"
+  notEnoughAnswers: "You need to specify at least 2 answers."
+  pollStarted: "{1} started a poll:"
+raffle:
+  previousRaffleOpen: "A previous raffle is still open. ({1} participants).\nClose it with `{2}` before starting a new one."
+  raffleStarted: "A new raffle has just started! To join, use the `{1}` command."
+  noRaffle: "There isn't any raffle going on right now."
+  alreadyJoined: "You already joined this raffle."
+  joined: "{1} joined the raffle! ({2} participants)."
+  noParticipantsLeft: "No participants left."
+  winner: "{1} wins this raffle!"
+  closed: "The raffle is now closed."
+  overview: "**__Raffle Overview__**:"
+  totalParticipants: "**{1}** total participants."
+  totalWinners: "**{1}** total winners."
+  placements: "**__Raffle Placements__**:"
+  raffleStats: "Raffle stats for {1}"
+  participated: '**Participated**: {1}'
+  won: '**Won**: {1}'
+  overall: "Overall"
+rng:
+  roll: "{1} 🎲 rolls `{2}`."
+  total: '**Total**: __{1}__.'
+  notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
+  choice: "I choose {1}."
+  8ball:
+    - It is certain
+    - It is decidedly so
+    - Without a doubt
+    - Yes, definitely
+    - You may rely on it
+    - As I see it, yes
+    - Most likely
+    - Outlook good
+    - Yes
+    - Signs point to yes
+    - Reply hazy try again
+    - Ask again later
+    - Better not tell you now
+    - Cannot predict now
+    - Concentrate and ask again
+    - Don't count on it
+    - My reply is no
+    - My sources say no
+    - Outlook not so good
+    - Very doubtful
+  rate: "I'd give {1} a {2}/10."
+tags:
+  added: "Tag saved!"
+  deleted: "Deleted {1} tags!"
+osu:
+  profile: "osu! Profile for {1}"
+  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
+  stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
+  official: "in osu! official server"
