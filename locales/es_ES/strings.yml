@@ -175,3 +175,5 @@ osu:
   performance: 'Performance: {1}pp (#{2}, {3}#{4})'
   stats: "▸ **Nivel**: {1}\n▸ **Precisión**: {2}\n▸ **Conteo de jugadas**: {3}\n▸ **Puntaje clasificado**: {4}\n▸ **Puntaje total**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "en el servidor oficial de osu!"
+announcements:
+  footer: "Este es un anuncio global. Puedes desactivarlo con el comando {0}."
