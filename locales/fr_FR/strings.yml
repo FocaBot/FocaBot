@@ -171,9 +171,9 @@ tags:
   added: "Tag enregistré !"
   deleted: "{1} tag(s) supprimé(s) !"
 osu:
-  profile: "osu! Profile for {1}"
-  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
-  stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
+  profile: "Profil osu! de {1}"
+  performance: 'Performance : {1}pp (#{2}, {3}#{4})'
+  stats: "▸ **Niveau**: {1}\n▸ **Précision**: {2}\n▸ **Nombre de tentatives**: {3}\n▸ **Score classé**: {4}\n▸ **Score total**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "in osu! official server"
 announcements:
   footer: "This is a global announcement. You can disable them by running {0}."
