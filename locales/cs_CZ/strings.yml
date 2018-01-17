@@ -27,7 +27,7 @@ player:
   noSauce: "Promiň, není zde odkaz pro tuto skladbu..."
   sauce: 'Zde je odkaz na aktuální písníčku: {1}'
   noSuchItem: "Nemohu najít specifikovanou položku ve frontě."
-  onlyRemoveOwn: "You can only remove your own items from the queue."
+  onlyRemoveOwn: "Můžeš odstranit z fronty pouze skladby, které jsi přidal."
   noVolumeChange: "Pouze DJ může změnit hlasitost bota."
   queueFrozen: "The queue is now frozen. No changes can be made to the playlist unless you unfreeze it."
   queueUnfrozen: "The queue is no longer frozen."
