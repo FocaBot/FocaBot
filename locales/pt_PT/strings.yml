@@ -173,7 +173,7 @@ tags:
 osu:
   profile: "osu! Perfil para {1}"
   performance: 'Desempenho: {1}pp (#{2}, {3}#{4})'
-  stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
-  official: "in osu! official server"
+  stats: "▸ **Nível**: {1} \n▸ **Precisão**: {2} \n▸ **Número de jogos**: {3} \n▸ **Pontuação Classificada**: {4} \n▸ **Pontuação Total**: {5} \n▸ ** SS**: {6} **S**: {7} **A**: {8}"
+  official: "em osu! servidor oficial"
 announcements:
-  footer: "This is a global announcement. You can disable them by running {0}."
+  footer: "Este é um anúncio global. Você pode desabilitá-los executando {0}."
