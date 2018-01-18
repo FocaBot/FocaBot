@@ -60,7 +60,7 @@ class PlayerCommands
               return if time > vid.duration or time < 0
               vid.startAt = time
               vid.filters = filters
-              @util.processInfo(vid, m, player, true, vc, i is 0)
+              @util.processInfo(vid, m, player, true, vc)
           else
             info.once 'done', =>
               return if info.cancelled
