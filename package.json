@@ -29,11 +29,11 @@
   },
   "homepage": "https://github.com/FocaBot/FocaBot#README",
   "dependencies": {
-    "azarasi": "^2.0.0-alpha15",
+    "azarasi": "^2.0.0-beta1",
     "chance": "^1.0.4",
     "coffeescript": "next",
     "dotenv": "^2.0.0",
-    "ffmpeg-downloader": "^1.0.4",
+    "ffmpeg-downloader": "^1.2.0",
     "inquirer": "^3.1.0",
     "json-format": "^0.1.2",
     "json-prune": "^1.0.1",
