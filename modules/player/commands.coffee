@@ -11,9 +11,10 @@ class PlayerCommands
       # Check Voice Connection
       unless m.member.voiceChannel
         return m.reply l.player.noVoice
+      vc = m.member.voiceChannel
       # Check voice channel name
       if s.voiceChannel and s.voiceChannel isnt '*' and
-         s.voiceChannel isnt m.member.voiceChannel.name and not @permissions.isAdmin(m.member)
+         s.voiceChannel isnt vc.name and not @permissions.isAdmin(m.member)
         return m.reply l.player.notAllowed
       # Check item limit
       if @util.checkItemCountLimit(player, m.member)
@@ -42,7 +43,7 @@ class PlayerCommands
             return m.reply l.player.invalidStart
           vid.startAt = time
           vid.filters = filters
-          @util.processInfo(vid, m, player, false, m.member.voiceChannel)
+          @util.processInfo(vid, m, player, false, vc)
         else
           # Playlist
           return m.reply(l.player.playlistNoDJ) unless Core.permissions.isDJ(m.member)
@@ -52,15 +53,24 @@ class PlayerCommands
             return m.reply(l.player.playlistAlreadyLoading)
           @hud.addPlaylist(m.member, info, m.channel, l, s)
           player.pendingPlaylist = { pl: info, by: m.member }
-          info.on 'done', =>
-            return if info.cancelled
-            delete player.pendingPlaylist
-            for item, i in info.items
-              vid = await @util.getAdditionalMetadata(item)
+          if s.asyncPlaylists
+            info.on 'video', (item)=>
+              return if info.cancelled
+              vid =  await @util.getAdditionalMetadata(item)
               return if time > vid.duration or time < 0
               vid.startAt = time
               vid.filters = filters
-              @util.processInfo(vid, m, player, true, m.member.voiceChannel, i is 0)
+              @util.processInfo(vid, m, player, true, vc, i is 0)
+          else
+            info.once 'done', =>
+              return if info.cancelled
+              delete player.pendingPlaylist
+              for item, i in info.items
+                vid = await @util.getAdditionalMetadata(item)
+                return if time > vid.duration or time < 0
+                vid.startAt = time
+                vid.filters = filters
+                @util.processInfo(vid, m, player, true, vc, i is 0)
       catch e
         console.error e
         m.reply '', embed: {
@@ -296,9 +306,10 @@ class PlayerCommands
       # Check Voice Connection
       unless m.member.voiceChannel
         return m.reply l.player.noVoice
+      vc = m.member.voiceChannel
       # Check voice channel name
       if s.voiceChannel and s.voiceChannel isnt '*' and
-         s.voiceChannel isnt m.member.voiceChannel.name and not @permissions.isAdmin(m.member)
+         s.voiceChannel isnt vc.name and not @permissions.isAdmin(m.member)
         return m.reply l.player.notAllowed
       # Check item limit
       if @util.checkItemCountLimit(player, m.member)
@@ -308,7 +319,7 @@ class PlayerCommands
         result = await @search.doSearch(m, l, args)
         vid = await @util.getAdditionalMetadata(result)
         vid.filters = []
-        @util.processInfo(vid, m, player, false, m.member.voiceChannel)
+        @util.processInfo(vid, m, player, false, vc)
       catch e
         Core.log e, 2
         m.reply e.message if e.message

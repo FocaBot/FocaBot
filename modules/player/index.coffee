@@ -22,6 +22,7 @@ class PlayerModule extends BotModule
     @registerParameter 'voteSkip', { type: Boolean, def: true }
     @registerParameter 'maxSongLength', { type: Number, def: 1800, min: 60, max: 21600 }
     @registerParameter 'maxItems', { type: Number, def: 0 }
+    @registerParameter 'asyncPlaylists', { type: Boolean, def: false }
 
   getForGuild: (guild)->
     return @_guilds[guild.id] if @_guilds[guild.id]?
