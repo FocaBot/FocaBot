@@ -54,6 +54,12 @@ class PlayerCommands
           @hud.addPlaylist(m.member, info, m.channel, l, s)
           player.pendingPlaylist = { pl: info, by: m.member }
           if s.asyncPlaylists
+            for item, i in info.items
+              vid = await @util.getAdditionalMetadata(item)
+              return if time > vid.duration or time < 0
+              vid.startAt = time
+              vid.filters = filters
+              @util.processInfo(vid, m, player, true, vc, i is 0)
             info.on 'video', (item)=>
               return if info.cancelled
               vid =  await @util.getAdditionalMetadata(item)
