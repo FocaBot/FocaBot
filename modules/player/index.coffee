@@ -109,6 +109,7 @@ class PlayerModule extends BotModule
       # Bot Switches Voice Channels
       if newMember.id is Core.bot.user.id and newMember.voiceChannel?
         player = @_guilds[newMember.guild.id]
+        return unless player.queue
         return player.skip() if player.queue.nowPlaying and not newMember.voiceChannel?
         return unless player.queue.nowPlaying and
                       player.queue.nowPlaying.voiceChannel.id isnt newMember.voiceChannel.id
