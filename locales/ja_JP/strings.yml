@@ -8,111 +8,111 @@ generic:
   sauceBtn: "ソース確認"
   helpBtn: "ヘルプ"
   donateBtn: "寄付する"
-  commandUsage: "Usage:"
+  commandUsage: "使用:"
 player:
   noVoice: "音声チャネルにいる必要があります。"
-  noSameVoice: "You must be in the same voice channel the bot is in."
-  notAllowed: "You are not allowed to use the bot in this voice channel."
-  queueLimit: "You have exceeded the limit of items in queue for this server."
+  noSameVoice: "ボットの同じ音声チャンネルに入る必要があります。"
+  notAllowed: "この音声チャネルでボットを使用することはできません。"
+  queueLimit: "このサーバー列内のアイテムの制限を超えています。"
   invalidStart: "無効な開始時間です。"
-  playlistNoDJ: "DJを持つユーザーだけがプレイリストを追加できます。"
+  playlistNoDJ: "DJを持つユーザーだけが再生リストを追加できます。"
   notPlaying: "このサーバーに何も再生されていません。"
-  skip: "**{1}** skipped the current song."
-  noSkipAllowed: "You are not allowed to skip songs."
-  voteSkip: "**{1}** voted to skip the current song ({2}/{3})"
-  alreadyVoted: "Did you really try to skip this song ***again***?"
-  voteSkipSuccess: "Skipping current song ~~with the power of democracy~~..."
+  skip: "**{1}** は曲をスキップしました"
+  noSkipAllowed: "曲をスキップすることを許可されていません。"
+  voteSkip: "**{1}** が曲のスキップを望む ({2}/{3})"
+  alreadyVoted: "***また***こんな曲をスキップするつもり？"
+  voteSkipSuccess: "現在の曲をスキップして ~~民主主義の力で~~..."
   queueCleared: "列がクリアされました。"
   queueEmpty: "列に何もありません。"
   noSauce: "申し訳ありませんが、このアイテムにソースがない。"
-  sauce: 'Here''s the sauce of the current item: {1}'
-  noSuchItem: "Can't find the specified item in the queue."
-  onlyRemoveOwn: "You can only remove your own items from the queue."
+  sauce: '現在のアイテムのソース: {1}'
+  noSuchItem: "列に指定されたアイテムが見つかりません。"
+  onlyRemoveOwn: "列から削除するアイテムは貴方のみのアイテムです。"
   noVolumeChange: "DJを持つユーザーだけがボリュームを変化できます。"
-  queueFrozen: "The queue is now frozen. No changes can be made to the playlist unless you unfreeze it."
-  queueUnfrozen: "The queue is no longer frozen."
-  cantJoin: "Couldn't join voice channel. Skipping..."
-  noRestrictivePause: "Can't pause (restrictive filters)."
+  queueFrozen: "列が停止しました。再開しない限り、再生リストの変更が無効になります。"
+  queueUnfrozen: "列が再開しました。"
+  cantJoin: "音声チャンネルを参加できませんでした。スキップします..."
+  noRestrictivePause: "ポーズすることができません。(フィルター制約)"
   noStreamPause: "音源を停止できません。"
-  noRestrictiveSeek: "Can't seek (restrictive filters)."
-  noStreamSeek: "Can't seek (livestream)."
+  noRestrictiveSeek: "シークすることができません。(フィルター制約)"
+  noStreamSeek: "シークすることができません。(ライブストリーミング)"
   invalidSeek: "無効な位置です。"
-  restrictiveFilters: "The current song has one or more restrictive filters."
+  restrictiveFilters: "現在の曲が1つ以上の制限フィルターを持っています。"
   livestreamFilters: "フィルターを変化できません。 (ライブストリーミング)"
-  restrictiveFiltersAdd: "You can't add restrictive filters during playback."
+  restrictiveFiltersAdd: "再生中に制限フィルターを追加できません。"
   noStreamVolume: "ボリュームを変化できません。(ライブストリーミング)"
   tooLong: "The requested video is too long"
-  filterErrors: "A filter reported errors:"
+  filterErrors: "フィルターはエラーが報告されます:"
   multiRemove: "Removed **{1}** items from the queue!"
-  playlistAlreadyLoading: "There's another playlist being loaded, please wait."
-  noQuery: "No query specified."
-  playlistSaved: "Playlist saved!"
-  playlistUpdated: "Playlist updated!"
-  playlistNotFound: "No such playlist."
-  playlistExists: "A playlist with that ID already exists."
-  playlistForbidden: "You don't have permission to update that playlist."
-  playlistDeleted: "Playlist deleted!"
+  playlistAlreadyLoading: "他の再生リストが読み込みしているので、しばらく待っていてください。"
+  noQuery: "質問が指定されていません。"
+  playlistSaved: "再生リストが保存されました。"
+  playlistUpdated: "再生リストがアップデートされました。"
+  playlistNotFound: "そんな再生リストが存在していません"
+  playlistExists: "同じIDを持っている再生リストがすでに存在します。"
+  playlistForbidden: "その再生リストをアップデートする権限がありません。"
+  playlistDeleted: "再生リストが削除されました。"
   hud:
     nowPlaying: "`{1}`で再生中:"
     removed: "列から消されました:"
     added: "列に追加しました:"
-    currentVolume: 'Current Volume: **{1}**.'
-    volumeSet: "{1} set global volume to **{2}**."
-    requestedBy: "Requested by {1}"
+    currentVolume: '現在のボリューム: **{1}**.'
+    volumeSet: "{1} がグローバルボリュームを **{2}** に設定"
+    requestedBy: "{1} からのリクエスト"
     removedBy: "{1} が除去しました"
     radioStream: "* * __ラジオストリーミング__ * *"
     radioTrack: '* * * トラック名 *: ''{1}'''
     radioNext: '* * 次のトラック *: ''{1}'''
-    swap: "{1} swapped some items:"
-    move: "{1} moved the following item:"
+    swap: "{1} はいくつかの項目を交換しました。"
+    move: "{1} は次のアイテムを移動しました。"
     length: "長さ:"
     position: "列内の位置:"
     filters: "フィルター:"
-    startTime: "Start At:"
-    estimated: "Estimated time for playback:"
-    playlistLoading: "Loading playlist..."
+    startTime: "再生時間:"
+    estimated: "再生の予定時間:"
+    playlistLoading: "再生リストを読み込んでいます..."
     playlistCount: "**{1}** items loaded so far. (Use {2} to cancel)"
-    playlistFinalCount: "**{1}** items."
-    playlistLoaded: "✅ Playlist Added!"
-    playlistCancelled: "(Playlist Cancelled)"
-    noSuchPage: "Page {1} does not exist."
-    upNext: "Up next:"
+    playlistFinalCount: "**{1}** アイテム"
+    playlistLoaded: "再生リストを追加!"
+    playlistCancelled: "(再生リストをキャンセルしました)"
+    noSuchPage: "{1} ページは存在しません。"
+    upNext: "次に:"
     queueFooter: "{1} total items ({2}). Page {3}/{4}"
     queueNext: "Use {1} to see the next page."
-    playlistLoopMode: "🔁 Loop Mode Enabled! [Playlist]"
-    songLoopMode: "🔂 Loop Mode Enabled! [Song]"
-    searching: "Searching..."
-    results: "Results:"
+    playlistLoopMode: "🔁 ループモード起動! [Playlist]"
+    songLoopMode: "🔁 ループモード起動! [Song]"
+    searching: "検索中..."
+    results: "結果:"
 admin:
-  languageChanged: "Language set to {1}!"
-  cantDelete: "Could not delete messages. Check if the bot has permission."
-  restarting: "FocaBot is restarting..."
-  updating: "FocaBot is updating..."
+  languageChanged: "言語は {1} に設定しました!"
+  cantDelete: "メッセージを削除できませんでした。ボットが権限を持っているか確認してください。"
+  restarting: "FocaBotが再起動しています..."
+  updating: "FocaBotがアップデートしています..."
   ytdlUpdate: "Downloading latest version of youtube-dl..."
   ytdlUpdated: "Successfully downloaded youtube-dl {1}!"
   ytdlUpdateError: "Could not download latest version of youtube-dl, please try again."
-  nickChanged: "Nickname changed successfully!"
-  avatarChanged: "Avatar changed successfully!"
-  usernameChanged: "Username changed successfully!"
-  noUserSpecified: "No user specified."
-  blacklistAdd: "Blacklisted **{1}**."
-  blacklistRemove: "Removed **{1}** from the blacklist."
-  noSuchModule: "No such module."
-  noSuchCommand: "No such command."
-  permissionsUpdated: "Permissions Updated!"
+  nickChanged: "ユーザーネームの変更が完了しました!"
+  avatarChanged: "アバターの変更が完了しました!"
+  usernameChanged: "ユーザーネームの変更が完了しました"
+  noUserSpecified: "ユーザーが指定されていません。"
+  blacklistAdd: "**{1}** がブラックリストしました"
+  blacklistRemove: "{1} をブラックリストから消去しました。"
+  noSuchModule: "このようなモジュールはありません。"
+  noSuchCommand: "このようなコマンドがありません。"
+  permissionsUpdated: "アクセス許可が更新されました!"
   invalidLevel: "Invalid permission level."
 config:
   parameter: "パラメータ:"
   value: "値:"
-  noParameter: "No parameter specified."
+  noParameter: "パラメータが指定されていません。"
   invalidParameter: "Invalid parameter specified."
-  invalidValue: "Invalid value specified."
+  invalidValue: "無効なバリューが指定されました。"
 danbooru:
-  invalidTag: "Invalid safebooru tag"
-  noWaifu: "Run the {1} command first!"
+  invalidTag: "無効な safebooru タグ"
+  noWaifu: "最初に {1} コマンドを実行!"
 help:
   links: "ヘルプリンク:"
-  prefix: "Prefix for {1}:"
+  prefix: "{1} の接頭辞:"
   commands: "コマンド"
   filters: "フィルター"
   manual: "マニュアル"
@@ -121,59 +121,59 @@ image:
   dailyLimit: "Daily limit exceeded for this command."
 poll:
   tooManyAnswers: "解答が多すぎています。"
-  notEnoughAnswers: "You need to specify at least 2 answers."
-  pollStarted: "{1} started a poll:"
+  notEnoughAnswers: "最低2つの回答を指定する必要があります。"
+  pollStarted: "{1} が投票を開始しました"
 raffle:
   previousRaffleOpen: "A previous raffle is still open. ({1} participants).\nClose it with `{2}` before starting a new one."
   raffleStarted: "A new raffle has just started! To join, use the `{1}` command."
   noRaffle: "There isn't any raffle going on right now."
   alreadyJoined: "この抽選にもう参加しています。"
-  joined: "{1} joined the raffle! ({2} participants)."
+  joined: "{1} が抽選に参加しました! (参加者 {2} 人)。"
   noParticipantsLeft: "残り参加者はありません。"
-  winner: "{1} wins this raffle!"
-  closed: "The raffle is now closed."
-  overview: "**__Raffle Overview__**:"
-  totalParticipants: "**{1}** total participants."
-  totalWinners: "**{1}** total winners."
-  placements: "**__Raffle Placements__**:"
-  raffleStats: "Raffle stats for {1}"
-  participated: '**Participated**: {1}'
-  won: '**Won**: {1}'
+  winner: "{1} がこの抽選を優勝しました!"
+  closed: "この抽選は終わりました"
+  overview: "**__抽選概要__**:"
+  totalParticipants: "参加者 **{1}** 人"
+  totalWinners: "優勝者 **{1}** 人"
+  placements: "**__抽選結果__**:"
+  raffleStats: "{1} の抽選情報"
+  participated: '**参加数**: {1}'
+  won: '**価値**: {1}'
   overall: "全般"
 rng:
-  roll: "{1} 🎲 rolls `{2}`."
-  total: '**Total**: __{1}__.'
+  roll: "{1} は`{2}`を振る🎲"
+  total: '* * 合計 * *: __{1}__。'
   notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
-  choice: "I choose {1}."
+  choice: "私は {1} を選択します"
   8ball:
-    - It is certain
-    - It is decidedly so
-    - Without a doubt
-    - Yes, definitely
-    - You may rely on it
-    - As I see it, yes
-    - Most likely
-    - Outlook good
+    - 確かです
+    - もしろん確かです
+    - 疑いなく
+    - イエス、もちろん
+    - 頼るかもしれない
+    - 私から見ると、はい
+    - おそらく、可能性が高い
+    - 見通しが良い
     - はい。
-    - Signs point to yes
-    - Reply hazy try again
+    - サインはイエスに指す
+    - 返信が見にくい、もう一度聞いてください
     - 後で聞いて下さい。
-    - Better not tell you now
-    - Cannot predict now
-    - Concentrate and ask again
-    - Don't count on it
-    - My reply is no
-    - My sources say no
-    - Outlook not so good
-    - Very doubtful
-  rate: "I'd give {1} a {2}/10."
+    - 今は言いえないほうがいい
+    - 今は予測できない
+    - 集中してもう一度聞いてください
+    - 当てにならないで
+    - 私の答えはノー
+    - 情報筋はノーと言っている
+    - 見通しが悪い
+    - かなり怪しい
+  rate: "その{1} に{2}/10を与えよう。"
 tags:
   added: "タグを保存しました！"
   deleted: "{1} タグを削除しました！"
 osu:
-  profile: "osu! Profile for {1}"
-  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
-  stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
-  official: "in osu! official server"
+  profile: "{1} のosu! プロファイル"
+  performance: 'パフォーマンス: {1}pp (#{2}、{3}#{4})'
+  stats: "▸ **レベル**: {1}\n▸ **精度**: {2}\n▸ **プレイ数**: {3}\n▸ **ランクスコア**: {4}\n▸ **合計スコア**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
+  official: "現在osu! 公式サーバーに入る"
 announcements:
-  footer: "This is a global announcement. You can disable them by running {0}."
+  footer: "こちらはグローバルのお知らせです。{0} を実行してそちらを無効にできます。"
