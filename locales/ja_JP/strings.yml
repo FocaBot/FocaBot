@@ -68,12 +68,12 @@ player:
     length: "長さ:"
     position: "列内の位置:"
     filters: "フィルター:"
-    startTime: "Start At:"
+    startTime: "再生時間:"
     estimated: "Estimated time for playback:"
     playlistLoading: "Loading playlist..."
     playlistCount: "**{1}** items loaded so far. (Use {2} to cancel)"
     playlistFinalCount: "**{1}** items."
-    playlistLoaded: "✅ Playlist Added!"
+    playlistLoaded: "プレイリスト追加!"
     playlistCancelled: "(Playlist Cancelled)"
     noSuchPage: "Page {1} does not exist."
     upNext: "次に:"
@@ -81,12 +81,12 @@ player:
     queueNext: "Use {1} to see the next page."
     playlistLoopMode: "🔁 Loop Mode Enabled! [Playlist]"
     songLoopMode: "🔂 Loop Mode Enabled! [Song]"
-    searching: "Searching..."
-    results: "Results:"
+    searching: "検索中..."
+    results: "結果:"
 admin:
-  languageChanged: "Language set to {1}!"
-  cantDelete: "Could not delete messages. Check if the bot has permission."
-  restarting: "FocaBot is restarting..."
+  languageChanged: "言語は {1} に設定しました!"
+  cantDelete: "メッセージを削除できませんでした。ボットが権限を持っているか確認してください。"
+  restarting: "FocaBotが再起動しています..."
   updating: "FocaBot is updating..."
   ytdlUpdate: "Downloading latest version of youtube-dl..."
   ytdlUpdated: "Successfully downloaded youtube-dl {1}!"
@@ -94,8 +94,8 @@ admin:
   nickChanged: "Nickname changed successfully!"
   avatarChanged: "Avatar changed successfully!"
   usernameChanged: "Username changed successfully!"
-  noUserSpecified: "No user specified."
-  blacklistAdd: "Blacklisted **{1}**."
+  noUserSpecified: "ユーザーが指定されていません。"
+  blacklistAdd: "**{1}** がブラックリストしました"
   blacklistRemove: "Removed **{1}** from the blacklist."
   noSuchModule: "No such module."
   noSuchCommand: "No such command."
@@ -149,9 +149,9 @@ rng:
     - It is certain
     - It is decidedly so
     - Without a doubt
-    - Yes, definitely
-    - You may rely on it
-    - As I see it, yes
+    - イエス、もちろん
+    - 頼るかもしれない
+    - 私から見ると、はい
     - Most likely
     - Outlook good
     - はい。
@@ -171,9 +171,9 @@ tags:
   added: "タグを保存しました！"
   deleted: "{1} タグを削除しました！"
 osu:
-  profile: "osu! Profile for {1}"
-  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
-  stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
+  profile: "{1} のosu! プロファイル"
+  performance: 'パフォーマンス: {1}pp (#{2}、{3}#{4})'
+  stats: "▸ **レベル**: {1}\n▸ **精度**: {2}\n▸ **プレイ数**: {3}\n▸ **ランクスコア**: {4}\n▸ **合計スコア**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "in osu! official server"
 announcements:
-  footer: "This is a global announcement. You can disable them by running {0}."
+  footer: "こちらはグローバルのお知らせです。{0} を実行してそちらを無効にできます。"
