@@ -5,7 +5,7 @@ class HelpModule extends BotModule
     @registerCommand 'help', { allowDM: true }, ({ msg, args, s, l })=>
       gstr = ''
       if msg.guild
-        gstr = "\n**#{l.gen l.help.prefix, msg.guild.name}**: `#{s.prefix}`\n"
+        gstr = "\n**#{l.gen l.help.prefix, msg.guild.name}** `#{s.prefix}`\n"
         # Calculate permission level
         level = 0
         level = 1 if Core.permissions.isDJ(msg.member)
