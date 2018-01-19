@@ -80,27 +80,25 @@ class PlayerModule extends BotModule
 
   ready: ->
     @registerEvent 'discord.voiceStateUpdate', (oldMember, newMember)=>
-      # User Joins a voice channel
-      unless oldMember.voiceChannel
+      # User Joins the same voice channel the bot's in
+      if newMember and newMember.voiceChannel? and newMember.voiceChannel.connection?
         player = @_guilds[newMember.guild.id]
-        return unless player and player.queue._d.nowPlaying and
-                      newMember.voiceChannel.id is player.queue._d.nowPlaying.voiceChannel.id
+        return unless player and player.queue.nowPlaying
         # Resume playback if suspended
-        if newMember.voiceChannel.members.length > 1 and
-        player.queue._d.nowPlaying.status is 'suspended'
+        if player.queue.nowPlaying.voiceChannel.members.size > 1 and
+        player.queue.nowPlaying.status is 'suspended'
           player.play()
           # Remove timeout
           if player.timeout
             clearTimeout player.timeout
             delete player.timeout
       
-      # User leaves or switches voice channels
-      if not newMember.voiceChannel or newMember.voiceChannel isnt oldMember.voiceChannel
-        player = @_guilds[newMember.guild.id]
-        return unless player and player.queue._d.nowPlaying and
-                      oldMember.voiceChannel.id is player.queue._d.nowPlaying.voiceChannel.id
+      # User leaves the voice channel the bot's in
+      if oldMember and oldMember.voiceChannel? and oldMember.voiceChannel.connection?
+        player = @_guilds[oldMember.guild.id]
+        return unless player and player.queue.nowPlaying
         # Empty voice channel
-        if player.queue.nowPlaying.voiceChannel.members.length <= 1
+        if player.queue.nowPlaying.voiceChannel.members.size <= 1
           player.suspend()
           if not player.timeout
             # Inactivity timeout
@@ -109,11 +107,21 @@ class PlayerModule extends BotModule
             , 240 * 60 * 1000 # 4 hours
 
       # Bot Switches Voice Channels
-      if newMember.id is Core.bot.user.id and oldMember.voiceChannel isnt newMember.voiceChannel
+      if newMember.id is Core.bot.user.id and newMember.voiceChannel?
         player = @_guilds[newMember.guild.id]
-        return player.skip() if player.queue._d.nowPlaying and not newMember.voiceChannel
-        player.queue.nowPlaying._d.voiceChannel = newMember.voiceChannel.id
+        return player.skip() if player.queue.nowPlaying and not newMember.voiceChannel?
+        return unless player.queue.nowPlaying and
+                      player.queue.nowPlaying.voiceChannel.id isnt newMember.voiceChannel.id
+        player.queue.nowPlaying.voiceChannel = newMember.voiceChannel
         player.queue.emit('updated')
+        # Empty voice channel
+        if player.queue.nowPlaying.voiceChannel.members.size <= 1
+          player.suspend()
+          if not player.timeout
+            # Inactivity timeout
+            player.timeout = setTimeout ->
+              player.stop()
+            , 240 * 60 * 1000 # 4 hours
 
   unload: ->
     # Remove ALL event listeners
