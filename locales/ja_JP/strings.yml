@@ -76,7 +76,7 @@ player:
     playlistLoaded: "✅ Playlist Added!"
     playlistCancelled: "(Playlist Cancelled)"
     noSuchPage: "Page {1} does not exist."
-    upNext: "Up next:"
+    upNext: "次に:"
     queueFooter: "{1} total items ({2}). Page {3}/{4}"
     queueNext: "Use {1} to see the next page."
     playlistLoopMode: "🔁 Loop Mode Enabled! [Playlist]"
