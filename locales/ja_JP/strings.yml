@@ -87,13 +87,13 @@ admin:
   languageChanged: "言語は {1} に設定しました!"
   cantDelete: "メッセージを削除できませんでした。ボットが権限を持っているか確認してください。"
   restarting: "FocaBotが再起動しています..."
-  updating: "FocaBot is updating..."
+  updating: "FocaBotがアップデートしています..."
   ytdlUpdate: "Downloading latest version of youtube-dl..."
   ytdlUpdated: "Successfully downloaded youtube-dl {1}!"
   ytdlUpdateError: "Could not download latest version of youtube-dl, please try again."
   nickChanged: "Nickname changed successfully!"
   avatarChanged: "Avatar changed successfully!"
-  usernameChanged: "Username changed successfully!"
+  usernameChanged: "ユーザーネームの変更が完了しました"
   noUserSpecified: "ユーザーが指定されていません。"
   blacklistAdd: "**{1}** がブラックリストしました"
   blacklistRemove: "Removed **{1}** from the blacklist."
@@ -104,7 +104,7 @@ admin:
 config:
   parameter: "パラメータ:"
   value: "値:"
-  noParameter: "No parameter specified."
+  noParameter: "パラメータが指定されていません。"
   invalidParameter: "Invalid parameter specified."
   invalidValue: "Invalid value specified."
 danbooru:
@@ -136,36 +136,36 @@ raffle:
   totalParticipants: "**{1}** total participants."
   totalWinners: "**{1}** total winners."
   placements: "**__Raffle Placements__**:"
-  raffleStats: "Raffle stats for {1}"
-  participated: '**Participated**: {1}'
-  won: '**Won**: {1}'
+  raffleStats: "{1} の抽選情報"
+  participated: '**参加数**: {1}'
+  won: '**価値**: {1}'
   overall: "全般"
 rng:
-  roll: "{1} 🎲 rolls `{2}`."
-  total: '**Total**: __{1}__.'
+  roll: "{1} は`{2}`を振る🎲"
+  total: '* * 合計 * *: __{1}__。'
   notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
-  choice: "I choose {1}."
+  choice: "私は {1} を選択します"
   8ball:
-    - It is certain
-    - It is decidedly so
-    - Without a doubt
+    - 確かです
+    - もしろん確かです
+    - 疑いなく
     - イエス、もちろん
     - 頼るかもしれない
     - 私から見ると、はい
-    - Most likely
-    - Outlook good
+    - おそらく、可能性が高い
+    - 見通しが良い
     - はい。
-    - Signs point to yes
-    - Reply hazy try again
+    - サインはイエスに指す
+    - 返信が見にくい、もう一度聞いてください
     - 後で聞いて下さい。
-    - Better not tell you now
-    - Cannot predict now
-    - Concentrate and ask again
-    - Don't count on it
-    - My reply is no
-    - My sources say no
-    - Outlook not so good
-    - Very doubtful
+    - 今は言いえないほうがいい
+    - 今は予測できない
+    - 集中してもう一度聞いてください
+    - 当てにならないで
+    - 私の答えはノー
+    - 情報筋はノーと言っている
+    - 見通しが悪い
+    - かなり怪しい
   rate: "I'd give {1} a {2}/10."
 tags:
   added: "タグを保存しました！"
