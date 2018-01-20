@@ -116,22 +116,26 @@ class AdminModule extends BotModule
         """
     # Runs git pull and updates youtube-dl, then restarts the bot.
     @registerCommand 'update', owner, ({ msg, args, locale })=>
-      msg.channel.send locale.admin.updating
-      # TODO: update using npm as well
-      try Core.commands.run('exec', msg, 'git pull')
-      catch e
-        Core.log(e, 1)
+      a = args.trim().toLowerCase().split(' ')
+      if not args.length or 'bot' in args
+        msg.channel.send locale.admin.updating
+        try
+          if Core.properties.npm then Core.commands.run('exec', msg, 'npm update -g focabot')
+          else Core.commands.run('exec', msg, 'git pull')
+        catch e
+          Core.log(e, 1)
       # Update youtube-dl
-      msg.channel.send locale.admin.ytdlUpdate
-      try
-        ytdlVersion = await ytdl.update()
-        msg.channel.send locale.gen(locale.admin.ytdlUpdated, ytdlVersion)
-      catch e
-        Core.log(e, 1)
-        msg.channel.send locale.admin.ytdlUpdateError
+      if not args.length or 'ytdl' in args
+        msg.channel.send locale.admin.ytdlUpdate
+        try
+          ytdlVersion = await ytdl.update()
+          msg.channel.send locale.gen(locale.admin.ytdlUpdated, ytdlVersion)
+        catch e
+          Core.log(e, 1)
+          msg.channel.send locale.admin.ytdlUpdateError
       # Restart the bot
-      unless args.toLowerCase() is 'norestart'
-        Core.commands.run('restart', msg, args)
+      unless 'norestart' in args
+        Core.commands.run('restart', msg, 'global')
     @registerCommand 'setavatar', owner, ({ msg, args, locale })=>
       try
         if msg.attachments.first()
