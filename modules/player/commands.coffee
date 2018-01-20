@@ -22,16 +22,16 @@ class PlayerCommands
       # Process request
       q = args.split('|')[0].trim().split('\n')
       # Use Attachment URL if present
-      q = m.attachments.first().url if m.attachments.first()
+      q = [ m.attachments.first().url ] if m.attachments.first()
       # Display error if no query
       return m.reply(l.player.noQuery) unless q[0]
       # Filters
       filters = (args.split('|')[1] or '').trim()
       # Start Position
       time = 0
-      if args.match(/@\s?(\d+(:\d+)*)/)
+      if args.match(/@\s?(\d+(:\d+)*)/) and q.length is 1
         time = parseTime(args.match(/@\s?(\d+(:\d+)*)/)[1])
-        q = q.replace(/@\s?(\d+(:\d+)*)/, '').trim()
+        q[0] = q[0].replace(/@\s?(\d+(:\d+)*)/, '').trim()
         filters = filters.replace(/@\s?(\d+(:\d+)*)/, '').trim()
       Core.util.sendTyping(m.channel)
       try
@@ -238,7 +238,8 @@ class PlayerCommands
 
     # Seek
     @registerCommand 'seek', { aliases: ['s'], djOnly: true }, ({ msg, args, player })=>
-      try await player.seek(parseTime(args))
+      time = parseTime(args.trim() or 0)
+      try await player.seek(time) unless isNaN(time)
       catch e
         msg.reply e.message if e.message
 

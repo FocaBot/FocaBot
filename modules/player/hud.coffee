@@ -6,6 +6,8 @@ class PlayerHUD
 
     # Handle events
     @audioModule.registerEvent 'player.start', (player, item)=> try
+      return unless item.notify
+      item.notify = false
       s = await Core.settings.getForGuild(player.guild)
       l = Core.locales.getLocale(s.locale)
       # Show "Now Playing" when an item starts playing

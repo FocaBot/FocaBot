@@ -12,6 +12,12 @@ class QueueItem {
   constructor (data, queue) {
     this._d = data
     this.queue = queue
+    /**
+     * If set to true, a notification will be sent when this element starts playing.
+     * It's set to false after such notification is sent.
+     * @type {boolean}
+     */
+    this.notify = true
   }
 
   /**
