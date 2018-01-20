@@ -17,7 +17,7 @@ player:
   queueLimit: "You have exceeded the limit of items in queue for this server."
   invalidStart: "Invalid start time."
   playlistNoDJ: "Only DJs can add playlists."
-  notPlaying: "Nothing being played in this server."
+  notPlaying: "Nothing's being played in this server."
   skip: "**{1}** skipped the current song."
   noSkipAllowed: "You are not allowed to skip songs."
   voteSkip: "**{1}** voted to skip the current song ({2}/{3})"
