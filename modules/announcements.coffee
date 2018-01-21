@@ -22,7 +22,8 @@ class Announcements extends BotModule
         return if await Core.modules.isDisabledForGuild guild, @
         s = await Core.settings.getForGuild(guild)
         l = Core.locales.getLocale(s.locale)
-        c = s.commandChannel or guild.defaultChannel
+        c = guild.defaultChannel
+        try c = guild.channels.get(s.commandChannel) if s.commandChannel
         c.send embed: {
           title
           description: message
