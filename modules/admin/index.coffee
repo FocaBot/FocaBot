@@ -129,14 +129,13 @@ class AdminModule extends BotModule
         msg.channel.send locale.admin.ytdlUpdate
         try
           ytdlVersion = await ytdl.update()
-          msg.channel.send locale.gen(locale.admin.ytdlUpdated, ytdlVersion)
+          msg.channel.send locale.gen(locale.admin.ytdlUpdated, ytdlVersion.trim())
         catch e
           Core.log(e, 1)
           msg.channel.send locale.admin.ytdlUpdateError
       # Restart the bot
       unless 'norestart' in a
         Core.commands.run('restart', msg, 'global')
-
     @registerCommand 'setavatar', owner, ({ msg, args, locale })=>
       try
         if msg.attachments.first()

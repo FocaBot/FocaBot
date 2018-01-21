@@ -6,13 +6,17 @@ class Announcements extends BotModule
         message = args.slice(1).join('\n').trim()
       else
         message = args[0]
-      # coffeelint: disable=max_line_length
+      if msg.attachments.first()
+        image = msg.attachments.first().url
       Core.shard.broadcastEval """
-      Core.modules.loaded.announcements.announce(#{JSON.stringify(title)}, #{JSON.stringify(message)})
+      Core.modules.loaded.announcements.announce(
+        #{JSON.stringify(title)},
+        #{JSON.stringify(message)},
+        #{if image then JSON.stringify(image) else 'undefined'}
+      )
       """
-      # coffeelint: enable=max_line_length
   
-  announce: (title, message)->
+  announce: (title, message, image)->
     Core.bot.guilds.array().forEach (guild)=>
       try
         return if await Core.modules.isDisabledForGuild guild, @
@@ -23,6 +27,7 @@ class Announcements extends BotModule
           title
           description: message
           color: 0x00AAFF
+          image: if image then { url: image } else undefined
           footer:
             icon_url: Core.bot.user.displayAvatarURL
             text: l.gen(l.announcements.footer, "#{s.prefix}disable announcements")
