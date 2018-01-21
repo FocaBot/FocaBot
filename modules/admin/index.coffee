@@ -117,7 +117,7 @@ class AdminModule extends BotModule
     # Runs git pull and updates youtube-dl, then restarts the bot.
     @registerCommand 'update', owner, ({ msg, args, locale })=>
       a = args.trim().toLowerCase().split(' ')
-      if not args.length or 'bot' in args
+      if not args.length or 'bot' in a
         msg.channel.send locale.admin.updating
         try
           if Core.properties.npm then Core.commands.run('exec', msg, 'npm update -g focabot')
@@ -125,7 +125,7 @@ class AdminModule extends BotModule
         catch e
           Core.log(e, 1)
       # Update youtube-dl
-      if not args.length or 'ytdl' in args
+      if not args.length or 'ytdl' in a
         msg.channel.send locale.admin.ytdlUpdate
         try
           ytdlVersion = await ytdl.update()
@@ -134,8 +134,9 @@ class AdminModule extends BotModule
           Core.log(e, 1)
           msg.channel.send locale.admin.ytdlUpdateError
       # Restart the bot
-      unless 'norestart' in args
+      unless 'norestart' in a
         Core.commands.run('restart', msg, 'global')
+
     @registerCommand 'setavatar', owner, ({ msg, args, locale })=>
       try
         if msg.attachments.first()
