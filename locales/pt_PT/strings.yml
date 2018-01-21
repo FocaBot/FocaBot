@@ -176,4 +176,4 @@ osu:
   stats: "▸ **Nível**: {1} \n▸ **Precisão**: {2} \n▸ **Número de jogos**: {3} \n▸ **Pontuação Classificada**: {4} \n▸ **Pontuação Total**: {5} \n▸ ** SS**: {6} **S**: {7} **A**: {8}"
   official: "em osu! servidor oficial"
 announcements:
-  footer: "Este é um anúncio global. Você pode desabilitá-los executando {0}."
+  footer: "Este é um anúncio global. Você pode desabilitá-los executando {1}."
