@@ -33,6 +33,7 @@ module.exports =
         choices.push { name: 'osu (osu! player statics)', value: 'osu', checked: false }
     if advanced
       choices.push { name: 'eval (Evaluate CoffeeScript)', value: 'eval', checked: false }
+      choices.push { name: 'announcements (Make announcements)', value: 'eval', checked: false }
     if config.modules? then choices.forEach (module)->
       module.checked = config.modules.indexOf(module.value) >= 0
     return {
