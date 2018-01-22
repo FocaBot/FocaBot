@@ -126,7 +126,7 @@ poll:
 raffle:
   previousRaffleOpen: "A previous raffle is still open. ({1} participants).\nClose it with `{2}` before starting a new one."
   raffleStarted: "A new raffle has just started! To join, use the `{1}` command."
-  noRaffle: "There isn't any raffle going on right now."
+  noRaffle: "現在抽選が行われていない。"
   alreadyJoined: "この抽選にもう参加しています。"
   joined: "{1} が抽選に参加しました! (参加者 {2} 人)。"
   noParticipantsLeft: "残り参加者はありません。"
@@ -143,7 +143,7 @@ raffle:
 rng:
   roll: "{1} は`{2}`を振る🎲"
   total: '* * 合計 * *: __{1}__。'
-  notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
+  notEnoughItems: "選択肢が足りません。それらを区切るには `;`を使うのです。"
   choice: "私は {1} を選択します"
   8ball:
     - 確かです
