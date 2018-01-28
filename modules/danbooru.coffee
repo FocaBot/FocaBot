@@ -21,7 +21,7 @@ class DanbooruModule extends BotModule
       b = safebooru unless d.data.allowNSFW or msg.channel.name.indexOf('nsfw') >= 0
       # Blacklisted tags (discord community guidelines)
       for tag in tags.split(' ')
-        if tag in ['loli', 'shota', 'lolicon', 'toddlercon'] then return msg.reply '', false, {
+        if tag in ['loli', 'rori', 'shota', 'lolicon', 'toddlercon'] then return msg.reply '', false, {
           image:
             url: 'https://cdn.discordapp.com/attachments/244581077610397699/315655455143886850/Screenshot_from_2017-05-20_21-01-03.png'
         }
