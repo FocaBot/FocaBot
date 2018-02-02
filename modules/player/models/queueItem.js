@@ -18,6 +18,11 @@ class QueueItem {
      * @type {boolean}
      */
     this.notify = true
+    /**
+     * If set to true, the stream is considered to have errors and will be skipped by the bot.
+     * @type {boolean}
+     */
+    this.error = false
   }
 
   /**

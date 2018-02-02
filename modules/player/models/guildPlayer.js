@@ -1,5 +1,6 @@
 const reload = require('require-reload')(require)
 const EventEmitter = require('events')
+const { getInfo } = require('ytdl-getinfo')
 const GuildQueue = reload('./guildQueue')
 
 /**
@@ -79,16 +80,20 @@ class GuildPlayer extends EventEmitter {
         this.emit('end', item)
         if (this.queue.loopMode === 'all') {
           this.queue._d.nowPlaying.time = 0
-          this.queue._d.items.push(this.queue._d.nowPlaying)
+          this.refreshInfo(this.queue.nowPlaying)
+          s.inversePlaylist ? this.queue._d.items.unshift(this.queue._d.nowPlaying)
+                            : this.queue._d.items.push(this.queue._d.nowPlaying)
         }
         if (item.status === 'skipped') return
         if (this.queue.loopMode === 'single') {
           this.queue._d.nowPlaying.time = 0
+          this.refreshInfo(this.queue.nowPlaying)
           return this.play()
         }
         if (!this.queue._d.items.length) return this.stop()
-        if (this.queue._d.nowPlaying && item.uid != this.queue.nowPlaying.uid) return
-        this.queue._d.nowPlaying = this.queue._d.items.shift()
+        if (this.queue._d.nowPlaying && item.uid !== this.queue.nowPlaying.uid) return
+        this.queue._d.nowPlaying = s.inversePlaylist ? this.queue._d.items.pop()
+                                                     : this.queue._d.items.shift()
         this.play()
       })
       if (!silent) this.queue.emit('updated')
@@ -177,6 +182,21 @@ class GuildPlayer extends EventEmitter {
   }
 
   /**
+   * Refreshes video info in the background.
+   * Used when the loop mode is enabled in order to keep the stream URL up to date.
+   */
+  async refreshInfo (item) {
+    try {
+      const info = await getInfo(item.sauce)
+      if (!info.items[0]) throw new Error(`Couldn't refresh stream info for ${item.sauce}.`)
+      item.path = info.items[0].url
+    } catch (e) {
+      Core.log(e, 2)
+      item.error = true
+    }
+  }
+
+  /**
    * Player Volume
    * @type {number}
    */
@@ -202,14 +222,16 @@ class GuildPlayer extends EventEmitter {
   /**
    * Skips current item and starts playing the next one
    */
-  skip () {
+  async skip () {
+    const s = await Core.settings.getForGuild(this.guild)
     const item = this.queue.nowPlaying
     if (!item && !this.queue._d.items.length) return
     item.status = 'skipped'
     if (!this.queue._d.items.length) return this.stop()
-    
+
     this.audioPlayer.stop()
-    this.queue._d.nowPlaying = this.queue._d.items.shift()
+    this.queue._d.nowPlaying = s.inversePlaylist ? this.queue._d.items.pop()
+                                                 : this.queue._d.items.shift()
     this.play()
     this.queue.emit('updated')
   }
