@@ -83,5 +83,10 @@ fs.exists(configFile, async exists => {
     token: config.token
   })
 
-  ShardManager.spawn()
+  try {
+    await ShardManager.spawn()
+  } catch (e) {
+    console.error('Sharding unavailable, falling back to single-process mode.')
+    require('./shard')
+  }
 })

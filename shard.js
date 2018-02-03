@@ -40,4 +40,13 @@ focaBot.modules.load(JSON.parse(process.env.BOT_MODULES))
 // Let the seals in!!
 focaBot.establishConnection()
 
-focaBot.log(`Shard ${Core.shard.id || 0} started!`)
+if (Core.shard.id) {
+  focaBot.log(`Shard ${Core.shard.id} started!`)
+} else {
+  focaBot.log(`Started!`)
+  focaBot.bot.on('ready', () => {
+    if (!focaBot.bot.user.bot) {
+      focaBot.log('Running FocaBot in a non-bot user account. This is discouraged.', 2)
+    }
+  })
+}

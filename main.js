@@ -21,3 +21,7 @@ const ShardManager = new Discord.ShardingManager('shard.js', {
 })
 
 ShardManager.spawn()
+.catch(e => {
+  console.error('Sharding unavailable, falling back to single-process mode.')
+  require('./shard')
+})

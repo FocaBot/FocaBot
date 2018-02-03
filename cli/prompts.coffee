@@ -2,7 +2,7 @@ module.exports =
   token:
     name: 'token'
     message: 'Bot Token:'
-    validate: (token)-> /^\S{24}\.\S{6}\.\S{27}$/.test(token)
+    validate: (token)-> /^(\S{24}\.\S{6}\.\S{27}|mfa\.\S+)$/.test(token)
   prefix:
     name: 'prefix'
     message: 'Global Command Prefix:'

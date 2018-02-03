@@ -39,8 +39,13 @@ const translations = ['ar_SA', 'cs_CZ', 'de_DE', 'en_US', 'es_CL', 'es_ES', 'fr_
 translations.forEach(t => focaBot.locales.loadLocale(t))
 
 // Invite Link
-if (Core.shard.id === 0) {
+if (!Core.shard.id || Core.shard.id === 0) {
   focaBot.bot.on('ready', async () => {
+    if (!focaBot.bot.user.bot) {
+      focaBot.log('Running FocaBot in a non-bot user account. This is discouraged.', 2)
+      focaBot.properties.owner = [ focaBot.bot.user.id ]
+      return
+    }
     try {
       const app = await focaBot.bot.fetchApplication()
       focaBot.log('To add the bot to your server, use this link: ')
@@ -54,4 +59,8 @@ if (Core.shard.id === 0) {
 // Let the seals in!!
 focaBot.establishConnection()
 
-focaBot.log(`Shard ${Core.shard.id || 0} started!`)
+if (Core.shard.id) {
+  focaBot.log(`Shard ${Core.shard.id} started!`)
+} else {
+  focaBot.log(`Started!`)
+}
