@@ -69,6 +69,6 @@ module.exports =(config, file)->
         prompt = prompts[param]
         prompt = prompt(config, true) if typeof prompt is 'function'
         prompt = [ prompt ] if not prompt instanceof Array
-        r = await iq.prompt [ prompt ]
+        r = await iq.prompt prompt
         console.log(r)
         Object.assign(config, r)
