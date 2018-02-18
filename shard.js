@@ -1,4 +1,4 @@
-require('dotenv').config()
+try { require('dotenv').config() } catch (e) {}
 require('coffeescript/register')
 
 const path = require('path')

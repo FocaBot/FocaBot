@@ -66,6 +66,14 @@
       "description": "osu! API Key"
     }
   },
-  "image": "heroku/nodejs"
+  "image": "heroku/nodejs",
+  "formation": {
+    "web": {
+      "quantity": 0
+    },
+    "focabot": {
+      "quantity": 1
+    }
+  }
 }
 
