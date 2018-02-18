@@ -1,4 +1,4 @@
-try { require('dotenv').config() } catch (e) {}
+require('dotenv').config()
 const Discord = require('discord.js')
 
 console.log(`
