@@ -4,7 +4,7 @@
   "description": "Music with Seals!",
   "main": "main.js",
   "engines": {
-    "node": ">=8.0.0"
+    "node": "^8.0.0"
   },
   "scripts": {
     "start": "node main.js"
