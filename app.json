@@ -1,0 +1,71 @@
+{
+  "name": "FocaBot",
+  "description": "Music with seals!",
+  "keywords": [
+    "discord",
+    "music",
+    "bot"
+  ],
+  "website": "https://www.focabot.xyz/",
+  "repository": "https://github.com/FocaBot/FocaBot",
+  "logo": "https://focabot.thebit.link/static/focabot_lres.jpg",
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Discord Bot Token",
+      "required": true
+    },
+    "BOT_PREFIX": {
+      "description": "Command Prefix",
+      "value": "f'",
+      "required": true
+    },
+    "BOT_OWNER": {
+      "description": "Bot Owner(s)",
+      "value": "[\"164588804362076160\", \"183348498375114752\"]"
+    },
+    "BOT_MODULES": {
+      "description": "Modules to load at startup",
+      "value": "[\"ping\", \"admin\", \"eval\", \"help\", \"danbooru\", \"image\", \"poll\", \"raffle\", \"rng\", \"statics\", \"tags\", \"greet\", \"inlineCommands\", \"player\", \"dynamicNick\"]",
+      "required": true
+    },
+    "BOT_ADMINS": {
+      "description": "Global Bot Admins",
+      "value": "[]"
+    },
+    "BOT_ADMIN_ROLES": {
+      "description": "Admin Roles",
+      "value": "[\"Bot Commander\", \"Admin\"]"
+    },
+    "BOT_ADMIN_ROLES": {
+      "description": "DJ Roles",
+      "value": "[\"DJ\"]"
+    },
+    "HELP_MESSAGE": {
+      "description": "Help Message",
+      "value": "This will appear when you run the help command."
+    },
+    "GOOGLE_KEY": {
+      "description": "Google API Key (for image search)"
+    },
+    "GOOGLE_CX": {
+      "description": "Google CSE ID (for image search)"
+    },
+    "IMGUR_KEY": {
+      "description": "Imgur API key"
+    },
+    "DANBOORU_LOGIN": {
+      "description": "Danbooru Username"
+    },
+    "DANBOORU_API_KEY": {
+      "description": "Danbooru API Key"
+    },
+    "TUMBLR_CONSUMER_KEY": {
+      "description": "Tumblr consumer key"
+    },
+    "OSU_KEY": {
+      "description": "osu! API Key"
+    }
+  },
+  "image": "heroku/nodejs"
+}
+
