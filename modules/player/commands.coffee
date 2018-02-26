@@ -67,6 +67,9 @@ class PlayerCommands
               vid.startAt = time
               vid.filters = filters
               @util.processInfo(vid, m, player, true, vc)
+            info.once 'done', =>
+              return if info.cancelled
+              delete player.pendingPlaylist
           else
             info.once 'done', =>
               return if info.cancelled

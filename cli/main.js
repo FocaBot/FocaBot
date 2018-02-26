@@ -15,11 +15,11 @@ mkdirp.sync(dataPath)
 console.log(`
        .-.
       :   ;
-       "."               FocaBot v1.0.0-beta (Elegant Erizo)
+       "."               FocaBot v1.0.0 (Elegant Erizo)
        / \\               by > thebit.link
       /  |
     .'    \\
-   /.'   \`.\\             Documentation: https://next.focabot.xyz/
+   /.'   \`.\\             Documentation: https://www.focabot.xyz/
    ' \\    \`\`.            Support Server: https://discord.gg/V5drVUS
      _\`.____ \`-._        GitHub: https://www.github.com/FocaBot/
     /^^^^^^^^\`.\\^\\

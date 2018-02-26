@@ -49,7 +49,7 @@ class Playlists extends BotModule
         when 'collaborators', 'collaborator', 'collab', 'c'
           # Fetch the playlist
           return msg.reply l.generic.invalidArgs if not args[1] or not args[2]
-          playlist = await Core.data.get("Playlist:#{args[2]}")
+          playlist = await Core.data.get("Playlist:#{args[1]}")
           return msg.reply l.player.playlistNotFound unless playlist
           # Check if the user is allowed to update
           if playlist.owner isnt msg.author.id
@@ -57,14 +57,14 @@ class Playlists extends BotModule
           switch args[2]
             when 'add', 'a'
               u = msg.mentions.users.first()
-              return msg.reply l.generic.invalidArgs unless u
+              return msg.reply l.generic.invalidArgs unless u?
               if playlist.collaborators.indexOf(u.id) < 0
                 playlist.collaborators.push(u.id)
                 await Core.data.set("Playlist:#{args[2]}", playlist)
                 msg.reply l.player.playlistUpdated
             when 'remove', 'r'
               u = msg.mentions.users.first()
-              return msg.reply l.generic.invalidArgs unless u
+              return msg.reply l.generic.invalidArgs unless u?
               if playlist.collaborators.indexOf(u.id) >= 0
                 playlist.collaborators.splice(playlist.collaborators.indexOf(u.id), 1)
                 await Core.data.set("Playlist:#{args[2]}", playlist)

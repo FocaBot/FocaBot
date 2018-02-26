@@ -65,9 +65,9 @@ aws4@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.6.0.tgz#83ef5ca860b2b32e4a0deedee8c771b9db57471e"
 
-azarasi@^2.0.0-beta1:
-  version "2.0.0-beta1"
-  resolved "https://registry.yarnpkg.com/azarasi/-/azarasi-2.0.0-beta1.tgz#c75455d6beccf5a9a248f7635d6375a7677c18c3"
+azarasi@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/azarasi/-/azarasi-2.0.0.tgz#9a39bdcdf562aa631887f575678ac667384eb5ab"
   dependencies:
     colors "^1.1.2"
     discord.js "11.1.0"
