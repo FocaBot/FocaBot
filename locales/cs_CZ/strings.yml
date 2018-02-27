@@ -17,7 +17,7 @@ player:
   invalidStart: "Zadán neplatný čas pro začátek."
   playlistNoDJ: "Pouze DJ mohou přidávat playlisty."
   notPlaying: "Zde se nic nehraje."
-  skip: "**{1}** přeskočena aktuální písnička."
+  skip: "**{1}** přeskočil aktuální skladbu."
   noSkipAllowed: "Nejsi oprávněn přeskakovat písničky."
   voteSkip: "**{1}** hlasoval pro přeskočení aktuální písničky ({2}/{3})"
   alreadyVoted: "Opravdu chceš tuto písničku ***znovu*** přeskočit?"
