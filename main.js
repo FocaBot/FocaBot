@@ -4,7 +4,7 @@ const Discord = require('discord.js')
 console.log(`
        .-.
       :   ;
-       "."               FocaBot v1.0.0 (Elegant Erizo)
+       "."               FocaBot v1.0.1 (Elegant Erizo)
        / \\               by > thebit.link
       /  |
     .'    \\

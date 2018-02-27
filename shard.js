@@ -7,7 +7,7 @@ const Azarasi = require('azarasi')
 
 const focaBot = new Azarasi({
   name: 'FocaBot',
-  version: '1.0.0 (Elegant Erizo)',
+  version: '1.0.1 (Elegant Erizo)',
   prefix: process.env.BOT_PREFIX,
   token: process.env.BOT_TOKEN,
   owner: JSON.parse(process.env.BOT_OWNER),
@@ -21,7 +21,9 @@ const focaBot = new Azarasi({
   watch: true,
   dbFile: process.env.DB_FILE || 'data.db',
   dbPort: process.env.DB_PORT || 12920,
-  ffmpegBin: ffmpeg.path
+  ffmpegBin: ffmpeg.path,
+  redis: process.env.USE_REDIS,
+  redisURL: process.env.REDIS_URL
 })
 
 // These modules go first.
