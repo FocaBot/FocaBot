@@ -97,8 +97,8 @@ admin:
   noUserSpecified: "Uživatel nebyl specifikován."
   blacklistAdd: "Na černou listinu byl přidán **{1}**."
   blacklistRemove: "**{1}** byl odebrán z černé listiny."
-  noSuchModule: "No such module."
-  noSuchCommand: "No such command."
+  noSuchModule: "Žádný takový modul neexistuje."
+  noSuchCommand: "Takový příkaz neexistuje."
   permissionsUpdated: "Pravomoce byli aktualizovány!"
   invalidLevel: "Neplatná úroveň pravomocí."
 config:
@@ -109,20 +109,20 @@ config:
   invalidValue: "Byla zadána neplatná hodnota."
 danbooru:
   invalidTag: "Invalid safebooru tag"
-  noWaifu: "Run the {1} command first!"
+  noWaifu: "Nejprve napiš příkaz {1}!"
 help:
-  links: "Help links:"
-  prefix: "Prefix for {1}:"
-  commands: "Commands"
-  filters: "Filters"
-  manual: "Manual"
-  donate: "Donate"
+  links: "Nápověda:"
+  prefix: "Prefix pro {1}:"
+  commands: "Příkazy"
+  filters: "Filtry"
+  manual: "Manuál"
+  donate: "Podpořit vývojáře"
 image:
-  dailyLimit: "Daily limit exceeded for this command."
+  dailyLimit: "Denní limit překročen pro tento příkaz."
 poll:
-  tooManyAnswers: "Too many answers!!"
-  notEnoughAnswers: "You need to specify at least 2 answers."
-  pollStarted: "{1} started a poll:"
+  tooManyAnswers: "Příliš mnoho odpovědí!!"
+  notEnoughAnswers: "Je třeba zadat alespoň 2 odpovědi."
+  pollStarted: "{1} spustil hlasování:"
 raffle:
   previousRaffleOpen: "A previous raffle is still open. ({1} participants).\nClose it with `{2}` before starting a new one."
   raffleStarted: "A new raffle has just started! To join, use the `{1}` command."
