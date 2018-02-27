@@ -25,7 +25,7 @@ player:
   queueCleared: "Fronta je nyní prázdná."
   queueEmpty: "Fronta je prázdná."
   noSauce: "Promiň, není zde odkaz pro tuto skladbu..."
-  sauce: 'Zde je odkaz na aktuální písníčku: {1}'
+  sauce: "Zde je odkaz na aktuální písníčku: {1}"
   noSuchItem: "Nemohu najít specifikovanou položku ve frontě."
   onlyRemoveOwn: "Můžeš odstranit z fronty pouze skladby, které jsi přidal."
   noVolumeChange: "Pouze DJ může změnit hlasitost bota."
@@ -45,7 +45,7 @@ player:
   filterErrors: "Filtr hlásí chyby:"
   multiRemove: "Smazáno **{1}** skladeb z fronty!"
   playlistAlreadyLoading: "Jiný playlist skladeb se načítá, prosím počkejte."
-  noQuery: "No query specified."
+  noQuery: "Dotaz nebyl zadán."
   playlistSaved: "Playlist uložen!"
   playlistUpdated: "Playlist aktualizován!"
   playlistNotFound: "Takovýto playlist neexistuje."
@@ -56,14 +56,14 @@ player:
     nowPlaying: "Právě hraje v `{1}`:"
     removed: "Smazáno z fronty:"
     added: "Přidáno do fronty:"
-    currentVolume: 'Aktuální hlasitost: **{1}**.'
+    currentVolume: "Aktuální hlasitost: **{1}**."
     volumeSet: "{1} nastavil globální hlasitost na **{2}**."
     requestedBy: "Na žádost uživatele {1}"
     removedBy: "Smazal {1}"
     radioStream: "**__Rádio__**"
-    radioTrack: '**Název skladby**: `{1}`'
-    radioNext: '**Další skladba**: `{1}`'
-    swap: "{1} swapped some items:"
+    radioTrack: "**Název skladby**: `{1}`"
+    radioNext: "**Další skladba**: `{1}`"
+    swap: "{1} vyměnil některé položky:"
     move: "{1} přesunul tuto skladbu:"
     length: "Délka skladby:"
     position: "Pozice v řadě:"
@@ -137,42 +137,42 @@ raffle:
   totalWinners: "**{1}** total winners."
   placements: "**__Raffle Placements__**:"
   raffleStats: "Raffle stats for {1}"
-  participated: '**Participated**: {1}'
-  won: '**Won**: {1}'
+  participated: "**Participated**: {1}"
+  won: "**Won**: {1}"
   overall: "Overall"
 rng:
   roll: "{1} 🎲 rolls `{2}`."
-  total: '**Total**: __{1}__.'
+  total: "**Total**: __{1}__."
   notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
   choice: "I choose {1}."
   8ball:
-    - It is certain
-    - It is decidedly so
-    - Without a doubt
-    - Yes, definitely
-    - You may rely on it
-    - As I see it, yes
-    - Most likely
-    - Outlook good
-    - Yes
-    - Signs point to yes
-    - Reply hazy try again
-    - Ask again later
-    - Better not tell you now
-    - Cannot predict now
-    - Concentrate and ask again
-    - Don't count on it
-    - My reply is no
-    - My sources say no
-    - Outlook not so good
-    - Very doubtful
+    - "It is certain"
+    - "It is decidedly so"
+    - "Without a doubt"
+    - "Yes, definitely"
+    - "You may rely on it"
+    - "As I see it, yes"
+    - "Most likely"
+    - "Outlook good"
+    - "Yes"
+    - "Signs point to yes"
+    - "Reply hazy try again"
+    - "Ask again later"
+    - "Better not tell you now"
+    - "Cannot predict now"
+    - "Concentrate and ask again"
+    - "Don't count on it"
+    - "My reply is no"
+    - "My sources say no"
+    - "Outlook not so good"
+    - "Very doubtful"
   rate: "I'd give {1} a {2}/10."
 tags:
   added: "Tag saved!"
   deleted: "Deleted {1} tags!"
 osu:
   profile: "osu! Profile for {1}"
-  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
+  performance: "Performance: {1}pp (#{2}, {3}#{4})"
   stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "in osu! official server"
 announcements:
