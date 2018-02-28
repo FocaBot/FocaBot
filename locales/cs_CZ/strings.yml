@@ -175,9 +175,5 @@ osu:
   performance: "Výkon: {1}pp (#{2}, {3}#{4})"
   stats: "▸ ** Level **: {1}\n▸ ** Přesnost **: {2}\n▸ ** Celkem her **: {3}\n▸ ** Bodované skóre **: {4}\n▸ ** Celkové skóre **: {5}\n▸ ** SS **: {6} ** S **: {7} ** A **: {8}"
   official: "v osu! oficiální server"
-  profile: "osu! Profile for {1}"
-  performance: "Performance: {1}pp (#{2}, {3}#{4})"
-  stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
-  official: "in osu! official server"
 announcements:
   footer: "Je to globální oznámení. Můžete je zakázat příkazem {1}."
