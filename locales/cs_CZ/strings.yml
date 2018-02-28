@@ -146,7 +146,6 @@ rng:
   notEnoughItems: "Není dostatek položek ze kterých vybírat. Nezapomeňte použít ';' k oddělení."
   choice: "Vybral jsem {1}."
   8ball:
-<<<<<<< HEAD
     - "To je jisté"
     - "Je to rozhodně tak"
     - "Bez pochyb"
@@ -168,29 +167,6 @@ rng:
     - "Aplikace Outlook není dobrá"
     - "Velmi pochybné"
   rate: "Dal bych {1} {2}/10."
-=======
-    - "It is certain"
-    - "It is decidedly so"
-    - "Without a doubt"
-    - "Yes, definitely"
-    - "You may rely on it"
-    - "As I see it, yes"
-    - "Nejspíše"
-    - "Aplikace Outlook je dobrá"
-    - "Ano"
-    - "Naznačuje, že ano"
-    - "Reply hazy try again"
-    - "Zeptejte se později znovu"
-    - "Better not tell you now"
-    - "Cannot predict now"
-    - "Concentrate and ask again"
-    - "Don't count on it"
-    - "My reply is no"
-    - "My sources say no"
-    - "Outlook not so good"
-    - "Very doubtful"
-  rate: "I'd give {1} a {2}/10."
->>>>>>> New translations strings.yml (Czech)
 tags:
   added: "Tag uložen!"
   deleted: "Smazáno {1} tagů!"
