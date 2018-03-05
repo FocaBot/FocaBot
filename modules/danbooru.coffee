@@ -32,11 +32,14 @@ class DanbooruModule extends BotModule
           msg.reply l.generic.error
           Core.log e, 2
         return
+      url =
+        if r.file_url.match(/^http/) then r.file_url
+        else "https://danbooru.donmai.us#{r.file_url}"
       # Send the picture
       msg.reply '', embed: {
         title: l.generic.sauceBtn
         url: "https://danbooru.donmai.us/posts/#{r.id}"
-        image: { url: "https://danbooru.donmai.us#{r.file_url}" }
+        image: { url }
       }
 
     @registerCommand 'safebooru', { allowDM: true, aliases: ['safe'] }, ({ msg, args, s, l })=>
@@ -49,11 +52,14 @@ class DanbooruModule extends BotModule
           msg.reply l.generic.error
           Core.log e, 2
         return
+      url =
+        if r.file_url.match(/^http/) then r.file_url
+        else "https://danbooru.donmai.us#{r.file_url}"
       # Send the picture
       msg.reply '', embed: {
         title: l.generic.sauceBtn
         url: "https://safebooru.donmai.us/posts/#{r.id}"
-        image: { url: "https://safebooru.donmai.us#{r.file_url}" }
+        image: { url }
       }
 
     @registerCommand 'setwaifu', { allowDM: true, aliases: ['sw'] }, ({ msg, args, s, l })=>
