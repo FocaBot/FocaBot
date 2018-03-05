@@ -205,7 +205,12 @@ class GuildPlayer extends EventEmitter {
   }
 
   set volume (v) {
-    const l = Core.locales.getLocale(this.guildData.data.settings.locale || Core.properties.locale)
+    let l
+    try {
+      l = Core.locales.getLocale(this.guildData.data.settings.locale || Core.properties.locale)
+    } catch (e) {
+      l = Core.locales.getLocale(Core.properties.locale)
+    }
     const item = this.queue.nowPlaying
     if (item) {
       if (item.stat) throw new Error(l.player.restrictiveFilters)
