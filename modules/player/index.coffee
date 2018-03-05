@@ -24,6 +24,7 @@ class PlayerModule extends BotModule
     @registerParameter 'maxItems', { type: Number, def: 0 }
     @registerParameter 'asyncPlaylists', { type: Boolean, def: false }
     @registerParameter 'inversePlaylist', { type: Boolean, def: false }
+    @registerParameter 'unrestrictedLivestreams', { type: Boolean, def: false }
 
   getForGuild: (guild)->
     return @_guilds[guild.id] if @_guilds[guild.id]?

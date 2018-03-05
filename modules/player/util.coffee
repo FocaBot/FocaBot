@@ -70,8 +70,10 @@ class PlayerUtil
 
   # Checks the element duration to avoid long items
   checkLength: (duration, msg, s)->
-    unless (isFinite(duration) and duration > 0) or @permissions.isDJ(msg.member)
-      return 2 # Can't add livestreams
+    unless (isFinite(duration) and duration > 0) or
+      s.unrestrictedLivestreams or
+      @permissions.isDJ(msg.member)
+        return 2 # Can't add livestreams
     if (duration > s.maxSongLength and not @permissions.isDJ(msg.member)) or
       (duration > 43200  and not @permissions.isAdmin(msg.member)) or
       (duration > 86400 and not @permissions.isOwner(msg.member))
