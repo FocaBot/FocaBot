@@ -25,7 +25,7 @@ player:
   queueCleared: "File d'attente vidée."
   queueEmpty: "La file d'attente est vide."
   noSauce: "Désolé, on ne peut pas envoyer la source pour cet élément..."
-  sauce: 'Voici la source envoyée pour l''élément en cours : {1}'
+  sauce: "Voici la source envoyée pour l'élément en cours : {1}"
   noSuchItem: "Impossible de trouver l’élément spécifié dans la file d’attente."
   onlyRemoveOwn: "Vous pouvez seulement retirer vos propres éléments de la file d'attente."
   noVolumeChange: "Seuls les DJs peuvent modifier le volume."
@@ -56,13 +56,13 @@ player:
     nowPlaying: "En cours de lecture dans `{1}` :"
     removed: "Retiré de la file d'attente :"
     added: "Ajouté à la file d’attente :"
-    currentVolume: 'Volume actuel : **{1}**.'
+    currentVolume: "Volume actuel : **{1}**."
     volumeSet: "{1} a défini la valeur globale du volume à **{2}**."
     requestedBy: "Demandé par {1}"
     removedBy: "Supprimé par {1}"
     radioStream: "**__Stream radio__**"
-    radioTrack: '**Titre de la piste** : `{1}`'
-    radioNext: '**Piste suivante** : `{1}`'
+    radioTrack: "**Titre de la piste** : `{1}`"
+    radioNext: "**Piste suivante** : `{1}`"
     swap: "{1} a échangé des éléments :"
     move: "{1} a déplacé les éléments suivants :"
     length: "Longueur :"
@@ -137,42 +137,42 @@ raffle:
   totalWinners: "**{1}** gagnant(s) au total."
   placements: "**__Tirages__** :"
   raffleStats: "Statistiques de tirage au sort pour {1}"
-  participated: '**A participé à** : {1}'
-  won: '**A gagné** : {1}'
+  participated: "**A participé à** : {1}"
+  won: "**A gagné** : {1}"
   overall: "En moyenne"
 rng:
   roll: "{1} fait un jet de 🎲 et obtient `{2}`."
-  total: '**Total** : __{1}__.'
+  total: "**Total** : __{1}__."
   notEnoughItems: "Il n'y a pas assez d'éléments pour choisir. Pensez-bien à utiliser `;` pour les séparer."
   choice: "Je choisis {1}."
   8ball:
-    - C'est certain
-    - Totalement
-    - Sans aucun doute
-    - Oui, sans aucun doute
-    - Vous pouvez y compter
-    - De mon point de vue, oui
-    - Très probablement
-    - Ça s'annonce bien
-    - Oui
-    - Les signes portent à croire que oui
-    - Réponse floue, essayez encore
-    - Réessayez plus tard
-    - Mieux vaut ne rien dire pour le moment
-    - Je ne peux rien prédire pour le moment
-    - Concentrez-vous et posez la question à nouveau
-    - Ne comptez pas dessus
-    - Ma réponse est non
-    - Mes sources me disent non
-    - Ça s'annonce plutôt mal
-    - J'en doute fort
+    - "C'est certain"
+    - "Totalement"
+    - "Sans aucun doute"
+    - "Oui, sans aucun doute"
+    - "Vous pouvez y compter"
+    - "De mon point de vue, oui"
+    - "Très probablement"
+    - "Ça s'annonce bien"
+    - "Oui"
+    - "Les signes portent à croire que oui"
+    - "Réponse floue, essayez encore"
+    - "Réessayez plus tard"
+    - "Mieux vaut ne rien dire pour le moment"
+    - "Je ne peux rien prédire pour le moment"
+    - "Concentrez-vous et posez la question à nouveau"
+    - "Ne comptez pas dessus"
+    - "Ma réponse est non"
+    - "Mes sources me disent non"
+    - "Ça s'annonce plutôt mal"
+    - "J'en doute fort"
   rate: "Je donne un {2}/10 à {1}."
 tags:
   added: "Tag enregistré !"
   deleted: "{1} tag(s) supprimé(s) !"
 osu:
   profile: "Profil osu! de {1}"
-  performance: 'Performance : {1}pp (#{2}, {3}#{4})'
+  performance: "Performance : {1}pp (#{2}, {3}#{4})"
   stats: "▸ **Niveau**: {1}\n▸ **Précision**: {2}\n▸ **Nombre de tentatives**: {3}\n▸ **Score classé**: {4}\n▸ **Score total**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "dans le serveur officiel de osu!"
 announcements:
