@@ -25,7 +25,7 @@ player:
   queueCleared: "Cola vaciada."
   queueEmpty: "La cola está vacía."
   noSauce: "No hay salsa para el elemento actual..."
-  sauce: 'Aquí está la salsa del elemento actual: {1}'
+  sauce: "Aquí está la salsa del elemento actual: {1}"
   noSuchItem: "No se puede encontrar el elemento especificado en la cola."
   onlyRemoveOwn: "Sólo puedes eliminar tu propios elementos de la cola."
   noVolumeChange: "Sólo DJs pueden cambiar el volumen."
@@ -56,13 +56,13 @@ player:
     nowPlaying: "Reproduciendo actualmente en `{1}`:"
     removed: "Eliminado de la cola:"
     added: "Añadido a la cola:"
-    currentVolume: 'Volumen Actual: **{1}**.'
+    currentVolume: "Volumen Actual: **{1}**."
     volumeSet: "{1} estableció el volumen global en **{2}**."
     requestedBy: "Solicitado por {1}"
     removedBy: "Eliminado por {1}"
     radioStream: "** __Transmisión de radio__ **"
-    radioTrack: '**Título de la pista**: `{1}`'
-    radioNext: '**Siguiente Pista**: `{1}`'
+    radioTrack: "**Título de la pista**: `{1}`"
+    radioNext: "**Siguiente Pista**: `{1}`"
     swap: "{1} intercambió algunos elementos:"
     move: "{1} movió el siguiente elemento:"
     length: "Duración:"
@@ -137,42 +137,42 @@ raffle:
   totalWinners: "**{1}** ganadores."
   placements: "**__Posiciones__**:"
   raffleStats: "Estadísticas de sorteo para {1}"
-  participated: '**Participó**: {1}'
-  won: '**Ganó**: {1}'
+  participated: "**Participó**: {1}"
+  won: "**Ganó**: {1}"
   overall: "En general"
 rng:
   roll: "{1} 🎲 obtiene`{2}`."
-  total: '**Total**: __{1}__.'
+  total: "**Total**: __{1}__."
   notEnoughItems: "No hay suficientes elementos de donde escoger. Recuerda usar `;` para separarlos."
   choice: "Elijo {1}."
   8ball:
-    - Ciertamente
-    - Definitivamente
-    - Sin lugar a dudas
-    - Sí, definitivamente
-    - Puedes contar con eso
-    - A mi parecer, si
-    - Muy probablemente
-    - El panorama es bueno
-    - Sí
-    - Las señales indican que si
-    - Respuesta muy vaga, intente de nuevo
-    - Pregunta mas tarde
-    - Mejor no decírtelo por ahora
-    - No puedo predecir ahora
-    - Concéntrate y pregúnta de nuevo
-    - No cuentes con ello
-    - Mi respuesta es no
-    - Mis fuentes dicen que no
-    - El panorama no es muy bueno
-    - Lo dudo mucho
+    - "Ciertamente"
+    - "Definitivamente"
+    - "Sin lugar a dudas"
+    - "Sí, definitivamente"
+    - "Puedes contar con eso"
+    - "A mi parecer, si"
+    - "Muy probablemente"
+    - "El panorama es bueno"
+    - "Sí"
+    - "Las señales indican que si"
+    - "Respuesta muy vaga, intente de nuevo"
+    - "Pregunta mas tarde"
+    - "Mejor no decírtelo por ahora"
+    - "No puedo predecir ahora"
+    - "Concéntrate y pregúnta de nuevo"
+    - "No cuentes con ello"
+    - "Mi respuesta es no"
+    - "Mis fuentes dicen que no"
+    - "El panorama no es muy bueno"
+    - "Lo dudo mucho"
   rate: "Le daría a {1} un {2}/10."
 tags:
   added: "¡Etiqueta guardada!"
   deleted: "¡Se han eliminado {1} etiquetas!"
 osu:
   profile: "Perfil de osu! para {1}"
-  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
+  performance: "Performance: {1}pp (#{2}, {3}#{4})"
   stats: "▸ **Nivel**: {1}\n▸ **Precisión**: {2}\n▸ **Conteo de jugadas**: {3}\n▸ **Puntaje clasificado**: {4}\n▸ **Puntaje total**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "en el servidor oficial de osu!"
 announcements:
