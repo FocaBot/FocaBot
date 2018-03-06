@@ -25,7 +25,7 @@ player:
   queueCleared: "Fila de espera limpa."
   queueEmpty: "A fila de espera está vazia."
   noSauce: "Desculpa, sem fontes para o item actual..."
-  sauce: 'Aqui está a fonte do item actual: {1}'
+  sauce: "Aqui está a fonte do item actual: {1}"
   noSuchItem: "Não consigo encontrar o item especificado na fila de espera."
   onlyRemoveOwn: "Apenas podes remover os teus próprios items da fila da espera."
   noVolumeChange: "Apenas DJs podem alterar o volume."
@@ -56,13 +56,13 @@ player:
     nowPlaying: "Agora a tocar no `{1}`:"
     removed: "Removido da fila de espera:"
     added: "Adicionado à fila de espera:"
-    currentVolume: 'Volume actual: * *{1} * *.'
+    currentVolume: "Volume actual: * *{1} * *."
     volumeSet: "{1} definiu o volume global * *{2} * *."
     requestedBy: "Pedido pelo {1}"
     removedBy: "Removido pelo {1}"
     radioStream: "* * __Stream de rádio__ * *"
-    radioTrack: '* * Título da faixa * *: ''{1}'''
-    radioNext: '* * Próxima faixa* *: ''{1}'''
+    radioTrack: "* * Título da faixa * *: '{1}'"
+    radioNext: "* * Próxima faixa* *: '{1}'"
     swap: "{1} trocou alguns itens:"
     move: "{1} moveu o seguinte item:"
     length: "Duração:"
@@ -137,42 +137,42 @@ raffle:
   totalWinners: "* *{1} * * vencedores totais."
   placements: "* * __Classificações do Sorteio__ * *:"
   raffleStats: "Estatísticas de sorteio para {1}"
-  participated: '* * Participações * *: {1}'
-  won: '* * Vitórias * *: {1}'
+  participated: "* * Participações * *: {1}"
+  won: "* * Vitórias * *: {1}"
   overall: "Geral"
 rng:
   roll: "{1} 🎲 rolou '{2}'."
-  total: '* * Total * *: __{1}__.'
+  total: "* * Total * *: __{1}__."
   notEnoughItems: "Não há escolhas suficientes. Lembra-te de usar `;` para as separar."
   choice: "Eu escolho {1}."
   8ball:
-    - De certeza
-    - Decisivamente que sim
-    - Sem dúvida
-    - Sim, definitivamente
-    - Podes contar com isso
-    - Do meu ponto de vista, sim
-    - Muito provável
-    - Boas perspectivas
-    - Sim
-    - Os sinais dizem que sim
-    - Resposta pouco clara, tenta de novo
-    - Pergunta-me novamente mais tarde
-    - É melhor não te dizer agora
-    - Não consigo prever agora
-    - Concentra-te e pergunta de novo
-    - Não contes com isso
-    - A minha resposta é não
-    - As minhas fontes dizem que não
-    - Perspectivas não são boas
-    - Duvido muito
+    - "De certeza"
+    - "Decisivamente que sim"
+    - "Sem dúvida"
+    - "Sim, definitivamente"
+    - "Podes contar com isso"
+    - "Do meu ponto de vista, sim"
+    - "Muito provável"
+    - "Boas perspectivas"
+    - "Sim"
+    - "Os sinais dizem que sim"
+    - "Resposta pouco clara, tenta de novo"
+    - "Pergunta-me novamente mais tarde"
+    - "É melhor não te dizer agora"
+    - "Não consigo prever agora"
+    - "Concentra-te e pergunta de novo"
+    - "Não contes com isso"
+    - "A minha resposta é não"
+    - "As minhas fontes dizem que não"
+    - "Perspectivas não são boas"
+    - "Duvido muito"
   rate: "Eu daria a {1} um {2}/10."
 tags:
   added: "Etiqueta guardada!"
   deleted: "Apaguei {1} etiquetas!"
 osu:
   profile: "osu! Perfil para {1}"
-  performance: 'Desempenho: {1}pp (#{2}, {3}#{4})'
+  performance: "Desempenho: {1}pp (#{2}, {3}#{4})"
   stats: "▸ **Nível**: {1} \n▸ **Precisão**: {2} \n▸ **Número de jogos**: {3} \n▸ **Pontuação Classificada**: {4} \n▸ **Pontuação Total**: {5} \n▸ ** SS**: {6} **S**: {7} **A**: {8}"
   official: "em osu! servidor oficial"
 announcements:
