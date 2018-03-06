@@ -25,7 +25,7 @@ player:
   queueCleared: "列がクリアされました。"
   queueEmpty: "列に何もありません。"
   noSauce: "申し訳ありませんが、このアイテムにソースがない。"
-  sauce: '現在のアイテムのソース: {1}'
+  sauce: "現在のアイテムのソース: {1}"
   noSuchItem: "列に指定されたアイテムが見つかりません。"
   onlyRemoveOwn: "列から削除するアイテムは貴方のみのアイテムです。"
   noVolumeChange: "DJを持つユーザーだけがボリュームを変化できます。"
@@ -41,9 +41,9 @@ player:
   livestreamFilters: "フィルターを変化できません。 (ライブストリーミング)"
   restrictiveFiltersAdd: "再生中に制限フィルターを追加できません。"
   noStreamVolume: "ボリュームを変化できません。(ライブストリーミング)"
-  tooLong: "The requested video is too long"
+  tooLong: "要求された動画が長すぎます"
   filterErrors: "フィルターはエラーが報告されます:"
-  multiRemove: "Removed **{1}** items from the queue!"
+  multiRemove: "列から{1} のアイテムが削除しました！"
   playlistAlreadyLoading: "他の再生リストが読み込みしているので、しばらく待っていてください。"
   noQuery: "質問が指定されていません。"
   playlistSaved: "再生リストが保存されました。"
@@ -56,13 +56,13 @@ player:
     nowPlaying: "`{1}`で再生中:"
     removed: "列から消されました:"
     added: "列に追加しました:"
-    currentVolume: '現在のボリューム: **{1}**.'
+    currentVolume: "現在のボリューム: **{1}**."
     volumeSet: "{1} がグローバルボリュームを **{2}** に設定"
     requestedBy: "{1} からのリクエスト"
     removedBy: "{1} が除去しました"
     radioStream: "* * __ラジオストリーミング__ * *"
-    radioTrack: '* * * トラック名 *: ''{1}'''
-    radioNext: '* * 次のトラック *: ''{1}'''
+    radioTrack: "* * * トラック名 *: '{1}'"
+    radioNext: "* * 次のトラック *: '{1}'"
     swap: "{1} はいくつかの項目を交換しました。"
     move: "{1} は次のアイテムを移動しました。"
     length: "長さ:"
@@ -71,14 +71,14 @@ player:
     startTime: "再生時間:"
     estimated: "再生の予定時間:"
     playlistLoading: "再生リストを読み込んでいます..."
-    playlistCount: "**{1}** items loaded so far. (Use {2} to cancel)"
+    playlistCount: "* *{1} * * アイテムはこれまでに読み込まれます。({2} を使用してキャンセルする)"
     playlistFinalCount: "**{1}** アイテム"
     playlistLoaded: "再生リストを追加!"
     playlistCancelled: "(再生リストをキャンセルしました)"
     noSuchPage: "{1} ページは存在しません。"
     upNext: "次に:"
-    queueFooter: "{1} total items ({2}). Page {3}/{4}"
-    queueNext: "Use {1} to see the next page."
+    queueFooter: "アイテム ({2}) の合計 {1}。ページ {3}/{4}"
+    queueNext: "{1} を使って次のページへ"
     playlistLoopMode: "🔁 ループモード起動! [Playlist]"
     songLoopMode: "🔁 ループモード起動! [Song]"
     searching: "検索中..."
@@ -88,9 +88,9 @@ admin:
   cantDelete: "メッセージを削除できませんでした。ボットが権限を持っているか確認してください。"
   restarting: "FocaBotが再起動しています..."
   updating: "FocaBotがアップデートしています..."
-  ytdlUpdate: "Downloading latest version of youtube-dl..."
-  ytdlUpdated: "Successfully downloaded youtube-dl {1}!"
-  ytdlUpdateError: "Could not download latest version of youtube-dl, please try again."
+  ytdlUpdate: "Youtube-dlの最新バージョンをダウンロードしています..."
+  ytdlUpdated: "Youtube-dl {1} 正常にダウンロードしました！"
+  ytdlUpdateError: "Youtube-dl の最新バージョンをダウンロードすることが出来なかった。もう一度試してみよう"
   nickChanged: "ユーザーネームの変更が完了しました!"
   avatarChanged: "アバターの変更が完了しました!"
   usernameChanged: "ユーザーネームの変更が完了しました"
@@ -100,12 +100,12 @@ admin:
   noSuchModule: "このようなモジュールはありません。"
   noSuchCommand: "このようなコマンドがありません。"
   permissionsUpdated: "アクセス許可が更新されました!"
-  invalidLevel: "Invalid permission level."
+  invalidLevel: "無効なアクセス許可レベルです。"
 config:
   parameter: "パラメータ:"
   value: "値:"
   noParameter: "パラメータが指定されていません。"
-  invalidParameter: "Invalid parameter specified."
+  invalidParameter: "無効なパラメータが指定されています"
   invalidValue: "無効なバリューが指定されました。"
 danbooru:
   invalidTag: "無効な safebooru タグ"
@@ -118,15 +118,15 @@ help:
   manual: "マニュアル"
   donate: "寄付する"
 image:
-  dailyLimit: "Daily limit exceeded for this command."
+  dailyLimit: "毎日の制限を超えたコマンドです。"
 poll:
   tooManyAnswers: "解答が多すぎています。"
   notEnoughAnswers: "最低2つの回答を指定する必要があります。"
   pollStarted: "{1} が投票を開始しました"
 raffle:
-  previousRaffleOpen: "A previous raffle is still open. ({1} participants).\nClose it with `{2}` before starting a new one."
-  raffleStarted: "A new raffle has just started! To join, use the `{1}` command."
-  noRaffle: "There isn't any raffle going on right now."
+  previousRaffleOpen: "以前の抽選がまだ開いています。(参加者 {1} 人)。'{2}' で閉じて新しい抽選を作ることが出来ます。"
+  raffleStarted: "新しい抽選券が始まったばかりです！結合するには、 `{1}`コマンドを使用してください。"
+  noRaffle: "現在抽選が行われていない。"
   alreadyJoined: "この抽選にもう参加しています。"
   joined: "{1} が抽選に参加しました! (参加者 {2} 人)。"
   noParticipantsLeft: "残り参加者はありません。"
@@ -137,42 +137,42 @@ raffle:
   totalWinners: "優勝者 **{1}** 人"
   placements: "**__抽選結果__**:"
   raffleStats: "{1} の抽選情報"
-  participated: '**参加数**: {1}'
-  won: '**価値**: {1}'
+  participated: "**参加数**: {1}"
+  won: "**価値**: {1}"
   overall: "全般"
 rng:
   roll: "{1} は`{2}`を振る🎲"
-  total: '* * 合計 * *: __{1}__。'
-  notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
+  total: "* * 合計 * *: __{1}__。"
+  notEnoughItems: "選択肢が足りません。それらを区切るには `;`を使うのです。"
   choice: "私は {1} を選択します"
   8ball:
-    - 確かです
-    - もしろん確かです
-    - 疑いなく
-    - イエス、もちろん
-    - 頼るかもしれない
-    - 私から見ると、はい
-    - おそらく、可能性が高い
-    - 見通しが良い
-    - はい。
-    - サインはイエスに指す
-    - 返信が見にくい、もう一度聞いてください
-    - 後で聞いて下さい。
-    - 今は言いえないほうがいい
-    - 今は予測できない
-    - 集中してもう一度聞いてください
-    - 当てにならないで
-    - 私の答えはノー
-    - 情報筋はノーと言っている
-    - 見通しが悪い
-    - かなり怪しい
+    - "確かです"
+    - "もしろん確かです"
+    - "疑いなく"
+    - "イエス、もちろん"
+    - "頼るかもしれない"
+    - "私から見ると、はい"
+    - "おそらく、可能性が高い"
+    - "見通しが良い"
+    - "はい。"
+    - "サインはイエスに指す"
+    - "返信が見にくい、もう一度聞いてください"
+    - "後で聞いて下さい。"
+    - "今は言いえないほうがいい"
+    - "今は予測できない"
+    - "集中してもう一度聞いてください"
+    - "当てにならないで"
+    - "私の答えはノー"
+    - "情報筋はノーと言っている"
+    - "見通しが悪い"
+    - "かなり怪しい"
   rate: "その{1} に{2}/10を与えよう。"
 tags:
   added: "タグを保存しました！"
   deleted: "{1} タグを削除しました！"
 osu:
   profile: "{1} のosu! プロファイル"
-  performance: 'パフォーマンス: {1}pp (#{2}、{3}#{4})'
+  performance: "パフォーマンス: {1}pp (#{2}、{3}#{4})"
   stats: "▸ **レベル**: {1}\n▸ **精度**: {2}\n▸ **プレイ数**: {3}\n▸ **ランクスコア**: {4}\n▸ **合計スコア**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "現在osu! 公式サーバーに入る"
 announcements:
