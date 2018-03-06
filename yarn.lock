@@ -1237,8 +1237,8 @@ yauzl@^2.4.2:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.0.1"
 
-ytdl-getinfo@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/ytdl-getinfo/-/ytdl-getinfo-1.0.4.tgz#e7d9759c96337c6df76e1a1ced98552d7e59d178"
+ytdl-getinfo@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/ytdl-getinfo/-/ytdl-getinfo-1.0.5.tgz#c99d11e968285e4a2b65db932dd68ea84ba5c9d3"
   dependencies:
     request "^2.81.0"
