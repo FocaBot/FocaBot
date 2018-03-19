@@ -1,6 +1,6 @@
 {
   "name": "focabot",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Music with Seals!",
   "main": "main.js",
   "engines": {
