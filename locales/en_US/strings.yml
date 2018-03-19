@@ -1,5 +1,5 @@
 # FocaBot Locale File
-# Version 1.0.4
+# Version 1.0.5
 generic:
   error: "Something went wrong."
   invalidArgs: "Invalid arguments provided."
