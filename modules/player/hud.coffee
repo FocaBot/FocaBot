@@ -205,7 +205,7 @@ class PlayerHUD
         inline: true, name: l.player.hud.filters, value: @util.displayFilters item.filters
       }
     if item.radioStream
-      r.description += "\n#{await @radioInfo(item)}"
+      r.description += "\n#{await @radioInfo(item, l)}"
     r
 
   queue: (q, page=1, l, s)->
