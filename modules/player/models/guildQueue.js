@@ -77,6 +77,20 @@ class GuildQueue extends EventEmitter {
   }
 
   /**
+   * Radio Mode (background playback)
+   */
+  get radioMode () {
+    return this._d.radioMode
+  }
+
+  set radioMode (v) {
+    if (v && Core.properties.disableRadio) {
+      throw new Error('The bot owner has disabled radio mode for this instance.')
+    }
+    this._d.radioMode = v
+  }
+
+  /**
    * Add an item to the queue
    * @param {object} item - Item to add
    * @param {boolean} silent - If true, no event will be emitted
