@@ -182,7 +182,7 @@ class PlayerUtil
       thumbnail: info.thumbnail
       radioStream: info.isRadioStream or false
       time: info.startAt if isFinite(info.duration) and info.duration > 0
-      videoPath: info.formats.find((f)-> f.width and f.width >= 480) or info.url
+      videoPath: (info.formats.find((f)-> f.width and f.width >= 480) or info).url
       duration
       filters
     }, playlist, not play)
