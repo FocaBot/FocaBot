@@ -10,6 +10,7 @@ generic:
   helpBtn: "\\[click for help\\]"
   donateBtn: "\\[donate\\]"
   commandUsage: "Usage:"
+  cooldown: "This command has a cooldown, try again in a few seconds..."
 player:
   noVoice: "You must be in a voice channel."
   noSameVoice: "You must be in the same voice channel the bot is in."
@@ -53,6 +54,7 @@ player:
   playlistExists: "A playlist with that ID already exists."
   playlistForbidden: "You don't have permission to update that playlist."
   playlistDeleted: "Playlist deleted!"
+  screenshotError: "Couldn't take screenshot"
   hud:
     nowPlaying: "Now playing in `{1}`:"
     removed: "Removed from the queue:"
