@@ -7,7 +7,7 @@ const Azarasi = require('azarasi')
 
 const focaBot = new Azarasi({
   name: 'FocaBot',
-  version: '1.0.5 (Elegant Erizo)',
+  version: '1.1.0-alpha (Fabulous Flamenco)',
   prefix: process.env.BOT_PREFIX,
   token: process.env.BOT_TOKEN,
   owner: JSON.parse(process.env.BOT_OWNER),
