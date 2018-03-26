@@ -54,7 +54,6 @@ player:
   playlistForbidden: "No tienes permiso para actualizar esa lista de reproducción."
   playlistDeleted: "Lista de reproducción eliminada!"
   screenshotError: "No se pudo realizar la captura"
->>>>>>> New translations strings.yml (Spanish)
   hud:
     nowPlaying: "Reproduciendo actualmente en `{1}`:"
     removed: "Eliminado de la cola:"
