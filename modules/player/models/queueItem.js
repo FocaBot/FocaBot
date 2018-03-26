@@ -134,7 +134,7 @@ class QueueItem {
   }
 
   /**
-   * URL/Path of the file or stream to play
+   * URL/Path of the file or stream to play (audio only)
    * @type {string}
    */
   get path () {
@@ -143,6 +143,18 @@ class QueueItem {
 
   set path (v) {
     this._d.path = v
+  }
+
+  /**
+   * URL/Path of the video stream if present
+   * @type {string}
+   */
+  get videoPath () {
+    return this._d.videoPath
+  }
+
+  set videoPath (v) {
+    this._d.videoPath = v
   }
 
   /**

@@ -5,6 +5,7 @@ class PlayerCommands
   constructor: (@playerModule)->
     { @hud, @util, @search } = @playerModule
     { @permissions } = Core
+    @cooldown = {}
 
     # Play
     @registerCommand 'play', { aliases: ['p', 'request', 'add'] }, ({ m, args, s, player, l })=>
@@ -348,6 +349,26 @@ class PlayerCommands
           msg.channel.send l.generic.success
         else
           msg.channel.send l.generic.invalidArgs
+    
+    @registerCommand 'screenshot', ({ m, l, player })=>
+      return m.reply l.generic.cooldown if @cooldown[m.guild.id] > Date.now()
+      @cooldown[m.guild.id] = Date.now() + 10000
+      
+      { nowPlaying } = player.queue
+      return m.reply l.player.notPlaying unless nowPlaying
+      return m.reply l.player.screenshotError unless nowPlaying.videoPath
+      
+      try
+        Core.util.sendTyping(m.channel)
+        time = if nowPlaying.duration then nowPlaying.time else 0
+        screenshot = await @util.getScreenshot nowPlaying.videoPath, time
+        m.channel.send files: [{
+          name: "focabot-#{nowPlaying.uid}-#{time}.jpg"
+          attachment: screenshot
+        }]
+      catch e
+        Core.log e, 2
+        m.reply l.player.screenshotError
 
   registerCommand: -> @playerModule.registerCommand.apply(@playerModule, arguments)
 

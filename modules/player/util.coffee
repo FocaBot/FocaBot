@@ -6,6 +6,7 @@ url = require 'url'
 ytdl = require('ytdl-getinfo').getInfo
 filterdb = reload './filters'
 ffprobe = require('ffmpeg-downloader').probePath
+ffmpeg = require('ffmpeg-downloader').path
 
 class PlayerUtil
   constructor: ()->
@@ -114,7 +115,25 @@ class PlayerUtil
       '--force-ipv4',
       '--format=bestaudio/best'
     ])
-      
+  
+  # Uses FFMpeg to get a frame of a stream at a specified timestamp
+  getScreenshot: (streamUrl, time)-> new Promise (resolve, reject)->
+    b = []
+    spawn ffmpeg, [
+      '-ss', time
+      '-i', streamUrl
+      '-vframes', 1
+      '-vf', 'scale=480:-1'
+      '-q:v', 3
+      '-f', 'mjpeg'
+      '-'
+    ], { maxBuffer: Infinity }
+    .on 'close', (code)->
+      return reject code if code
+      resolve Buffer.concat b
+    .on 'error', reject
+    .stdout.on 'data', (chunk)->
+      b.push(chunk)
 
   # Parses a list of filters (| speed=2 distort, etc)
   parseFilters: (arg, member, playing)->
@@ -163,6 +182,7 @@ class PlayerUtil
       thumbnail: info.thumbnail
       radioStream: info.isRadioStream or false
       time: info.startAt if isFinite(info.duration) and info.duration > 0
+      videoPath: info.formats.find((f)-> f.width and f.width >= 480) or info.url
       duration
       filters
     }, playlist, not play)
