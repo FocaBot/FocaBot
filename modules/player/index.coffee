@@ -25,19 +25,23 @@ class PlayerModule extends BotModule
     @registerParameter 'asyncPlaylists', { type: Boolean, def: false }
     @registerParameter 'inversePlaylist', { type: Boolean, def: false }
     @registerParameter 'unrestrictedLivestreams', { type: Boolean, def: false }
+    @registerParameter 'radioPlaylist', { type: String, def: '-' }
+    @registerParameter 'radioChannel', { type: String, def: '-' }
+    @registerParameter 'radioShuffle', { type: Boolean, def: true }
 
   getForGuild: (guild)->
     return @_guilds[guild.id] if @_guilds[guild.id]?
     # Get guild data
     gData = await Core.guilds.getGuild(guild)
     # Create a new player object
-    player = new GuildPlayer guild, gData, await Core.data.get("GuildQueue:#{guild.id}") or {
+    player = new GuildPlayer guild, gData, Object.assign {
       # "empty" queue
       nowPlaying: undefined
       frozen: false
       volume: 1
-      items: []
-    }
+      items: [],
+      radioMode: false
+    }, await Core.data.get("GuildQueue:#{guild.id}")
     @_guilds[guild.id] = player
     @e.emit('newPlayer', player)
     # Relay all events
