@@ -9,7 +9,7 @@ generic:
   helpBtn: "\\[click para ayuda\\]"
   donateBtn: "\\[donar\\]"
   commandUsage: "Uso:"
-  cooldown: "This command has a cooldown, try again in a few seconds..."
+  cooldown: "Este comando tiene un cooldown, intenta de nuevo en unos segundos..."
 player:
   noVoice: "Debes estar en un canal de voz."
   noSameVoice: "Debes estar en el mismo canal de voz que el bot."
@@ -53,7 +53,7 @@ player:
   playlistExists: "Ya existe una lista de reproducción con ese ID."
   playlistForbidden: "No tienes permiso para actualizar esa lista de reproducción."
   playlistDeleted: "Lista de reproducción eliminada!"
-  screenshotError: "Couldn't take screenshot"
+  screenshotError: "No se pudo realizar la captura"
   hud:
     nowPlaying: "Reproduciendo actualmente en `{1}`:"
     removed: "Eliminado de la cola:"
