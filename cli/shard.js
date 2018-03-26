@@ -15,7 +15,7 @@ Object.assign(process.env, config.env)
 // Instantiate the bot
 const focaBot = new Azarasi({
   name: 'FocaBot',
-  version: '1.0.5 (Elegant Erizo)',
+  version: '1.1.0-alpha (Fabulous Flamenco)',
   token: config.token,
   prefix: config.prefix,
   adminRoles: [ config.adminRole ],
