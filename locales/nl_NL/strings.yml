@@ -9,6 +9,7 @@ generic:
   helpBtn: "[Klik voor help]"
   donateBtn: "[Doneer]"
   commandUsage: "Gebruik:"
+  cooldown: "This command has a cooldown, try again in a few seconds..."
 player:
   noVoice: "Je moet eerst in een spraakkanaal zitten."
   noSameVoice: "Je moet in hetzelfde spraakkanaal zitten waar de bot zit."
@@ -25,7 +26,7 @@ player:
   queueCleared: "Wachtrij leeggemaakt."
   queueEmpty: "De wachtrij is leeg."
   noSauce: "Sorry, geen bron voor het huidige nummer..."
-  sauce: 'Hier is de bron van het huidige nummer: {1}'
+  sauce: "Hier is de bron van het huidige nummer: {1}"
   noSuchItem: "Kan niet het opgegeven nummer in de wachtrij vinden."
   onlyRemoveOwn: "Je kunt alleen eigen nummers van de wachtrij verwijderen."
   noVolumeChange: "Alleen DJs kunnen de volume veranderen."
@@ -52,17 +53,18 @@ player:
   playlistExists: "A playlist with that ID already exists."
   playlistForbidden: "You don't have permission to update that playlist."
   playlistDeleted: "Playlist deleted!"
+  screenshotError: "Couldn't take screenshot"
   hud:
     nowPlaying: "Nu aan het spelen in `{1}`:"
     removed: "Verwijderd uit de wachtrij:"
     added: "Toegevoegd aan wachtrij:"
-    currentVolume: 'Huidige Volume: **{1}**.'
+    currentVolume: "Huidige Volume: **{1}**."
     volumeSet: "{1} heeft de globale volume veranderd naar **{2}**."
     requestedBy: "Gevraagd door {1}"
     removedBy: "Verwijderd door {1}"
     radioStream: "** __Radio stream__ **"
-    radioTrack: '** Titel van track **: ''{1}'''
-    radioNext: '** Volgende Track **: ''{1}'''
+    radioTrack: "** Titel van track **: '{1}'"
+    radioNext: "** Volgende Track **: '{1}'"
     swap: "{1} verwisseld sommige nummers:"
     move: "{1} verplaatst het volgende nummer:"
     length: "Lengte:"
@@ -137,42 +139,42 @@ raffle:
   totalWinners: "**{1}** total winners."
   placements: "**__Raffle Placements__**:"
   raffleStats: "Raffle stats for {1}"
-  participated: '**Participated**: {1}'
-  won: '**Won**: {1}'
+  participated: "**Participated**: {1}"
+  won: "**Won**: {1}"
   overall: "Overall"
 rng:
   roll: "{1} 🎲 rolls `{2}`."
-  total: '**Total**: __{1}__.'
+  total: "**Total**: __{1}__."
   notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
   choice: "I choose {1}."
   8ball:
-    - It is certain
-    - It is decidedly so
-    - Without a doubt
-    - Yes, definitely
-    - You may rely on it
-    - As I see it, yes
-    - Most likely
-    - Outlook good
-    - Yes
-    - Signs point to yes
-    - Reply hazy try again
-    - Ask again later
-    - Better not tell you now
-    - Cannot predict now
-    - Concentrate and ask again
-    - Don't count on it
-    - My reply is no
-    - My sources say no
-    - Outlook not so good
-    - Very doubtful
+    - "It is certain"
+    - "It is decidedly so"
+    - "Without a doubt"
+    - "Yes, definitely"
+    - "You may rely on it"
+    - "As I see it, yes"
+    - "Most likely"
+    - "Outlook good"
+    - "Yes"
+    - "Signs point to yes"
+    - "Reply hazy try again"
+    - "Ask again later"
+    - "Better not tell you now"
+    - "Cannot predict now"
+    - "Concentrate and ask again"
+    - "Don't count on it"
+    - "My reply is no"
+    - "My sources say no"
+    - "Outlook not so good"
+    - "Very doubtful"
   rate: "I'd give {1} a {2}/10."
 tags:
   added: "Tag saved!"
   deleted: "Deleted {1} tags!"
 osu:
   profile: "osu! Profile for {1}"
-  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
+  performance: "Performance: {1}pp (#{2}, {3}#{4})"
   stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "in osu! official server"
 announcements:
