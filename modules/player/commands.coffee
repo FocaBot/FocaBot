@@ -352,7 +352,7 @@ class PlayerCommands
     
     @registerCommand 'screenshot', { aliases: ['ss'] }, ({ m, l, player })=>
       return m.reply l.generic.cooldown if @cooldown[m.guild.id] > Date.now()
-      @cooldown[m.guild.id] = Date.now() + 10000
+      @cooldown[m.guild.id] = Date.now() + 5000
       
       { nowPlaying } = player.queue
       return m.reply l.player.notPlaying unless nowPlaying
@@ -360,7 +360,7 @@ class PlayerCommands
       
       try
         Core.util.sendTyping(m.channel)
-        time = if nowPlaying.duration then nowPlaying.time + 1 else 0
+        time = if nowPlaying.duration then nowPlaying.time + 2 else 0
         screenshot = await @util.getScreenshot nowPlaying.videoPath, time
         m.channel.send files: [{
           name: "focabot-#{nowPlaying.uid}-#{time}.jpg"
