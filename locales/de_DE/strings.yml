@@ -9,6 +9,7 @@ generic:
   helpBtn: "Drücke für Hilfe"
   donateBtn: "Spenden"
   commandUsage: "Verwendung:"
+  cooldown: "This command has a cooldown, try again in a few seconds..."
 player:
   noVoice: "Du musst in einem Sprachkanal sein."
   noSameVoice: "Du musst im gleichen Sprachkanal wie der Bot sein."
@@ -25,7 +26,7 @@ player:
   queueCleared: "Liste gelöscht."
   queueEmpty: "Die Warteschlange ist leer."
   noSauce: "Leider wurde keine Quelle zu dem aktuellen Item gefunden..."
-  sauce: 'Hier ist die Quelle des aktuellen Liedes: {1}'
+  sauce: "Hier ist die Quelle des aktuellen Liedes: {1}"
   noSuchItem: "Das angegebene Element konnte in der Warteschlange nicht gefunden werden."
   onlyRemoveOwn: "Du kannst nur eigene Lieder aus der Warteschlange löschen."
   noVolumeChange: "Nur DJs dürfen die Lautstärke ändern."
@@ -52,17 +53,18 @@ player:
   playlistExists: "Eine Playlist mit dieser ID existiert bereits."
   playlistForbidden: "Du hast keine Berechtigung, diese Playlist zu aktualisieren."
   playlistDeleted: "Playlist gelöscht!"
+  screenshotError: "Couldn't take screenshot"
   hud:
     nowPlaying: "Spielt jetzt in `{1}`"
     removed: "Aus der Warteschlange entfernt:"
     added: "Zur Warteschlange hinzugefügt:"
-    currentVolume: 'Aktuelle Lautstärke: **{1}**'
+    currentVolume: "Aktuelle Lautstärke: **{1}**"
     volumeSet: "{1} hat die globale Lautstärke auf **{2}** gestellt."
     requestedBy: "Eingereicht von {1}"
     removedBy: "Gelöscht von {1}"
     radioStream: "**__Radio Stream__**"
-    radioTrack: '**Liedname**: `{1}`'
-    radioNext: '**Nächstes Lied**: `{1}`'
+    radioTrack: "**Liedname**: `{1}`"
+    radioNext: "**Nächstes Lied**: `{1}`"
     swap: "{1} vertauschte Elemente:"
     move: "{1} verschob folgende Elemente:"
     length: "Länge:"
@@ -137,42 +139,42 @@ raffle:
   totalWinners: "**{1}** Gewinner insgesamt."
   placements: "**__Platzierungen der Auslosung__**:"
   raffleStats: "Auslosungs-Statistik für {1}"
-  participated: '**Teilgenommen**: {1}'
-  won: '**Gewonnen**: {1}'
+  participated: "**Teilgenommen**: {1}"
+  won: "**Gewonnen**: {1}"
   overall: "Insgesamt"
 rng:
   roll: "{1} 🎲 würfelt `{2}`."
-  total: '**Gesamt**: __{1}__.'
+  total: "**Gesamt**: __{1}__."
   notEnoughItems: "Nicht genügend Elemente zur Auswahl. Denke daran `;` zu benutzen, um diese zu trennen."
   choice: "Ich nehme {1}."
   8ball:
-    - Es ist sicher
-    - Es ist eindeutig so
-    - Ohne Zweifel
-    - Ja, auf jeden Fall
-    - Du kannst dich drauf verlassen
-    - So, wie ich es sehe, ja
-    - Am ehesten
-    - Gute Aussichten
-    - Ja
-    - Anzeichen deuten auf ja
-    - Antwort unklar, versuche es erneut
-    - Frag mich später noch einmal
-    - Sag es mir lieber nicht
-    - Ich kann jetzt nicht vorhersagen
-    - Konzentriere dich und frag nochmal
-    - Verlass dich nicht drauf
-    - Meine Antwort ist nein
-    - Meine Quellen sagen Nein
-    - Die Aussichten sind nicht so gut
-    - Sehr zweifelhaft
+    - "Es ist sicher"
+    - "Es ist eindeutig so"
+    - "Ohne Zweifel"
+    - "Ja, auf jeden Fall"
+    - "Du kannst dich drauf verlassen"
+    - "So, wie ich es sehe, ja"
+    - "Am ehesten"
+    - "Gute Aussichten"
+    - "Ja"
+    - "Anzeichen deuten auf ja"
+    - "Antwort unklar, versuche es erneut"
+    - "Frag mich später noch einmal"
+    - "Sag es mir lieber nicht"
+    - "Ich kann jetzt nicht vorhersagen"
+    - "Konzentriere dich und frag nochmal"
+    - "Verlass dich nicht drauf"
+    - "Meine Antwort ist nein"
+    - "Meine Quellen sagen Nein"
+    - "Die Aussichten sind nicht so gut"
+    - "Sehr zweifelhaft"
   rate: "Ich würde {1} eine {2}/10 geben."
 tags:
   added: "Stichwort gespeichert!"
   deleted: "{1} Tags gelöscht!"
 osu:
   profile: "osu! Profile for {1}"
-  performance: 'Performance: {1}pp (#{2}, {3}#{4})'
+  performance: "Performance: {1}pp (#{2}, {3}#{4})"
   stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "in osu! official server"
 announcements:
