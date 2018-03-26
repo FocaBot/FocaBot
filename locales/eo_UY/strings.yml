@@ -9,6 +9,7 @@ generic:
   helpBtn: "\\[alklaku por helpi\\]"
   donateBtn: "\\[donaci\\]"
   commandUsage: "Uzado:"
+  cooldown: "This command has a cooldown, try again in a few seconds..."
 player:
   noVoice: "Vi devas esti en voĉo kanalo."
   noSameVoice: "Vi devas esti en la sama voĉo-kanalo, kiun la bot estas."
@@ -52,6 +53,7 @@ player:
   playlistExists: "A playlist with that ID already exists."
   playlistForbidden: "Vi ne rajtas ĝisdatigi tiun playlist."
   playlistDeleted: "Playlist deleted!"
+  screenshotError: "Couldn't take screenshot"
   hud:
     nowPlaying: "Now playing in `{1}`:"
     removed: "Removed from the queue:"
