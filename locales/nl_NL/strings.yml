@@ -9,6 +9,7 @@ generic:
   helpBtn: "[Klik voor help]"
   donateBtn: "[Doneer]"
   commandUsage: "Gebruik:"
+  cooldown: "This command has a cooldown, try again in a few seconds..."
 player:
   noVoice: "Je moet eerst in een spraakkanaal zitten."
   noSameVoice: "Je moet in hetzelfde spraakkanaal zitten waar de bot zit."
@@ -52,6 +53,7 @@ player:
   playlistExists: "A playlist with that ID already exists."
   playlistForbidden: "You don't have permission to update that playlist."
   playlistDeleted: "Playlist deleted!"
+  screenshotError: "Couldn't take screenshot"
   hud:
     nowPlaying: "Nu aan het spelen in `{1}`:"
     removed: "Verwijderd uit de wachtrij:"
