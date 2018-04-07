@@ -11,6 +11,8 @@ generic:
   donateBtn: "\\[donate\\]"
   commandUsage: "Usage:"
   cooldown: "This command has a cooldown, try again in a few seconds..."
+  forbidden: "You are not allowed to use this command."
+  needRole: "You need the `{1}` role."
 player:
   noVoice: "You must be in a voice channel."
   noSameVoice: "You must be in the same voice channel the bot is in."
@@ -104,6 +106,8 @@ admin:
   noSuchCommand: "No such command."
   permissionsUpdated: "Permissions Updated!"
   invalidLevel: "Invalid permission level."
+  currentSettings: "Current settings for {1}:"
+  currentPermissionLevel: "Current permission level for {1}:"
 config:
   parameter: "Parameter:"
   value: "Value:"
@@ -180,3 +184,7 @@ osu:
   official: "in osu! official server"
 announcements:
   footer: "This is a global announcement. You can disable them by running {1}."
+lyrics:
+  searching: "Searching lyrics for {1}..."
+  title: "{1} lyrics:"
+  more: "\\[More at Genius.com\\]"
