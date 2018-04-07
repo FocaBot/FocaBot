@@ -18,6 +18,7 @@ module.exports =
       { name: 'ping (Pong!)', value: 'ping', checked: true }
       { name: 'player (Music Player)', value: 'player', checked: true }
       { name: 'playlists (Manage playlists inside the bot)', value: 'playlists', checked: true }
+      { name: 'lyrics (Lyrics Search)', value: 'lyrics', checked: true }
       { name: 'poll (Simple Polls)', value: 'poll', checked: true }
       { name: 'raffle (Simple Raffle System)', value: 'raffle', checked: true }
       { name: 'rng (Dice Rolls, 8ball, etc)', value: 'rng', checked: true }
