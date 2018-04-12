@@ -9,6 +9,7 @@ generic:
   helpBtn: "ヘルプ"
   donateBtn: "寄付する"
   commandUsage: "使用:"
+  cooldown: "This command has a cooldown, try again in a few seconds..."
 player:
   noVoice: "音声チャネルにいる必要があります。"
   noSameVoice: "ボットの同じ音声チャンネルに入る必要があります。"
@@ -52,6 +53,7 @@ player:
   playlistExists: "同じIDを持っている再生リストがすでに存在します。"
   playlistForbidden: "その再生リストをアップデートする権限がありません。"
   playlistDeleted: "再生リストが削除されました。"
+  screenshotError: "Couldn't take screenshot"
   hud:
     nowPlaying: "`{1}`で再生中:"
     removed: "列から消されました:"

@@ -9,6 +9,7 @@ generic:
   helpBtn: "\\[إضغط من أجل المساعدة\\]"
   donateBtn: "\\[ساهم بالتبرع\\]"
   commandUsage: "الاستخدام:"
+  cooldown: "This command has a cooldown, try again in a few seconds..."
 player:
   noVoice: "يجب أن تكون في قناة صوتية."
   noSameVoice: "يجب أن تكون في نفس القناة الصوت التي يتواجد بها الألي."
@@ -52,6 +53,7 @@ player:
   playlistExists: "A playlist with that ID already exists."
   playlistForbidden: "You don't have permission to update that playlist."
   playlistDeleted: "Playlist deleted!"
+  screenshotError: "Couldn't take screenshot"
   hud:
     nowPlaying: "ألعب الآن في `{1}`:"
     removed: "أزيل من قائمة الانتظار:"
