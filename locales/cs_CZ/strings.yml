@@ -9,6 +9,7 @@ generic:
   helpBtn: "\\[Potřebuji pomoc!\\]"
   donateBtn: "\\[Podpořit vývojáře\\]"
   commandUsage: "Použití:"
+  cooldown: "Pro použití tohoto příkazu musíš chvíli počkat..."
 player:
   noVoice: "Pro použití musíš být v hlasové místnosti."
   noSameVoice: "Musíš být ve stejné místnosti jako bot."
@@ -52,6 +53,7 @@ player:
   playlistExists: "Playlist s tímto ID již existuje."
   playlistForbidden: "Nemáš oprávnění aktualizovat tento playlist."
   playlistDeleted: "Playlist vymazán!"
+  screenshotError: "Snímek obrazovky se nepodařilo zachytit"
   hud:
     nowPlaying: "Právě hraje v `{1}`:"
     removed: "Smazáno z fronty:"
