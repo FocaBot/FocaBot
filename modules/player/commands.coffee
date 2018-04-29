@@ -360,7 +360,7 @@ class PlayerCommands
       
       try
         Core.util.sendTyping(m.channel)
-        time = if nowPlaying.duration then nowPlaying.time + 2 else 0
+        time = if nowPlaying.duration then nowPlaying.originalTime + 2 else 0
         screenshot = await @util.getScreenshot nowPlaying.videoPath, time
         m.channel.send files: [{
           name: "focabot-#{nowPlaying.uid}-#{time}.jpg"
