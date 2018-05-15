@@ -36,11 +36,13 @@ class AdminModule extends BotModule
       catch e
         Core.log(e, 1)
         msg.reply locale.admin.cantDelete
-    @registerCommand 'purge', admin, ({ msg, args, locale })=>
-      limit = parseInt(args)
+    @registerCommand 'purge', { adminOnly: true, argSeparator: ' ' }, ({ msg, args, locale })=>
+      limit = parseInt(args[0])
       if isFinite(limit) and limit > 0
         try
           messages = await msg.channel.fetchMessages { limit }
+          if msg.mentions.members.first()?
+            messages = messages.filter (m)-> m.member.id is msg.mentions.members.first()
           await msg.channel.bulkDelete(messages)
         catch e
           Core.log(e, 1)
