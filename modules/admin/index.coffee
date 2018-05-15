@@ -42,7 +42,7 @@ class AdminModule extends BotModule
         try
           messages = await msg.channel.fetchMessages { limit }
           if msg.mentions.members.first()?
-            messages = messages.filter (m)-> m.member.id is msg.mentions.members.first()
+            messages = messages.filter (m)-> m.member.id is msg.mentions.members.first().id
           await msg.channel.bulkDelete(messages)
         catch e
           Core.log(e, 1)
