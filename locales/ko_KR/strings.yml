@@ -143,7 +143,7 @@ raffle:
 rng:
   roll: "{1} 이/가 🎲 를 굴려 `{2}` 가 나왔습니다."
   total: "**도합**:__{1}__."
-  notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
+  notEnoughItems: "선택할 아이템들이 충분치 않습니다. `;` 을 사용해 분리하는 것을 잊지 마십시오."
   choice: "I choose {1}."
   8ball:
     - "It is certain"
