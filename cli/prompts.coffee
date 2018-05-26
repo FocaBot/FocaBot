@@ -58,7 +58,7 @@ module.exports =
     message: 'Default Language:'
     type: 'list'
     default: 'en_US'
-    choices: ['ar_SA', 'cs_CZ', 'de_DE', 'en_US', 'es_ES', 'fr_FR', 'ja_JP', 'nl_NL', 'pt_PT']
+    choices: ['ar_SA', 'cs_CZ', 'de_DE', 'en_US', 'eo_UY', 'es_ES', 'fr_FR', 'ko_KR', 'nl_NL', 'ja_JP', 'pt_PT']
   dbPort:
     name: 'dbPort'
     message: 'Internal Database Port:'
