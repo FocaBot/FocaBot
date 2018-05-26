@@ -139,10 +139,10 @@ raffle:
   raffleStats: "{1} 의 복권 추첨 통계"
   participated: "**참가 횟수**: {1}"
   won: "**우승 횟수**: {1}"
-  overall: "Overall"
+  overall: "종합"
 rng:
-  roll: "{1} 🎲 rolls `{2}`."
-  total: "**Total**: __{1}__."
+  roll: "{1} 이/가 🎲 를 굴려 `{2}` 가 나왔습니다."
+  total: "**도합**:__{1}__."
   notEnoughItems: "Not enough items to choose from. Remember to use `;` to separate them."
   choice: "I choose {1}."
   8ball:
