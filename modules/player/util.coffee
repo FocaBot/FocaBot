@@ -167,8 +167,8 @@ class PlayerUtil
     catch errors
       if typeof errors is 'string'
         return if playlist
-        return msg.reply l.player.filterErrors, false, {
-          description: errors,
+        return msg.reply l.player.filterErrors, embed: {
+          description: errors
           color: 0xFF0000
         }
     # Add the item to the queue
