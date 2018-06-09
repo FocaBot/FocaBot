@@ -5,8 +5,8 @@ url = require 'url'
 { parseTime } = Core.util
 ytdl = require('ytdl-getinfo').getInfo
 filterdb = reload './filters'
-ffprobe = require('ffmpeg-downloader').probePath
-ffmpeg = require('ffmpeg-downloader').path
+ffprobe = Core.properties.ffprobeBin
+ffmpeg = Core.properties.ffmpegBin
 
 class PlayerUtil
   constructor: ()->

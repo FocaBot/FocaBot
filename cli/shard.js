@@ -25,7 +25,8 @@ const focaBot = new Azarasi({
   locale: config.defaultLocale,
   dbFile: path.join(dataPath, 'data.db'),
   dbPort: config.dbPort || 12920,
-  ffmpegBin: ffmpeg.path,
+  ffmpegBin: config.ffmpegPath || ffmpeg.path,
+  ffprobeBin: config.ffprobePath || ffmpeg.probePath,
   npm: true
 })
 
