@@ -175,3 +175,13 @@ module.exports =
       '''
       'osu! API key'
     validate: (key)-> /^\S+$/.test(key.trim())
+  ffmpegCustom: [
+    {
+      name: 'ffmpegPath'
+      message: 'ffmpeg path'
+    }
+    {
+      name: 'ffprobePath'
+      message: 'ffprobe path'
+    }
+  ]

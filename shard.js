@@ -21,7 +21,8 @@ const focaBot = new Azarasi({
   watch: true,
   dbFile: process.env.DB_FILE || 'data.db',
   dbPort: process.env.DB_PORT || 12920,
-  ffmpegBin: ffmpeg.path,
+  ffmpegBin: process.env.FFMPEG_BIN || ffmpeg.path,
+  ffprobeBin: process.env.FFPROBE_BIN || ffmpeg.probePath,
   redis: process.env.USE_REDIS,
   redisURL: process.env.REDIS_URL
 })
