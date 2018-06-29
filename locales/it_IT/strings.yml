@@ -1,10 +1,10 @@
 ---
 generic:
-  error: "Something went wrong."
-  invalidArgs: "Invalid arguments provided."
-  noResults: "No results."
-  success: "Success!"
-  saved: "Saved!"
+  error: "Si è verificato un errore."
+  invalidArgs: "Le opzioni fornite non sono valide."
+  noResults: "Nessun risultato trovato."
+  success: "Riuscito!"
+  saved: "Salvato!"
   sauceBtn: "\\[click for sauce\\]"
   helpBtn: "\\[click for help\\]"
   donateBtn: "\\[donate\\]"
