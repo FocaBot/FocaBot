@@ -166,7 +166,7 @@ rng:
     - "Moje źródła mówią, że nie"
     - "Nie wygląda to za dobrze"
     - "Bardzo wątpliwe"
-  rate: "I'd give {1} a {2}/10."
+  rate: "Chciałbym dać {1} {2}/10."
 tags:
   added: "Tag zapisany!"
   deleted: "Usunięto Tagi {1}!"
@@ -176,4 +176,4 @@ osu:
   stats: "▸ ** Poziom **: {1}\n▸ ** Dokładność **: {2}\n▸ ** Liczba odtworzeń **: {3}\n▸ ** Ocena gości **: {4}\n▸ ** Łączny wynik **: {5}\n▸ ** SS **: {6} ** S **: {7} ** A **: {8}"
   official: "w osu! oficjalny serwer"
 announcements:
-  footer: "This is a global announcement. You can disable them by running {1}."
+  footer: "To jest globalne ogłoszenie. Możesz je wyłączyć, uruchamiając {1}."
