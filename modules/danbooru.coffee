@@ -33,8 +33,8 @@ class DanbooruModule extends BotModule
           Core.log e, 2
         return
       url =
-        if r.file_url.match(/^http/) then r.file_url.replace('//data', '/')
-        else "https://danbooru.donmai.us#{r.file_url.replace('//data', '/')}"
+        if r.file_url.match(/^http/) then r.file_url.replace('//data', '/data')
+        else "https://danbooru.donmai.us#{r.file_url.replace('//data', '/data')}"
       # Send the picture
       msg.reply '', embed: {
         title: l.generic.sauceBtn
@@ -53,8 +53,8 @@ class DanbooruModule extends BotModule
           Core.log e, 2
         return
       url =
-        if r.file_url.match(/^http/) then r.file_url.replace('//data', '/')
-        else "https://danbooru.donmai.us#{r.file_url.replace('//data', '/')}"
+        if r.file_url.match(/^http/) then r.file_url.replace('//data', '/data')
+        else "https://danbooru.donmai.us#{r.file_url.replace('//data', '/data')}"
       # Send the picture
       msg.reply '', embed: {
         title: l.generic.sauceBtn
