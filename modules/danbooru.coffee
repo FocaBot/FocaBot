@@ -34,7 +34,7 @@ class DanbooruModule extends BotModule
         return
       url =
         if r.file_url.match(/^http/) then r.file_url
-        else "https://danbooru.donmai.us#{r.file_url}"
+        else "https://danbooru.donmai.us#{r.file_url.replace(/\/\//g, '/')}"
       # Send the picture
       msg.reply '', embed: {
         title: l.generic.sauceBtn
@@ -54,7 +54,7 @@ class DanbooruModule extends BotModule
         return
       url =
         if r.file_url.match(/^http/) then r.file_url
-        else "https://danbooru.donmai.us#{r.file_url}"
+        else "https://danbooru.donmai.us#{r.file_url.replace(/\/\//g, '/')}"
       # Send the picture
       msg.reply '', embed: {
         title: l.generic.sauceBtn
