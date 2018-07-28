@@ -36,7 +36,7 @@ focaBot.settings.register('autoDel', { type: Boolean, def: true })
 focaBot.modules.load(['util', 'admin'])
 focaBot.modules.load(config.modules)
 // Translations
-const translations = ['ar_SA', 'cs_CZ', 'de_DE', 'en_US', 'es_CL', 'es_ES', 'fr_FR', 'ja_JP', 'pt_PT']
+const translations = ['ar_SA', 'cs_CZ', 'de_DE', 'en_US', 'eo_UY', 'es_ES', 'fr_FR', 'it_IT', 'ko_KR', 'nl_NL', 'ja_JP', 'pt_PT', 'pl_PL']
 translations.forEach(t => focaBot.locales.loadLocale(t))
 
 // Invite Link
