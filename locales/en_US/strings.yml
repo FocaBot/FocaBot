@@ -188,3 +188,6 @@ lyrics:
   searching: "Searching lyrics for {1}..."
   title: "{1} lyrics:"
   more: "\\[More at Genius.com\\]"
+math:
+  input: "Input:"
+  result: "Result:"

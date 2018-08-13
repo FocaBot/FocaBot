@@ -1,0 +1,95 @@
+##################################
+# FocaBot 2.x configuration file #
+##################################
+
+# Required Properties
+bot:
+  # Bot Token.
+  # To get one, go to https://discordapp.com/developers/applications/me,
+  # create a new app and add a bot account.
+  token: MTgx...
+  # Global command prefix
+  prefix: f'
+  # Bot owner (User IDs)
+  # They'll have full access to the bot, including
+  # dangerous commands like f'eval and f'execute, so please make sure to change them
+  owners:
+    - '164588804362076160'
+    - '183348498375114752'
+  # Global Admins (User IDs)
+  # They'll have global access to administrative commands.
+  # (same access level as guild administrators)
+  globalAdmins:
+    - '196141905686298624'
+  # Default locale
+  locale: en_US
+  # Whether to enable debug mode (detailed logging and verbose output)
+  debug: false
+# Role settings
+roles:
+  # Users with those roles will have "admin" level access
+  admin:
+    - Bot Commander
+    - Administrator
+    - Admin
+  # Users with those roles will have "DJ" level access.
+  dj:
+    - DJ
+    - FocaBot DJ
+# Modules to load
+# Individual modules can be disabled by guild admins using the f'disable command
+modules:
+  - ping
+  - eval
+  - help
+  - status
+  - admin
+  - booru
+  - inlineCommands
+  - math
+  - greet
+# Data store settings
+data:
+  # Data store backend
+  # Can be either 'memory' (no persistence), 'gun' (built-in) or 'redis'
+  backend: memory
+  # Settings for Gun backend
+  gun:
+    file: data.db
+    port: 12920 # Make sure to change this if you're running multiple instances of the bot!!
+  # Settings for Redis backend
+  redis:
+    sever: redis://127.0.0.1/1
+# Player settings
+player:
+  backend: ffmpeg
+  # Settings for the FFMPEG backend
+  ffmpeg:
+    ##
+    # By default FocaBot automatically downloads recent ffmpeg builds and uses those instead
+    # of the system binaries, if you're having issues with audio playback, uncomment those lines
+    # to use the system binaries (or custom ones) instead.
+    ##
+    # bin: /bin/ffmpeg
+    # probeBin: /bin/ffprobe
+  # Settings for the FocaStreamer backend
+  focastreamer:
+    bin: /usr/local/bin/focastreamer
+# API keys
+# Check https://www.focabot.xyz/install/source to get instructions on how to get the API keys.
+apiKeys:
+  google:
+    apiKey: ''
+    cx: ''
+  imgur: ''
+  danbooru:
+    username: ''
+    apiKey: ''
+  tumblr: ''
+  osu: ''
+# Miscellaneous settings
+misc:
+  # Message to show when executing f'help
+  helpMessage: |
+    __Official Support server:__
+    https://discord.gg/V5drVUS

@@ -7,3 +7,4 @@ modules/lastfm
 *.db
 .env
 .crowdin.yml
+.directory

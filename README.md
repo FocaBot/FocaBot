@@ -9,6 +9,8 @@
 </p>
 </div>
 
+**THIS BRANCH CURRENTLY HOSTS THE (VERY) EXPERIMENTAL TYPESCRIPT REWRITE, STILL A BIG WIP**
+
 FocaBot is an easy to use music bot for discord, it includes most of the commands
 you would expect for a music but, plus some extras, like a `seek` command, many
 audio filters (`| nightcore`, anyone?), and advanced queue management (`move`, `swap`, `remove`)

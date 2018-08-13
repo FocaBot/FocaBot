@@ -1,7 +1,7 @@
+{ Azarasi } = require 'azarasi'
 Chance = require 'chance'
-request = require 'request'
 
-class SealModule extends BotModule
+class Seal extends Azarasi.Module
   init: ->
     @registerCommand 'seal', { allowDM: true }, ({ msg, args })=>
       chance = new Chance()
@@ -16,4 +16,4 @@ class SealModule extends BotModule
       msg.channel.send '', embed: image: url: 'https://cdn.discordapp.com/attachments/248274146931245056/327639305172287488/praise_the_seal.jpg'
     # coffeelint: enable=max_line_length
 
-module.exports = SealModule
+module.exports = Seal

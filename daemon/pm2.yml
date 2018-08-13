@@ -1,8 +1,0 @@
-apps:
-  - name   : FocaBot
-    script : main.js
-    env:
-      NODE_ENV: production      
-    env_staging:
-      NODE_ENV: development
-      PORT: 3052
