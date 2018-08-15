@@ -10,7 +10,7 @@ export default class Math extends Azarasi.Module {
   init() {
     this.registerCommand('calculate', { allowDM: true, aliases: ['calc', 'math'] }, ({ msg, args, l }) => {
       const result = mathjs.eval(args)
-      if (!result) return msg.reply(l!.generic.invalidArgs)
+      if (result == null) return msg.reply(l!.generic.invalidArgs)
 
       msg.channel.send(l!.gen('```js\n{1}\n```', args.toString()), {
         embed: {
