@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/FocaBot/FocaBot#README",
   "dependencies": {
-    "azarasi": "^2.1.0",
+    "azarasi": "^2.1.1",
     "chance": "^1.0.4",
     "coffeescript": "^2.1.1",
     "dotenv": "^2.0.0",
