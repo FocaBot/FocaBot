@@ -7,16 +7,24 @@ class DynamicNick extends BotModule
       iC = '▶'
       iC = '📡' if not item.duration
       iC = '📻' if item.radioStream
-      try guild.members.find('id', Core.bot.user.id).setNickname("#{iC} | #{@getTitle(item)}")
+      try
+        guild.members.find((m)-> m.id is Core.bot.user.id)
+          .setNickname("#{iC} | #{@getTitle(item)}")
     @registerEvent 'player.paused', ({ guild }, item)=>
-      try guild.members.find('id', Core.bot.user.id).setNickname("⏸ | #{@getTitle(item)}")
+      try
+        guild.members.find((m)-> m.id is Core.bot.user.id)
+          .setNickname("⏸ | #{@getTitle(item)}")
     @registerEvent 'player.suspended', ({ guild }, item)=>
       iC = '⏸'
       iC = '📡' if not item.duration
       iC = '📻' if item.radioStream
-      try guild.members.find('id', Core.bot.user.id).setNickname("#{iC} | #{@getTitle(item)}")
+      try
+        guild.members.find((m)-> m.id is Core.bot.user.id)
+          .setNickname("#{iC} | #{@getTitle(item)}")
     @registerEvent 'player.stopped', ({ guild })=>
-      try guild.members.find('id', Core.bot.user.id).setNickname(null)
+      try
+        guild.members.find((m)-> m.id is Core.bot.user.id)
+          .setNickname(null)
 
   getTitle: (item)->
     title = item.title.substr(0, 28)

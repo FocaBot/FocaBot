@@ -58,7 +58,10 @@ class TagModule extends BotModule
       # Generate a list of responses
       r = ''
       for res in tag
-        u = bot.users.find('id', res.by) or { username: 'Unknown', discriminator: res.by }
+        u = bot.users.find((u) -> u.id is res.by) or {
+          username: 'Unknown'
+          discriminator: res.by
+        }
         r += "\n(#{u.username}##{u.discriminator}): #{res.reply.substr(0,32)}..."
       # Send it
       msg.channel.send r

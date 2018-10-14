@@ -68,7 +68,7 @@ class QueueItem {
    * @type {Discordie.IGuildMember}
    */
   get requestedBy () {
-    return this.queue.guild.members.find('id', this._d.requestedBy)
+    return this.queue.guild.members.find(m => m === this._d.requestedBy)
   }
 
   set requestedBy (v) {
@@ -80,7 +80,7 @@ class QueueItem {
    * @type {Discordie.IVoiceChannel}
    */
   get voiceChannel () {
-    return channels.find('id', this._d.voiceChannel)
+    return channels.find(c => c.id === this._d.voiceChannel)
   }
 
   set voiceChannel (v) {
@@ -92,7 +92,7 @@ class QueueItem {
    * @type {Discordie.ITextChannel}
    */
   get textChannel () {
-    return channels.find('id', this._d.textChannel)
+    return channels.find(c => m.id === this._d.textChannel)
   }
 
   set textChannel (v) {
