@@ -26,7 +26,7 @@ const focaBot = new Azarasi({
   localePath: path.join(__dirname, 'locales'),
   locale: config.bot.locale,
   watch: true,
-  dbFile: config.data.gun.file,
+  dbPath: config.data.gun.file,
   dbPort: config.data.gun.port,
   redisUrl: config.data.redis.server,
   dataStore: config.data.backend,

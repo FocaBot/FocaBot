@@ -55,7 +55,7 @@ data:
   backend: memory
   # Settings for Gun backend
   gun:
-    file: data.db
+    path: data
     port: 12920 # Make sure to change this if you're running multiple instances of the bot!!
   # Settings for Redis backend
   redis:

@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/FocaBot/FocaBot#README",
   "dependencies": {
-    "azarasi": "FocaBot/Azarasi#next",
+    "azarasi": "github:FocaBot/Azarasi#next",
     "chance": "^1.0.4",
     "cheerio": "^1.0.0-rc.2",
     "coffeescript": "^2.1.1",
