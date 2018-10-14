@@ -59,7 +59,7 @@ class Raffle extends BotModule
       raffle.winners.push(winner)
       # Save
       await Core.data.set("Raffle:#{msg.guild.id}", raffle)
-      u = msg.guild.members.find('id', winner)
+      u = msg.guild.members.find((m) -> m.id is winner)
       # Save stats
       if raffle.winners.filter((w)=> w is winner).length is 1
         uStats = (await Core.data.get("RaffleStats:#{winner}")) or { total: [], won: [] }
@@ -87,7 +87,7 @@ class Raffle extends BotModule
       if raffle.winners.length > 0
         m += "\n\n#{l.raffle.placements}"
         for winner, i in raffle.winners
-          m += "\n**#{i + 1}**. #{msg.guild.members.find('id', winner)}"
+          m += "\n**#{i + 1}**. #{msg.guild.members.find((m) -> m.id is winner)}"
       
       msg.channel.send m
 
