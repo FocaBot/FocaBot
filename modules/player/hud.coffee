@@ -235,7 +235,9 @@ class PlayerHUD
 
     for qI, i in q.items.slice offset, max
       r.description += """
-      **#{offset+i+1}.** [#{qI.title.replace(/\]/, '\\]')}](#{qI.sauce.replace(/\)/, '\\)')}) \
+      **#{offset+i+1}.** \
+      [#{qI.title.replace(/\]/, '\\]').substr(0, 50)}]\
+      (#{qI.sauce.replace(/\)/, '\\)')}) \
       #{@util.displayFilters qI.filters} \
       (#{@util.displayTime qI.duration}) \
       #{l.gen l.player.hud.requestedBy, qI.requestedBy.displayName}\n
