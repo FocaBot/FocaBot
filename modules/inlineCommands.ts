@@ -3,14 +3,18 @@
  * @author TheBITLINK aka BIT <me@thebitlink.com>
  * @license MIT
  **/
-import { Azarasi } from 'azarasi'
+import { Azarasi, CommandArgs } from 'azarasi'
+import { registerCommand } from 'azarasi/lib/decorators'
 
 export default class InlineCommands extends Azarasi.Module {
   defaultDisabled = true
-  init() {
-    this.registerCommand(/{{(.+?)}}/, ({ msg, args }) => {
-      // Maybe allow multiple commands in the future? (with some kind of hard limit)
-      this.az.commands.processMessage(msg, args[1])
-    })
+
+  /**
+   * Regex-triggered "command" that captures text within {{double braces}} and makes Azarasi process
+   * it as a separate message, therefore triggering commands if one is present.
+   */
+  @registerCommand(/{{(.+?)}}/)
+  handleInlineCommand ({ msg, args } : CommandArgs) {
+    this.az.commands.processMessage(msg, args[1])
   }
 }

@@ -1,10 +1,10 @@
 import { Azarasi } from 'azarasi'
 import {Url, URL} from 'url'
 import request, { RequestPromiseOptions } from 'request-promise-native'
-import { IProvider } from '.'
+import { IBooruProvider } from '.'
 import { RequestAPI } from 'request'
 
-export default class Konachan implements IProvider {
+export default class Konachan implements IBooruProvider {
   readonly name : string
   readonly aliases : string[]
 

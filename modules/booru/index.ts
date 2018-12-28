@@ -6,7 +6,7 @@
 import { Azarasi } from 'azarasi'
 import { DMChannel, GroupDMChannel } from 'discord.js'
 import {
-  IProvider,
+  IBooruProvider,
   Danbooru,
   Konachan,
   SankakuComplex,
@@ -14,7 +14,7 @@ import {
 } from './providers'
 
 export default class Booru extends Azarasi.Module {
-  providers : IProvider[] = []
+  providers : IBooruProvider[] = []
   /** Blacklisted tags **/
   tagBlacklist = ['loli', 'rori', 'shota', 'lolicon', 'toddlercon']
 

@@ -1,9 +1,9 @@
-export interface IProvider {
-  /** Command name. MUST be lowercase **/
+export interface IBooruProvider {
+  /** Command name. MUST be lowercase */
   name : string
-  /** Command aliases **/
+  /** Command aliases */
   aliases? : string[]
-  /** Get random post from provider with matching tags **/
+  /** Get random post from provider with matching tags */
   getRandomPost : (tags : string, allowNSFW : boolean) => Promise<IPost>
 }
 

@@ -48,6 +48,7 @@ modules:
   - inlineCommands
   - math
   - greet
+  - image
 # Data store settings
 data:
   # Data store backend
@@ -85,7 +86,6 @@ apiKeys:
   danbooru:
     username: ''
     apiKey: ''
-  tumblr: ''
   osu: ''
 # Miscellaneous settings
 misc:

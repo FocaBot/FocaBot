@@ -1,23 +1,26 @@
 /**
  * Math module.
- * @author thebitlink
+ * @author TheBITLINK aka BIT <me@thebitlink.com>
  * @license MIT
  **/
-import { Azarasi } from 'azarasi'
+import { Azarasi, CommandArgs } from 'azarasi'
+import { registerCommand } from 'azarasi/lib/decorators'
 import mathjs from 'mathjs'
 
 export default class Math extends Azarasi.Module {
-  init() {
-    this.registerCommand('calculate', { allowDM: true, aliases: ['calc', 'math'] }, ({ msg, args, l }) => {
-      const result = mathjs.eval(args)
-      if (result == null) return msg.reply(l!.generic.invalidArgs)
+  /**
+   * Performs math calculations using math.js
+   */
+  @registerCommand({ allowDM: true, aliases: ['calc', 'math'] })
+  calculate ({ msg, args, l } : CommandArgs) {
+    const result = mathjs.eval(args)
+    if (result == null) return msg.reply(l!.generic.invalidArgs)
 
-      msg.channel.send(l!.gen('```js\n{1}\n```', args.toString()), {
-        embed: {
-          color: 0xDC3912,
-          description: l!.gen('**{1}** {2}', l!.math.result, l!.transform(result))
-        }
-      })
+    msg.channel.send(l!.gen('```js\n{1}\n```', args.toString()), {
+      embed: {
+        color: 0xDC3912,
+        description: l!.gen('**{1}** {2}', l!.math.result, l!.transform(result))
+      }
     })
   }
 }

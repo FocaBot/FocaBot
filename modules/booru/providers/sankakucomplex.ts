@@ -1,10 +1,10 @@
 import { Azarasi } from 'azarasi'
 import {Url, URL} from 'url'
 import request, { RequestPromiseOptions } from 'request-promise-native'
-import { IProvider } from '.'
+import { IBooruProvider } from '.'
 import { RequestAPI } from 'request'
 
-export default class SankakuComplex implements IProvider {
+export default class SankakuComplex implements IBooruProvider {
   readonly name = 'sankakucomplex'
   readonly aliases = ['sankaku', 'sc']
 

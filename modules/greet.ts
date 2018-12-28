@@ -8,31 +8,42 @@ import { Locale } from 'azarasi/lib/locales'
 import { Settings } from 'azarasi/lib/settings'
 import Discord from 'discord.js'
 import moment from 'moment'
+import { registerEvent } from 'azarasi/lib/decorators'
 
 export default class Greet extends Azarasi.Module {
   init() {
     this.registerParameter('greetChannel', { type: Discord.TextChannel })
     this.registerParameter('greet', { type: String, min: 1, def: 'off' })
     this.registerParameter('farewell', { type: String, min: 1, def: 'off' })
-    // Greeting message
-    this.registerEvent('discord.guildMemberAdd', async (member : Discord.GuildMember) => {
-      const s = await this.az.settings.getForGuild(member.guild)
-      const l = this.az.locales.getLocale(s.locale!)
-      if (!s.greet || s.greet === 'off') return
-      const channel = this.getGreetChannel(member.guild, s)
-      const vars = this.generateVars(member, l!)
-      channel.send(this.transformTemplate(s.greet, vars))
-    })
-    // Farewell message
-    this.registerEvent('discord.guildMemberRemove', async (member : Discord.GuildMember) => {
-      const s = await this.az.settings.getForGuild(member.guild)
-      const l = this.az.locales.getLocale(s.locale!)
-      if (!s.farewell || s.farewell === 'off') return
-      const channel = this.getGreetChannel(member.guild, s)
-      const vars = this.generateVars(member, l!)
-      channel.send(this.transformTemplate(s.farewell, vars))
-    })
   }
+
+  /**
+   * Greeting message.
+   */
+  @registerEvent('discord.guildMemberAdd')
+  async sendGreetingMessage (member : Discord.GuildMember) {
+    const s = await this.az.settings.getForGuild(member.guild)
+    const l = this.az.locales.getLocale(s.locale!)
+    if (!s.greet || s.greet === 'off') return
+    const channel = this.getGreetChannel(member.guild, s)
+    const vars = this.generateVars(member, l!)
+    channel.send(this.transformTemplate(s.greet, vars))
+  }
+
+  /**
+   * Farewell message.
+   * @param member
+   */
+  @registerEvent('discord.guildMemberRemove')
+  async farewellMessage (member : Discord.GuildMember) {
+    const s = await this.az.settings.getForGuild(member.guild)
+    const l = this.az.locales.getLocale(s.locale!)
+    if (!s.farewell || s.farewell === 'off') return
+    const channel = this.getGreetChannel(member.guild, s)
+    const vars = this.generateVars(member, l!)
+    channel.send(this.transformTemplate(s.farewell, vars))
+  }
+
   /** Transforms text input replacing variable templates */
   transformTemplate (template : string, vars : ITemplateVars) : string {
     return template.replace(/{\S+}/g, v => vars[v.slice(1, -1)] || v)
