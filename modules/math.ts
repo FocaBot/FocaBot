@@ -3,7 +3,7 @@
  * @author TheBITLINK aka BIT <me@thebitlink.com>
  * @license MIT
  **/
-import { Azarasi, CommandArgs } from 'azarasi'
+import { Azarasi, CommandContext } from 'azarasi'
 import { registerCommand } from 'azarasi/lib/decorators'
 import mathjs from 'mathjs'
 
@@ -12,7 +12,7 @@ export default class Math extends Azarasi.Module {
    * Performs math calculations using math.js
    */
   @registerCommand({ allowDM: true, aliases: ['calc', 'math'] })
-  calculate ({ msg, args, l } : CommandArgs) {
+  calculate ({ msg, args, l } : CommandContext) {
     const result = mathjs.eval(args)
     if (result == null) return msg.reply(l!.generic.invalidArgs)
 

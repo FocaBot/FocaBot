@@ -3,7 +3,7 @@
  * @author TheBITLINK aka BIT <me@thebitlink.com>
  * @license MIT
  **/
-import { Azarasi, CommandArgs } from 'azarasi'
+import { Azarasi, CommandContext } from 'azarasi'
 import { registerCommand } from 'azarasi/lib/decorators'
 import { exec } from 'child_process'
 import os from 'os'
@@ -13,11 +13,12 @@ export default class Admin extends Azarasi.Module {
 
   /**
    * Changes the bot's nickname in a guild
+   * @parameter nickname - New nickname
    */
   @registerCommand({ adminOnly: true })
-  async setNick ({ msg, args, l } : CommandArgs) {
+  async setNick ({ msg, l } : CommandContext, nickname : string) {
     try {
-      await msg.guild.member(this.bot.user).setNickname(args.toString())
+      await msg.guild.member(this.bot.user).setNickname(nickname)
       msg.reply(l!.admin.nickChanged)
     } catch (e) {
       this.az.log(e)
@@ -29,7 +30,7 @@ export default class Admin extends Azarasi.Module {
    * Deletes recent bot messages (and most invocations).
    */
   @registerCommand({ adminOnly: true })
-  async clean ({ msg, args, l, settings } : CommandArgs) {
+  async clean ({ msg, l, settings } : CommandContext) {
     try {
       const messages = await msg.channel.fetchMessages({ limit: 100 })
       // Get only the messages from the bot and starting with the bot's prefix
@@ -50,11 +51,11 @@ export default class Admin extends Azarasi.Module {
   /**
    * Deletes last X messages.
    * Can optionally mention a user to remove only theirs.
-   * Due to API limitations, only the last 100 messages will be queried.
+   * @param messageLimit - Number of messages to delete. Only 100 messages at a time are allowed by the API.
    */
   @registerCommand({ adminOnly: true, argSeparator: ' ' })
-  async purge ({ msg, args, l } : CommandArgs) {
-    const limit = parseInt(args[0])
+  async purge ({ msg, l } : CommandContext, messageLimit : string) {
+    const limit = parseInt(messageLimit)
     if (!isFinite(limit) || limit <= 0) return msg.reply(l!.generic.invalidArgs)
     try {
       let messages = await msg.channel.fetchMessages({ limit })
@@ -70,11 +71,11 @@ export default class Admin extends Azarasi.Module {
 
   /**
    * Changes settings parameters for a guild
+   * @param param - Parameter to change
+   * @param value - New value
    */
   @registerCommand({ adminOnly: true, argSeparator: ' ' })
-  async config ({ msg, args, l, settings } : CommandArgs) {
-    const param = args[0]
-    const value = (args as string[]).slice(1).join(' ')
+  async config ({ msg, l, settings } : CommandContext, param : string, ...value : string[]) {
     // List settings if no parameter is specified
     if (!param) return msg.reply('', {
       embed: {
@@ -109,10 +110,10 @@ export default class Admin extends Azarasi.Module {
 
   /**
    * Enables a module for the current guild.
+   * @param module - Module to enable
    */
   @registerCommand({ adminOnly: true })
-  async enable ({ msg, args, l } : CommandArgs) {
-    const module = args.toString()
+  async enable ({ msg, l } : CommandContext, module : string) {
     if (!this.az.modules.get(module)) return msg.reply(l!.admin.noSuchModule)
     try {
       await this.az.modules.enableModuleForGuild(msg.guild, module)
@@ -124,10 +125,10 @@ export default class Admin extends Azarasi.Module {
 
   /**
    * Disables a module for the current guild.
+   * @param module - Module to disable
    */
   @registerCommand({ adminOnly: true })
-  async disable ({ msg, args, l } : CommandArgs) {
-    const module = args.toString()
+  async disable ({ msg, l } : CommandContext, module : string) {
     if (!this.az.modules.get(module)) return msg.reply(l!.admin.noSuchModule)
     try {
       await this.az.modules.disableModuleForGuild(msg.guild, module)
@@ -141,15 +142,16 @@ export default class Admin extends Azarasi.Module {
 
   /**
    * Execute shell command.
+   * @param cmd - Command to execute
    */
   @registerCommand({ ownerOnly: true, allowDM: true })
-  exec ({ msg, args } : CommandArgs) {
+  exec ({ msg } : CommandContext, cmd : string) {
     return new Promise((resolve, reject) => {
-      exec(args.toString(), (e, stdout, stderr) => {
+      exec(cmd, (e, stdout, stderr) => {
         if (e) return reject(e)
         resolve(msg.channel.send(
           '```diff\n' +
-          `! [focaBot@${os.hostname()} ~] ${args}\n\n` +
+          `! [focaBot@${os.hostname()} ~] ${cmd}\n\n` +
           stdout + '\n' +
           stderr.replace(/^/gm, '- ') + '\n```'
         ))
@@ -159,12 +161,13 @@ export default class Admin extends Azarasi.Module {
 
   /**
    * Changes the bot's avatar image.
+   * @param avatarURL - Avatar URL to use if no attachment is present
    */
   @registerCommand({ ownerOnly: true, allowDM: true })
-  async setAvatar ({ msg, args, l } : CommandArgs) {
+  async setAvatar ({ msg, l } : CommandContext, avatarURL : string) {
     try {
       if (msg.attachments.first()) await this.bot.user.setAvatar(msg.attachments.first().url)
-      else await this.bot.user.setAvatar(args.toString())
+      else await this.bot.user.setAvatar(avatarURL)
     } catch (e) {
       msg.reply(l!.generic.error)
       this.az.logError(e)
@@ -173,11 +176,12 @@ export default class Admin extends Azarasi.Module {
 
   /**
    * Changes the bot's username.
+   * @param username - New username
    */
   @registerCommand({ ownerOnly: true, allowDM: true })
-  async setUsername ({ msg, args, l } : CommandArgs) {
+  async setUsername ({ msg, l } : CommandContext, username : string) {
     try {
-      await this.bot.user.setUsername(args.toString())
+      await this.bot.user.setUsername(username)
       msg.reply(l!.admin.usernameChanged)
     } catch (e) {
       this.az.logError(e)
@@ -187,11 +191,12 @@ export default class Admin extends Azarasi.Module {
 
   /**
    * Loads a module at runtime.
+   * @param module - Module to load
    */
   @registerCommand({ ownerOnly: true, allowDM: true })
-  load ({ msg, args, l } : CommandArgs) {
+  load ({ msg, l } : CommandContext, module : string) {
     try {
-      this.az.modules.load(args)
+      this.az.modules.load(module)
       msg.reply(l!.generic.success)
     } catch (e) {
       msg.channel.send({
@@ -205,11 +210,12 @@ export default class Admin extends Azarasi.Module {
 
   /**
    * Unloads a module at runtime.
+   * @param module - Module to unload
    */
   @registerCommand({ ownerOnly: true, allowDM: true })
-  unload ({ msg, args, l } : CommandArgs) {
+  unload ({ msg, l } : CommandContext, module : string) {
     try {
-      this.az.modules.unload(args)
+      this.az.modules.unload(module)
       msg.reply(l!.generic.success)
     } catch (e) {
       msg.channel.send({
@@ -223,11 +229,12 @@ export default class Admin extends Azarasi.Module {
 
   /**
    * Reloads a module at runtime.
+   * @param module - Module to reload
    */
   @registerCommand({ ownerOnly: true, allowDM: true })
-  reload ({ msg, args, l } : CommandArgs) {
+  reload ({ msg, l } : CommandContext, module : string) {
     try {
-      this.az.modules.reload(args)
+      this.az.modules.reload(module)
       msg.reply(l!.generic.success)
     } catch (e) {
       msg.channel.send({

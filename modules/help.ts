@@ -3,7 +3,7 @@
  * @author TheBITLINK aka BIT <me@thebitlink.com>
  * @license MIT
  **/
-import { Azarasi, CommandArgs } from 'azarasi'
+import { Azarasi, CommandContext } from 'azarasi'
 import { UserPermissions } from 'azarasi/lib/permissions'
 import { registerCommand } from 'azarasi/lib/decorators'
 import QS from 'querystring'
@@ -14,7 +14,7 @@ export default class Help extends Azarasi.Module {
    * Help command
    */
   @registerCommand({ allowDM: true })
-  help ({ msg, s, l, perms } : CommandArgs) {
+  help ({ msg, s, l, perms } : CommandContext) {
     const guildHelp = msg.guild ? `\n**${l!.gen(l!.help.prefix, msg.guild.name)}** \`${s.prefix}\`\n\n` : ''
     const qs = msg.guild ? '?' + this.generateQuery(s.prefix, perms) : ''
     const props = this.az.properties

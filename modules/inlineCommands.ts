@@ -3,7 +3,7 @@
  * @author TheBITLINK aka BIT <me@thebitlink.com>
  * @license MIT
  **/
-import { Azarasi, CommandArgs } from 'azarasi'
+import { Azarasi, CommandContext } from 'azarasi'
 import { registerCommand } from 'azarasi/lib/decorators'
 
 export default class InlineCommands extends Azarasi.Module {
@@ -14,7 +14,7 @@ export default class InlineCommands extends Azarasi.Module {
    * it as a separate message, therefore triggering commands if one is present.
    */
   @registerCommand(/{{(.+?)}}/)
-  handleInlineCommand ({ msg, args } : CommandArgs) {
+  handleInlineCommand ({ msg, args } : CommandContext) {
     this.az.commands.processMessage(msg, args[1])
   }
 }

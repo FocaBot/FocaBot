@@ -49,6 +49,9 @@ modules:
   - math
   - greet
   - image
+  - poll
+  - raffle
+  - rng
 # Data store settings
 data:
   # Data store backend
