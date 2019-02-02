@@ -12,6 +12,6 @@ class BitCrushFilter extends AudioFilter
     throw '[Bit Crusher] Sample reduction must not be higher than 250' if @samples > 250
     throw '[Bit Crusher] Sample reduction must not be lower than 1' if @samples < 1
     @FFMPEGFilter = @escape "acrusher=bits=8:mix=1:samples=#{@samples}"
-    @display = "[BitC@#{@samples}]"
+    @display = "[BitCrush@#{@samples}]"
 
 module.exports = BitCrushFilter
