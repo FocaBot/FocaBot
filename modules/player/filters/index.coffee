@@ -19,6 +19,7 @@ module.exports =
   treble: filter 'treble'           # | treble=-10                 [DJ]
   tremolo: filter 'tremolo'         # | tremolo=5
   volume: filter 'volume'           # | volume=0                   [DJ]
+  bitc: filter 'bitc'               # | bitc=10                    [DJ]
   nightcore: preset 'speed', '1.22' # | nightcore
   chipmunk: preset 'speed', '2.0'   # | chipmunk
   vaporwave: preset 'speed','0.75'  # | vaporwave
