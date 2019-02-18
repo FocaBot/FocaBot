@@ -15,7 +15,7 @@ mkdirp.sync(dataPath)
 console.log(`
        .-.
       :   ;
-       "."               FocaBot v1.0.11 (Elegant Erizo)
+       "."               FocaBot v1.0.13 (Elegant Erizo)
        / \\               by > thebit.link
       /  |
     .'    \\
