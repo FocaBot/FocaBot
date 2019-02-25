@@ -10,7 +10,7 @@ const targetLocale = 'en_US'
 // Input file
 const input = path.join(__dirname, '..', 'locales', targetLocale, 'strings.yml')
 // Output file
-const output = path.join(__dirname, '..', 'types', 'focabot-locale', 'index.d.ts')
+const output = path.join(__dirname, '..', 'src', 'focabot-locale.d.ts')
 // Output header
 const header = `/**
  * FocaBot Locale TypeScript Definition
@@ -29,6 +29,7 @@ f.write('  interface Locale {')
 function generateBlock (block, indent = 4) {
   const indentStr = Array(indent + 1).join(' ')
   for (const key in block) {
+    if (!block.hasOwnProperty(key)) continue
     const value = block[key]
     if (typeof value === 'string') {
       f.write(`\n${indentStr}/**\n${value.replace(/^/gm, indentStr + ' * ')}\n${indentStr} */`)

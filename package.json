@@ -2,16 +2,19 @@
   "name": "focabot",
   "version": "2.0.0-alpha1",
   "description": "Music with Seals!",
-  "main": "main.js",
+  "main": "build/index.js",
   "engines": {
-    "node": "^8.0.0"
+    "node": "^10.0.0"
   },
   "scripts": {
-    "start": "ts-node main.ts",
+    "start": "node build",
+    "build": "tsc",
+    "build-bin": "pkg .",
+    "dev": "ts-node src",
     "locale-gen": "node utils/generateLocaleTypings.js"
   },
   "bin": {
-    "focabot": "cli/main.js"
+    "focabot": "build/index.js"
   },
   "repository": {
     "type": "git",
@@ -30,26 +33,16 @@
   },
   "homepage": "https://github.com/FocaBot/FocaBot#README",
   "dependencies": {
+    "axios": "^0.18.0",
     "azarasi": "github:FocaBot/Azarasi#next",
     "chance": "^1.0.4",
     "cheerio": "^1.0.0-rc.2",
-    "coffeescript": "^2.1.1",
     "discord.js": "^11.4.0",
     "dotenv": "^2.0.0",
-    "ffmpeg-downloader": "^1.2.2",
     "inquirer": "^3.1.0",
-    "json-format": "^0.1.2",
-    "json-prune": "^1.0.1",
     "mathjs": "^5.1.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.14.1",
-    "node-osu": "1.3.0",
-    "request": "^2.74.0",
-    "request-promise-native": "^1.0.5",
-    "require-reload": "^0.2.2",
-    "ts-node": "^7.0.0",
-    "tumblr.js": "^1.1.1",
-    "typescript": "^2.9.2",
     "ytdl-getinfo": "^1.0.5"
   },
   "devDependencies": {
@@ -57,15 +50,9 @@
     "@types/js-yaml": "^3.11.2",
     "@types/mathjs": "^4.4.1",
     "@types/node": "^10.5.3",
-    "@types/request": "^2.47.1",
-    "@types/request-promise-native": "^1.0.15"
-  },
-  "standard": {
-    "globals": [
-      "Core",
-      "BotCommand",
-      "BotModule"
-    ]
+    "pkg": "^4.3.7",
+    "ts-node": "^7.0.0",
+    "typescript": "^3.3.3333"
   },
   "types": "./types/focabot/index.d.ts"
 }
