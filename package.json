@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node build",
     "build": "tsc",
-    "build-bin": "pkg .",
+    "build-bin": "tsc &&% pkg --out-path bin .",
     "dev": "ts-node src",
     "locale-gen": "node utils/generateLocaleTypings.js"
   },
@@ -53,6 +53,13 @@
     "pkg": "^4.3.7",
     "ts-node": "^7.0.0",
     "typescript": "^3.3.3333"
+  },
+  "pkg": {
+    "scripts": "build/**/*.js",
+    "assets": [
+      "locales/**/*",
+      "focabot.yml"
+    ]
   },
   "types": "./types/focabot/index.d.ts"
 }

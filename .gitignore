@@ -68,8 +68,11 @@ data
 .idea/**/dbnavigator.xml
 .idea/httpRequests
 
-# Packaged binaries
+# TypeScript compiler output
 build
+
+# Compiled Binaries
+bin
 
 # Yarn
 .yarn-integrity
