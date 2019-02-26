@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node build",
     "build": "tsc",
-    "build-bin": "tsc &&% pkg --out-path bin .",
+    "build-bin": "tsc && pkg --out-path bin .",
     "dev": "ts-node src",
     "locale-gen": "node utils/generateLocaleTypings.js"
   },
