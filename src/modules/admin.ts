@@ -87,7 +87,7 @@ export default class Admin extends Azarasi.Module {
     // Update parameter value
     if (value) {
       try {
-        await this.az.settings.setGuildParam(msg.guild, param, value)
+        await this.az.settings.setGuildParam(msg.guild, param, value.join(' '))
       } catch (e) {
         return msg.reply(l!.config.invalidValue, { embed: {
           color: 0xEE0000,

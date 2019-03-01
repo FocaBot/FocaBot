@@ -125,9 +125,10 @@ ${raffle.winners.map(
 
   /**
    * Display raffle stats for a user.
+   * @param member - Member to check.
    */
-  @registerCommand async raffleStats ({ msg, l } : CommandContext) {
-    const target = msg.mentions.members.first() || msg.member
+  @registerCommand async raffleStats ({ msg, l } : CommandContext, member ?: GuildMember) {
+    const target = member || msg.member
     const uStats = await this.getStatsForMember(target)
     msg.channel.send({ embed: {
       title: l!.gen(l!.raffle.raffleStats, target.displayName),

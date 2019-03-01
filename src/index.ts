@@ -1,61 +1,33 @@
-import { Azarasi } from 'azarasi'
 import { FocaBotConfig } from './focabot-config'
+import printHeader from './header'
 import yaml from 'js-yaml'
 import path from 'path'
 import fs from 'fs'
+import { ShardingManager } from 'discord.js'
+
+// Print header
+printHeader()
 
 // Load Config
 const configFile = path.join(__dirname, '..', 'focabot.yml')
 const config = yaml.safeLoad(fs.readFileSync(configFile, 'utf-8')) as FocaBotConfig
 
-const focaBot = new Azarasi({
-  name: 'FocaBot@dev',
-  version: '2.0.0-alpha',
-  versionName: 'Glorious Gato',
-  prefix: config.bot.prefix,
-  token: config.bot.token,
-  owner: config.bot.owners,
-  admins: config.bot.globalAdmins,
-  adminRoles: config.roles.admin,
-  djRoles: config.roles.dj,
-  debug: config.bot.debug,
-  modulePath: path.join(__dirname, 'modules'),
-  localePath: path.join(__dirname, '..', 'locales'),
-  locale: config.bot.locale,
-  watch: true,
-  dbPath: config.data.gun.file,
-  dbPort: config.data.gun.port,
-  redisUrl: config.data.redis.server,
-  dataStore: config.data.backend,
-  focaBot: config
+// Start shard manager
+let shardManager : ShardingManager
+
+if (process.env.TS_NODE_FILES) {
+  shardManager = new ShardingManager(path.join(__dirname, 'shard.ts'), {
+    token: config.bot.token,
+    shardArgs: ['-r', 'ts-node/register']
+  })
+} else {
+  shardManager = new ShardingManager(path.join(__dirname, 'shard.js'), {
+    token: config.bot.token
+  })
+}
+
+shardManager.spawn()
+.catch(() => {
+  console.error('Sharding unavailable, falling back to single-process mode.')
+  require('./shard')
 })
-// Load the translations
-const translations = [
-  'ar_SA',
-  'cs_CZ',
-  'de_DE',
-  'en_US',
-  'eo_UY',
-  'es_ES',
-  'fr_FR',
-  'ja_JP',
-  'ko_KR',
-  'nl_NL',
-  'pt_PT'
-]
-
-translations.forEach(t => focaBot.locales.loadLocale(t))
-
-// Load modules
-focaBot.modules.load(config.modules)
-
-// Let the seals in!!
-focaBot.establishConnection()
-
-focaBot.log('Started!')
-focaBot.events.once('ready', () => {
-  if (!focaBot.client.user.bot) {
-    focaBot.logError('Running FocaBot in a non-bot user account. This is discouraged.')
-  }
-})
-

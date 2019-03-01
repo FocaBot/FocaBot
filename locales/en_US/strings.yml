@@ -191,3 +191,16 @@ lyrics:
 math:
   input: "Input:"
   result: "Result:"
+moderation:
+  kicked: "User kicked successfully!"
+  cantKick: "Couldn't kick user. Please check the bot permissions."
+  banned: "User banned successfully!"
+  cantBan: "Couldn't ban user. Please check the bot permissions."
+  noReason: "(No reason specified)"
+  raidDetected: "Potential Raid Detected."
+  antiRaidAlert: "Triggering anti-raid features. (Run {1}resetAntiRaid to reset everything back to normal)"
+  antiRaidNotActive: "Anti-raid not currently triggered. Nothing to do."
+  raidResetting: "(Anti Raid) Resetting everything back to normal..."
+  raidKickPrompt: "Kick all users associated with this raid? (Users with roles other than the raid role will be spared)"
+  raidKick: "Kicking all users associated with a recent raid..."
+  autoRole: "Automatic Role"

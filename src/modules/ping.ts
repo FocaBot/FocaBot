@@ -20,4 +20,3 @@ export default class Ping extends Azarasi.Module {
     ping.edit(`🏓 Pong! \`${ms}ms\``)
   }
 }
-

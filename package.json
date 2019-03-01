@@ -10,7 +10,7 @@
     "start": "node build",
     "build": "tsc",
     "build-bin": "tsc && pkg --out-path bin .",
-    "dev": "ts-node src",
+    "dev": "cross-env TS_NODE_FILES=true ts-node src",
     "locale-gen": "node utils/generateLocaleTypings.js"
   },
   "bin": {
@@ -26,7 +26,7 @@
     "music",
     "focabot"
   ],
-  "author": "TheBITLINK aka BIT <me@thebitlink.com> (https://thebit.link/)",
+  "author": "TheBITLINK aka BIT <me@thebitlink.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/FocaBot/FocaBot/issues"
@@ -43,13 +43,16 @@
     "mathjs": "^5.1.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.14.1",
+    "mz": "^2.7.0",
     "ytdl-getinfo": "^1.0.5"
   },
   "devDependencies": {
     "@types/chance": "^1.0.1",
     "@types/js-yaml": "^3.11.2",
     "@types/mathjs": "^4.4.1",
+    "@types/mz": "^0.0.32",
     "@types/node": "^10.5.3",
+    "cross-env": "^5.2.0",
     "pkg": "^4.3.7",
     "ts-node": "^7.0.0",
     "typescript": "^3.3.3333"
@@ -58,7 +61,8 @@
     "scripts": "build/**/*.js",
     "assets": [
       "locales/**/*",
-      "focabot.yml"
+      "focabot.example.yml",
+      "package.json"
     ]
   },
   "types": "./types/focabot/index.d.ts"
