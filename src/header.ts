@@ -10,14 +10,14 @@ export default function printHeader () {
        .-.
       :   ;
        "."               FocaBot ${version} (${versionName})
-       / \\\\               by > thebit.link
+       / \\               by > thebit.link
       /  |
-    .'    \\\\
-   /.'   \\\`.\\\\             Documentation: https://www.focabot.xyz/
-   ' \\\\    \\\`\\\`.            Support Server: https://discord.gg/V5drVUS
-     _\\\`.____ \\\`-._        GitHub: https://www.github.com/FocaBot/
-    /^^^^^^^^\\\`.\\\\^\\\\
-   /           \\\`  \\\\
+    .'    \\
+   /.'   \`.\\             Documentation: https://www.focabot.xyz/
+   ' \\    \`\`.            Support Server: https://discord.gg/V5drVUS
+     _\`.____ \`-._        GitHub: https://www.github.com/FocaBot/
+    /^^^^^^^^\`.\\^\\
+   /           \`  \\
 """"""""""""""""""""""""
 `)
 }

@@ -4,7 +4,7 @@
  * @license MIT
  **/
 import { Azarasi, CommandContext } from 'azarasi'
-import { registerCommand } from 'azarasi/lib/decorators'
+import { registerCommand, registerEvent } from 'azarasi/lib/decorators'
 import { exec } from 'child_process'
 import os from 'os'
 
@@ -243,6 +243,32 @@ export default class Admin extends Azarasi.Module {
           description: e.message || 'Something went wrong.'
         }
       })
+    }
+  }
+
+  /**
+   * Fetch app info from discord and do stuff with it
+   */
+  @registerEvent('ready')
+  async fetchAppInfo () {
+    if (this.az.client.user.bot) {
+      // Fetch app info from discord
+      const app = await this.az.client.fetchApplication()
+      // Add app owner to bot owners if they aren't added yet
+      if (this.az.permissions.owner.indexOf(app.owner.id) < 0) {
+        this.az.permissions.owner.push(app.owner.id)
+      }
+      // Log invite link to the console
+      if (!this.az.shard || !this.az.shard.id) {
+        this.log('To add the bot to your server, use this link:')
+        this.log(`https://discordapp.com/oauth2/authorize?client_id=${app.id}&scope=bot&permissions=57408`)
+      }
+    } else {
+      // Show a disclaimer if running as a non-bot user
+      this.logError('Running FocaBot in a non-bot user account. This is discouraged.')
+      if (this.az.permissions.owner.indexOf(this.az.client.user.id) < 0) {
+        this.az.permissions.owner.push(this.az.client.user.id)
+      }
     }
   }
 }

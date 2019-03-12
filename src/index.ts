@@ -26,8 +26,14 @@ if (process.env.TS_NODE_FILES) {
   })
 }
 
-shardManager.spawn()
-.catch(() => {
-  console.error('Sharding unavailable, falling back to single-process mode.')
+if (process.env.FOCABOT_NOSHARDING) {
+  console.log('Launching in single-process mode.')
   require('./shard')
-})
+} else {
+  shardManager.spawn()
+  .catch(() => {
+    console.error('Sharding unavailable, falling back to single-process mode.')
+    require('./shard')
+  })
+}
+

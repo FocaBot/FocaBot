@@ -2,7 +2,7 @@
   "name": "focabot",
   "version": "2.0.0-alpha1",
   "description": "Music with Seals!",
-  "main": "build/index.js",
+  "main": "cli-bootstrap.js",
   "engines": {
     "node": ">=8.0.0"
   },
@@ -14,7 +14,7 @@
     "locale-gen": "node utils/generateLocaleTypings.js"
   },
   "bin": {
-    "focabot": "build/index.js"
+    "focabot": "cli-bootstrap.js"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "azarasi": "github:FocaBot/Azarasi#next",
     "chance": "^1.0.4",
     "cheerio": "^1.0.0-rc.2",
+    "commander": "^2.19.0",
     "discord.js": "^11.4.0",
     "dotenv": "^2.0.0",
     "inquirer": "^3.1.0",
@@ -58,12 +59,15 @@
     "typescript": "^3.3.3333"
   },
   "pkg": {
-    "scripts": "build/**/*.js",
+    "scripts": [
+      "cli-bootstrap.js",
+      "build/**/*.js"
+    ],
     "assets": [
       "locales/**/*",
       "focabot.example.yml",
       "package.json"
     ]
   },
-  "types": "./types/focabot/index.d.ts"
+  "types": "./src/focabot.d.ts"
 }

@@ -37,8 +37,8 @@ export interface FocaBotConfig {
     }
     /** Settings for Gun backend */
     gun : {
-      /** Database file */
-      file : string
+      /** Database path */
+      path : string
       /** Database port */
       port : number
     }

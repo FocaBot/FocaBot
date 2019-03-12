@@ -19,12 +19,12 @@ const focaBot = new Azarasi({
   admins: config.bot.globalAdmins,
   adminRoles: config.roles.admin,
   djRoles: config.roles.dj,
-  debug: config.bot.debug,
+  debug: process.env.FOCABOT_DEBUG === '1' || config.bot.debug,
   modulePath: path.join(__dirname, 'modules'),
   localePath: path.join(__dirname, '..', 'locales'),
   locale: config.bot.locale,
   watch: true,
-  dbPath: config.data.gun.file,
+  dbPath: config.data.gun.path,
   dbPort: config.data.gun.port,
   redisUrl: config.data.redis.server,
   dataStore: config.data.backend,
@@ -60,8 +60,3 @@ if (focaBot.shard) {
 focaBot.establishConnection()
 
 focaBot.log('Started!')
-focaBot.events.once('ready', () => {
-  if (!focaBot.client.user.bot) {
-    focaBot.logError('Running FocaBot in a non-bot user account. This is discouraged.')
-  }
-})

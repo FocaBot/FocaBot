@@ -44,6 +44,11 @@ export default class Help extends Azarasi.Module {
     }})
   }
 
+  /**
+   * Generate Query Strings for help URLs
+   * @param prefix - Bot prefix
+   * @param perms - Current permission level
+   */
   generateQuery (prefix : string | undefined, perms : UserPermissions) {
     let level = 0
     if (perms.isDJ) level = 1
