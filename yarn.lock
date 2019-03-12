@@ -218,7 +218,7 @@ axios@^0.18.0:
 
 "azarasi@github:FocaBot/Azarasi#next":
   version "3.0.0-alpha7"
-  resolved "https://codeload.github.com/FocaBot/Azarasi/tar.gz/2a2654e21f5d100420308c33a0f257d6e9e2c918"
+  resolved "https://codeload.github.com/FocaBot/Azarasi/tar.gz/3ff8fcd105c53a07559ebcb8ab5611093b660190"
   dependencies:
     chalk "^2.4.2"
     chokidar "^2.0.4"
