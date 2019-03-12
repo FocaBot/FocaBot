@@ -36,11 +36,13 @@ class AdminModule extends BotModule
       catch e
         Core.log(e, 1)
         msg.reply locale.admin.cantDelete
-    @registerCommand 'purge', admin, ({ msg, args, locale })=>
-      limit = parseInt(args)
+    @registerCommand 'purge', { adminOnly: true, argSeparator: ' ' }, ({ msg, args, locale })=>
+      limit = parseInt(args[0])
       if isFinite(limit) and limit > 0
         try
           messages = await msg.channel.fetchMessages { limit }
+          if msg.mentions.members.first()?
+            messages = messages.filter (m)-> m.member.id is msg.mentions.members.first().id
           await msg.channel.bulkDelete(messages)
         catch e
           Core.log(e, 1)
@@ -116,22 +118,26 @@ class AdminModule extends BotModule
         """
     # Runs git pull and updates youtube-dl, then restarts the bot.
     @registerCommand 'update', owner, ({ msg, args, locale })=>
-      msg.channel.send locale.admin.updating
-      # TODO: update using npm as well
-      try Core.commands.run('exec', msg, 'git pull')
-      catch e
-        Core.log(e, 1)
+      a = args.trim().toLowerCase().split(' ')
+      if not args.length or 'bot' in a
+        msg.channel.send locale.admin.updating
+        try
+          if Core.properties.npm then Core.commands.run('exec', msg, 'npm update -g focabot')
+          else Core.commands.run('exec', msg, 'git pull')
+        catch e
+          Core.log(e, 1)
       # Update youtube-dl
-      msg.channel.send locale.admin.ytdlUpdate
-      try
-        ytdlVersion = await ytdl.update()
-        msg.channel.send locale.gen(locale.admin.ytdlUpdated, ytdlVersion)
-      catch e
-        Core.log(e, 1)
-        msg.channel.send locale.admin.ytdlUpdateError
+      if not args.length or 'ytdl' in a
+        msg.channel.send locale.admin.ytdlUpdate
+        try
+          ytdlVersion = await ytdl.update()
+          msg.channel.send locale.gen(locale.admin.ytdlUpdated, ytdlVersion.trim())
+        catch e
+          Core.log(e, 1)
+          msg.channel.send locale.admin.ytdlUpdateError
       # Restart the bot
-      unless args.toLowerCase() is 'norestart'
-        Core.commands.run('restart', msg, args)
+      unless 'norestart' in a
+        Core.commands.run('restart', msg, 'global')
     @registerCommand 'setavatar', owner, ({ msg, args, locale })=>
       try
         if msg.attachments.first()

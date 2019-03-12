@@ -4,11 +4,11 @@ const Discord = require('discord.js')
 console.log(`
        .-.
       :   ;
-       "."               FocaBot v1.0.0-alpha (Elegant Erizo)
+       "."               FocaBot v1.1.0-alpha (Fabulous Flamenco)
        / \\               by > thebit.link
       /  |
     .'    \\
-   /.'   \`.\\             Documentation: https://next.focabot.xyz/
+   /.'   \`.\\             Documentation: https://www.focabot.xyz/
    ' \\    \`\`.            Support Server: https://discord.gg/V5drVUS
      _\`.____ \`-._        GitHub: https://www.github.com/FocaBot/
     /^^^^^^^^\`.\\^\\
@@ -21,3 +21,7 @@ const ShardManager = new Discord.ShardingManager('shard.js', {
 })
 
 ShardManager.spawn()
+.catch(e => {
+  console.error('Sharding unavailable, falling back to single-process mode.')
+  require('./shard')
+})

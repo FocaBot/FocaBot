@@ -33,7 +33,7 @@ For advanced needs, including sharded setups and custom modules, check the docum
 ## Documentation
 
 To learn more about the available commands and filters, and how to host the bot yourself
-check the [website](https://focabot.thebit.link/).
+check the [website](https://www.focabot.xyz/).
 
 ## Official discord server
 

@@ -15,11 +15,11 @@ mkdirp.sync(dataPath)
 console.log(`
        .-.
       :   ;
-       "."               FocaBot v1.0.0-alpha (Elegant Erizo)
+       "."               FocaBot v1.1.0-alpha (Fabulous Flamenco)
        / \\               by > thebit.link
       /  |
     .'    \\
-   /.'   \`.\\             Documentation: https://next.focabot.xyz/
+   /.'   \`.\\             Documentation: https://www.focabot.xyz/
    ' \\    \`\`.            Support Server: https://discord.gg/V5drVUS
      _\`.____ \`-._        GitHub: https://www.github.com/FocaBot/
     /^^^^^^^^\`.\\^\\
@@ -83,5 +83,10 @@ fs.exists(configFile, async exists => {
     token: config.token
   })
 
-  ShardManager.spawn()
+  try {
+    await ShardManager.spawn()
+  } catch (e) {
+    console.error('Sharding unavailable, falling back to single-process mode.')
+    require('./shard')
+  }
 })

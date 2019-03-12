@@ -5,7 +5,8 @@ url = require 'url'
 { parseTime } = Core.util
 ytdl = require('ytdl-getinfo').getInfo
 filterdb = reload './filters'
-ffprobe = require('ffmpeg-downloader').probePath
+ffprobe = Core.properties.ffprobeBin
+ffmpeg = Core.properties.ffmpegBin
 
 class PlayerUtil
   constructor: ()->
@@ -70,8 +71,10 @@ class PlayerUtil
 
   # Checks the element duration to avoid long items
   checkLength: (duration, msg, s)->
-    unless (isFinite(duration) and duration > 0) or @permissions.isDJ(msg.member)
-      return 2 # Can't add livestreams
+    unless (isFinite(duration) and duration > 0) or
+      s.unrestrictedLivestreams or
+      @permissions.isDJ(msg.member)
+        return 2 # Can't add livestreams
     if (duration > s.maxSongLength and not @permissions.isDJ(msg.member)) or
       (duration > 43200  and not @permissions.isAdmin(msg.member)) or
       (duration > 86400 and not @permissions.isOwner(msg.member))
@@ -112,7 +115,25 @@ class PlayerUtil
       '--force-ipv4',
       '--format=bestaudio/best'
     ])
-      
+  
+  # Uses FFMpeg to get a frame of a stream at a specified timestamp
+  getScreenshot: (streamUrl, time)-> new Promise (resolve, reject)->
+    b = []
+    spawn ffmpeg, [
+      '-ss', time
+      '-i', streamUrl
+      '-vframes', 1
+      '-vf', 'scale=480:-1'
+      '-q:v', 3
+      '-f', 'mjpeg'
+      '-'
+    ], { maxBuffer: Infinity }
+    .on 'close', (code)->
+      return reject code if code
+      resolve Buffer.concat b
+    .on 'error', reject
+    .stdout.on 'data', (chunk)->
+      b.push(chunk)
 
   # Parses a list of filters (| speed=2 distort, etc)
   parseFilters: (arg, member, playing)->
@@ -130,7 +151,7 @@ class PlayerUtil
     filters
 
   # Processes video information (and adds it to the queue)
-  processInfo: (info, msg, player, playlist = false, voiceChannel)->
+  processInfo: (info, msg, player, playlist = false, voiceChannel, play = true)->
     s = await Core.settings.getForGuild(player.guild)
     l = Core.locales.getLocale(s.locale)
 
@@ -146,8 +167,8 @@ class PlayerUtil
     catch errors
       if typeof errors is 'string'
         return if playlist
-        return msg.reply l.player.filterErrors, false, {
-          description: errors,
+        return msg.reply l.player.filterErrors, embed: {
+          description: errors
           color: 0xFF0000
         }
     # Add the item to the queue
@@ -161,9 +182,10 @@ class PlayerUtil
       thumbnail: info.thumbnail
       radioStream: info.isRadioStream or false
       time: info.startAt if isFinite(info.duration) and info.duration > 0
+      videoPath: (info.formats.find((f)-> f.width and f.width >= 480) or info).url
       duration
       filters
-    }, playlist, playlist)
+    }, playlist, not play)
 
   # Checks item count for user
   checkItemCountLimit: (player, member)->

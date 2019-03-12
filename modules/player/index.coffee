@@ -22,19 +22,26 @@ class PlayerModule extends BotModule
     @registerParameter 'voteSkip', { type: Boolean, def: true }
     @registerParameter 'maxSongLength', { type: Number, def: 1800, min: 60, max: 21600 }
     @registerParameter 'maxItems', { type: Number, def: 0 }
+    @registerParameter 'asyncPlaylists', { type: Boolean, def: false }
+    @registerParameter 'inversePlaylist', { type: Boolean, def: false }
+    @registerParameter 'unrestrictedLivestreams', { type: Boolean, def: false }
+    @registerParameter 'radioPlaylist', { type: String, def: '-' }
+    @registerParameter 'radioChannel', { type: String, def: '-' }
+    @registerParameter 'radioShuffle', { type: Boolean, def: true }
 
   getForGuild: (guild)->
     return @_guilds[guild.id] if @_guilds[guild.id]?
     # Get guild data
     gData = await Core.guilds.getGuild(guild)
     # Create a new player object
-    player = new GuildPlayer guild, gData, await Core.data.get("GuildQueue:#{guild.id}") or {
+    player = new GuildPlayer guild, gData, Object.assign {
       # "empty" queue
       nowPlaying: undefined
       frozen: false
       volume: 1
-      items: []
-    }
+      items: [],
+      radioMode: false
+    }, await Core.data.get("GuildQueue:#{guild.id}")
     @_guilds[guild.id] = player
     @e.emit('newPlayer', player)
     # Relay all events
@@ -60,12 +67,6 @@ class PlayerModule extends BotModule
     # Save data on each update
     player.queue.on 'updated', =>
       await Core.data.set("GuildQueue:#{guild.id}", player.queue._d)
-      # Notify other instances when the queue gets updated
-      Core.data.publish('GuildQueueFeed', {
-        type: 'queueUpdated'
-        guildId: guild.id
-        by: Core.shard.id or 0
-      })
     player
 
   registerCommand: (name, options, handler)->
@@ -85,37 +86,54 @@ class PlayerModule extends BotModule
 
   ready: ->
     @registerEvent 'discord.voiceStateUpdate', (oldMember, newMember)=>
-      # User Joins a voice channel
-      unless oldMember.voiceChannel
+      # User Joins the same voice channel the bot's in
+      if newMember and newMember.voiceChannel? and newMember.voiceChannel.connection?
         player = @_guilds[newMember.guild.id]
-        return unless player and player.queue._d.nowPlaying and
-                      newMember.voiceChannel.id is player.queue._d.nowPlaying.voiceChannel.id
+        return unless player and player.queue.nowPlaying
         # Resume playback if suspended
-        if newMember.voiceChannel.members.length > 1 and
-           player.queue._d.nowPlaying.status is 'suspended' then
-           player.play()
+        if player.queue.nowPlaying.voiceChannel.members.size > 1 and
+        player.queue.nowPlaying.status is 'suspended'
+          player.play()
+          # Remove timeout
+          if player.timeout
+            clearTimeout player.timeout
+            delete player.timeout
       
-      # User leaves or switches voice channels
-      if not newMember.voiceChannel or newMember.voiceChannel isnt oldMember.voiceChannel
-        player = @_guilds[newMember.guild.id]
-        return unless player and player.queue._d.nowPlaying and
-                      oldMember.voiceChannel.id is player.queue._d.nowPlaying.voiceChannel.id
+      # User leaves the voice channel the bot's in
+      if oldMember and oldMember.voiceChannel? and oldMember.voiceChannel.connection?
+        player = @_guilds[oldMember.guild.id]
+        return unless player and player.queue.nowPlaying
         # Empty voice channel
-        if player.queue.nowPlaying.voiceChannel.members.length <= 1
+        if player.queue.nowPlaying.voiceChannel.members.size <= 1
           player.suspend()
+          if not player.timeout
+            # Inactivity timeout
+            player.timeout = setTimeout ->
+              player.stop()
+            , 240 * 60 * 1000 # 4 hours
 
       # Bot Switches Voice Channels
-      if newMember.id is Core.bot.user.id and oldMember.voiceChannel isnt newMember.voiceChannel
+      if newMember.id is Core.bot.user.id and newMember.voiceChannel?
         player = @_guilds[newMember.guild.id]
-        return player.skip() if player.queue._d.nowPlaying and not newMember.voiceChannel
-        player.queue.nowPlaying._d.voiceChannel = newMember.voiceChannel.id
+        return unless player and player.queue
+        return player.skip() if player.queue.nowPlaying and not newMember.voiceChannel?
+        return unless player.queue.nowPlaying and
+                      player.queue.nowPlaying.voiceChannel.id isnt newMember.voiceChannel.id
+        player.queue.nowPlaying.voiceChannel = newMember.voiceChannel
         player.queue.emit('updated')
+        # Empty voice channel
+        if player.queue.nowPlaying.voiceChannel.members.size <= 1
+          player.suspend()
+          if not player.timeout
+            # Inactivity timeout
+            player.timeout = setTimeout ->
+              player.stop()
+            , 240 * 60 * 1000 # 4 hours
 
   unload: ->
     # Remove ALL event listeners
     Object.keys(@_guilds).forEach (g)=>
       @_guilds[g].removeAllListeners()
       @_guilds[g].queue.removeAllListeners()
-      Core.data.removeListener('message', @_messageHandler)
 
 module.exports = PlayerModule

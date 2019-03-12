@@ -2,7 +2,7 @@ module.exports =
   token:
     name: 'token'
     message: 'Bot Token:'
-    validate: (token)-> /^\S{24}\.\S{6}\.\S{27}$/.test(token)
+    validate: (token)-> /^(\S{24}\.\S{6}\.\S{27}|mfa\.\S+)$/.test(token)
   prefix:
     name: 'prefix'
     message: 'Global Command Prefix:'
@@ -17,6 +17,8 @@ module.exports =
       { name: 'help (Help command)', value: 'help', checked: true }
       { name: 'ping (Pong!)', value: 'ping', checked: true }
       { name: 'player (Music Player)', value: 'player', checked: true }
+      { name: 'playlists (Manage playlists inside the bot)', value: 'playlists', checked: true }
+      { name: 'lyrics (Lyrics Search)', value: 'lyrics', checked: true }
       { name: 'poll (Simple Polls)', value: 'poll', checked: true }
       { name: 'raffle (Simple Raffle System)', value: 'raffle', checked: true }
       { name: 'rng (Dice Rolls, 8ball, etc)', value: 'rng', checked: true }
@@ -32,6 +34,7 @@ module.exports =
         choices.push { name: 'osu (osu! player statics)', value: 'osu', checked: false }
     if advanced
       choices.push { name: 'eval (Evaluate CoffeeScript)', value: 'eval', checked: false }
+      choices.push { name: 'announcements (Make announcements)', value: 'eval', checked: false }
     if config.modules? then choices.forEach (module)->
       module.checked = config.modules.indexOf(module.value) >= 0
     return {
@@ -55,7 +58,7 @@ module.exports =
     message: 'Default Language:'
     type: 'list'
     default: 'en_US'
-    choices: ['ar_SA', 'en_US', 'es_ES', 'fr_FR']
+    choices: ['ar_SA', 'cs_CZ', 'de_DE', 'en_US', 'eo_UY', 'es_ES', 'fr_FR', 'ko_KR', 'nl_NL', 'ja_JP', 'pt_PT']
   dbPort:
     name: 'dbPort'
     message: 'Internal Database Port:'
@@ -173,3 +176,13 @@ module.exports =
       '''
       'osu! API key'
     validate: (key)-> /^\S+$/.test(key.trim())
+  ffmpegCustom: [
+    {
+      name: 'ffmpegPath'
+      message: 'ffmpeg path'
+    }
+    {
+      name: 'ffprobePath'
+      message: 'ffprobe path'
+    }
+  ]

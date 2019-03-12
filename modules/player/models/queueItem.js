@@ -12,6 +12,17 @@ class QueueItem {
   constructor (data, queue) {
     this._d = data
     this.queue = queue
+    /**
+     * If set to true, a notification will be sent when this element starts playing.
+     * It's set to false after such notification is sent.
+     * @type {boolean}
+     */
+    this.notify = true
+    /**
+     * If set to true, the stream is considered to have errors and will be skipped by the bot.
+     * @type {boolean}
+     */
+    this.error = false
   }
 
   /**
@@ -57,7 +68,7 @@ class QueueItem {
    * @type {Discordie.IGuildMember}
    */
   get requestedBy () {
-    return this.queue.guild.members.find('id', this._d.requestedBy)
+    return this.queue.guild.members.find(m => m.id === this._d.requestedBy)
   }
 
   set requestedBy (v) {
@@ -69,7 +80,7 @@ class QueueItem {
    * @type {Discordie.IVoiceChannel}
    */
   get voiceChannel () {
-    return channels.find('id', this._d.voiceChannel)
+    return channels.find(c => c.id === this._d.voiceChannel)
   }
 
   set voiceChannel (v) {
@@ -81,7 +92,7 @@ class QueueItem {
    * @type {Discordie.ITextChannel}
    */
   get textChannel () {
-    return channels.find('id', this._d.textChannel)
+    return channels.find(c => c.id === this._d.textChannel)
   }
 
   set textChannel (v) {
@@ -123,7 +134,7 @@ class QueueItem {
   }
 
   /**
-   * URL/Path of the file or stream to play
+   * URL/Path of the file or stream to play (audio only)
    * @type {string}
    */
   get path () {
@@ -132,6 +143,18 @@ class QueueItem {
 
   set path (v) {
     this._d.path = v
+  }
+
+  /**
+   * URL/Path of the video stream if present
+   * @type {string}
+   */
+  get videoPath () {
+    return this._d.videoPath
+  }
+
+  set videoPath (v) {
+    this._d.videoPath = v
   }
 
   /**

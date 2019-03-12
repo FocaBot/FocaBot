@@ -6,6 +6,8 @@ class PlayerHUD
 
     # Handle events
     @audioModule.registerEvent 'player.start', (player, item)=> try
+      return unless item.notify
+      item.notify = false
       s = await Core.settings.getForGuild(player.guild)
       l = Core.locales.getLocale(s.locale)
       # Show "Now Playing" when an item starts playing
@@ -31,6 +33,7 @@ class PlayerHUD
     >`#{item.title}` (#{@util.displayTime item.duration}) #{@util.displayFilters item.filters}
     #{if item.radioStream then '\n\n' + (await @radioInfo(item, l)) + '\n' else ''}
     #{l.gen(l.player.hud.requestedBy, item.requestedBy.displayName)}
+    #{@loopModeInd item.queue.loopMode, l}
     """
 
   radioInfo: (item, l)->
@@ -133,8 +136,8 @@ class PlayerHUD
     message = undefined
     sending = false
     lastCount = 0
-    updateMessage = =>
-      return if sending or playlist.items.length is lastCount
+    updateMessage = (done)=>
+      return if sending or (playlist.items.length is lastCount and not done)
       embed = {
         author:
           name: if playlist.partial
@@ -152,23 +155,24 @@ class PlayerHUD
       }
       lastCount = playlist.items.length
       unless message
-        sending = true
-        message = await channel.send '', { embed }
-        sending = false
+        sending = channel.send '', { embed }
+        message = await sending
+        sending = null
       else
-        sending = true
-        await message.edit '', { embed }
-        sending = false
+        sending = message.edit '', { embed }
+        await sending
+        sending = null
     updateMessage()
     if playlist.partial
       interval = setInterval(updateMessage, 2500)
-      playlist.on 'done', =>
-        sending = false
-        updateMessage()
+      playlist.once 'done', =>
+        return if playlist.cancelled
+        await sending if sending
+        updateMessage(true)
         clearInterval(interval)
-      playlist.on 'cancelled', =>
+      playlist.once 'cancelled', =>
         playlist.cancelled = true
-        sending = false
+        await sending if sending
         if message then message.edit '', embed: {
           author: name: l.player.hud.playlistCancelled
         }
@@ -181,7 +185,8 @@ class PlayerHUD
       title: l.generic.sauceBtn
       description: """
       [#{l.generic.donateBtn}](https://tblnk.me/focabot-donate/)
-      #{@generateProgressOuter item}
+      #{@generateProgressOuter item}\
+      #{@loopModeInd item.queue.loopMode, l}
       """
       author:
         name: item.title
@@ -200,7 +205,7 @@ class PlayerHUD
         inline: true, name: l.player.hud.filters, value: @util.displayFilters item.filters
       }
     if item.radioStream
-      r.description += "\n#{await @radioInfo(item)}"
+      r.description += "\n#{await @radioInfo(item, l)}"
     r
 
   queue: (q, page=1, l, s)->
@@ -230,7 +235,9 @@ class PlayerHUD
 
     for qI, i in q.items.slice offset, max
       r.description += """
-      **#{offset+i+1}.** [#{qI.title.replace(/\]/, '\\]')}](#{qI.sauce.replace(/\)/, '\\)')}) \
+      **#{offset+i+1}.** \
+      [#{qI.title.substring(0, 50).replace(/\]/, '\\]')}]\
+      (#{qI.sauce.replace(/\)/, '\\)')}) \
       #{@util.displayFilters qI.filters} \
       (#{@util.displayTime qI.duration}) \
       #{l.gen l.player.hud.requestedBy, qI.requestedBy.displayName}\n
@@ -257,5 +264,10 @@ class PlayerHUD
     return '🔊' if vol >= 0.6
     return '🔉' if vol >= 0.3
     '🔈'
+
+  loopModeInd: (loopMode, l)->
+    return "\n#{l.player.hud.songLoopMode}" if loopMode is 'single'
+    return "\n#{l.player.hud.playlistLoopMode}" if loopMode is 'all'
+    ''
 
 module.exports = PlayerHUD

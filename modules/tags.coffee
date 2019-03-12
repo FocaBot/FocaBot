@@ -41,7 +41,7 @@ class TagModule extends BotModule
       await Core.data.set("Tag:#{args[0].toLowerCase()}", filtered)
       msg.reply l.gen(l.tags.deleted, tag.length - filtered.length)
 
-    @registerCommand '!', { argSeparator: ' ' }, ({ msg, args })=>
+    @registerCommand '!', { argSeparator: ' ' }, ({ msg, args, l })=>
       return if msg.author.bot or args.length < 1
       # Get the tag
       tag = await Core.data.get("Tag:#{args[0].toLowerCase()}")
@@ -49,7 +49,7 @@ class TagModule extends BotModule
       # Pick a random reply and send it
       chance = new Chance()
       res = chance.pickone tag
-      msg.channel.send res.reply
+      msg.channel.send l.gen res.reply
 
     @registerCommand 'taginfo', { ownerOnly: true, argSeparator: ' ' }, ({ msg, args, bot })=>
       # Get the tag
@@ -58,7 +58,10 @@ class TagModule extends BotModule
       # Generate a list of responses
       r = ''
       for res in tag
-        u = bot.users.find('id', res.by) or { username: 'Unknown', discriminator: res.by }
+        u = bot.users.find((u) -> u.id is res.by) or {
+          username: 'Unknown'
+          discriminator: res.by
+        }
         r += "\n(#{u.username}##{u.discriminator}): #{res.reply.substr(0,32)}..."
       # Send it
       msg.channel.send r

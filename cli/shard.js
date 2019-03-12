@@ -15,7 +15,7 @@ Object.assign(process.env, config.env)
 // Instantiate the bot
 const focaBot = new Azarasi({
   name: 'FocaBot',
-  version: '1.0.0-alpha (Elegant Erizo)',
+  version: '1.1.0-alpha (Fabulous Flamenco)',
   token: config.token,
   prefix: config.prefix,
   adminRoles: [ config.adminRole ],
@@ -25,7 +25,9 @@ const focaBot = new Azarasi({
   locale: config.defaultLocale,
   dbFile: path.join(dataPath, 'data.db'),
   dbPort: config.dbPort || 12920,
-  ffmpegBin: ffmpeg.path
+  ffmpegBin: config.ffmpegPath || ffmpeg.path,
+  ffprobeBin: config.ffprobePath || ffmpeg.probePath,
+  npm: true
 })
 
 // Parameters
@@ -34,12 +36,17 @@ focaBot.settings.register('autoDel', { type: Boolean, def: true })
 focaBot.modules.load(['util', 'admin'])
 focaBot.modules.load(config.modules)
 // Translations
-const translations = ['ar_SA', 'de_DE', 'en_US', 'es_CL', 'es_ES', 'fr_FR', 'ja_JP', 'pt_PT']
+const translations = ['ar_SA', 'cs_CZ', 'de_DE', 'en_US', 'es_CL', 'es_ES', 'fr_FR', 'ja_JP', 'pt_PT']
 translations.forEach(t => focaBot.locales.loadLocale(t))
 
 // Invite Link
-if (Core.shard.id === 0) {
+if (!Core.shard.id || Core.shard.id === 0) {
   focaBot.bot.on('ready', async () => {
+    if (!focaBot.bot.user.bot) {
+      focaBot.log('Running FocaBot in a non-bot user account. This is discouraged.', 2)
+      focaBot.properties.owner = [ focaBot.bot.user.id ]
+      return
+    }
     try {
       const app = await focaBot.bot.fetchApplication()
       focaBot.log('To add the bot to your server, use this link: ')
@@ -53,4 +60,8 @@ if (Core.shard.id === 0) {
 // Let the seals in!!
 focaBot.establishConnection()
 
-focaBot.log(`Shard ${Core.shard.id || 0} started!`)
+if (Core.shard.id) {
+  focaBot.log(`Shard ${Core.shard.id} started!`)
+} else {
+  focaBot.log(`Started!`)
+}

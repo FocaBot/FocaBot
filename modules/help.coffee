@@ -5,7 +5,7 @@ class HelpModule extends BotModule
     @registerCommand 'help', { allowDM: true }, ({ msg, args, s, l })=>
       gstr = ''
       if msg.guild
-        gstr = "\n**#{l.gen l.help.prefix, msg.guild.name}**: `#{s.prefix}`\n"
+        gstr = "\n**#{l.gen l.help.prefix, msg.guild.name}** `#{s.prefix}`\n"
         # Calculate permission level
         level = 0
         level = 1 if Core.permissions.isDJ(msg.member)
@@ -33,7 +33,7 @@ class HelpModule extends BotModule
             value: """
             [#{l.help.commands}](https://www.focabot.xyz/commands?#{qs}) / \
             [#{l.help.filters}](https://www.focabot.xyz/filters?#{qs}) / \
-            [#{l.help.manual}](https://www.focabot.xyz/manual?#{qs}) / \
+            [#{l.help.manual}](https://www.focabot.xyz/docs?#{qs}) / \
             [#{l.help.donate}](https://www.focabot.xyz/donate?#{qs}) / \
             [GitHub](https://github.com/FocaBot)
             """

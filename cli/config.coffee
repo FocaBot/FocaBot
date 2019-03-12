@@ -20,6 +20,21 @@ module.exports =(config, file)->
           to set them up first.
           '''
           'What do you want to do?'
+        else if menu is 'ffmpeg' then ->
+          ffmpegPath = if config.ffmpegPath is 'ffmpeg' then '<system>' else config.ffmpegPath
+          ffprobePath = if config.ffprobePath is 'ffprobe' then '<system>' else config.ffprobePath
+          console.log """
+          FocaBot automatically downloads recent ffmpeg builds by default.
+
+          You can use the system provided ones or provide a custom path instead.
+          Change this if you're having issues with audio playback.
+
+          Current settings:
+
+          ffmpeg: #{ffmpegPath or '<built in>'}
+          ffprobe: #{ffprobePath or '<built in>'}
+          """
+          'What do you want to do?'
       type: 'list'
       choices:
         if menu is 'main'
@@ -35,6 +50,7 @@ module.exports =(config, file)->
             }
             { name: "Change internal database port (#{config.dbPort||12920})", value: 'dbPort' }
             new iq.Separator()
+            { name: 'Change ffmpeg path >', value: 'ffmpeg' }
             { name: 'Set up additional API keys >', value: 'apiKeys' }
             new iq.Separator()
             { name: 'Save changes and exit', value: 'wq' }
@@ -55,10 +71,25 @@ module.exports =(config, file)->
             { name: 'Discard changes and exit', value: 'q' }
             new iq.Separator()
           ]
+        else if menu is 'ffmpeg'
+          [
+            { name: 'Use built-in ffmpeg binaries', value: 'ffmpegBuiltin' },
+            { name: 'Use system provided ffmpeg binaries', value: 'ffmpegSystem' },
+            { name: 'Use custom ffmpeg binaries', value: 'ffmpegCustom' }
+            new iq.Separator()
+            { name: '< Cancel and go back', value: 'back' }
+          ]
     }]
     switch param
       when 'apiKeys'
         menu = 'apiKeys'
+      when 'ffmpeg'
+        menu = 'ffmpeg'
+      when 'ffmpegBuiltin'
+        config.ffmpegPath = config.ffprobePath = ''
+      when 'ffmpegSystem'
+        config.ffmpegPath = 'ffmpeg'
+        config.ffprobePath = 'ffprobe'
       when 'back'
         menu = 'main'
       when 'q' then done = true
@@ -69,6 +100,6 @@ module.exports =(config, file)->
         prompt = prompts[param]
         prompt = prompt(config, true) if typeof prompt is 'function'
         prompt = [ prompt ] if not prompt instanceof Array
-        r = await iq.prompt [ prompt ]
+        r = await iq.prompt prompt
         console.log(r)
         Object.assign(config, r)

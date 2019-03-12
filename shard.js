@@ -7,7 +7,7 @@ const Azarasi = require('azarasi')
 
 const focaBot = new Azarasi({
   name: 'FocaBot',
-  version: '1.0.0-alpha (Elegant Erizo)',
+  version: '1.1.0-alpha (Fabulous Flamenco)',
   prefix: process.env.BOT_PREFIX,
   token: process.env.BOT_TOKEN,
   owner: JSON.parse(process.env.BOT_OWNER),
@@ -21,7 +21,10 @@ const focaBot = new Azarasi({
   watch: true,
   dbFile: process.env.DB_FILE || 'data.db',
   dbPort: process.env.DB_PORT || 12920,
-  ffmpegBin: ffmpeg.path
+  ffmpegBin: process.env.FFMPEG_BIN || ffmpeg.path,
+  ffprobeBin: process.env.FFPROBE_BIN || ffmpeg.probePath,
+  redis: process.env.USE_REDIS,
+  redisURL: process.env.REDIS_URL
 })
 
 // These modules go first.
@@ -31,7 +34,7 @@ focaBot.modules.load(['util'])
 focaBot.settings.register('autoDel', { type: Boolean, def: true })
 
 // Load the translations
-const translations = ['ar_SA', 'de_DE', 'en_US', 'es_ES', 'fr_FR', 'ja_JP', 'pt_PT']
+const translations = ['ar_SA', 'cs_CZ', 'de_DE', 'en_US', 'eo_UY', 'es_ES', 'fr_FR', 'ko_KR', 'nl_NL', 'ja_JP', 'pt_PT']
 translations.forEach(t => focaBot.locales.loadLocale(t))
 
 // Load the modules.
@@ -40,4 +43,13 @@ focaBot.modules.load(JSON.parse(process.env.BOT_MODULES))
 // Let the seals in!!
 focaBot.establishConnection()
 
-focaBot.log(`Shard ${Core.shard.id || 0} started!`)
+if (Core.shard.id) {
+  focaBot.log(`Shard ${Core.shard.id} started!`)
+} else {
+  focaBot.log(`Started!`)
+  focaBot.bot.on('ready', () => {
+    if (!focaBot.bot.user.bot) {
+      focaBot.log('Running FocaBot in a non-bot user account. This is discouraged.', 2)
+    }
+  })
+}

@@ -5,32 +5,34 @@ class PlayerCommands
   constructor: (@playerModule)->
     { @hud, @util, @search } = @playerModule
     { @permissions } = Core
+    @cooldown = {}
 
     # Play
     @registerCommand 'play', { aliases: ['p', 'request', 'add'] }, ({ m, args, s, player, l })=>
       # Check Voice Connection
       unless m.member.voiceChannel
         return m.reply l.player.noVoice
+      vc = m.member.voiceChannel
       # Check voice channel name
       if s.voiceChannel and s.voiceChannel isnt '*' and
-         s.voiceChannel isnt m.member.voiceChannel.name and not @permissions.isAdmin(m.member)
+         s.voiceChannel isnt vc.name and not @permissions.isAdmin(m.member)
         return m.reply l.player.notAllowed
       # Check item limit
       if @util.checkItemCountLimit(player, m.member)
         return m.reply l.player.queueLimit
       # Process request
-      q = args.split('|')[0].trim()
+      q = args.split('|')[0].trim().split('\n')
       # Use Attachment URL if present
-      q = m.attachments.first().url if m.attachments.first()
+      q = [ m.attachments.first().url ] if m.attachments.first()
       # Display error if no query
-      return m.reply(l.player.noQuery) unless q
+      return m.reply(l.player.noQuery) unless q[0]
       # Filters
       filters = (args.split('|')[1] or '').trim()
       # Start Position
       time = 0
-      if args.match(/@\s?(\d+(:\d+)*)/)
+      if args.match(/@\s?(\d+(:\d+)*)/) and q.length is 1
         time = parseTime(args.match(/@\s?(\d+(:\d+)*)/)[1])
-        q = q.replace(/@\s?(\d+(:\d+)*)/, '').trim()
+        q[0] = q[0].replace(/@\s?(\d+(:\d+)*)/, '').trim()
         filters = filters.replace(/@\s?(\d+(:\d+)*)/, '').trim()
       Core.util.sendTyping(m.channel)
       try
@@ -42,7 +44,7 @@ class PlayerCommands
             return m.reply l.player.invalidStart
           vid.startAt = time
           vid.filters = filters
-          @util.processInfo(vid, m, player, false, m.member.voiceChannel)
+          @util.processInfo(vid, m, player, false, vc)
         else
           # Playlist
           return m.reply(l.player.playlistNoDJ) unless Core.permissions.isDJ(m.member)
@@ -52,18 +54,33 @@ class PlayerCommands
             return m.reply(l.player.playlistAlreadyLoading)
           @hud.addPlaylist(m.member, info, m.channel, l, s)
           player.pendingPlaylist = { pl: info, by: m.member }
-          info.on 'done', =>
-            return if info.cancelled
-            info.items.forEach (item, i)=>
+          if s.asyncPlaylists
+            for item, i in info.items
               vid = await @util.getAdditionalMetadata(item)
               return if time > vid.duration or time < 0
               vid.startAt = time
               vid.filters = filters
-              @util.processInfo(vid, m, player, true, m.member.voiceChannel)
-              # Start playback if not started already
-              if i is (info.items.length - 1) and not player.queue.nowPlaying
-                player.queue._d.nowPlaying = player.queue._d.items.shift()
-                player.play()
+              @util.processInfo(vid, m, player, true, vc, i is 0)
+            info.on 'video', (item)=>
+              return if info.cancelled
+              vid =  await @util.getAdditionalMetadata(item)
+              return if time > vid.duration or time < 0
+              vid.startAt = time
+              vid.filters = filters
+              @util.processInfo(vid, m, player, true, vc)
+            info.once 'done', =>
+              return if info.cancelled
+              delete player.pendingPlaylist
+          else
+            info.once 'done', =>
+              return if info.cancelled
+              delete player.pendingPlaylist
+              for item, i in info.items
+                vid = await @util.getAdditionalMetadata(item)
+                return if time > vid.duration or time < 0
+                vid.startAt = time
+                vid.filters = filters
+                @util.processInfo(vid, m, player, true, vc, i is 0)
       catch e
         console.error e
         m.reply '', embed: {
@@ -111,7 +128,7 @@ class PlayerCommands
     # Clear / Stop
     @registerCommand 'clear', { aliases: ['stop'], djOnly: true }, ({ msg, player, l })=>
       player.stop()
-      msg.channel.sendMessage l.player.queueCleared
+      msg.channel.send l.player.queueCleared
 
     # Pause
     @registerCommand 'pause', { djOnly: true }, ({ msg, player })=>
@@ -192,7 +209,7 @@ class PlayerCommands
         unless (itm.requestedBy is msg.author.id) or @permissions.isDJ msg.member
           return msg.channel.send l.player.onlyRemoveOwn
         { item } = player.queue.remove(index, msg.member)
-        msg.channel.sendMessage l.player.hud.removed,
+        msg.channel.send l.player.hud.removed,
                                 embed: @hud.removeItem(item, msg.member, l)
 
     # Swap
@@ -225,7 +242,8 @@ class PlayerCommands
 
     # Seek
     @registerCommand 'seek', { aliases: ['s'], djOnly: true }, ({ msg, args, player })=>
-      try await player.seek(parseTime(args))
+      time = parseTime(args.trim() or 0)
+      try await player.seek(time) unless isNaN(time)
       catch e
         msg.reply e.message if e.message
 
@@ -299,9 +317,10 @@ class PlayerCommands
       # Check Voice Connection
       unless m.member.voiceChannel
         return m.reply l.player.noVoice
+      vc = m.member.voiceChannel
       # Check voice channel name
       if s.voiceChannel and s.voiceChannel isnt '*' and
-         s.voiceChannel isnt m.member.voiceChannel.name and not @permissions.isAdmin(m.member)
+         s.voiceChannel isnt vc.name and not @permissions.isAdmin(m.member)
         return m.reply l.player.notAllowed
       # Check item limit
       if @util.checkItemCountLimit(player, m.member)
@@ -311,10 +330,45 @@ class PlayerCommands
         result = await @search.doSearch(m, l, args)
         vid = await @util.getAdditionalMetadata(result)
         vid.filters = []
-        @util.processInfo(vid, m, player, false, m.member.voiceChannel)
+        @util.processInfo(vid, m, player, false, vc)
       catch e
         Core.log e, 2
         m.reply e.message if e.message
+
+    # Loop Mode
+    @registerCommand 'loop', { djOnly: true }, ({ msg, args, l, player })->
+      switch args
+        when 'song', 'single', '1'
+          player.queue.loopMode = 'single'
+          msg.channel.send l.player.hud.songLoopMode
+        when 'playlist', 'all', 'queue'
+          player.queue.loopMode = 'all'
+          msg.channel.send l.player.hud.playlistLoopMode
+        when 'off', 'none', 'disable', 'disabled', '0'
+          player.queue.loopMode = 'none'
+          msg.channel.send l.generic.success
+        else
+          msg.channel.send l.generic.invalidArgs
+          
+    @registerCommand 'screenshot', { aliases: ['ss'] }, ({ m, l, player })=>
+      return m.reply l.generic.cooldown if @cooldown[m.guild.id] > Date.now()
+      @cooldown[m.guild.id] = Date.now() + 5000
+
+      { nowPlaying } = player.queue
+      return m.reply l.player.notPlaying unless nowPlaying
+      return m.reply l.player.screenshotError unless nowPlaying.videoPath
+      
+      try
+        Core.util.sendTyping(m.channel)
+        time = if nowPlaying.duration then nowPlaying.originalTime + 2 else 0
+        screenshot = await @util.getScreenshot nowPlaying.videoPath, time
+        m.channel.send files: [{
+          name: "focabot-#{nowPlaying.uid}-#{time}.jpg"
+          attachment: screenshot
+        }]
+      catch e
+        Core.log e, 2
+        m.reply l.player.screenshotError
 
   registerCommand: -> @playerModule.registerCommand.apply(@playerModule, arguments)
 

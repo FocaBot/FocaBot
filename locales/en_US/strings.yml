@@ -1,5 +1,5 @@
 # FocaBot Locale File
-# Version 1.0.0-alpha13
+# Version 1.0.5
 generic:
   error: "Something went wrong."
   invalidArgs: "Invalid arguments provided."
@@ -10,6 +10,9 @@ generic:
   helpBtn: "\\[click for help\\]"
   donateBtn: "\\[donate\\]"
   commandUsage: "Usage:"
+  cooldown: "This command has a cooldown, try again in a few seconds..."
+  forbidden: "You are not allowed to use this command."
+  needRole: "You need the `{1}` role."
 player:
   noVoice: "You must be in a voice channel."
   noSameVoice: "You must be in the same voice channel the bot is in."
@@ -17,7 +20,7 @@ player:
   queueLimit: "You have exceeded the limit of items in queue for this server."
   invalidStart: "Invalid start time."
   playlistNoDJ: "Only DJs can add playlists."
-  notPlaying: "Nothing being played in this server."
+  notPlaying: "Nothing's being played in this server."
   skip: "**{1}** skipped the current song."
   noSkipAllowed: "You are not allowed to skip songs."
   voteSkip: "**{1}** voted to skip the current song ({2}/{3})"
@@ -53,6 +56,7 @@ player:
   playlistExists: "A playlist with that ID already exists."
   playlistForbidden: "You don't have permission to update that playlist."
   playlistDeleted: "Playlist deleted!"
+  screenshotError: "Couldn't take screenshot"
   hud:
     nowPlaying: "Now playing in `{1}`:"
     removed: "Removed from the queue:"
@@ -102,6 +106,8 @@ admin:
   noSuchCommand: "No such command."
   permissionsUpdated: "Permissions Updated!"
   invalidLevel: "Invalid permission level."
+  currentSettings: "Current settings for {1}:"
+  currentPermissionLevel: "Current permission level for {1}:"
 config:
   parameter: "Parameter:"
   value: "Value:"
@@ -176,3 +182,9 @@ osu:
   performance: "Performance: {1}pp (#{2}, {3}#{4})"
   stats: "▸ **Level**: {1}\n▸ **Accuracy**: {2}\n▸ **Play count**: {3}\n▸ **Ranked score**: {4}\n▸ **Total score**: {5}\n▸ **SS**: {6} **S**: {7} **A**: {8}"
   official: "in osu! official server"
+announcements:
+  footer: "This is a global announcement. You can disable them by running {1}."
+lyrics:
+  searching: "Searching lyrics for {1}..."
+  title: "{1} lyrics:"
+  more: "\\[More at Genius.com\\]"
