@@ -1,10 +1,20 @@
+# IDE stuff
 .vscode
-.env.example
-coffeelint.json
-process.yml
+.idea
+
+# Yarn stuff
 yarn.lock
-modules/lastfm
-*.db
+
+# Sensitive Data
+focabot.yml
 .env
+data
+
+# Development-only stuff
 .crowdin.yml
 .directory
+focabot.example.yml
+src
+bin
+tsconfig.json
+snapcraft.yaml
