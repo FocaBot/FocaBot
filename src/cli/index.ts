@@ -3,6 +3,7 @@ import { StartAction, ConfigAction, ReconfigureAction } from './actions'
 import cli, { Command } from 'commander'
 
 cli
+  .name('focabot')
   .version(`${version} (${versionName})`, '-v, --version')
   .arguments('[action]')
   .description(`Possible actions:
