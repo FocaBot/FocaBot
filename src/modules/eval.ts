@@ -26,12 +26,15 @@ export default class Eval extends Azarasi.Module {
       ...this.globalNamespace,
       ...ctx,
       Global: this.globalNamespace,
-      registerCommand: this.registerCommand,
-      unregisterCommand: this.unregisterCommand,
-      registerEvent: this.registerEvent,
-      unregisterEvent: this.unregisterEvent,
-      registerParameter: this.registerParameter,
-      unregisterParameter: this.unregisterParameter,
+      registerCommand: this.wrap(this.registerCommand),
+      unregisterCommand: this.wrap(this.unregisterCommand),
+      registerEvent: this.wrap(this.registerEvent),
+      unregisterEvent: this.wrap(this.unregisterEvent),
+      registerParameter: this.wrap(this.registerParameter),
+      unregisterParameter: this.wrap(this.unregisterParameter),
+      log: this.wrap(this.log),
+      logDebug: this.wrap(this.logDebug),
+      logError: this.wrap(this.logError),
       print: printFn,
       p: printFn,
       axios
@@ -58,6 +61,10 @@ export default class Eval extends Azarasi.Module {
     } else {
       channel.send('```js\n' + inspect(input, false, depth) + '```')
     }
+  }
+
+  wrap (fn : (...args : any[]) => any) {
+    return (...args : any[]) => fn.apply(this, args)
   }
 }
 

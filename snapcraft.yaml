@@ -1,4 +1,7 @@
 name: focabot
+title: FocaBot
+icon: src/icon.jpg
+license: MIT
 base: core18
 version: '2.0+git'
 summary: Discord Music Bot
@@ -9,7 +12,7 @@ description: |
 
   Check the docs at https://www.focabot.xyz/
 grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+confinement: strict
 parts:
   focabot:
     plugin: nodejs
