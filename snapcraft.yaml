@@ -17,6 +17,7 @@ parts:
     node-engine: '10.15.3'
     npm-run:
       - build
+    node-package-manager: yarn
 apps:
   focabot:
     command: focabot
