@@ -1,6 +1,6 @@
 name: focabot
 title: FocaBot
-icon: src/icon.jpg
+icon: src/icon.png
 license: MIT
 base: core18
 version: '2.0+git'
