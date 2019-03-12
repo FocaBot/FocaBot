@@ -20,12 +20,18 @@ export default class Eval extends Azarasi.Module {
   @registerCommand({ ownerOnly: true }) eval (ctx : CommandContext, code : string) {
     const { msg } = ctx
     // Enclose script in an async function to allow use of the "await" keyword.
-    const script = `(async () => {\n${code}\n})()`
+    const script = `(async () => {\n${code}\n})().catch(e => print(e))`
     const printFn = (input : any, depth = 1) => this.print(msg.channel, input, depth)
     const vmContext = VM.createContext({
       ...this.globalNamespace,
       ...ctx,
       Global: this.globalNamespace,
+      registerCommand: this.registerCommand,
+      unregisterCommand: this.unregisterCommand,
+      registerEvent: this.registerEvent,
+      unregisterEvent: this.unregisterEvent,
+      registerParameter: this.registerParameter,
+      unregisterParameter: this.unregisterParameter,
       print: printFn,
       p: printFn,
       axios
