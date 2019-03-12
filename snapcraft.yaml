@@ -1,0 +1,22 @@
+name: focabot
+base: core18
+version: '2.0+git'
+summary: Discord Music Bot
+description: |
+  FocaBot is an open source music bot for Discord, it's easy to setup and comes
+  with support for many video and audio streaming platforms, as well as some additional
+  features like audio filters, video screenshots and livestream/radio support.
+
+  Check the docs at https://www.focabot.xyz/
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+parts:
+  focabot:
+    plugin: nodejs
+    source: .
+    node-engine: '^10.0.0'
+    npm-run:
+      - build
+apps:
+  focabot:
+    command: focabot
