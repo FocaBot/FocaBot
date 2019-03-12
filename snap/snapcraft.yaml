@@ -14,7 +14,6 @@ parts:
   focabot:
     plugin: nodejs
     source: .
-    node-engine: '^10.0.0'
     npm-run:
       - build
 apps:
