@@ -9,6 +9,7 @@ generic:
   helpBtn: "\\[도움말을 위해 클릭\\]"
   donateBtn: "\\[지원하기\\]"
   commandUsage: "사용법:"
+  cooldown: "이 명령어는 쿨타임이 있습니다. 몇 초 후 다시 시도해 주십시오."
 player:
   noVoice: "보이스 채널/음성방 안에 있으셔야 합니다."
   noSameVoice: "봇인 저와 같은 보이스 채널/음성방에 있으셔야 합니다."
@@ -52,6 +53,7 @@ player:
   playlistExists: "그 ID/이름를 가진 재생목록이 이미 존재합니다."
   playlistForbidden: "귀하께서는 이 재생목록을 업데이트/편집할 수 있는 권한이 없습니다."
   playlistDeleted: "재생목록이 삭제되었습니다!"
+  screenshotError: "스크린샷을 찍을 수 없습니다."
   hud:
     nowPlaying: "현재 이곳에서 재생됩니다 `{1}`:"
     removed: "이 대기열에서 삭제되었습니다:"
