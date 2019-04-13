@@ -110,6 +110,7 @@ class PlayerUtil
 
   # Uses youtube-dl to get information of an URL or search term
   getInfo: (query)-> await ytdl(query, [
+      '--youtube-skip-dash-manifest'
       '--default-search=ytsearch'
       '--ignore-errors'
       '--force-ipv4',
