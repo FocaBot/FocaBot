@@ -204,3 +204,15 @@ moderation:
   raidKickPrompt: "Kick all users associated with this raid? (Users with roles other than the raid role will be spared)"
   raidKick: "Kicking all users associated with a recent raid..."
   autoRole: "Automatic Role"
+  noRole: "Please specify a role."
+  selfAssignableList: "Self assignable roles:"
+  selfAssignCommand: "Use {1}role <role name> to request one."
+  selfAssignModCommand: "Use {1}selfAssign <role name> to enable or disable a role."
+  roleSelfAssignableStatusOn: "Role \"{1}\" is currently self assignable. Use `{2}selfAssign {1}=false` to disable."
+  roleSelfAssignableStatusOff: "Role \"{1}\" is currently not self assignable. Use `{2}selfAssign {1}=true` to enable."
+  roleNotAssignable: "The specified role is not self assignable."
+  roleNotReachable: "The bot can't assign this role (it is higher than the bot's highest role)."
+  invalidRole: "Invalid role specified"
+
+
+

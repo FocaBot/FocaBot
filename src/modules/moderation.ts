@@ -19,6 +19,8 @@ export default class Moderation extends Azarasi.Module {
     this.registerParameter('antiRaid_increaseVerification', { type: Boolean, def: false })
     // Auto-Role
     this.registerParameter('autoRole', { type: String, def: 'off' })
+    // Self assignable roles
+    this.registerParameter('selfAssignAutoDel', { type: Boolean, def: false })
   }
 
   /**
@@ -131,7 +133,7 @@ export default class Moderation extends Azarasi.Module {
       if (!data.antiRaidUsers) data.antiRaidUsers = []
       data.antiRaidUsers.push({ id: member.id, timestamp: Date.now() })
       if (data.antiRaidTriggered) {
-        // Anti-Raid is currently triggered, give role
+        // Anti-Raid is currently active, give role
         if (s.antiRaid_role !== 'none') {
           const role = member.guild.roles.find(r => r.name === s.antiRaid_role)
           if (role) await member.addRole(role, l!.moderation.raidDetected)
@@ -153,7 +155,11 @@ export default class Moderation extends Azarasi.Module {
           // Set verification level
           if (s.antiRaid_increaseVerification) {
             data.antiRaidPreviousVerificationLevel = member.guild.verificationLevel
-            member.guild.setVerificationLevel(4, l!.moderation.raidDetected)
+            try {
+              await member.guild.setVerificationLevel(4, l!.moderation.raidDetected)
+            } catch (e) {
+              this.logError(e)
+            }
           }
           // Apply roles
           if (s.antiRaid_role !== 'none') {
@@ -174,6 +180,79 @@ export default class Moderation extends Azarasi.Module {
       const role = member.guild.roles.find(r => r.name === s.autoRole)
       if (role) await member.addRole(role, l!.moderation.autoRole)
     }
+  }
+
+  /**
+   * Marks a role as self-assignable.
+   * @param role - Role to mark.
+   * @param status - True to enable and False to disable.
+   */
+  @registerCommand({ adminOnly: true, argSeparator: '=' })
+  async selfAssign ({ msg, l, data, s } : CommandContext, roleName : string, status : boolean) {
+    let selfAssignableRoles = data.selfAssignableRoles || []
+    // Send list of self assignable roles if no role is specified
+    if (!roleName) {
+      const roles = selfAssignableRoles
+        .map(id => msg.guild.roles.find(r => r.id === id))
+        .filter(r => r)
+      return msg.channel.send(
+        l!.moderation.selfAssignableList + '\n\n' +
+        (roles.length >= 1 ? roles.map(r => ` • ${r.name}\n`) : '<N/A>') + '\n\n' +
+        l!.gen(l!.moderation.selfAssignModCommand, s.prefix!)
+      )
+    }
+    // Find role
+    const role = msg.guild.roles.find(r => r.name.toLowerCase() === roleName.toLowerCase())
+    if (!role) return msg.reply(l!.moderation.invalidRole)
+    // Check if the role is assignable by the bot.
+    if (!role.editable) return msg.reply(l!.moderation.roleNotReachable)
+    // Change status if specified.
+    if (status != null) {
+      // Remove all instances of this role from the list.
+      selfAssignableRoles = selfAssignableRoles.filter(r => r !== role.id)
+      // Add the role if status is true
+      if (status) selfAssignableRoles.push(role.id)
+      // Save changes
+      data.selfAssignableRoles = selfAssignableRoles
+      await data.save()
+    }
+    // Display current status
+    const currentStatus = selfAssignableRoles.indexOf(role.id) >= 0
+    msg.channel.send(l!.gen(
+      currentStatus ? l!.moderation.roleSelfAssignableStatusOn : l!.moderation.roleSelfAssignableStatusOff,
+      role.name,
+      s.prefix!
+    ))
+  }
+
+  /**
+   * Request a self-assignable role.
+   * @param roleName - Role to request.
+   */
+  @registerCommand({ aliases: ['iam', 'iamn'] })
+  async role ({ msg, l, data, s } : CommandContext, roleName : string) {
+    let selfAssignableRoles = data.selfAssignableRoles || []
+    // Send list of self assignable roles if no role is specified
+    if (!roleName) {
+      const roles = selfAssignableRoles
+      .map(id => msg.guild.roles.find(r => r.id === id))
+      .filter(r => r)
+      return msg.reply(
+        l!.moderation.selfAssignableList + '\n\n' +
+        (roles.length >= 1 ? roles.map(r => ` • ${r.name}\n`) : '*(N/A)*\n') + '\n' +
+        l!.gen(l!.moderation.selfAssignCommand, s.prefix!)
+      )
+    }
+    // Find role
+    const role = msg.guild.roles.find(r => r.name.toLowerCase() === roleName.toLowerCase())
+    if (!role) return msg.reply(l!.moderation.invalidRole)
+    // Check if the role is assignable by the bot.
+    if (selfAssignableRoles.indexOf(role.id) < 0) return msg.reply(l!.moderation.roleNotAssignable)
+    if (!role.editable) return msg.reply(l!.moderation.roleNotReachable)
+    // Assign role
+    await msg.member.addRole(role)
+    if (s.selfAssignAutoDel) await msg.delete()
+    else msg.reply(l!.generic.success)
   }
 }
 
@@ -200,9 +279,10 @@ declare module 'azarasi/lib/settings' {
     antiRaid_role : string
     /** Optionally increase the guild's verification level to the maximum possible value. */
     antiRaid_increaseVerification : boolean
-
     /** Give a role automatically to new members. Set to 'off' to disable. */
     autoRole : string
+    /** Automatically delete messages requesting self assignable roles */
+    selfAssignAutoDel : boolean
   }
 }
 
@@ -214,5 +294,7 @@ declare module 'azarasi/lib/guilds' {
     antiRaidUsers? : AntiRaidUserEntry[]
     /** Keep track of the verification level active before triggering the anti-raid, in order to restore it */
     antiRaidPreviousVerificationLevel : number
+    /** Self assignable roles */
+    selfAssignableRoles? : string[]
   }
 }

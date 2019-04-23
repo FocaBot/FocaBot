@@ -1,6 +1,6 @@
 /**
  * FocaBot Locale TypeScript Definition
- * Generated automatically from en_US/strings.yml on 2019-03-01T01:39:39.823Z
+ * Generated automatically from en_US/strings.yml on 2019-04-23T13:01:58.988Z
  */
 import { Locale } from 'azarasi/lib/locales'
 
@@ -710,6 +710,46 @@ declare module 'azarasi/lib/locales' {
        * Automatic Role
        */
       "autoRole" : string
+      /**
+       * Please specify a role.
+       */
+      "noRole" : string
+      /**
+       * Self assignable roles:
+       */
+      "selfAssignableList" : string
+      /**
+       * Use {1}role <role name> to request one.
+       */
+      "selfAssignCommand" : string
+      /**
+       * Use {1}selfAssign <role name> to enable or disable a role.
+       */
+      "selfAssignModCommand" : string
+      /**
+       * Role "{1}" is currently self assignable. Use `{2}selfAssign {1}=false` to disable.
+       */
+      "roleSelfAssignableStatusOn" : string
+      /**
+       * Role "{1}" is currently not self assignable. Use `{2}selfAssign {1}=true` to enable.
+       */
+      "roleSelfAssignableStatusOff" : string
+      /**
+       * The specified role is not self assignable.
+       */
+      "roleNotAssignable" : string
+      /**
+       * The bot can't assign this role (it is higher than the bot's highest role).
+       */
+      "roleNotReachable" : string
+      /**
+       * You don't have enough permissions to change roles for other users.
+       */
+      "roleModForbidden" : string
+      /**
+       * Invalid role specified
+       */
+      "invalidRole" : string
     }
   }
 }
