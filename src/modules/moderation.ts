@@ -127,7 +127,7 @@ export default class Moderation extends Azarasi.Module {
   async handleNewMember (member : Discord.GuildMember) {
     const { data } = await this.az.guilds.getGuild(member.guild)
     const s = await this.az.settings.getForGuild(member.guild)
-    const l = this.az.locales.getLocale(s.locale!)
+    const l = this.az.locales.getLocale(s.locale!)!
     // Anti Raid
     if (s.antiRaid) {
       if (!data.antiRaidUsers) data.antiRaidUsers = []
