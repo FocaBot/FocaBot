@@ -1,20 +1,18 @@
 # IDE stuff
-.vscode
-.idea
-
-# Yarn stuff
-yarn.lock
+.vscode/
+.idea/
 
 # Sensitive Data
 focabot.yml
 .env
-data
+data/
 
 # Development-only stuff
 .crowdin.yml
 .directory
 focabot.example.yml
-src
-bin
+src/
+bin/
 tsconfig.json
 snapcraft.yaml
+*.tsbuildinfo
