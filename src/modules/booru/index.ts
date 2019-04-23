@@ -48,14 +48,14 @@ export default class Booru extends Azarasi.Module {
           const post = await provider.getRandomPost(tags, nsfw)
           // Send the picture
           return msg.reply('', { embed: {
-            title: l!.generic.sauceBtn,
+            title: l.generic.sauceBtn,
             url: post.webUrl,
             image: { url: post.embedUrl }
           }})
         } catch (e) {
-          if (e.statusCode && e.statusCode === 404) return msg.reply(l!.generic.noResults)
+          if (e.statusCode && e.statusCode === 404) return msg.reply(l.generic.noResults)
           this.az.logError(e)
-          return msg.reply(l!.generic.error)
+          return msg.reply(l.generic.error)
         }
       })
     }

@@ -21,10 +21,10 @@ export default class RNG extends Azarasi.Module {
       roll = parseInt(dice) ? `1d${dice}` : '1d100' // When in doubt, roll a single, 100-faces dice.
     }
     const result = this.chance.rpg(roll)
-    let reply = l!.gen(l!.rng.roll, msg.member.toString(), result.join(', '))
+    let reply = l.gen(l.rng.roll, msg.member.toString(), result.join(', '))
     if (result.length > 1) {
       const total = result.reduce((a, b) => a + b)
-      reply += `\n\n${l!.gen(l!.rng.total, total.toString())}`
+      reply += `\n\n${l.gen(l.rng.total, total.toString())}`
     }
     msg.channel.send(reply)
   }
@@ -36,9 +36,9 @@ export default class RNG extends Azarasi.Module {
   @registerCommand({ argSeparator: ';', aliases: ['pick'] })
   choose ({ msg, l } : CommandContext, ...items : string[]) {
     if (items.length < 2) {
-      msg.reply(l!.rng.notEnoughItems)
+      msg.reply(l.rng.notEnoughItems)
     } else {
-      msg.reply(l!.gen(l!.rng.choice, this.chance.pickone(items)))
+      msg.reply(l.gen(l.rng.choice, this.chance.pickone(items)))
     }
   }
 
@@ -47,7 +47,7 @@ export default class RNG extends Azarasi.Module {
    */
   @registerCommand('8ball')
   eightBall ({ msg, l } : CommandContext) {
-    msg.reply('🎱' + this.chance.pickone(l!.rng['8ball']))
+    msg.reply('🎱' + this.chance.pickone(l.rng['8ball']))
   }
 
   /**
@@ -62,7 +62,7 @@ export default class RNG extends Azarasi.Module {
       hash = ((hash << 5) - hash) + target.charCodeAt(i)
     }
     const rate = Math.ceil(((hash & 0xFF) / 0xFF) * 10)
-    msg.reply(l!.gen(l!.rng.rate, target, rate.toString()))
+    msg.reply(l.gen(l.rng.rate, target, rate.toString()))
   }
 }
 

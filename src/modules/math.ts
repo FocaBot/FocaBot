@@ -14,12 +14,12 @@ export default class Math extends Azarasi.Module {
   @registerCommand({ allowDM: true, aliases: ['calc', 'math'] })
   calculate ({ msg, args, l } : CommandContext) {
     const result = mathjs.eval(args)
-    if (result == null) return msg.reply(l!.generic.invalidArgs)
+    if (result == null) return msg.reply(l.generic.invalidArgs)
 
-    msg.channel.send(l!.gen('```js\n{1}\n```', args.toString()), {
+    msg.channel.send(l.gen('```js\n{1}\n```', args.toString()), {
       embed: {
         color: 0xDC3912,
-        description: l!.gen('**{1}** {2}', l!.math.result, l!.transform(result))
+        description: l.gen('**{1}** {2}', l.math.result, l.transform(result))
       }
     })
   }

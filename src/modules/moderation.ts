@@ -32,11 +32,11 @@ export default class Moderation extends Azarasi.Module {
   async kick ({ msg, l } : CommandContext, member : GuildMember, ...reason : string[]) {
     if (!member) return
     try {
-      await member.kick(`${msg.member.displayName}: ${reason.join(' ') || l!.moderation.noReason}`)
-      return msg.reply(l!.moderation.kicked)
+      await member.kick(`${msg.member.displayName}: ${reason.join(' ') || l.moderation.noReason}`)
+      return msg.reply(l.moderation.kicked)
     } catch (e) {
       console.error(e)
-      return msg.reply(l!.moderation.cantKick)
+      return msg.reply(l.moderation.cantKick)
     }
   }
 
@@ -49,11 +49,11 @@ export default class Moderation extends Azarasi.Module {
   async ban ({ msg, l } : CommandContext, member : GuildMember, ...reason : string[]) {
     if (!member) return
     try {
-      await member.ban(`${msg.member.displayName}: ${reason.join(' ') || l!.moderation.noReason}`)
-      return msg.reply(l!.moderation.banned)
+      await member.ban(`${msg.member.displayName}: ${reason.join(' ') || l.moderation.noReason}`)
+      return msg.reply(l.moderation.banned)
     } catch (e) {
       console.error(e)
-      return msg.reply(l!.moderation.cantBan)
+      return msg.reply(l.moderation.cantBan)
     }
   }
 
@@ -64,14 +64,14 @@ export default class Moderation extends Azarasi.Module {
   @registerCommand({ adminOnly: true })
   async resetAntiRaid ({ msg, s, l, guildData } : CommandContext) {
     if (!guildData.antiRaidTriggered) {
-      return msg.reply(l!.moderation.antiRaidNotActive)
+      return msg.reply(l.moderation.antiRaidNotActive)
     }
     const raidUsers = guildData.antiRaidUsers || []
     // Reset trigger status
     guildData.antiRaidTriggered = false
     guildData.antiRaidUsers = []
     try {
-      await msg.channel.send(l!.moderation.raidResetting)
+      await msg.channel.send(l.moderation.raidResetting)
       // Reset verification level
       if (s.antiRaid_increaseVerification) {
         await msg.guild.setVerificationLevel(guildData.antiRaidPreviousVerificationLevel)
@@ -83,13 +83,13 @@ export default class Moderation extends Azarasi.Module {
           await Promise.all(raidUsers.map(async u => {
             try {
               const m = await msg.guild.fetchMember(u.id)
-              await m.removeRole(role, l!.moderation.raidResetting)
+              await m.removeRole(role, l.moderation.raidResetting)
             } catch (e) {}
           }))
         }
       }
       // Prompt kick
-      const prompt = await msg.channel.send(l!.moderation.raidKickPrompt) as Message
+      const prompt = await msg.channel.send(l.moderation.raidKickPrompt) as Message
       prompt.react('❌')
       prompt.react('✅')
       const promptResponse = await prompt.awaitReactions(
@@ -99,12 +99,12 @@ export default class Moderation extends Azarasi.Module {
       await prompt.clearReactions()
       if (promptResponse.first().emoji.name === '✅') {
         // Kick everyone!
-        await prompt.edit(l!.moderation.antiRaidNotActive)
+        await prompt.edit(l.moderation.antiRaidNotActive)
         await Promise.all(raidUsers.map(async u => {
           try {
             const m = await msg.guild.fetchMember(u.id)
             if (m.roles.array().length > 1) return
-            await m.kick(`${msg.member.displayName}: ${l!.moderation.raidKick}`)
+            await m.kick(`${msg.member.displayName}: ${l.moderation.raidKick}`)
           } catch (e) {}
         }))
       } else {
@@ -112,10 +112,10 @@ export default class Moderation extends Azarasi.Module {
         await prompt.delete()
       }
       await guildData.save()
-      await msg.reply(l!.generic.success)
+      await msg.reply(l.generic.success)
     } catch (e) {
       console.error(e)
-      msg.reply(l!.generic.error)
+      msg.reply(l.generic.error)
     }
   }
 
@@ -136,7 +136,7 @@ export default class Moderation extends Azarasi.Module {
         // Anti-Raid is currently active, give role
         if (s.antiRaid_role !== 'none') {
           const role = member.guild.roles.find(r => r.name === s.antiRaid_role)
-          if (role) await member.addRole(role, l!.moderation.raidDetected)
+          if (role) await member.addRole(role, l.moderation.raidDetected)
         }
       } else {
         // Filter users outside of the time threshold.
@@ -150,13 +150,13 @@ export default class Moderation extends Azarasi.Module {
           // Send alert
           if (s.antiRaid_alertChannel !== 'none') {
             const channel = member.guild.channels.get(s.antiRaid_alertChannel) as Discord.TextChannel
-            if (channel) channel.send(`${l!.moderation.raidDetected} ${l!.gen(l!.moderation.antiRaidAlert, s.prefix || '')}`)
+            if (channel) channel.send(`${l.moderation.raidDetected} ${l.gen(l.moderation.antiRaidAlert, s.prefix || '')}`)
           }
           // Set verification level
           if (s.antiRaid_increaseVerification) {
             data.antiRaidPreviousVerificationLevel = member.guild.verificationLevel
             try {
-              await member.guild.setVerificationLevel(4, l!.moderation.raidDetected)
+              await member.guild.setVerificationLevel(4, l.moderation.raidDetected)
             } catch (e) {
               this.logError(e)
             }
@@ -167,7 +167,7 @@ export default class Moderation extends Azarasi.Module {
             if (role) {
               data.antiRaidUsers.forEach(async u => {
                 const m = await member.guild.fetchMember(u.id)
-                await m.addRole(role, l!.moderation.raidDetected)
+                await m.addRole(role, l.moderation.raidDetected)
               })
             }
           }
@@ -178,7 +178,7 @@ export default class Moderation extends Azarasi.Module {
     // Auto Role
     if (!data.antiRaidTriggered && s.autoRole !== 'off') {
       const role = member.guild.roles.find(r => r.name === s.autoRole)
-      if (role) await member.addRole(role, l!.moderation.autoRole)
+      if (role) await member.addRole(role, l.moderation.autoRole)
     }
   }
 
@@ -196,16 +196,16 @@ export default class Moderation extends Azarasi.Module {
         .map(id => msg.guild.roles.find(r => r.id === id))
         .filter(r => r)
       return msg.channel.send(
-        l!.moderation.selfAssignableList + '\n\n' +
+        l.moderation.selfAssignableList + '\n\n' +
         (roles.length >= 1 ? roles.map(r => ` • ${r.name}\n`) : '<N/A>') + '\n\n' +
-        l!.gen(l!.moderation.selfAssignModCommand, s.prefix!)
+        l.gen(l.moderation.selfAssignModCommand, s.prefix!)
       )
     }
     // Find role
     const role = msg.guild.roles.find(r => r.name.toLowerCase() === roleName.toLowerCase())
-    if (!role) return msg.reply(l!.moderation.invalidRole)
+    if (!role) return msg.reply(l.moderation.invalidRole)
     // Check if the role is assignable by the bot.
-    if (!role.editable) return msg.reply(l!.moderation.roleNotReachable)
+    if (!role.editable) return msg.reply(l.moderation.roleNotReachable)
     // Change status if specified.
     if (status != null) {
       // Remove all instances of this role from the list.
@@ -218,8 +218,8 @@ export default class Moderation extends Azarasi.Module {
     }
     // Display current status
     const currentStatus = selfAssignableRoles.indexOf(role.id) >= 0
-    msg.channel.send(l!.gen(
-      currentStatus ? l!.moderation.roleSelfAssignableStatusOn : l!.moderation.roleSelfAssignableStatusOff,
+    msg.channel.send(l.gen(
+      currentStatus ? l.moderation.roleSelfAssignableStatusOn : l.moderation.roleSelfAssignableStatusOff,
       role.name,
       s.prefix!
     ))
@@ -238,21 +238,21 @@ export default class Moderation extends Azarasi.Module {
       .map(id => msg.guild.roles.find(r => r.id === id))
       .filter(r => r)
       return msg.reply(
-        l!.moderation.selfAssignableList + '\n\n' +
+        l.moderation.selfAssignableList + '\n\n' +
         (roles.length >= 1 ? roles.map(r => ` • ${r.name}\n`) : '*(N/A)*\n') + '\n' +
-        l!.gen(l!.moderation.selfAssignCommand, s.prefix!)
+        l.gen(l.moderation.selfAssignCommand, s.prefix!)
       )
     }
     // Find role
     const role = msg.guild.roles.find(r => r.name.toLowerCase() === roleName.toLowerCase())
-    if (!role) return msg.reply(l!.moderation.invalidRole)
+    if (!role) return msg.reply(l.moderation.invalidRole)
     // Check if the role is assignable by the bot.
-    if (selfAssignableRoles.indexOf(role.id) < 0) return msg.reply(l!.moderation.roleNotAssignable)
-    if (!role.editable) return msg.reply(l!.moderation.roleNotReachable)
+    if (selfAssignableRoles.indexOf(role.id) < 0) return msg.reply(l.moderation.roleNotAssignable)
+    if (!role.editable) return msg.reply(l.moderation.roleNotReachable)
     // Assign role
     await msg.member.addRole(role)
     if (s.selfAssignAutoDel) await msg.delete()
-    else msg.reply(l!.generic.success)
+    else msg.reply(l.generic.success)
   }
 }
 

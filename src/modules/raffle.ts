@@ -30,7 +30,7 @@ export default class Raffle extends Azarasi.Module {
     const raffle = await this.getRaffleDataForGuild(msg.guild)
     if (raffle) {
       return msg.reply(
-        l!.gen(l!.raffle.previousRaffleOpen, raffle.participants.length.toString(), s.prefix + 'raffleClose')
+        l.gen(l.raffle.previousRaffleOpen, raffle.participants.length.toString(), s.prefix + 'raffleClose')
       )
     }
     // Create the new raffle
@@ -38,7 +38,7 @@ export default class Raffle extends Azarasi.Module {
     // Announce it
     msg.channel.send(
       (s.raffleMention ? '@everyone ' : '') +
-      l!.gen(l!.raffle.raffleStarted, s.prefix + 'raffleJoin')
+      l.gen(l.raffle.raffleStarted, s.prefix + 'raffleJoin')
     )
   }
 
@@ -49,10 +49,10 @@ export default class Raffle extends Azarasi.Module {
     msg.delete().catch(() => {})
     // Check for an active raffle.
     const raffle = await this.getRaffleDataForGuild(msg.guild)
-    if (!raffle) return msg.reply(l!.raffle.noRaffle)
+    if (!raffle) return msg.reply(l.raffle.noRaffle)
     // Check if the user already joined.
     if (raffle.participants.indexOf(msg.member.id) >= 0 || raffle.winners.indexOf(msg.member.id) >= 0) {
-      return msg.reply(l!.raffle.alreadyJoined)
+      return msg.reply(l.raffle.alreadyJoined)
     }
     // Add member to participants array and save
     raffle.participants.push(msg.member.id)
@@ -62,7 +62,7 @@ export default class Raffle extends Azarasi.Module {
     uStats.total.push(msg.guild.id)
     await this.updateStatsForMember(msg.member, uStats)
     // Send confirmation
-    msg.channel.send(l!.gen(l!.raffle.joined, msg.member.toString(), raffle.participants.length.toString()))
+    msg.channel.send(l.gen(l.raffle.joined, msg.member.toString(), raffle.participants.length.toString()))
   }
 
   /**
@@ -73,13 +73,13 @@ export default class Raffle extends Azarasi.Module {
     msg.delete().catch(() => {})
     // Check for an active raffle.
     const raffle = await this.getRaffleDataForGuild(msg.guild)
-    if (!raffle) return msg.reply(l!.raffle.noRaffle)
+    if (!raffle) return msg.reply(l.raffle.noRaffle)
     // Filter out participants that already won if we're not in "multi" mode.
     let participants = raffle.participants
     if (raffle.type !== 'multi') {
       participants = raffle.participants.filter(p => raffle.winners.indexOf(p) < 0)
     }
-    if (participants.length <= 0) return msg.reply(l!.raffle.noParticipantsLeft)
+    if (participants.length <= 0) return msg.reply(l.raffle.noParticipantsLeft)
     // Pick a winner
     const winner = this.chance.pickone(participants)
     raffle.winners.push(winner)
@@ -87,13 +87,13 @@ export default class Raffle extends Azarasi.Module {
     await this.updateRaffleDataForGuild(msg.guild, raffle)
     // Find member instance
     const winnerMember = msg.guild.members.find(m => m.id === winner)
-    if (!winnerMember) return msg.reply(l!.generic.error)
+    if (!winnerMember) return msg.reply(l.generic.error)
     // Update user stats
     const uStats = await this.getStatsForMember(msg.member)
     uStats.won.push(msg.guild.id)
     await this.updateStatsForMember(msg.member, uStats)
     // Announce
-    msg.channel.send(l!.gen(l!.raffle.winner, winnerMember.toString()))
+    msg.channel.send(l.gen(l.raffle.winner, winnerMember.toString()))
   }
 
   /**
@@ -104,18 +104,18 @@ export default class Raffle extends Azarasi.Module {
     msg.delete().catch(() => {})
     // Check for an active raffle.
     const raffle = await this.getRaffleDataForGuild(msg.guild)
-    if (!raffle) return msg.reply(l!.raffle.noRaffle)
+    if (!raffle) return msg.reply(l.raffle.noRaffle)
     // Delete data
     await this.deleteRaffleDataForGuild(msg.guild)
     // Display raffle stats
     msg.channel.send(
 `${s.raffleMention ? '@everyone ' : ''}
-${l!.raffle.closed}
+${l.raffle.closed}
 
-${l!.raffle.overview}
-${l!.gen(l!.raffle.totalParticipants, raffle.participants.length.toString())}
-${l!.gen(l!.raffle.totalWinners, raffle.winners.length.toString())}
-${raffle.winners.length > 0 ? '\n\n' + l!.raffle.placements + '\n' : '' }
+${l.raffle.overview}
+${l.gen(l.raffle.totalParticipants, raffle.participants.length.toString())}
+${l.gen(l.raffle.totalWinners, raffle.winners.length.toString())}
+${raffle.winners.length > 0 ? '\n\n' + l.raffle.placements + '\n' : '' }
 ${raffle.winners.map(
   (winner, ix) => `**${ix+1}**. ${msg.guild.members.find(m => m.id === winner)}`
 ).join('\n')}
@@ -131,7 +131,7 @@ ${raffle.winners.map(
     const target = member || msg.member
     const uStats = await this.getStatsForMember(target)
     msg.channel.send({ embed: {
-      title: l!.gen(l!.raffle.raffleStats, target.displayName),
+      title: l.gen(l.raffle.raffleStats, target.displayName),
       thumbnail: {
         url: target.user.displayAvatarURL
       },
@@ -141,18 +141,18 @@ ${raffle.winners.map(
           name: msg.guild.name,
           value: [
             '\n',
-            l!.gen(l!.raffle.participated, uStats.total.filter(gid => gid === msg.guild.id).length.toString()),
-            l!.gen(l!.raffle.won, uStats.won.filter(gid => gid === msg.guild.id).length.toString())
+            l.gen(l.raffle.participated, uStats.total.filter(gid => gid === msg.guild.id).length.toString()),
+            l.gen(l.raffle.won, uStats.won.filter(gid => gid === msg.guild.id).length.toString())
           ].join('\n'),
           inline: true
         },
         // Global stats
         {
-          name: l!.raffle.overall,
+          name: l.raffle.overall,
           value: [
             '\n',
-            l!.gen(l!.raffle.participated, uStats.total.length.toString()),
-            l!.gen(l!.raffle.won, uStats.won.length.toString())
+            l.gen(l.raffle.participated, uStats.total.length.toString()),
+            l.gen(l.raffle.won, uStats.won.length.toString())
           ].join('\n'),
           inline: true
         }

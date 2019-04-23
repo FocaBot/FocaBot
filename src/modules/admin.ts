@@ -19,10 +19,10 @@ export default class Admin extends Azarasi.Module {
   async setNick ({ msg, l } : CommandContext, nickname : string) {
     try {
       await msg.guild.member(this.client.user).setNickname(nickname)
-      msg.reply(l!.admin.nickChanged)
+      msg.reply(l.admin.nickChanged)
     } catch (e) {
       this.az.log(e)
-      msg.reply(l!.generic.error)
+      msg.reply(l.generic.error)
     }
   }
 
@@ -44,7 +44,7 @@ export default class Admin extends Azarasi.Module {
       await msg.channel.bulkDelete(botMessages)
     } catch (e) {
       this.az.logError(e)
-      msg.reply(l!.admin.cantDelete)
+      msg.reply(l.admin.cantDelete)
     }
   }
 
@@ -56,7 +56,7 @@ export default class Admin extends Azarasi.Module {
   @registerCommand({ adminOnly: true, argSeparator: ' ' })
   async purge ({ msg, l } : CommandContext, messageLimit : string) {
     const limit = parseInt(messageLimit)
-    if (!isFinite(limit) || limit <= 0) return msg.reply(l!.generic.invalidArgs)
+    if (!isFinite(limit) || limit <= 0) return msg.reply(l.generic.invalidArgs)
     try {
       let messages = await msg.channel.fetchMessages({ limit })
       if (msg.mentions.members.first()) {
@@ -65,7 +65,7 @@ export default class Admin extends Azarasi.Module {
       await msg.channel.bulkDelete(messages)
     } catch (e) {
       this.az.logError(e)
-      msg.reply(l!.admin.cantDelete)
+      msg.reply(l.admin.cantDelete)
     }
   }
 
@@ -83,13 +83,13 @@ export default class Admin extends Azarasi.Module {
       }
     })
     // Check if parameter exists in schema
-    if (!this.az.settings.schema.get(param)) return msg.reply(l!.config.invalidParameter)
+    if (!this.az.settings.schema.get(param)) return msg.reply(l.config.invalidParameter)
     // Update parameter value
     if (value) {
       try {
         await this.az.settings.setGuildParam(msg.guild, param, value.join(' '))
       } catch (e) {
-        return msg.reply(l!.config.invalidValue, { embed: {
+        return msg.reply(l.config.invalidValue, { embed: {
           color: 0xEE0000,
           description: e.message || e,
         }})
@@ -98,9 +98,9 @@ export default class Admin extends Azarasi.Module {
     // Display parameter parameter value
     msg.channel.send('', { embed: {
       fields: [
-        { name: l!.config.parameter, value: param, inline: true },
+        { name: l.config.parameter, value: param, inline: true },
         {
-          name: l!.config.value,
+          name: l.config.value,
           value: (await this.az.settings.getGuildParam(msg.guild, param)).toString(),
           inline: true
         }
@@ -114,12 +114,12 @@ export default class Admin extends Azarasi.Module {
    */
   @registerCommand({ adminOnly: true })
   async enable ({ msg, l } : CommandContext, module : string) {
-    if (!this.az.modules.get(module)) return msg.reply(l!.admin.noSuchModule)
+    if (!this.az.modules.get(module)) return msg.reply(l.admin.noSuchModule)
     try {
       await this.az.modules.enableModuleForGuild(msg.guild, module)
-      msg.reply(l!.generic.success)
+      msg.reply(l.generic.success)
     } catch (e) {
-      msg.reply(l!.generic.error)
+      msg.reply(l.generic.error)
     }
   }
 
@@ -129,12 +129,12 @@ export default class Admin extends Azarasi.Module {
    */
   @registerCommand({ adminOnly: true })
   async disable ({ msg, l } : CommandContext, module : string) {
-    if (!this.az.modules.get(module)) return msg.reply(l!.admin.noSuchModule)
+    if (!this.az.modules.get(module)) return msg.reply(l.admin.noSuchModule)
     try {
       await this.az.modules.disableModuleForGuild(msg.guild, module)
-      msg.reply(l!.generic.success)
+      msg.reply(l.generic.success)
     } catch (e) {
-      msg.reply(l!.generic.error)
+      msg.reply(l.generic.error)
     }
   }
 
@@ -169,7 +169,7 @@ export default class Admin extends Azarasi.Module {
       if (msg.attachments.first()) await this.client.user.setAvatar(msg.attachments.first().url)
       else await this.client.user.setAvatar(avatarURL)
     } catch (e) {
-      msg.reply(l!.generic.error)
+      msg.reply(l.generic.error)
       this.az.logError(e)
     }
   }
@@ -182,10 +182,10 @@ export default class Admin extends Azarasi.Module {
   async setUsername ({ msg, l } : CommandContext, username : string) {
     try {
       await this.client.user.setUsername(username)
-      msg.reply(l!.admin.usernameChanged)
+      msg.reply(l.admin.usernameChanged)
     } catch (e) {
       this.az.logError(e)
-      msg.reply(l!.generic.error)
+      msg.reply(l.generic.error)
     }
   }
 
@@ -197,7 +197,7 @@ export default class Admin extends Azarasi.Module {
   load ({ msg, l } : CommandContext, module : string) {
     try {
       this.az.modules.load(module)
-      msg.reply(l!.generic.success)
+      msg.reply(l.generic.success)
     } catch (e) {
       msg.channel.send({
         embed: {
@@ -216,7 +216,7 @@ export default class Admin extends Azarasi.Module {
   unload ({ msg, l } : CommandContext, module : string) {
     try {
       this.az.modules.unload(module)
-      msg.reply(l!.generic.success)
+      msg.reply(l.generic.success)
     } catch (e) {
       msg.channel.send({
         embed: {
@@ -235,7 +235,7 @@ export default class Admin extends Azarasi.Module {
   reload ({ msg, l } : CommandContext, module : string) {
     try {
       this.az.modules.reload(module)
-      msg.reply(l!.generic.success)
+      msg.reply(l.generic.success)
     } catch (e) {
       msg.channel.send({
         embed: {

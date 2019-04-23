@@ -15,7 +15,7 @@ export default class Help extends Azarasi.Module {
    */
   @registerCommand({ allowDM: true })
   help ({ msg, s, l, perms } : CommandContext) {
-    const guildHelp = msg.guild ? `\n**${l!.gen(l!.help.prefix, msg.guild.name)}** \`${s.prefix}\`\n\n` : ''
+    const guildHelp = msg.guild ? `\n**${l.gen(l.help.prefix, msg.guild.name)}** \`${s.prefix}\`\n\n` : ''
     const qs = msg.guild ? '?' + this.generateQuery(s.prefix, perms) : ''
     const props = this.az.properties
 
@@ -28,12 +28,12 @@ export default class Help extends Azarasi.Module {
       },
       description: guildHelp + props.focaBot.misc.helpMessage,
       fields: [{
-        name: l!.help.links,
+        name: l.help.links,
         value: [
-          `[${l!.help.commands}](https://www.focabot.xyz/commands${qs})`,
-          `[${l!.help.filters}](https://www.focabot.xyz/filters${qs})`,
-          `[${l!.help.manual}](https://www.focabot.xyz/docs${qs})`,
-          `[${l!.help.donate}](https://www.focabot.xyz/donate${qs})`,
+          `[${l.help.commands}](https://www.focabot.xyz/commands${qs})`,
+          `[${l.help.filters}](https://www.focabot.xyz/filters${qs})`,
+          `[${l.help.manual}](https://www.focabot.xyz/docs${qs})`,
+          `[${l.help.donate}](https://www.focabot.xyz/donate${qs})`,
           `[GitHub](https://github.com/FocaBot)`
         ].join(' / ')
       }],

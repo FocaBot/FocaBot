@@ -32,14 +32,14 @@ export default class Index extends Azarasi.Module {
           const image = await provider.getRandomImage(query, nsfw)
           // Send the picture
           return msg.reply('', { embed: {
-              title: l!.generic.sauceBtn,
+              title: l.generic.sauceBtn,
               url: image.webUrl,
               image: { url: image.embedUrl }
             }})
         } catch (e) {
-          if (e.statusCode && e.statusCode === 404) return msg.reply(l!.generic.noResults)
+          if (e.statusCode && e.statusCode === 404) return msg.reply(l.generic.noResults)
           this.az.logError(e)
-          return msg.reply(l!.generic.error)
+          return msg.reply(l.generic.error)
         }
       })
     }

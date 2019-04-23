@@ -18,8 +18,8 @@ export default class Poll extends Azarasi.Module {
   @registerCommand({ argSeparator: '|' })
   async poll ({ msg, l } : CommandContext, question : string, ...answers : string[]) {
     // Validate answer count
-    if (answers.length > 15) return msg.reply(l!.poll.tooManyAnswers)
-    if (answers.length < 2) return msg.reply(l!.poll.notEnoughAnswers)
+    if (answers.length > 15) return msg.reply(l.poll.tooManyAnswers)
+    if (answers.length < 2) return msg.reply(l.poll.notEnoughAnswers)
 
     const embed = {
       color: 0xB1FF86,
@@ -27,7 +27,7 @@ export default class Poll extends Azarasi.Module {
       description: answers.map((answer, ix) => `${this.answerSymbols[ix]} - ${answer}`).join('\n')
     }
 
-    const pollMsg = await msg.channel.send(l!.gen(l!.poll.pollStarted, msg.author.toString()), { embed }) as Message
+    const pollMsg = await msg.channel.send(l.gen(l.poll.pollStarted, msg.author.toString()), { embed }) as Message
     for (let i = 0; i < answers.length; i++) {
       await pollMsg.react(this.answerSymbols[i])
     }
