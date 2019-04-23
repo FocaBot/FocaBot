@@ -70,6 +70,7 @@ data
 
 # TypeScript compiler output
 build
+*.tsbuildinfo
 
 # Compiled Binaries
 bin
