@@ -41,7 +41,7 @@ export async function getDefaultConfig () : Promise<FocaBotConfig> {
   config.bot.token = ''
   config.bot.globalAdmins = []
   config.bot.owners = []
-  config.data.backend = 'gun'
+  config.data.backend = 'memory'
   config.data.gun.path = dataPath
   return config
 }
