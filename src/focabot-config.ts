@@ -35,12 +35,19 @@ export interface FocaBotConfig {
       /** Redis server URL */
       server : string
     }
-    /** Settings for Gun backend */
+    /** Settings for Gun backend (DEPRECATED) */
     gun : {
       /** Database path */
       path : string
       /** Database port */
       port : number
+    }
+    /** Settings for CouchDB backend */
+    couchdb : {
+      /** Server URL */
+      server : string
+      /** Database Name */
+      dbName : string
     }
   }
   /** Player module settings */

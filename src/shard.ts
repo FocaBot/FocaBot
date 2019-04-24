@@ -27,6 +27,8 @@ const focaBot = new Azarasi({
   dbPath: config.data.gun.path,
   dbPort: config.data.gun.port,
   redisUrl: config.data.redis.server,
+  couchdbUrl: config.data.couchdb.server,
+  couchdbDatabase: config.data.couchdb.dbName,
   dataStore: config.data.backend,
   focaBot: config
 })

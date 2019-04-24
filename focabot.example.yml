@@ -61,15 +61,20 @@ modules:
 # Data store settings
 data:
   # Data store backend
-  # Can be either 'memory' (no persistence), 'gun' (built-in) or 'redis'
-  backend: gun
-  # Settings for Gun backend
+  # Can be either 'memory' (no persistence), 'gun' (embedded), 'redis' or 'couchdb'
+  backend: memory
+  # Settings for Gun backend (DEPRECATED)
   gun:
     path: focabot_data
     port: 12920 # Make sure to change this if you're running multiple instances of the bot!!
   # Settings for Redis backend
   redis:
     sever: redis://127.0.0.1/1
+  # Settings for CouchDB backend
+  couchdb:
+    # Server URL (http://username:password@host:port)
+    server: http://127.0.0.1:5984
+    dbName: focabot
 
 # Player settings
 player:
