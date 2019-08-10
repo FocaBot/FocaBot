@@ -12,6 +12,7 @@ import {
 } from '../interfaces'
 import { Guild, GuildMember, TextChannel, VoiceChannel } from 'discord.js'
 import PlayerError, { PlayerErrorCode } from './PlayerError'
+import { GuildData } from 'azarasi/lib/guilds'
 
 export default class PlayerQueue extends EventEmitter implements QueueEvents {
   /** Queue items */

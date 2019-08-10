@@ -1,5 +1,4 @@
 import PlayerQueue from '../runtime/PlayerQueue'
-import Stream from 'stream'
 import { RuntimeQueueItem } from './QueueItem'
 import { EventEmitter } from 'events'
 

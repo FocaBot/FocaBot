@@ -1,7 +1,6 @@
 import { RawQueueItem } from './QueueItem'
 
 export interface QueueEvents {
-
 }
 
 export interface RawQueue {
@@ -26,4 +25,11 @@ export enum UpdateType {
   Discrete,
   /** Internal update, don't fire events or synchronize the player backend */
   Internal
+}
+
+declare module 'azarasi/lib/guilds' {
+  interface GuildData {
+    /** Queue Data **/
+    queue : unknown
+  }
 }

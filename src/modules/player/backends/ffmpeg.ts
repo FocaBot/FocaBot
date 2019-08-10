@@ -51,7 +51,7 @@ export default class FFMPEGBackend extends EventEmitter implements PlayerBackend
     this.process = spawn(this.ffmpegBinary, this.getFlags(this.currentItem))
     // Setup error logging
     this.process.on('error', e => this.az.logError(e))
-    this.process.stderr.on('data', d => this.az.logDebug(d))
+    this.process.stderr.on('data', d => this.az.logDebug(d.toString()))
     // Begin stream
     this.stream = connection!.playOpusStream(this.process.stdout)
     // Update state
@@ -59,6 +59,7 @@ export default class FFMPEGBackend extends EventEmitter implements PlayerBackend
     this.emit('itemStart', this.currentItem)
 
     this.stream.on('end', () => {
+      this.az.logDebug('Stream ended i guess 🤔')
       // TODO: handle end
     })
   }

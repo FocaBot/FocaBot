@@ -3,7 +3,7 @@
  * @author TheBITLINK aka BIT <me@thebitlink.com>
  * @license MIT
  **/
-import { Azarasi, CommandContext } from 'azarasi'
+import { Azarasi, CommandContext, Module } from 'azarasi'
 import { DMChannel, GroupDMChannel, TextChannel } from 'discord.js'
 import { registerCommand } from 'azarasi/lib/decorators'
 import { inspect } from 'util'
@@ -35,6 +35,7 @@ export default class Eval extends Azarasi.Module {
       log: this.wrap(this.log),
       logDebug: this.wrap(this.logDebug),
       logError: this.wrap(this.logError),
+      getModule: this.wrap(this.getModule),
       print: printFn,
       p: printFn,
       axios
@@ -65,6 +66,10 @@ export default class Eval extends Azarasi.Module {
 
   wrap (fn : (...args : any[]) => any) {
     return (...args : any[]) => fn.apply(this, args)
+  }
+
+  getModule (moduleName : string) : Module {
+    return this.az.modules.get(moduleName)
   }
 }
 
