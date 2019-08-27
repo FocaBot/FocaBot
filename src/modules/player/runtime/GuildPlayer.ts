@@ -4,6 +4,7 @@ import { Azarasi } from 'azarasi'
 import { PlayerBackend, RawQueue } from '../interfaces'
 import PlayerQueue from './PlayerQueue'
 import FFMPEGBackend from '../backends/ffmpeg'
+import MPVBackend from '../backends/mpv/mpv'
 
 export default class GuildPlayer extends EventEmitter {
   public queue !: PlayerQueue
@@ -31,6 +32,9 @@ export default class GuildPlayer extends EventEmitter {
         break
       case 'focastreamer':
         throw new Error('FocaStreamer backend not yet implemented.')
+      case 'mpv':
+        this.backend = new MPVBackend(this.az, this.queue)
+        break
       default:
         throw new Error('Invalid player backend provided in settings. Valid options are "ffmpeg" and "focastreamer".')
     }

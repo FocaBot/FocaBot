@@ -7,6 +7,8 @@ import { Azarasi, CommandContext } from 'azarasi'
 import { registerCommand } from 'azarasi/lib/decorators'
 import { Guild } from 'discord.js'
 import GuildPlayer from './runtime/GuildPlayer'
+import Eval from '../eval'
+import MPVBackend from './backends/mpv/mpv'
 
 export default class Player extends Azarasi.Module {
   private instanceCache = new Map<Guild, GuildPlayer>()
@@ -45,5 +47,13 @@ export default class Player extends Azarasi.Module {
       voiceChannel,
       requestedBy: msg.member
     }))
+  }
+
+  @registerCommand({ argSeparator: ' ' })
+  async playerIPC ({ msg } : CommandContext, ...command : string[]) {
+    const player = await this.getPlayer(msg.guild)
+    const evalModule = await this.az.modules.get<Eval>('eval')
+    const backend = player.backend as MPVBackend
+    evalModule.print(msg.channel, await backend.process!.sendIPC(...command), 10)
   }
 }

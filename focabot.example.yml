@@ -91,6 +91,9 @@ player:
   # Settings for the FocaStreamer backend
   focastreamer:
     bin: /usr/local/bin/focastreamer
+  # Settings for the mpv backend
+  mpv:
+    bin: /usr/bin/mpv
 
 # API keys
 # Check https://www.focabot.xyz/install/source to get instructions on how to get the API keys.

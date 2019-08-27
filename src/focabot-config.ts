@@ -53,7 +53,7 @@ export interface FocaBotConfig {
   /** Player module settings */
   player : {
     /** Audio player backend */
-    backend : 'ffmpeg' | 'focastreamer'
+    backend : 'ffmpeg' | 'focastreamer' | 'mpv'
     /** Settings for the FFMPEG backend */
     ffmpeg : {
       /** ffmpeg binary path (absolute) */
@@ -64,7 +64,12 @@ export interface FocaBotConfig {
     /** Settings for the FocaStreamer backend */
     focastreamer : {
       /** Binary path (absolute) */
-      bin: string
+      bin : string
+    }
+    /** Settings for the mpv backend */
+    mpv : {
+      /** Binary path (absolute) */
+      bin : string
     }
   }
   /** API keys */
