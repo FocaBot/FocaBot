@@ -10,7 +10,7 @@
     "start": "node build",
     "build": "tsc",
     "build-bin": "tsc && pkg --out-path bin . -t node12-linux-x64,node12-macos-x64,node12-win-x64,node12-win-x86",
-    "build-arm": "tsc && pkg --out-path bin . -t node12-linux-armv7","
+    "build-arm": "tsc && pkg --out-path bin . -t node12-linux-armv7",
     "dev": "cross-env TS_NODE_FILES=true ts-node src",
     "locale-gen": "node utils/generateLocaleTypings.js"
   },
