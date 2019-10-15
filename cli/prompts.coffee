@@ -63,6 +63,21 @@ module.exports =
     message: 'Internal Database Port:'
     default: 12920
     validate: (v)-> typeof v is 'number'
+  proxy:
+    name: 'env.YTDL_PROXY'
+    message: ->
+        console.log '''
+        Change this option if you want to use a proxy server with youtube-dl.
+        
+        This is useful if you are being region locked or rate limited by YouTube or another \
+        provider and want to bypass those restrictions.
+
+        The value should be in this format:
+
+        socks5://example.com:5555
+        '''
+        'Proxy Server'
+    default: ""
   # API Keys
   googleKeys: [
     {

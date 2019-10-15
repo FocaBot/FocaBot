@@ -52,6 +52,7 @@ module.exports =(config, file)->
             new iq.Separator()
             { name: 'Change ffmpeg path >', value: 'ffmpeg' }
             { name: 'Set up additional API keys >', value: 'apiKeys' }
+            { name: "Use a proxy server >", value: 'proxy' }
             new iq.Separator()
             { name: 'Save changes and exit', value: 'wq' }
             { name: 'Discard changes and exit', value: 'q' }
