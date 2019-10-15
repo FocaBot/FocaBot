@@ -116,28 +116,10 @@ class PlayerUtil
       '--ignore-errors'
       '--force-ipv4',
       '--format=bestaudio/best'
-      ]
+    ]
     flags.push "--proxy=#{process.env.YTDL_PROXY}" if process.env.YTDL_PROXY
     await ytdl(query, flags)
-  
-  # Uses FFMpeg to get a frame of a stream at a specified timestamp
-  getScreenshot: (streamUrl, time)-> new Promise (resolve, reject)->
-    b = []
-    spawn ffmpeg, [
-      '-ss', time
-      '-i', streamUrl
-      '-vframes', 1
-      '-vf', 'scale=480:-1'
-      '-q:v', 3
-      '-f', 'mjpeg'
-      '-'
-    ], { maxBuffer: Infinity }
-    .on 'close', (code)->
-      return reject code if code
-      resolve Buffer.concat b
-    .on 'error', reject
-    .stdout.on 'data', (chunk)->
-      b.push(chunk)
+      
 
   # Parses a list of filters (| speed=2 distort, etc)
   parseFilters: (arg, member, playing)->
