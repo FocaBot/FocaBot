@@ -109,13 +109,16 @@ class PlayerUtil
       resolve(info)
 
   # Uses youtube-dl to get information of an URL or search term
-  getInfo: (query)-> await ytdl(query, [
+  getInfo: (query)->
+    flags = [
       '--youtube-skip-dash-manifest'
       '--default-search=ytsearch'
       '--ignore-errors'
       '--force-ipv4',
       '--format=bestaudio/best'
-    ])
+      ]
+    flags.push "--proxy=#{process.env.YTDL_PROXY}" if process.env.YTDL_PROXY
+    await ytdl(query, flags)
   
   # Uses FFMpeg to get a frame of a stream at a specified timestamp
   getScreenshot: (streamUrl, time)-> new Promise (resolve, reject)->
